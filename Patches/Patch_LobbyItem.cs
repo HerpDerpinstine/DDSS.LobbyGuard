@@ -20,6 +20,11 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(address))
                 return false;
 
+            // Hide our own ghost lobby
+            string userSteamId = SteamUser.GetSteamID().ToString();
+            if (address == userSteamId)
+                return false;
+
             // Check if Lobby is already in Cache
             if (_lobbyList.ContainsKey(address))
             {
