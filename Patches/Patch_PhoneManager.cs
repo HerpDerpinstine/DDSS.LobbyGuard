@@ -17,8 +17,8 @@ namespace DDSS_LobbyGuard.Patches
         private static bool CmdCall_Prefix(string __0, string __1)
         {
             // Prevent Calling Self
-            //if (__0 == __1)
-            //    return false;
+            if (__0 == __1)
+                return false;
 
             // Run Original
             return true;
