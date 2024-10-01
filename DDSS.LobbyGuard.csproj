@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+		<TargetFrameworks>net60</TargetFrameworks>
+		<LangVersion>Latest</LangVersion>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>Output\$(Configuration)\</OutputPath>
+		<OutputType>Library</OutputType>
+		<RootNamespace>DDSS_LobbyGuard</RootNamespace>
+        <Platforms>AnyCPU</Platforms>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Components\**" />
+    <Compile Remove="Libs\**" />
+    <Compile Remove="Output\**" />
+    <EmbeddedResource Remove="Components\**" />
+    <EmbeddedResource Remove="Libs\**" />
+    <EmbeddedResource Remove="Output\**" />
+    <None Remove="Components\**" />
+    <None Remove="Libs\**" />
+    <None Remove="Output\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE.md" />
+    <None Remove="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+	<PackageReference Include="HarmonyX" Version="2.13.0">
+	  <PrivateAssets>all</PrivateAssets>
+	</PackageReference>
+    <PackageReference Include="LavaGang.MelonLoader" Version="0.6.4">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Il2CppInterop.Runtime" Version="1.4.5">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>Libs\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2CppMirror">
+      <HintPath>Libs\Il2CppMirror.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>Libs\Il2Cppmscorlib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2CppSystem">
+      <HintPath>Libs\Il2CppSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>Libs\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  
+</Project>
