@@ -88,13 +88,17 @@ namespace DDSS_LobbyGuard.Patches
             // Get Message and Enforce Timestamp
             __1.ReadNetworkIdentity();
             string message = __1.ReadString();
-            string time = DateTime.Now.ToString("HH:mm:ss");
+
+            // Validate Message Text
+            if (string.IsNullOrEmpty(message)
+                || string.IsNullOrWhiteSpace(message))
+                return false;
 
             // Remove Rich Text
             message = message.RemoveRichText();
 
             // Invoke Game Method
-            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String(sender, message, time);
+            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String(sender, message, DateTime.Now.ToString("HH:mm:ss"));
 
             // Prevent Original
             return false;
