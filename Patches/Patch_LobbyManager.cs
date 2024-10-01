@@ -1,7 +1,9 @@
-﻿using HarmonyLib;
+﻿using DDSS_LobbyGuard.Utils;
+using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using System;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -68,6 +70,34 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Original
             return true;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.InvokeUserCode_CmdSendChatMessage__NetworkIdentity__String__String))]
+        private static bool InvokeUserCode_CmdSendChatMessage__NetworkIdentity__String__String_Prefix(
+            NetworkBehaviour __0, 
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Get LobbyManager
+            LobbyManager manager = __0.TryCast<LobbyManager>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Get Message and Enforce Timestamp
+            __1.ReadNetworkIdentity();
+            string message = __1.ReadString();
+            string time = DateTime.Now.ToString("HH:mm:ss");
+
+            // Remove Rich Text
+            message = message.RemoveRichText();
+
+            // Invoke Game Method
+            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String(sender, message, time);
+
+            // Prevent Original
+            return false;
         }
     }
 }
