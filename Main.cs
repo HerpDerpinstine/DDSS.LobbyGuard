@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Patches;
+﻿using DDSS_LobbyGuard.Moderations;
+using DDSS_LobbyGuard.Patches;
 using MelonLoader;
 using System;
 
@@ -20,6 +21,11 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_SteamMatchmaking>();
 
             _logger.Msg("Initialized!");
+        }
+
+        public override void OnSceneWasInitialized(int buildIndex, string sceneName)
+        {
+            CallSecurity.OnSceneLoad();
         }
 
         private void ApplyPatch<T>()

@@ -34,6 +34,10 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.InvokeUserCode_CmdSetSubRole__SubRole))]
         private static bool InvokeUserCode_CmdSetSubRole__SubRole_Prefix(NetworkConnectionToClient __2)
         {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Validate Manager Role
             LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
             if ((player == null)

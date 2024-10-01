@@ -52,16 +52,13 @@ namespace DDSS_LobbyGuard.Patches
                 || __2.WasCollected)
                 return false;
 
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Check for Lobby
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "LobbyScene")
-            {
-                // Check for Host
-                if (!__2.identity.isServer)
-                    return false;
-
-                // Allow Host to Set in Lobby
-                return true;
-            }
+                return false;
 
             // Validate Manager Role when In-Game
             LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
