@@ -13,11 +13,13 @@ namespace DDSS_LobbyGuard
             _logger = LoggerInstance;
 
             ApplyPatch<Patch_GameManager>();
+            ApplyPatch<Patch_LobbyItem>();
             ApplyPatch<Patch_LobbyManager>();
             ApplyPatch<Patch_LobbyPlayer>();
             ApplyPatch<Patch_PhoneManager>();
+            ApplyPatch<Patch_SteamMatchmaking>();
 
-            _logger.Msg("Initialized");
+            _logger.Msg("Initialized!");
         }
 
         private void ApplyPatch<T>()

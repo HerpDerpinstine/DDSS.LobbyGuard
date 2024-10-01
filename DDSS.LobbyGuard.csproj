@@ -44,8 +44,20 @@
       <HintPath>Libs\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Il2Cppcom.rlabrecque.steamworks.net">
+      <HintPath>Libs\Il2Cppcom.rlabrecque.steamworks.net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2CppFizzySteamworks">
+      <HintPath>Libs\Il2CppFizzySteamworks.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Il2CppMirror">
       <HintPath>Libs\Il2CppMirror.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2CppMirror.Components">
+      <HintPath>Libs\Il2CppMirror.Components.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
