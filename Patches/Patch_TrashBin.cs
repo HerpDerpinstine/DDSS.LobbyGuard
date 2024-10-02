@@ -1,13 +1,32 @@
-﻿using HarmonyLib;
+﻿using DDSS_LobbyGuard.Security;
+using HarmonyLib;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.TrashBin;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
     internal class Patch_TrashBin
     {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.RpcEnableFire))]
+        private static void RpcEnableFire_Postfix(TrashBin __instance)
+        {
+            // TrashBin Security
+            TrashBinSecurity.OnEnableFireEnd(__instance);
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.UserCode_CmdEnableFire__NetworkIdentity__Boolean))]
+        private static bool UserCode_CmdEnableFire__NetworkIdentity__Boolean_Prefix(TrashBin __instance, NetworkIdentity __0, bool __1)
+        {
+            // TrashBin Security
+            TrashBinSecurity.OnEnableFireBegin(__0, __instance, __1);
+
+            // Prevent Original
+            return false;
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.InvokeUserCode_CmdEnableFire__NetworkIdentity__Boolean))]
         private static bool InvokeUserCode_CmdEnableFire__NetworkIdentity__Boolean_Prefix(
@@ -26,8 +45,7 @@ namespace DDSS_LobbyGuard.Patches
             bool enabled = __1.ReadBool();
 
             // Validate Distance
-            float distance = Vector3.Distance(sender.transform.position, trashcan.transform.position);
-            if (distance > MelonMain.MAX_INTERACTION_DISTANCE)
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
                 return false;
 
             // Check for Enable

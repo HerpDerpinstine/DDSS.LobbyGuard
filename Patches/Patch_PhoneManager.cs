@@ -1,4 +1,4 @@
-﻿using DDSS_LobbyGuard.Moderations;
+﻿using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
@@ -13,8 +13,8 @@ namespace DDSS_LobbyGuard.Patches
         private static bool CmdCall_Prefix(string __0, string __1)
         {
             // Prevent Calling Self
-            if (__0 == __1)
-                return false;
+            //if (__0 == __1)
+            //    return false;
 
             // Run Original
             return true;
@@ -49,7 +49,7 @@ namespace DDSS_LobbyGuard.Patches
             string receiver = __1.ReadString();
 
             // Run Security
-            CallSecurity.OnCallAttempt(phone, caller, receiver);
+            PhoneSecurity.OnCallAttempt(phone, caller, receiver);
 
             // Prevent Original
             return false;
@@ -84,7 +84,7 @@ namespace DDSS_LobbyGuard.Patches
             string caller = __1.ReadString();
 
             // Run Security
-            CallSecurity.OnCallAnswer(phone, caller, receiver);
+            PhoneSecurity.OnCallAnswer(phone, caller, receiver);
 
             // Prevent Original
             return false;
@@ -119,7 +119,7 @@ namespace DDSS_LobbyGuard.Patches
             string receiver = __1.ReadString();
 
             // Run Security
-            CallSecurity.OnCallCancel(phone, caller, receiver);
+            PhoneSecurity.OnCallCancel(phone, caller, receiver);
 
             // Prevent Original
             return false;
@@ -154,7 +154,7 @@ namespace DDSS_LobbyGuard.Patches
             string caller = __1.ReadString();
 
             // Run Security
-            CallSecurity.OnCallEnd(phone, caller, receiver);
+            PhoneSecurity.OnCallEnd(phone, caller, receiver);
 
             // Prevent Original
             return false;
@@ -189,7 +189,7 @@ namespace DDSS_LobbyGuard.Patches
             string caller = __1.ReadString();
 
             // Run Security
-            CallSecurity.OnCallDecline(phone, caller, receiver);
+            PhoneSecurity.OnCallDecline(phone, caller, receiver);
 
             // Prevent Original
             return false;

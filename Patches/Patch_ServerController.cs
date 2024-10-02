@@ -1,13 +1,32 @@
-﻿using HarmonyLib;
+﻿using DDSS_LobbyGuard.Security;
+using HarmonyLib;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.ServerRack;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
     internal class Patch_ServerController
     {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(ServerController), nameof(ServerController.RpcSetConnectionEnabled))]
+        private static void RpcSetConnectionEnabled_Postfix(ServerController __instance)
+        {
+            // Server Security
+            ServerSecurity.OnSetConnectionEnd(__instance);
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(ServerController), nameof(ServerController.UserCode_SetConnectionEnabled__NetworkIdentity__Boolean))]
+        private static bool UserCode_SetConnectionEnabled__NetworkIdentity__Boolean_Prefix(ServerController __instance, NetworkIdentity __0, bool __1)
+        {
+            // Server Security
+            ServerSecurity.OnSetConnectionBegin(__0, __instance, __1);
+
+            // Prevent Original
+            return false;
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ServerController), nameof(ServerController.InvokeUserCode_SetConnectionEnabled__NetworkIdentity__Boolean))]
         private static bool InvokeUserCode_SetConnectionEnabled__NetworkIdentity__Boolean_Prefix(
@@ -26,8 +45,7 @@ namespace DDSS_LobbyGuard.Patches
             bool enabled = __1.ReadBool();
 
             // Validate Distance
-            float distance = Vector3.Distance(sender.transform.position, server.transform.position);
-            if (distance > MelonMain.MAX_INTERACTION_DISTANCE)
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, server.transform.position))
                 return false;
 
             // Check for Disable

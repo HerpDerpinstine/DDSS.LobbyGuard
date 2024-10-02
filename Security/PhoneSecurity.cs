@@ -1,9 +1,9 @@
 ﻿using Il2Cpp;
 using System.Collections.Generic;
 
-namespace DDSS_LobbyGuard.Moderations
+namespace DDSS_LobbyGuard.Security
 {
-    internal static class CallSecurity
+    internal static class PhoneSecurity
     {
         private static Dictionary<string, string> _callSenderList = new();
         private static Dictionary<string, string> _callReceiverList = new();
@@ -19,8 +19,8 @@ namespace DDSS_LobbyGuard.Moderations
             string receiver)
         {
             // Check if Calling Self
-            if (caller == receiver)
-                return;
+            //if (caller == receiver)
+            //    return;
 
             // Check if already has Ongoing Call
             if (_callSenderList.ContainsKey(caller))
@@ -47,8 +47,8 @@ namespace DDSS_LobbyGuard.Moderations
             string receiver)
         {
             // Check if Calling Self
-            if (caller == receiver)
-                return;
+            //if (caller == receiver)
+            //    return;
 
             // Check if already has Ongoing Call
             if (_callReceiverList.ContainsKey(receiver))
@@ -75,8 +75,8 @@ namespace DDSS_LobbyGuard.Moderations
             string receiver)
         {
             // Check if Calling Self
-            if (caller == receiver)
-                return;
+            //if (caller == receiver)
+            //    return;
 
             // Check if there is an Ongoing Call Attempt
             if (!_callSenderList.ContainsKey(caller))
@@ -107,8 +107,8 @@ namespace DDSS_LobbyGuard.Moderations
             string receiver)
         {
             // Check if Calling Self
-            if (caller == receiver)
-                return;
+            //if (caller == receiver)
+            //    return;
 
             // Check if there is an Ongoing Call Attempt
             if (!_callSenderList.ContainsKey(caller))
@@ -140,8 +140,8 @@ namespace DDSS_LobbyGuard.Moderations
             string receiver)
         {
             // Check if Calling Self
-            if (caller == receiver)
-                return;
+            //if (caller == receiver)
+            //    return;
 
             // Check if already has Ongoing Call
             if (!_callSenderList.ContainsKey(caller))

@@ -1,5 +1,5 @@
-﻿using DDSS_LobbyGuard.Moderations;
-using DDSS_LobbyGuard.Patches;
+﻿using DDSS_LobbyGuard.Patches;
+using DDSS_LobbyGuard.Security;
 using MelonLoader;
 using System;
 
@@ -7,8 +7,6 @@ namespace DDSS_LobbyGuard
 {
     internal class MelonMain : MelonMod
     {
-        internal const float MAX_INTERACTION_DISTANCE = 2f;
-
         internal static MelonLogger.Instance _logger;
 
         public override void OnInitializeMelon()
@@ -29,7 +27,9 @@ namespace DDSS_LobbyGuard
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
-            CallSecurity.OnSceneLoad();
+            PhoneSecurity.OnSceneLoad();
+            ServerSecurity.OnSceneLoad();
+            TrashBinSecurity.OnSceneLoad();
         }
 
         private void ApplyPatch<T>()
