@@ -7,6 +7,8 @@ namespace DDSS_LobbyGuard
 {
     internal class MelonMain : MelonMod
     {
+        internal const float MAX_INTERACTION_DISTANCE = 2f;
+
         internal static MelonLogger.Instance _logger;
 
         public override void OnInitializeMelon()
@@ -18,6 +20,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_LobbyManager>();
             ApplyPatch<Patch_LobbyPlayer>();
             ApplyPatch<Patch_PhoneManager>();
+            ApplyPatch<Patch_ServerController>();
             ApplyPatch<Patch_SteamMatchmaking>();
 
             _logger.Msg("Initialized!");

@@ -3,15 +3,11 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
-using System.Collections.Generic;
 
 namespace DDSS_LobbyGuard.Patches
 {
     internal class Patch_PhoneManager
     {
-        internal static Dictionary<string, string> _callSenderList = new();
-        internal static Dictionary<string, string> _callReceiverList = new();
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.CmdCall))]
         private static bool CmdCall_Prefix(string __0, string __1)
