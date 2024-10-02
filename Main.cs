@@ -11,8 +11,10 @@ namespace DDSS_LobbyGuard
 
         public override void OnInitializeMelon()
         {
+            // Cache Logger
             _logger = LoggerInstance;
 
+            // Apply Patches
             ApplyPatch<Patch_GameManager>();
             ApplyPatch<Patch_LobbyItem>();
             ApplyPatch<Patch_LobbyManager>();
@@ -21,7 +23,9 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_ServerController>();
             ApplyPatch<Patch_SteamMatchmaking>();
             ApplyPatch<Patch_TrashBin>();
+            ApplyPatch<Patch_Usable>();
 
+            // Log Success
             _logger.Msg("Initialized!");
         }
 
