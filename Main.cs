@@ -26,6 +26,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_SteamMatchmaking>();
             ApplyPatch<Patch_TrashBin>();
             ApplyPatch<Patch_Usable>();
+            ApplyPatch<Patch_VendingMachine>();
 
             // Log Success
             _logger.Msg("Initialized!");
