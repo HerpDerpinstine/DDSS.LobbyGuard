@@ -70,9 +70,6 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
-            // Get Player Controller
-            PlayerController player = sender.GetComponent<PlayerController>();
-
             // Run Game Command
             usable.UserCode_CmdStopUse__NetworkIdentity(sender);
 
