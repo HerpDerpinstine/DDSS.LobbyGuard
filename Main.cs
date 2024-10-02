@@ -20,6 +20,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_LobbyItem>();
             ApplyPatch<Patch_LobbyManager>();
             ApplyPatch<Patch_LobbyPlayer>();
+            ApplyPatch<Patch_NetworkManager>();
             ApplyPatch<Patch_PhoneManager>();
             ApplyPatch<Patch_ServerController>();
             ApplyPatch<Patch_SteamMatchmaking>();
