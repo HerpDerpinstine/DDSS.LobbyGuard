@@ -22,6 +22,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_PhoneManager>();
             ApplyPatch<Patch_ServerController>();
             ApplyPatch<Patch_SteamMatchmaking>();
+            ApplyPatch<Patch_TrashBin>();
 
             _logger.Msg("Initialized!");
         }
