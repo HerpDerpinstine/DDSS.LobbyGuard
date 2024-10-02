@@ -65,5 +65,28 @@ namespace DDSS_LobbyGuard.Patches
             // Prevent Original
             return false;
         }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.InvokeUserCode_CmdEmptyBin__NetworkIdentity))]
+        private static bool InvokeUserCode_CmdEmptyBin__NetworkIdentity_Prefix(
+            NetworkBehaviour __0,
+            NetworkConnectionToClient __2)
+        {
+            // Get TrashBin
+            TrashBin trashcan = __0.TryCast<TrashBin>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
+                return false;
+
+            // Run Game Command
+            trashcan.UserCode_CmdEmptyBin__NetworkIdentity(sender);
+
+            // Prevent Original
+            return false;
+        }
     }
 }
