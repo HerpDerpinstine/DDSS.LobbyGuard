@@ -19,8 +19,8 @@ namespace DDSS_LobbyGuard.Security
             string receiver)
         {
             // Check if Calling Self
-            //if (caller == receiver)
-            //    return;
+            if (caller == receiver)
+                return;
 
             // Check if already has Ongoing Call
             if (_callSenderList.ContainsKey(caller))
@@ -47,8 +47,8 @@ namespace DDSS_LobbyGuard.Security
             string receiver)
         {
             // Check if Calling Self
-            //if (caller == receiver)
-            //    return;
+            if (caller == receiver)
+                return;
 
             // Check if already has Ongoing Call
             if (_callReceiverList.ContainsKey(receiver))
@@ -75,8 +75,8 @@ namespace DDSS_LobbyGuard.Security
             string receiver)
         {
             // Check if Calling Self
-            //if (caller == receiver)
-            //    return;
+            if (caller == receiver)
+                return;
 
             // Check if there is an Ongoing Call Attempt
             if (!_callSenderList.ContainsKey(caller))
@@ -107,8 +107,8 @@ namespace DDSS_LobbyGuard.Security
             string receiver)
         {
             // Check if Calling Self
-            //if (caller == receiver)
-            //    return;
+            if (caller == receiver)
+                return;
 
             // Check if there is an Ongoing Call Attempt
             if (!_callSenderList.ContainsKey(caller))
@@ -140,8 +140,8 @@ namespace DDSS_LobbyGuard.Security
             string receiver)
         {
             // Check if Calling Self
-            //if (caller == receiver)
-            //    return;
+            if (caller == receiver)
+                return;
 
             // Check if already has Ongoing Call
             if (!_callSenderList.ContainsKey(caller))
