@@ -15,6 +15,7 @@ namespace DDSS_LobbyGuard
             _logger = LoggerInstance;
 
             // Apply Patches
+            ApplyPatch<Patch_CatController>();
             ApplyPatch<Patch_CigarettePack>();
             ApplyPatch<Patch_Collectible>();
             ApplyPatch<Patch_GameManager>();
