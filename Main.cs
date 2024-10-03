@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Patches;
+﻿using DDSS_LobbyGuard.Components;
+using DDSS_LobbyGuard.Patches;
 using DDSS_LobbyGuard.Security;
 using MelonLoader;
 using System;
@@ -13,6 +14,9 @@ namespace DDSS_LobbyGuard
         {
             // Cache Logger
             _logger = LoggerInstance;
+
+            // Register Custom Components
+            ManagedEnumerator.Register();
 
             // Apply Patches
             ApplyPatch<Patch_CatController>();
@@ -40,6 +44,7 @@ namespace DDSS_LobbyGuard
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
+            DoorSecurity.OnSceneLoad();
             PhoneSecurity.OnSceneLoad();
             ServerSecurity.OnSceneLoad();
             TrashBinSecurity.OnSceneLoad();

@@ -13,13 +13,10 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Components\**" />
     <Compile Remove="Libs\**" />
     <Compile Remove="Output\**" />
-    <EmbeddedResource Remove="Components\**" />
     <EmbeddedResource Remove="Libs\**" />
     <EmbeddedResource Remove="Output\**" />
-    <None Remove="Components\**" />
     <None Remove="Libs\**" />
     <None Remove="Output\**" />
   </ItemGroup>
@@ -76,6 +73,9 @@
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Components\" />
   </ItemGroup>
   
 </Project>

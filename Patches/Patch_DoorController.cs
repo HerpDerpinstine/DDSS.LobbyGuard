@@ -8,6 +8,19 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_DoorController
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetDoorState__Int32))]
+        private static bool UserCode_CmdSetDoorState__Int32_Prefix(
+            DoorController __instance,
+            int __0)
+        {
+            // Apply State
+            DoorSecurity.ApplyState(__instance, __0);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetLockState__Boolean))]
         private static bool InvokeUserCode_CmdSetLockState__Boolean_Prefix(
             NetworkBehaviour __0,
@@ -19,13 +32,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Requested Lock State
             bool requestedState = __1.ReadBool();
-            int stateIndex = requestedState ? 0 : door.state;
-
-            // Validate Lock
-            if ((door.isLocked && (stateIndex != 0))
-                || ((door.state == 1) && (stateIndex == -1)) 
-                || ((door.state == -1) && stateIndex == 1))
-                return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
@@ -53,12 +59,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Requested Lock State
             int stateIndex = __1.ReadInt();
-
-            // Validate Lock
-            if ((door.isLocked && (stateIndex != 0))
-                || ((door.state == 1) && (stateIndex == -1))
-                || ((door.state == -1) && stateIndex == 1))
-                return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
