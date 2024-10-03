@@ -25,7 +25,7 @@ namespace DDSS_LobbyGuard.Security
         internal static int MAX_CIG_PACKS { get; private set; }
         internal static int MAX_INFECTED_USBS { get; private set; }
 
-        internal static void OnMatchStart()
+        internal static void OnSceneLoad()
         {
             // Validate Game Rules Manager
             if (GameRulesSettingsManager.instance == null)

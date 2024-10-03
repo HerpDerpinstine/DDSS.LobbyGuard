@@ -47,6 +47,7 @@ namespace DDSS_LobbyGuard
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
             DoorSecurity.OnSceneLoad();
+            InteractionSecurity.OnSceneLoad();
             PhoneSecurity.OnSceneLoad();
             ServerSecurity.OnSceneLoad();
             TrashBinSecurity.OnSceneLoad();
