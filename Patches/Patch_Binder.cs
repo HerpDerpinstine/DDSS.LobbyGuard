@@ -11,18 +11,6 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_Binder
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocument__String__String))]
-        private static bool InvokeUserCode_CmdAddDocument__String__String_Prefix(NetworkConnectionToClient __2)
-        {
-            // Check for Server
-            if (!__2.identity.isServer)
-                return false;
-
-            // Run Original
-            return true;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(Binder), nameof(Binder.UserCode_CmdAddDocument__String__String))]
         private static bool UserCode_CmdAddDocument__String__String_Prefix(Binder __instance, string __0, string __1)
         {
@@ -65,6 +53,10 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Get Binder
             Binder binder = __0.TryCast<Binder>();
 
@@ -85,11 +77,52 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, doc.transform.position))
+            if (!InteractionSecurity.IsWithinRange(binder.transform.position, doc.transform.position))
                 return false;
 
             // Run Game Command
             binder.UserCode_CmdAddDocument__Document__NetworkIdentity(doc, sender);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocument__String__String))]
+        private static bool InvokeUserCode_CmdAddDocument__String__String_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
+            // Get Binder
+            Binder binder = __0.TryCast<Binder>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Count
+            if (binder.documents.Count >= InteractionSecurity.MAX_DOCUMENTS_BINDER)
+                return false;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, binder.transform.position))
+                return false;
+
+            // Get Document
+            Document doc = __1.ReadNetworkBehaviour<Document>();
+            if (doc == null)
+                return false;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(binder.transform.position, doc.transform.position))
+                return false;
+
+            // Run Game Command
+            binder.UserCode_CmdAddDocument__String__String(doc.interactableName, doc.text);
 
             // Prevent Original
             return false;
