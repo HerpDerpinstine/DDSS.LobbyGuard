@@ -36,6 +36,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_PlayerEffectController>();
             ApplyPatch<Patch_ServerController>();
             ApplyPatch<Patch_SteamMatchmaking>();
+            ApplyPatch<Patch_StorageBox>();
             ApplyPatch<Patch_TrashBin>();
             ApplyPatch<Patch_Usable>();
             ApplyPatch<Patch_VendingMachine>();
