@@ -1,4 +1,5 @@
 ﻿using Il2CppGameManagement;
+using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
@@ -41,18 +42,10 @@ namespace DDSS_LobbyGuard.Security
            return GameManager.instance.CountSpawnedItemsOfType(interactableName) < maxCount;
         }
 
-        internal static bool CanGrabCollectible(LobbyPlayer player)
+        internal static bool CanGrabCollectible(NetworkIdentity player, 
+            Collectible collectible)
         {
-            PlayerController controller = player.NetworkplayerController.GetComponent<PlayerController>();
-            if (controller == null)
-                return false;
-
-            return controller.currentUsables.Count < MAX_ITEMS_HELD;
-        }
-
-        internal static bool CanGrabCollectible(LobbyPlayer player, Collectible collectible)
-        {
-            PlayerController controller = player.NetworkplayerController.GetComponent<PlayerController>();
+            PlayerController controller = player.GetComponent<PlayerController>();
             if (controller == null)
                 return false;
 
@@ -61,9 +54,9 @@ namespace DDSS_LobbyGuard.Security
                 && (count < collectible.maxStack));
         }
 
-        internal static bool IsHoldingCollectible(LobbyPlayer player)
+        internal static bool IsHoldingCollectible(NetworkIdentity player)
         {
-            PlayerController controller = player.NetworkplayerController.GetComponent<PlayerController>();
+            PlayerController controller = player.GetComponent<PlayerController>();
             if (controller == null)
                 return false;
 

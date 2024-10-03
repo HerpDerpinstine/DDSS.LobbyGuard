@@ -14,6 +14,10 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Get CollectibleHolder
             CollectibleHolder holder = __0.TryCast<CollectibleHolder>();
 
@@ -24,18 +28,9 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
                 return false;
 
-            // Check for Server
-            if (!__2.identity.isServer)
-            {
-                // Get LobbyPlayer
-                LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-                if (player == null)
-                    return false;
-
-                // Validate Placement
-                if (!InteractionSecurity.IsHoldingCollectible(player))
-                    return false;
-            }
+            // Validate Placement
+            if (!InteractionSecurity.IsHoldingCollectible(sender))
+                return false;
 
             // Run Game Command
             holder.UserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity(sender);
@@ -69,23 +64,14 @@ namespace DDSS_LobbyGuard.Patches
             __1.ReadNetworkIdentity();
             NetworkIdentity collectibleIdentity = __1.ReadNetworkIdentity();
 
-            // Check for Server
-            if (!__2.identity.isServer)
-            {
-                // Get Collectible
-                Collectible collectible = collectibleIdentity.GetComponent<Collectible>();
-                if (collectible == null)
-                    return false;
-
-                // Get LobbyPlayer
-                LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-                if (player == null)
-                    return false;
-
-                // Validate Grab
-                if (!InteractionSecurity.CanGrabCollectible(player, collectible))
-                    return false;
-            }
+            // Get Collectible
+            Collectible collectible = collectibleIdentity.GetComponent<Collectible>();
+            if (collectible == null)
+                return false;
+                
+            // Validate Grab
+            if (!InteractionSecurity.CanGrabCollectible(sender, collectible))
+                return false;
 
             // Run Game Command
             holder.UserCode_CmdGrabCollectible__NetworkIdentity__NetworkIdentity(sender, collectibleIdentity);

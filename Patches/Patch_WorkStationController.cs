@@ -3,7 +3,6 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.WorkStation.InfectedUSB;
 
 namespace DDSS_LobbyGuard.Patches
@@ -113,7 +112,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Count
             if (!InteractionSecurity.CanSpawnItem(interactableName,
-                InteractionSecurity.MAX_CIG_PACKS))
+                InteractionSecurity.MAX_INFECTED_USBS))
                 return false;
 
             // Run Game Command
