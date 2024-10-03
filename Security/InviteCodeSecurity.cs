@@ -4,8 +4,8 @@
     {
         // Old Codes: 14950 possible combinations
         // New Codes: 30260340 possible combinations
-        const string AllowedCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const int CharacterCount = 8;
+        private const string AllowedCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const int CharacterCount = 8;
 
         internal static string GenerateNewCode()
         {
