@@ -54,9 +54,6 @@ namespace DDSS_LobbyGuard.Security
             if (GameManager.instance == null)
                 return 0;
 
-            if (!GameManager.instance.collectibleCounts.ContainsKey(interactableName))
-                GameManager.instance.collectibleCounts[interactableName] = 0;
-
             return GameManager.instance.CountSpawnedItemsOfType(interactableName);
         }
         internal static bool CanSpawnItem(string interactableName, int maxCount)
