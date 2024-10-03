@@ -3,7 +3,6 @@ using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
-using System;
 
 namespace DDSS_LobbyGuard.Patches
 {

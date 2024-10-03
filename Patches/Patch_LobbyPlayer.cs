@@ -47,9 +47,14 @@ namespace DDSS_LobbyGuard.Patches
                 || (player.playerRole != PlayerRole.Manager))
                 return false;
 
-            // Remove Assistant Role from All Others
+            // Validate Role
             SubRole requestedRole = (SubRole)__1.ReadInt();
+            if (requestedRole == player.subRole)
+                return false;
+
+            // Remove Assistant Role from All Others
             if (requestedRole == SubRole.Assistant)
+            {
                 foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedPlayers)
                 {
                     // Get Old Player
@@ -61,6 +66,7 @@ namespace DDSS_LobbyGuard.Patches
                     // Reset Role
                     oldPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
                 }
+            }
 
             // Run Game Command
             player.UserCode_CmdSetSubRole__SubRole(requestedRole);
