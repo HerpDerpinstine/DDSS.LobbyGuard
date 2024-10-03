@@ -58,9 +58,17 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Requested Item
             Collectible item = machine.items[itemIndex];
+            if (item == null)
+                return false;
+
+            // Get Item Interactable Name
+            string interactableName = item.interactableName;
+            if (string.IsNullOrEmpty(interactableName)
+                || string.IsNullOrWhiteSpace(interactableName))
+                return false;
 
             // Validate Count
-            if (!InteractionSecurity.CanSpawnItem(item.interactableName, machine.maxItemCount))
+            if (!InteractionSecurity.CanSpawnItem(interactableName, machine.maxItemCount))
                 return false;
 
             // Run Game Command

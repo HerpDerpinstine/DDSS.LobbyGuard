@@ -1,6 +1,9 @@
 ﻿using Il2CppGameManagement;
+using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
+using Il2CppPlayer.TaskManagement.Tasks;
+using Il2CppPlayer.Tasks;
 using Il2CppProps.Scripts;
 using UnityEngine;
 
@@ -11,7 +14,11 @@ namespace DDSS_LobbyGuard.Security
         internal const float MAX_DISTANCE = 2f;
         internal const float MAX_SPANK_DISTANCE = 1f;
 
+        internal const int MAX_CIG_PACKS = 21;
         internal const int MAX_CIGS_PER_PACK = 20;
+
+        internal const int MAX_INFECTED_USBS = 21;
+
         internal const int MAX_ITEMS_HELD = 2;
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
@@ -61,6 +68,23 @@ namespace DDSS_LobbyGuard.Security
                 return false;
 
             return controller.currentUsables.Count > 0;
+        }
+
+        internal static bool CanPickUpInfectedUsb(WorkStationController station, LobbyPlayer player)
+        {
+            LobbyPlayer stationOwner = station.NetworkownerLobbyPlayer.GetComponent<LobbyPlayer>();
+            if (stationOwner == null)
+                return false;
+            return CanInfectStation(station, player)
+                && (stationOwner == player);
+        }
+
+        internal static bool CanInfectStation(WorkStationController station, LobbyPlayer player)
+        {
+            TaskController component = player.GetComponent<TaskController>();
+            if (component == null)
+                return false;
+            return component.GetActiveTask() is InfectComputerTask;
         }
     }
 }

@@ -38,6 +38,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_TrashBin>();
             ApplyPatch<Patch_Usable>();
             ApplyPatch<Patch_VendingMachine>();
+            ApplyPatch<Patch_WorkStationController>();
 
             // Log Success
             _logger.Msg("Initialized!");
