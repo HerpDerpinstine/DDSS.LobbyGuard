@@ -36,9 +36,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Count
             int freeSlots = tray.freePositions.Count;
-            if (!tray.allowStacking
-                && ((freeSlots <= 0)
-                    || (freeSlots < InteractionSecurity.MAX_DOCUMENTS_TRAY)))
+            if (!tray.allowStacking && (freeSlots <= 0))
                 return false;
 
             // Get Value

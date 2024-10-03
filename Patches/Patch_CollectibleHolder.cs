@@ -23,6 +23,11 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Validate Count
+            int freeSlots = holder.freePositions.Count;
+            if (!holder.allowStacking && (freeSlots <= 0))
+                return false;
+
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
                 return false;
@@ -54,6 +59,10 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+
+            // Validate Count
+            if (holder.freePositions.Count >= holder.collectiblePositions.Count)
+                return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
