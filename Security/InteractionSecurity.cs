@@ -14,8 +14,6 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class InteractionSecurity
     {
-        private static Dictionary<NetworkIdentity, Dictionary<string, int>> _itemSpawnCount = new();
-
         private const int MAX_ITEMS_HELD = 2;
 
         internal const float MAX_DISTANCE = 2f;
