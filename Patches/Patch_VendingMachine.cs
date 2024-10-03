@@ -60,7 +60,7 @@ namespace DDSS_LobbyGuard.Patches
             Collectible item = machine.items[itemIndex];
 
             // Validate Count
-            if (!machine.CanSpawnItem(item.interactableName))
+            if (!InteractionSecurity.CanSpawnItem(item.interactableName, machine.maxItemCount))
                 return false;
 
             // Run Game Command
