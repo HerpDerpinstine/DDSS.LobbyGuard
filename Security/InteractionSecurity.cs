@@ -38,8 +38,8 @@ namespace DDSS_LobbyGuard.Security
             // Adjust Limits
             MAX_CIG_PACKS = maxPlayers;
             MAX_INFECTED_USBS = maxPlayers;
-            MAX_CIGS = maxPlayers * 2;
-            MAX_DOCUMENTS_TRAY = maxPlayers * 2;
+            MAX_CIGS = maxPlayers * 3;
+            MAX_DOCUMENTS_TRAY = maxPlayers * 3;
         }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
