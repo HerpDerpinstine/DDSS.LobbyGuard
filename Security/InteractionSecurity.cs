@@ -1,4 +1,5 @@
-﻿using Il2CppGameManagement;
+﻿using Il2Cpp;
+using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer;
@@ -6,21 +7,38 @@ using Il2CppPlayer.Lobby;
 using Il2CppPlayer.TaskManagement.Tasks;
 using Il2CppPlayer.Tasks;
 using Il2CppProps.Scripts;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Security
 {
     internal static class InteractionSecurity
     {
+        private static Dictionary<NetworkIdentity, Dictionary<string, int>> _itemSpawnCount = new();
+
+        private const int MAX_ITEMS_HELD = 2;
+
         internal const float MAX_DISTANCE = 2f;
         internal const float MAX_SPANK_DISTANCE = 1f;
 
-        internal const int MAX_CIG_PACKS = 21;
-        internal const int MAX_CIGS_PER_PACK = 20;
+        internal static int MAX_CIGS { get; private set; }
+        internal static int MAX_CIG_PACKS { get; private set; }
+        internal static int MAX_INFECTED_USBS { get; private set; }
 
-        internal const int MAX_INFECTED_USBS = 21;
+        internal static void OnMatchStart()
+        {
+            // Validate Game Rules Manager
+            if (GameRulesSettingsManager.instance == null)
+                return;
 
-        internal const int MAX_ITEMS_HELD = 2;
+            // Get Max Players
+            int maxPlayers = Mathf.RoundToInt(GameRulesSettingsManager.instance.GetSetting("Max players")) + 1;
+
+            // Adjust Limits
+            MAX_CIG_PACKS = maxPlayers;
+            MAX_INFECTED_USBS = maxPlayers;
+            MAX_CIGS = MAX_CIG_PACKS * 3;
+        }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
             float maxRange = MAX_DISTANCE)
@@ -31,16 +49,18 @@ namespace DDSS_LobbyGuard.Security
             return distance <= maxRange;
         }
 
-        internal static bool CanSpawnItem(string interactableName, int maxCount)
+        private static int GetTotalCountOfSpawnedItem(string interactableName)
         {
             if (GameManager.instance == null)
-                return false;
+                return 0;
 
             if (!GameManager.instance.collectibleCounts.ContainsKey(interactableName))
                 GameManager.instance.collectibleCounts[interactableName] = 0;
 
-           return GameManager.instance.CountSpawnedItemsOfType(interactableName) < maxCount;
+            return GameManager.instance.CountSpawnedItemsOfType(interactableName);
         }
+        internal static bool CanSpawnItem(string interactableName, int maxCount)
+            => GetTotalCountOfSpawnedItem(interactableName) < maxCount;
 
         internal static bool CanGrabCollectible(NetworkIdentity player, 
             Collectible collectible)

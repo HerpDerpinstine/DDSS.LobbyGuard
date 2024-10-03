@@ -36,8 +36,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Count
-            if (!InteractionSecurity.CanSpawnItem(interactableName,
-                InteractionSecurity.MAX_CIGS_PER_PACK))
+            if (!InteractionSecurity.CanSpawnItem(interactableName, 
+                InteractionSecurity.MAX_CIG_PACKS))
                 return false;
 
             // Run Game Command

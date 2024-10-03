@@ -68,7 +68,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Count
-            if (!InteractionSecurity.CanSpawnItem(interactableName, machine.maxItemCount))
+            if (!InteractionSecurity.CanSpawnItem(interactableName,
+                machine.maxItemCount))
                 return false;
 
             // Run Game Command
