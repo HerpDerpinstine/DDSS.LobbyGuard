@@ -12,7 +12,7 @@ namespace DDSS_LobbyGuard
 
         public override void OnInitializeMelon()
         {
-            // Cache Logger
+            // Cache Logger 
             _logger = LoggerInstance;
 
             // Register Custom Components
@@ -32,6 +32,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_NetworkManager>();
             ApplyPatch<Patch_PhoneManager>();
             ApplyPatch<Patch_PlayerController>();
+            ApplyPatch<Patch_PlayerEffectController>();
             ApplyPatch<Patch_ServerController>();
             ApplyPatch<Patch_SteamMatchmaking>();
             ApplyPatch<Patch_TrashBin>();
