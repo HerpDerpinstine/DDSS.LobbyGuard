@@ -20,6 +20,18 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.InvokeUserCode_CmdReplacePlayer__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdReplacePlayer__NetworkConnectionToClient_Prefix(NetworkConnectionToClient __2)
+        {
+            // Validate Server
+            if (!__2.identity.isServer)
+                return false;
+
+            // Run Original
+            return true;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.InvokeUserCode_CmdReplacePlayerWithSpectator__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdReplacePlayerWithSpectator__NetworkConnectionToClient_Prefix(NetworkConnectionToClient __2)
         {
