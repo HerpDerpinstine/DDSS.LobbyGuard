@@ -9,15 +9,18 @@ namespace DDSS_LobbyGuard.Security
     internal static class InteractionSecurity
     {
         internal const float MAX_DISTANCE = 2f;
+        internal const float MAX_SPANK_DISTANCE = 1f;
+
         internal const int MAX_CIGS_PER_PACK = 20;
         internal const int MAX_ITEMS_HELD = 2;
 
-        internal static bool IsWithinRange(Vector3 posA, Vector3 posB)
+        internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
+            float maxRange = MAX_DISTANCE)
         {
             float distance = Vector3.Distance(posA, posB);
             if (distance < 0f)
                 distance *= -1f;
-            return distance <= MAX_DISTANCE;
+            return distance <= maxRange;
         }
 
         internal static bool CanSpawnItem(string interactableName, int maxCount)

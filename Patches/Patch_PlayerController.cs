@@ -20,7 +20,10 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, player.transform.position))
+            if (!InteractionSecurity.IsWithinRange(
+                sender.transform.position, 
+                player.transform.position, 
+                InteractionSecurity.MAX_SPANK_DISTANCE))
                 return false;
 
             // Run Game Command
