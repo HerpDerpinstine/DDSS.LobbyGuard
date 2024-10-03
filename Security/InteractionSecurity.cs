@@ -6,7 +6,7 @@ namespace DDSS_LobbyGuard.Security
     internal static class InteractionSecurity
     {
         internal const float MAX_DISTANCE = 2f;
-        internal const int MAX_CIGS_PER_PACK = 20;
+        internal const int MAX_CIGS_PER_PACK = 2;
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB)
         {
