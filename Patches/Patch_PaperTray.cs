@@ -45,7 +45,7 @@ namespace DDSS_LobbyGuard.Patches
             if (prefabDoc == null)
                 return false;
 
-            // Get CigarettePack Interactable Name
+            // Get Document Interactable Name
             string interactableName = prefabDoc.interactableName;
             if (string.IsNullOrEmpty(interactableName)
                 || string.IsNullOrWhiteSpace(interactableName))
