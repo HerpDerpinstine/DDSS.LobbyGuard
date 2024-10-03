@@ -32,6 +32,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_LobbyPlayer>();
             ApplyPatch<Patch_NetworkManager>();
             ApplyPatch<Patch_PaperShredder>();
+            ApplyPatch<Patch_PaperTray>();
             ApplyPatch<Patch_PhoneManager>();
             ApplyPatch<Patch_PlayerController>();
             ApplyPatch<Patch_PlayerEffectController>();

@@ -24,6 +24,7 @@ namespace DDSS_LobbyGuard.Security
         internal static int MAX_CIGS { get; private set; }
         internal static int MAX_CIG_PACKS { get; private set; }
         internal static int MAX_INFECTED_USBS { get; private set; }
+        internal static int MAX_DOCUMENTS_TRAY { get; private set; }
 
         internal static void OnSceneLoad()
         {
@@ -37,7 +38,8 @@ namespace DDSS_LobbyGuard.Security
             // Adjust Limits
             MAX_CIG_PACKS = maxPlayers;
             MAX_INFECTED_USBS = maxPlayers;
-            MAX_CIGS = MAX_CIG_PACKS * 3;
+            MAX_CIGS = maxPlayers * 2;
+            MAX_DOCUMENTS_TRAY = maxPlayers * 2;
         }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,

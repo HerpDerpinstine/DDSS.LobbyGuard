@@ -13,6 +13,10 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Get Collectible
             Collectible collectible = __0.TryCast<Collectible>();
 
