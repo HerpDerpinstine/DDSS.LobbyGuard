@@ -3,6 +3,7 @@ using HarmonyLib;
 using Il2CppMirror;
 using Il2CppProps;
 using Il2CppProps.Printer;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -11,20 +12,16 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPrefix]
         [HarmonyPatch(typeof(OfficeShelf), nameof(OfficeShelf.InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32))]
         private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32_Prefix(
-            NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Get OfficeShelf
-            OfficeShelf shelf = __0.TryCast<OfficeShelf>();
-
             // Get Document
             string document = __1.ReadString();
             if (string.IsNullOrEmpty(document)
                 || string.IsNullOrWhiteSpace(document))
                 return false;
 
-            // Get Document
+            // Get FileName
             string fileName = __1.ReadString();
             if (string.IsNullOrEmpty(fileName)
                 || string.IsNullOrWhiteSpace(fileName))
@@ -60,19 +57,18 @@ namespace DDSS_LobbyGuard.Patches
             if (binderObj == null) 
                 return false;
 
-            // Get Binder Interactable Name
-            string interactableName = binderObj.interactableName;
-            if (string.IsNullOrEmpty(interactableName)
-                || string.IsNullOrWhiteSpace(interactableName))
+            // Validate Count
+            if (binderObj.documents.Count >= InteractionSecurity.MAX_DOCUMENTS_BINDER)
                 return false;
 
-            // Validate Count
-            if (!InteractionSecurity.CanSpawnItem(interactableName,
-                InteractionSecurity.MAX_DOCUMENTS_BINDER))
+            // Get Document Content
+            string documentContent = Resources.Load<TextAsset>("files/" + fileName).text;
+            if (string.IsNullOrEmpty(documentContent)
+                || string.IsNullOrWhiteSpace(documentContent))
                 return false;
 
             // Run Game Command
-            shelf.UserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32(document, fileName, documentCategory, binder);
+            binderObj.UserCode_CmdAddDocument__String__String(document, documentContent);
 
             // Prevent Original
             return false;

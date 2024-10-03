@@ -34,26 +34,17 @@ namespace DDSS_LobbyGuard.Patches
             if (tray == null) 
                 return false;
 
+            // Validate Count
+            int freeSlots = tray.freePositions.Count;
+            if (!tray.allowStacking
+                && ((freeSlots <= 0)
+                    || (freeSlots < InteractionSecurity.MAX_DOCUMENTS_TRAY)))
+                return false;
+
             // Get Value
             string document = __1.ReadString();
             if (string.IsNullOrEmpty(document)
                 || string.IsNullOrWhiteSpace(document))
-                return false;
-
-            // Get Document from Prefab
-            Document prefabDoc = tray.documentPrefab.GetComponentInChildren<Document>();
-            if (prefabDoc == null)
-                return false;
-
-            // Get Document Interactable Name
-            string interactableName = prefabDoc.interactableName;
-            if (string.IsNullOrEmpty(interactableName)
-                || string.IsNullOrWhiteSpace(interactableName))
-                return false;
-
-            // Validate Count
-            if (!InteractionSecurity.CanSpawnItem(interactableName, 
-                InteractionSecurity.MAX_DOCUMENTS_TRAY))
                 return false;
 
             // Run Game Command
