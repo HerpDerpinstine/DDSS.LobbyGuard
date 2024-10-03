@@ -16,6 +16,7 @@ namespace DDSS_LobbyGuard
 
             // Apply Patches
             ApplyPatch<Patch_CigarettePack>();
+            ApplyPatch<Patch_Collectible>();
             ApplyPatch<Patch_GameManager>();
             ApplyPatch<Patch_LobbyItem>();
             ApplyPatch<Patch_LobbyManager>();
