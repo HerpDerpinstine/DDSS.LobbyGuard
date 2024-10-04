@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
@@ -13,6 +14,7 @@ namespace DDSS_LobbyGuard
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Document), nameof(Document.InvokeUserCode_CmdSignDocument__NetworkIdentity))]
         private static bool InvokeUserCode_CmdSignDocument__NetworkIdentity_Prefix(
+           NetworkBehaviour __0,
            NetworkReader __1,
            NetworkConnectionToClient __2)
         {
@@ -20,8 +22,18 @@ namespace DDSS_LobbyGuard
             if (__2.identity.isServer)
                 return true;
 
+            // Get Document
+            Document document = __0.TryCast<Document>();
+            if ((document == null)
+                || document.signed)
+                return false;
+
             // Get Sender
             NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, document.transform.position))
+                return false;
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
@@ -30,8 +42,9 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Get Document
-            Document document = collectible.TryCast<Document>();
-            if (document == null)
+            document = collectible.TryCast<Document>();
+            if ((document == null)
+                || document.signed)
                 return false;
 
             // Get Value

@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
@@ -12,6 +13,7 @@ namespace DDSS_LobbyGuard
         [HarmonyPrefix]
         [HarmonyPatch(typeof(StickyNoteController), nameof(StickyNoteController.InvokeUserCode_CmdSetText__String))]
         private static bool InvokeUserCode_CmdSetText__String_Prefix(
+           NetworkBehaviour __0,
            NetworkReader __1,
            NetworkConnectionToClient __2)
         {
@@ -19,8 +21,17 @@ namespace DDSS_LobbyGuard
             if (__2.identity.isServer)
                 return true;
 
+            // Get StickyNoteController
+            StickyNoteController controller = __0.TryCast<StickyNoteController>();
+            if (controller == null)
+                return false;
+
             // Get Sender
             NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
+                return false;
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
@@ -29,7 +40,7 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Get StickyNoteController
-            StickyNoteController controller = collectible.TryCast<StickyNoteController>();
+            controller = collectible.TryCast<StickyNoteController>();
             if (controller == null)
                 return false;
 
