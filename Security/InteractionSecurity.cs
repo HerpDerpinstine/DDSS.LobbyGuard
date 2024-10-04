@@ -21,10 +21,12 @@ namespace DDSS_LobbyGuard.Security
 
         internal const int MAX_DOCUMENTS_TRAY = 10;
         internal const int MAX_DOCUMENTS_BINDER = 10;
+        internal const int MAX_DOCUMENTS_PRINTER = 10;
 
         internal static int MAX_CIGS { get; private set; }
         internal static int MAX_CIG_PACKS { get; private set; }
         internal static int MAX_INFECTED_USBS { get; private set; }
+        internal static int MAX_DOCUMENTS_PRINTER_TOTAL { get; private set; }
 
         internal static void OnSceneLoad()
         {
@@ -39,6 +41,7 @@ namespace DDSS_LobbyGuard.Security
             MAX_CIG_PACKS = maxPlayers;
             MAX_INFECTED_USBS = maxPlayers;
             MAX_CIGS = maxPlayers * 3;
+            MAX_DOCUMENTS_PRINTER_TOTAL = maxPlayers * 3;
         }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
@@ -80,15 +83,6 @@ namespace DDSS_LobbyGuard.Security
             int count = controller.currentUsables.Count;
             return ((count < MAX_ITEMS_HELD) 
                 && (count < collectible.maxStack));
-        }
-
-        internal static Collectible GetCurrentCollectible(NetworkIdentity player)
-        {
-            PlayerController controller = player.GetComponent<PlayerController>();
-            if (controller == null)
-                return null;
-
-            return controller.currentUsables[0].TryCast<Collectible>();
         }
 
         internal static bool IsHoldingCollectible(NetworkIdentity player)

@@ -1,6 +1,7 @@
 ﻿using DDSS_LobbyGuard.Components;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
+using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
@@ -17,9 +18,9 @@ namespace DDSS_LobbyGuard.Utils
         internal static string RemoveRichText(this string val)
             => _rtRegex.Replace(val, string.Empty);
 
-        internal static Collectible GetCurrentCollectible(this LobbyPlayer player)
+        internal static Collectible GetCurrentCollectible(this NetworkIdentity player)
         {
-            PlayerController controller = player.NetworkplayerController.GetComponent<PlayerController>();
+            PlayerController controller = player.GetComponent<PlayerController>();
             if (controller == null)
                 return null;
             Usable usable = controller.GetCurrentUsable();

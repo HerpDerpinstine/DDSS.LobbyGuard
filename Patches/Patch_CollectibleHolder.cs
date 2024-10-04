@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
 using Il2CppProps.Scripts;
@@ -25,7 +26,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Placement
-            Collectible collectible = InteractionSecurity.GetCurrentCollectible(sender);
+            Collectible collectible = sender.GetCurrentCollectible();
             if (collectible == null)
                 return false;
 

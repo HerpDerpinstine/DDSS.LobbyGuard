@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
@@ -72,7 +73,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Placement
-            Collectible collectible = InteractionSecurity.GetCurrentCollectible(sender);
+            Collectible collectible = sender.GetCurrentCollectible();
             if ((collectible == null)
                 || (collectible.GetIl2CppType() != Il2CppType.Of<Document>()))
                 return false;
@@ -118,7 +119,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Placement
-            Collectible collectible = InteractionSecurity.GetCurrentCollectible(sender);
+            Collectible collectible = sender.GetCurrentCollectible();
             if ((collectible == null)
                 || (collectible.GetIl2CppType() != Il2CppType.Of<Document>()))
                 return false;
