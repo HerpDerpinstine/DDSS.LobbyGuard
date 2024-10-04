@@ -38,7 +38,7 @@ namespace DDSS_LobbyGuard.Patches
             // Get Values
             string fileName = __1.ReadString();
             string documentName = $"{userName.RemoveRichText()}'s Document";
-            string documentContent = __1.ReadString();
+            string documentContent = __1.ReadString().RemoveRichText();
 
             // Get Document Content
             if (!string.IsNullOrEmpty(fileName)
@@ -65,7 +65,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkServer.Spawn(docCopy.gameObject);
             printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, documentName);
             docCopy.SetLabel(documentName);
-            docCopy.SetText(documentContent.RemoveRichText());
+            docCopy.SetText(documentContent);
 
             // Prevent Original
             return false;
