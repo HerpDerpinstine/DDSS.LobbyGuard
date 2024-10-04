@@ -36,15 +36,18 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Placement
-            Collectible collectible = sender.GetCurrentCollectible();
-            if ((collectible == null)
-                || (collectible.GetIl2CppType() != Il2CppType.Of<Jelly>()))
-                return false;
+            if (enabled)
+            {
+                Collectible collectible = sender.GetCurrentCollectible();
+                if ((collectible == null)
+                    || (collectible.GetIl2CppType() != Il2CppType.Of<Jelly>()))
+                    return false;
 
-            // Get Jelly
-            Jelly jelly = collectible.TryCast<Jelly>();
-            if (jelly == null)
-                return false;
+                // Get Jelly
+                Jelly jelly = collectible.TryCast<Jelly>();
+                if (jelly == null)
+                    return false;
+            }
 
             // Run Game Command
             station.UserCode_CmdEnableJelly__NetworkIdentity__Boolean(sender, enabled);
