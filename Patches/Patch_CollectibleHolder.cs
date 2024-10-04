@@ -128,6 +128,10 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.CanGrabCollectible(sender, collectible))
                 return false;
 
+            // Validate Collectible
+            if (collectible.currentHolder != holder)
+                return false;
+
             // Run Game Command
             holder.UserCode_CmdGrabCollectible__NetworkIdentity__NetworkIdentity(sender, collectibleIdentity);
 

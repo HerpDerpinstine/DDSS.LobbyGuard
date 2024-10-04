@@ -51,7 +51,7 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Run Game Command
-            controller.UserCode_CmdSetText__String(text);
+            controller.UserCode_CmdSetText__String(text.RemoveRichText());
 
             // Prevent Original
             return false;

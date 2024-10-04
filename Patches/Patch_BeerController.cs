@@ -22,7 +22,8 @@ namespace DDSS_LobbyGuard
 
             // Get BeerController
             BeerController beer = __0.TryCast<BeerController>();
-            if (beer == null)
+            if ((beer == null)
+                || beer.NetworkisEmpty)
                 return false;
 
             // Get Sender
@@ -40,7 +41,8 @@ namespace DDSS_LobbyGuard
 
             // Get Document
             beer = collectible.TryCast<BeerController>();
-            if (beer == null)
+            if ((beer == null)
+                || beer.NetworkisEmpty)
                 return false;
 
             // Run Game Command

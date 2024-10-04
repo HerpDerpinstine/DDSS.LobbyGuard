@@ -37,7 +37,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Values
             string fileName = __1.ReadString();
-            string documentName = $"{userName}'s Document";
+            string documentName = $"{userName.RemoveRichText()}'s Document";
             string documentContent = __1.ReadString();
 
             // Get Document Content
@@ -65,7 +65,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkServer.Spawn(docCopy.gameObject);
             printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, documentName);
             docCopy.SetLabel(documentName);
-            docCopy.SetText(documentContent);
+            docCopy.SetText(documentContent.RemoveRichText());
 
             // Prevent Original
             return false;
@@ -107,11 +107,12 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Create New Document Copy
+            string documentName = $"{userName.RemoveRichText()}'s Image";
             PrintedImage docCopy = GameObject.Instantiate<PrintedImage>(printer.printedImagePrefab,
                 printer.printPos.position, printer.printPos.rotation);
             NetworkServer.Spawn(docCopy.gameObject);
-            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, $"{userName}'s Image");
-            docCopy.SetLabel($"{userName}'s Image");
+            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, documentName);
+            docCopy.SetLabel(documentName);
             printer.RpcSetImage(docCopy.netIdentity, imageData);
 
             // Prevent Original
