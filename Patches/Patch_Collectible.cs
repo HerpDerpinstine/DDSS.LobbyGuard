@@ -46,7 +46,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Collectible
             if ((collectible.currentHolder != null)
-                && (collectible.currentHolder.GetIl2CppType() != Il2CppType.Of<PaperShredder>()))
+                && (collectible.currentHolder.GetIl2CppType() == Il2CppType.Of<PaperShredder>()))
             {
                 // Destroy It
                 collectible.UserCode_CmdDestroyCollectible();
