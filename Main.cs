@@ -39,7 +39,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_PhoneManager>();
             ApplyPatch<Patch_PlayerController>();
             ApplyPatch<Patch_PlayerEffectController>();
-            //ApplyPatch<Patch_Printer>();
+            ApplyPatch<Patch_Printer>();
             ApplyPatch<Patch_ServerController>();
             ApplyPatch<Patch_SteamMatchmaking>();
             ApplyPatch<Patch_StorageBox>();
