@@ -12,7 +12,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(StorageBox), nameof(StorageBox.InvokeUserCode_CmdGrabObject__NetworkIdentity))]
         private static bool InvokeUserCode_CmdGrabObject__NetworkIdentity_Prefix(
             NetworkBehaviour __0,
-            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Get StorageBox
