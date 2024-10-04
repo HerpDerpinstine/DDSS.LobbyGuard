@@ -1,5 +1,6 @@
 ﻿using DDSS_LobbyGuard.Security;
 using HarmonyLib;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppProps;
 using Il2CppProps.Printer;
@@ -50,7 +51,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocument__Document__NetworkIdentity))]
         private static bool InvokeUserCode_CmdAddDocument__Document__NetworkIdentity_Prefix(
             NetworkBehaviour __0,
-            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Check for Server
@@ -71,8 +71,14 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, binder.transform.position))
                 return false;
 
+            // Validate Placement
+            Collectible collectible = InteractionSecurity.GetCurrentCollectible(sender);
+            if ((collectible == null)
+                || (collectible.GetIl2CppType() != Il2CppType.Of<Document>()))
+                return false;
+
             // Get Document
-            Document doc = __1.ReadNetworkBehaviour<Document>();
+            Document doc = collectible.TryCast<Document>();
             if (doc == null)
                 return false;
 
@@ -91,7 +97,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocument__String__String))]
         private static bool InvokeUserCode_CmdAddDocument__String__String_Prefix(
             NetworkBehaviour __0,
-            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Check for Server
@@ -112,8 +117,14 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, binder.transform.position))
                 return false;
 
+            // Validate Placement
+            Collectible collectible = InteractionSecurity.GetCurrentCollectible(sender);
+            if ((collectible == null)
+                || (collectible.GetIl2CppType() != Il2CppType.Of<Document>()))
+                return false;
+
             // Get Document
-            Document doc = __1.ReadNetworkBehaviour<Document>();
+            Document doc = collectible.TryCast<Document>();
             if (doc == null)
                 return false;
 
@@ -148,7 +159,16 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, binder.transform.position))
                 return false;
-            
+
+            // Get Collectible
+            Collectible collectible = binder.documentPrefab.GetComponent<Collectible>();
+            if (collectible == null)
+                return false;
+
+            // Validate Placement
+            if (!InteractionSecurity.CanGrabCollectible(sender, collectible))
+                return false;
+
             // Get Document Name
             string documentName = __1.ReadString();
             if (string.IsNullOrEmpty(documentName)

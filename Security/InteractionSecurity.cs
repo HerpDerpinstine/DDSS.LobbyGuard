@@ -60,6 +60,16 @@ namespace DDSS_LobbyGuard.Security
         internal static bool CanSpawnItem(string interactableName, int maxCount)
             => GetTotalCountOfSpawnedItem(interactableName) < maxCount;
 
+        internal static bool CanGrabCollectible(NetworkIdentity player)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if (controller == null)
+                return false;
+
+            int count = controller.currentUsables.Count;
+            return (count < MAX_ITEMS_HELD);
+        }
+
         internal static bool CanGrabCollectible(NetworkIdentity player, 
             Collectible collectible)
         {
@@ -70,6 +80,15 @@ namespace DDSS_LobbyGuard.Security
             int count = controller.currentUsables.Count;
             return ((count < MAX_ITEMS_HELD) 
                 && (count < collectible.maxStack));
+        }
+
+        internal static Collectible GetCurrentCollectible(NetworkIdentity player)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if (controller == null)
+                return null;
+
+            return controller.currentUsables[0].TryCast<Collectible>();
         }
 
         internal static bool IsHoldingCollectible(NetworkIdentity player)

@@ -8,6 +8,52 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_CollectibleHolder
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String))]
+        private static bool InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
+            // Get CollectibleHolder
+            CollectibleHolder holder = __0.TryCast<CollectibleHolder>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Placement
+            Collectible collectible = InteractionSecurity.GetCurrentCollectible(sender);
+            if (collectible == null)
+                return false;
+
+            // Validate Count
+            int freeSlots = holder.freePositions.Count;
+            if (!holder.allowStacking && (freeSlots <= 0))
+                return false;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
+                return false;
+
+            // Get Object Name
+            __1.ReadNetworkIdentity();
+            string name = __1.ReadString();
+            if (string.IsNullOrEmpty(name)
+                || string.IsNullOrWhiteSpace(name))
+                return false;
+
+            // Run Game Command
+            holder.UserCode_CmdPlaceCollectible__NetworkIdentity__String(collectible.netIdentity,
+                collectible.label);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity))]
         private static bool InvokeUserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity_Prefix(
             NetworkBehaviour __0,

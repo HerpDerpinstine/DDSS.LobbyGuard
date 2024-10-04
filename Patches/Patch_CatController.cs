@@ -1,7 +1,9 @@
 ﻿using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -21,6 +23,17 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, cat.transform.position))
+                return false;
+
+            // Validate Placement
+            Collectible collectible = InteractionSecurity.GetCurrentCollectible(sender);
+            if ((collectible == null)
+                || (collectible.GetIl2CppType() != Il2CppType.Of<CatFoodController>()))
+                return false;
+
+            // Get CatFoodController
+            CatFoodController food = collectible.TryCast<CatFoodController>();
+            if (food == null)
                 return false;
 
             // Run Game Command

@@ -1,8 +1,10 @@
 ﻿using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
+using Il2CppProps.Scripts;
 using Il2CppProps.WorkStation.InfectedUSB;
 
 namespace DDSS_LobbyGuard.Patches
@@ -30,6 +32,17 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(
                 sender.transform.position,
                 station.transform.position))
+                return false;
+
+            // Validate Placement
+            Collectible collectible = InteractionSecurity.GetCurrentCollectible(sender);
+            if ((collectible == null)
+                || (collectible.GetIl2CppType() != Il2CppType.Of<Jelly>()))
+                return false;
+
+            // Get Jelly
+            Jelly jelly = collectible.TryCast<Jelly>();
+            if (jelly == null)
                 return false;
 
             // Run Game Command
@@ -60,6 +73,10 @@ namespace DDSS_LobbyGuard.Patches
             // Get CigarettePack from Prefab
             CigarettePack prefabCig = station.cigarettePackPrefab.GetComponentInChildren<CigarettePack>();
             if (prefabCig == null)
+                return false;
+
+            // Validate Placement
+            if (!InteractionSecurity.CanGrabCollectible(sender, prefabCig))
                 return false;
 
             // Get CigarettePack Interactable Name
@@ -102,6 +119,10 @@ namespace DDSS_LobbyGuard.Patches
             // Get InfectedUsb from Prefab
             InfectedUsb prefabUsb = station.cigarettePackPrefab.GetComponentInChildren<InfectedUsb>();
             if (prefabUsb == null)
+                return false;
+
+            // Validate Placement
+            if (!InteractionSecurity.CanGrabCollectible(sender, prefabUsb))
                 return false;
 
             // Get InfectedUsb Interactable Name

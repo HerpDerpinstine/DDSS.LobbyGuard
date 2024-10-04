@@ -25,6 +25,15 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, box.transform.position))
                 return false;
 
+            // Get Collectible
+            Collectible collectible = box.objectPrefab.GetComponent<Collectible>();
+            if (collectible == null)
+                return false;
+
+            // Validate Grab
+            if (!InteractionSecurity.CanGrabCollectible(sender, collectible))
+                return false;
+
             // Run Game Command
             box.UserCode_CmdGrabObject__NetworkIdentity(sender);
 

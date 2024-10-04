@@ -11,9 +11,7 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(OfficeShelf), nameof(OfficeShelf.InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32))]
-        private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32_Prefix(
-            NetworkReader __1,
-            NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32_Prefix(NetworkReader __1)
         {
             // Get Document
             string document = __1.ReadString();
