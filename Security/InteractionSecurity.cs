@@ -1,11 +1,11 @@
 ﻿using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
-using Il2CppObjects.Scripts;
+//using Il2CppObjects.Scripts;
 using Il2CppPlayer;
-using Il2CppPlayer.Lobby;
-using Il2CppPlayer.TaskManagement.Tasks;
-using Il2CppPlayer.Tasks;
+//using Il2CppPlayer.Lobby;
+//using Il2CppPlayer.TaskManagement.Tasks;
+//using Il2CppPlayer.Tasks;
 using Il2CppProps.Scripts;
 using UnityEngine;
 
@@ -90,6 +90,7 @@ namespace DDSS_LobbyGuard.Security
             return controller.currentUsables.Count > 0;
         }
 
+        /*
         internal static bool CanPickUpInfectedUsb(WorkStationController station, LobbyPlayer player)
         {
             LobbyPlayer stationOwner = station.NetworkownerLobbyPlayer.GetComponent<LobbyPlayer>();
@@ -106,5 +107,6 @@ namespace DDSS_LobbyGuard.Security
                 return false;
             return component.GetActiveTask() is InfectComputerTask;
         }
+        */
     }
 }

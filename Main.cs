@@ -42,6 +42,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_Printer>();
             ApplyPatch<Patch_ServerController>();
             ApplyPatch<Patch_SteamMatchmaking>();
+            ApplyPatch<Patch_StickyNoteController>();
             ApplyPatch<Patch_StorageBox>();
             ApplyPatch<Patch_Toilet>();
             ApplyPatch<Patch_TrashBin>();
