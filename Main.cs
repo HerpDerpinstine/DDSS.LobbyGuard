@@ -21,6 +21,7 @@ namespace DDSS_LobbyGuard
             // Apply Patches
             ApplyPatch<Patch_Binder>();
             ApplyPatch<Patch_CatController>();
+            ApplyPatch<Patch_Cigarette>();
             ApplyPatch<Patch_CigarettePack>();
             ApplyPatch<Patch_CoffeeMachine>();
             ApplyPatch<Patch_Collectible>();
@@ -38,6 +39,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_PhoneManager>();
             ApplyPatch<Patch_PlayerController>();
             ApplyPatch<Patch_PlayerEffectController>();
+            //ApplyPatch<Patch_Printer>();
             ApplyPatch<Patch_ServerController>();
             ApplyPatch<Patch_SteamMatchmaking>();
             ApplyPatch<Patch_StorageBox>();
