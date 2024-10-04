@@ -55,7 +55,5 @@ namespace DDSS_LobbyGuard.Patches
             // Prevent Original
             return false;
         }
-
-
     }
 }
