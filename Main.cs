@@ -19,6 +19,7 @@ namespace DDSS_LobbyGuard
             ManagedEnumerator.Register();
 
             // Apply Patches
+            ApplyPatch<Patch_BeerController>();
             ApplyPatch<Patch_Binder>();
             ApplyPatch<Patch_CatController>();
             ApplyPatch<Patch_Cigarette>();
