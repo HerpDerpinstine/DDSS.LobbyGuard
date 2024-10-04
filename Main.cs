@@ -26,6 +26,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_CoffeeMachine>();
             ApplyPatch<Patch_Collectible>();
             ApplyPatch<Patch_CollectibleHolder>();
+            ApplyPatch<Patch_Consumable>();
             ApplyPatch<Patch_Document>();
             ApplyPatch<Patch_DoorController>();
             ApplyPatch<Patch_GameManager>();
