@@ -35,6 +35,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_LobbyItem>();
             ApplyPatch<Patch_LobbyManager>();
             ApplyPatch<Patch_LobbyPlayer>();
+            ApplyPatch<Patch_Mug>();
             ApplyPatch<Patch_NetworkManager>();
             ApplyPatch<Patch_OfficeShelf>();
             ApplyPatch<Patch_PaperShredder>();
