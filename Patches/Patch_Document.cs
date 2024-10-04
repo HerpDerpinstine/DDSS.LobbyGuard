@@ -1,7 +1,6 @@
 ﻿using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
-using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppProps.Printer;
@@ -15,7 +14,6 @@ namespace DDSS_LobbyGuard
         [HarmonyPatch(typeof(Document), nameof(Document.InvokeUserCode_CmdSignDocument__NetworkIdentity))]
         private static bool InvokeUserCode_CmdSignDocument__NetworkIdentity_Prefix(
            NetworkBehaviour __0,
-           NetworkReader __1,
            NetworkConnectionToClient __2)
         {
             // Check for Server
@@ -45,12 +43,6 @@ namespace DDSS_LobbyGuard
             document = collectible.TryCast<Document>();
             if ((document == null)
                 || document.signed)
-                return false;
-
-            // Get Value
-            string text = __1.ReadString();
-            if (string.IsNullOrEmpty(text)
-                || string.IsNullOrWhiteSpace(text))
                 return false;
 
             // Run Game Command

@@ -14,7 +14,6 @@ namespace DDSS_LobbyGuard
         [HarmonyPatch(typeof(Consumable), nameof(Consumable.InvokeUserCode_CmdConsume__NetworkIdentity))]
         private static bool InvokeUserCode_CmdConsume__NetworkIdentity_Prefix(
            NetworkBehaviour __0,
-           NetworkReader __1,
            NetworkConnectionToClient __2)
         {
             // Check for Server
@@ -42,12 +41,6 @@ namespace DDSS_LobbyGuard
             // Get Document
             food = collectible.TryCast<Consumable>();
             if (food == null)
-                return false;
-
-            // Get Value
-            string text = __1.ReadString();
-            if (string.IsNullOrEmpty(text)
-                || string.IsNullOrWhiteSpace(text))
                 return false;
 
             // Run Game Command
