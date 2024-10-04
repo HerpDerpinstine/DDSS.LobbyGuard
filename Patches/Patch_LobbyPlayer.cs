@@ -8,28 +8,12 @@ namespace DDSS_LobbyGuard.Patches
 {
     internal class Patch_LobbyPlayer
     {
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.Networkusername), MethodType.Getter)]
-        private static void Networkusername_get_Postfix(ref string __result)
-        {
-            // Sanitize Username
-            __result = __result.RemoveRichText();
-        }
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.Networkusername), MethodType.Setter)]
         private static void Networkusername_set_Prefix(ref string __0)
         {
             // Sanitize Username
             __0 = __0.RemoveRichText();
-        }
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamUsername), MethodType.Getter)]
-        private static void NetworksteamUsername_get_Postfix(ref string __result)
-        {
-            // Sanitize Username
-            __result = __result.RemoveRichText();
         }
 
         [HarmonyPrefix]

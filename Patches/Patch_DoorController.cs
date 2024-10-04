@@ -1,7 +1,11 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
+using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -39,6 +43,25 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
+
+            // Check for Server
+            if (!sender.isServer)
+            {
+                // Get Player
+                LobbyPlayer oldPlayer = sender.GetComponent<LobbyPlayer>();
+                if (oldPlayer == null)
+                    return false;
+
+                // Validate Role
+                if (oldPlayer.NetworkplayerRole != PlayerRole.Manager)
+                {
+                    // Validate Placement
+                    Collectible collectible = sender.GetCurrentCollectible();
+                    if ((collectible == null)
+                        || (collectible.GetIl2CppType() != Il2CppType.Of<KeyController>()))
+                        return false;
+                }
+            }
 
             // Run Game Command
             door.UserCode_CmdSetLockState__Boolean(requestedState);
