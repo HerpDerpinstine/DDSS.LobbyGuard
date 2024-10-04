@@ -11,16 +11,85 @@ namespace DDSS_LobbyGuard.Patches
 {
     internal class Patch_Printer
     {
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdPrintDocument__String__String))]
+        private static bool InvokeUserCode_CmdPrintDocument__String__String_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Get Printer
+            Printer printer = __0.TryCast<Printer>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Get Sender Username
+            string userName = sender.GetUserName();
+            if (string.IsNullOrEmpty(userName)
+                || string.IsNullOrWhiteSpace(userName))
+                return false;
+
+            // Validate Count
+            int freeSlots = printer.freePositions.Count;
+            if (!printer.allowStacking && (freeSlots <= 0))
+                return false;
+
+            // Get Values
+            string fileName = __1.ReadString();
+            string documentName = $"{userName}'s Document";
+            string documentContent = __1.ReadString();
+
+            // Get Document Content
+            if (!string.IsNullOrEmpty(fileName)
+                && !string.IsNullOrWhiteSpace(fileName))
+            {
+                TextAsset textAsset = Resources.Load<TextAsset>("files/" + fileName);
+                if (textAsset != null)
+                {
+                    documentName = fileName;
+                    documentContent = textAsset.text;
+                }
+            }
+            if (string.IsNullOrEmpty(documentName)
+                || string.IsNullOrWhiteSpace(documentName))
+                return false;
+            if (string.IsNullOrEmpty(documentContent)
+                || string.IsNullOrWhiteSpace(documentContent))
+                return false;
+
+            // Create New Document Copy
+            Document docCopy = UnityEngine.Object.Instantiate(printer.documentPrefab,
+                printer.printPos.position,
+                printer.printPos.rotation);
+            NetworkServer.Spawn(docCopy.gameObject);
+            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, documentName);
+            docCopy.SetLabel(documentName);
+            docCopy.SetText(documentContent);
+
+            // Prevent Original
+            return false;
+        }
+
         // InvokeUserCode_CmdPrintImage__Byte
-        // UserCode_CmdPrintImage__Byte
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Printer), nameof(Printer.Method_Protected_Static_Void_NetworkBehaviour_NetworkReader_NetworkConnectionToClient_PDM_0))]
         private static bool Method_Protected_Static_Void_NetworkBehaviour_NetworkReader_NetworkConnectionToClient_PDM_0_Prefix(
             NetworkBehaviour __0,
-            NetworkReader __1)
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
         {
             // Get Printer
             Printer printer = __0.TryCast<Printer>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Get Sender Username
+            string userName = sender.GetUserName();
+            if (string.IsNullOrEmpty(userName)
+                || string.IsNullOrWhiteSpace(userName))
+                return false;
 
             // Validate Count
             int freeSlots = printer.freePositions.Count;
@@ -37,28 +106,16 @@ namespace DDSS_LobbyGuard.Patches
             if (!PrinterSecurity.VerifyImage(printer, imageData))
                 return false;
 
-            // Run Game Command
-            printer.Method_Protected_Void_Il2CppStructArray_1_Byte_PDM_0(imageData);
+            // Create New Document Copy
+            PrintedImage docCopy = GameObject.Instantiate<PrintedImage>(printer.printedImagePrefab,
+                printer.printPos.position, printer.printPos.rotation);
+            NetworkServer.Spawn(docCopy.gameObject);
+            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, $"{userName}'s Image");
+            docCopy.SetLabel($"{userName}'s Image");
+            printer.RpcSetImage(docCopy.netIdentity, imageData);
 
             // Prevent Original
             return false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdPrintDocument__String__String))]
-        private static bool InvokeUserCode_CmdPrintDocument__String__String_Prefix(
-            NetworkBehaviour __0)
-        {
-            // Get Printer
-            Printer printer = __0.TryCast<Printer>();
-
-            // Validate Count
-            int freeSlots = printer.freePositions.Count;
-            if (!printer.allowStacking && (freeSlots <= 0))
-                return false;
-
-            // Run Original
-            return true;
         }
 
         [HarmonyPrefix]
@@ -105,6 +162,8 @@ namespace DDSS_LobbyGuard.Patches
                     printer.printPos.position, printer.printPos.rotation);
                 NetworkServer.Spawn(docCopy.gameObject);
                 printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, doc.label);
+                docCopy.SetName(doc.interactableName);
+                docCopy.SetLabel(doc.label);
                 printer.RpcSetImage(docCopy.netIdentity, doc.byteImg);
                 docCopy.Networksigned = doc.Networksigned;
                 docCopy.signed = doc.signed;
@@ -122,8 +181,8 @@ namespace DDSS_LobbyGuard.Patches
                     printer.printPos.rotation);
                 NetworkServer.Spawn(docCopy.gameObject);
                 printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, docCopy.label);
-                docCopy.SetText(doc.contentText.text);
                 docCopy.SetName(doc.interactableName);
+                docCopy.SetText(doc.contentText.text);
                 docCopy.SetLabel(doc.label);
                 docCopy.Networksigned = doc.Networksigned;
                 docCopy.signed = doc.signed;

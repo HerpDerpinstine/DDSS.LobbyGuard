@@ -18,6 +18,21 @@ namespace DDSS_LobbyGuard.Utils
         internal static string RemoveRichText(this string val)
             => _rtRegex.Replace(val, string.Empty);
 
+        internal static Coroutine StartCoroutine<T>(this T behaviour, IEnumerator enumerator)
+            where T : MonoBehaviour
+            => behaviour.StartCoroutine(
+                new Il2CppSystem.Collections.IEnumerator(
+                new ManagedEnumerator(enumerator).Pointer));
+
+        internal static string GetUserName(this NetworkIdentity player)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if (controller == null)
+                return null;
+
+            return controller.NetworklobbyPlayer.username;
+        }
+
         internal static Collectible GetCurrentCollectible(this NetworkIdentity player)
         {
             PlayerController controller = player.GetComponent<PlayerController>();
@@ -28,11 +43,5 @@ namespace DDSS_LobbyGuard.Utils
                 return null;
             return usable.TryCast<Collectible>();
         }
-
-        internal static Coroutine StartCoroutine<T>(this T behaviour, IEnumerator enumerator)
-            where T : MonoBehaviour
-            => behaviour.StartCoroutine(
-                new Il2CppSystem.Collections.IEnumerator(
-                new ManagedEnumerator(enumerator).Pointer));
     }
 }
