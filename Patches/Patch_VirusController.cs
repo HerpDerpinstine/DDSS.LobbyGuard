@@ -139,7 +139,8 @@ namespace DDSS_LobbyGuard.Patches
                 // Validate Manager Role
                 LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
                 if ((player == null)
-                    || (player.playerRole != PlayerRole.Manager))
+                    || ((player.playerRole != PlayerRole.Manager)
+                        && (player.subRole != SubRole.Assistant)))
                     return false;
             }
 
