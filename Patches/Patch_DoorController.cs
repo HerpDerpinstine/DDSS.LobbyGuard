@@ -54,7 +54,8 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Validate Role
                 var role = oldPlayer.NetworkplayerRole;
-                if (role != PlayerRole.Manager && role != PlayerRole.Janitor)
+                if (!door.PlayerCanChangeLockState(sender)
+                    && role != PlayerRole.Manager && role != PlayerRole.Janitor)
                 {
                     // Validate Placement
                     Collectible collectible = sender.GetCurrentCollectible();
