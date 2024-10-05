@@ -1,9 +1,17 @@
-# DDSS.LobbyGuard
-Lobby Protection and Bug Fixing for [Dale & Dawson Stationery Supplies](https://store.steampowered.com/app/2920570/Dale__Dawson_Stationery_Supplies/)
+
+<p align="center">
+  <a href="#"><img src="https://raw.githubusercontent.com/HerpDerpinstine/DDSS.LobbyGuard/main/Docs/Logo.png"></a>
+</p>
+
+---
+
+Serverside Anti-Cheat for [Dale & Dawson Stationery Supplies](https://store.steampowered.com/app/2920570/Dale__Dawson_Stationery_Supplies/)
 
 - Protects Lobbies and Users from Malicious Exploits
 - Fixes a few Gameplay issues that are disruptive
-- Extends Invite Codes to avoid Generation Conflicts (Disabled by Default).
+- Serverside Authoritative, Only the Lobby Host needs to have it installed
+- Seamless Integration with Gameplay
+- Extends Invite Codes to avoid Generation Conflicts (Disabled by Default)
 - Settings are found in ``UserData/LobbyGuard.cfg``
 
 ---
