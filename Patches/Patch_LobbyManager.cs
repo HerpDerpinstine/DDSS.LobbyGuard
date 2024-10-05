@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
@@ -9,6 +10,14 @@ namespace DDSS_LobbyGuard.Patches
 {
     internal class Patch_LobbyManager
     {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.UpdateSettings))]
+        private static void UpdateSettings_Postfix()
+        {
+            // Update Our Game Settings
+            InteractionSecurity.UpdateSettings();
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.BlackListPlayer))]
         private static bool BlackListPlayer_Prefix(NetworkIdentity __0)

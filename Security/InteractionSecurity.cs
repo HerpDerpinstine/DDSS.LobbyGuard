@@ -25,19 +25,21 @@ namespace DDSS_LobbyGuard.Security
         internal static int MAX_CIG_PACKS { get; private set; }
         internal static int MAX_INFECTED_USBS { get; private set; }
 
-        internal static void OnSceneLoad()
+        internal static int MAX_PLAYERS { get; private set; }
+
+        internal static void UpdateSettings()
         {
             // Validate Game Rules Manager
-            if (GameRulesSettingsManager.instance == null)
+            if (GameRulesSettingsManager.instance != null)
                 return;
 
             // Get Max Players
-            int maxPlayers = Mathf.RoundToInt(GameRulesSettingsManager.instance.GetSetting("Max players")) + 1;
+            MAX_PLAYERS = Mathf.RoundToInt(GameRulesSettingsManager.instance.GetSetting("Max players")) + 1;
 
             // Adjust Limits
-            MAX_CIG_PACKS = maxPlayers;
-            MAX_INFECTED_USBS = maxPlayers;
-            MAX_CIGS = maxPlayers * 3;
+            MAX_CIG_PACKS = MAX_PLAYERS;
+            MAX_INFECTED_USBS = MAX_PLAYERS;
+            MAX_CIGS = MAX_PLAYERS * 3;
         }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
