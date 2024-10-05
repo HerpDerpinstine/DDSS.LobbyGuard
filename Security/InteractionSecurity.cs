@@ -30,7 +30,7 @@ namespace DDSS_LobbyGuard.Security
         internal static void UpdateSettings()
         {
             // Validate Game Rules Manager
-            if (GameRulesSettingsManager.instance != null)
+            if (GameRulesSettingsManager.instance == null)
                 return;
 
             // Get Max Players

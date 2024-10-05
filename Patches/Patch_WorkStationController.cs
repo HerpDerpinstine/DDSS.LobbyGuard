@@ -121,7 +121,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get InfectedUsb from Prefab
-            InfectedUsb prefabUsb = station.cigarettePackPrefab.GetComponentInChildren<InfectedUsb>();
+            InfectedUsb prefabUsb = station.infectedUsbPrefab.GetComponentInChildren<InfectedUsb>();
             if (prefabUsb == null)
                 return false;
 

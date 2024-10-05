@@ -67,6 +67,7 @@ namespace DDSS_LobbyGuard
         {
             DoorSecurity.OnSceneLoad();
             PhoneSecurity.OnSceneLoad();
+            InteractionSecurity.UpdateSettings();
             ServerSecurity.OnSceneLoad();
             TrashBinSecurity.OnSceneLoad();
         }
