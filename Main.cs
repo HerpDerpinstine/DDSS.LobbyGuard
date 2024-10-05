@@ -1,6 +1,7 @@
 ﻿using DDSS_LobbyGuard.Components;
 using DDSS_LobbyGuard.Patches;
 using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using MelonLoader;
 using System;
 
@@ -14,6 +15,9 @@ namespace DDSS_LobbyGuard
         {
             // Cache Logger 
             _logger = LoggerInstance;
+
+            // Setup Config
+            ConfigHandler.Setup();
 
             // Register Custom Components
             ManagedEnumerator.Register();
