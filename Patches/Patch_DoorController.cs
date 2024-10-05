@@ -53,7 +53,8 @@ namespace DDSS_LobbyGuard.Patches
                     return false;
 
                 // Validate Role
-                if (oldPlayer.NetworkplayerRole != PlayerRole.Manager)
+                var role = oldPlayer.NetworkplayerRole;
+                if (role != PlayerRole.Manager && role != PlayerRole.Janitor)
                 {
                     // Validate Placement
                     Collectible collectible = sender.GetCurrentCollectible();
