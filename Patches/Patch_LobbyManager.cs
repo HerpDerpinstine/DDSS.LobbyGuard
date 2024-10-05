@@ -38,7 +38,7 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.KickPlayer))]
-        private static bool KickPlayer_Prefix(NetworkIdentity __0)
+        private static bool KickPlayer_Prefix(LobbyManager __instance, NetworkIdentity __0)
         {
             // Validate Player
             if ((__0 == null)
@@ -50,8 +50,12 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.isServer)
                 return false;
 
-            // Run Original
-            return true;
+            // Force-Disconnect
+            __instance.KickPlayerRPC(__0);
+            __0._connectionToClient.Disconnect();
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]
