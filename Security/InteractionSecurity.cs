@@ -16,6 +16,7 @@ namespace DDSS_LobbyGuard.Security
         private const int MAX_ITEMS_HELD = 2;
 
         internal const float MAX_DISTANCE = 2f;
+        internal const float MAX_DISTANCE_GRAB = 2.1f;
         internal const float MAX_SPANK_DISTANCE = 1f;
 
         internal const int MAX_DOCUMENTS_TRAY = 10;

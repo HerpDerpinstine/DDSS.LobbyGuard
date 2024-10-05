@@ -20,35 +20,12 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.BlackListPlayer))]
-        private static bool BlackListPlayer_Prefix(NetworkIdentity __0)
-        {
-            // Validate Player
-            if ((__0 == null)
-                || __0.WasCollected)
-                return false;
-
-            // Check for Local Player
-            if (__0.isLocalPlayer
-                || __0.isServer)
-                return false;
-
-            // Run Original
-            return true;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.KickPlayer))]
         private static bool KickPlayer_Prefix(LobbyManager __instance, NetworkIdentity __0)
         {
             // Validate Player
             if ((__0 == null)
                 || __0.WasCollected)
-                return false;
-
-            // Check for Local Player
-            if (__0.isLocalPlayer
-                || __0.isServer)
                 return false;
 
             // Force-Disconnect

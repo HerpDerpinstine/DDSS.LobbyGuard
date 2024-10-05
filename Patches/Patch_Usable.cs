@@ -13,6 +13,10 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Get Usable
             Usable usable = __0.TryCast<Usable>();
 
@@ -20,7 +24,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position, 
+                InteractionSecurity.MAX_DISTANCE_GRAB))
                 return false;
 
             // Run Game Command
@@ -36,6 +41,10 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Get Usable
             Usable usable = __0.TryCast<Usable>();
 
@@ -43,7 +52,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position,
+                InteractionSecurity.MAX_DISTANCE_GRAB))
                 return false;
 
             // Run Game Command
@@ -59,6 +69,10 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Get Usable
             Usable usable = __0.TryCast<Usable>();
 
@@ -66,7 +80,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position,
+                InteractionSecurity.MAX_DISTANCE_GRAB))
                 return false;
 
             // Run Game Command
