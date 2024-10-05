@@ -5,6 +5,7 @@ using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using Il2CppProps.Door;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
@@ -34,9 +35,6 @@ namespace DDSS_LobbyGuard.Patches
             // Get DoorController
             DoorController door = __0.TryCast<DoorController>();
 
-            // Get Requested Lock State
-            bool requestedState = __1.ReadBool();
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -52,10 +50,16 @@ namespace DDSS_LobbyGuard.Patches
                 if (oldPlayer == null)
                     return false;
 
+                // Get DoorInteractable
+                DoorInteractable doorInteractable = door.GetComponentInChildren<DoorInteractable>();
+                if (doorInteractable == null)
+                    return false; 
+
                 // Validate Role
-                var role = oldPlayer.NetworkplayerRole;
-                if (!door.PlayerCanChangeLockState(sender)
-                    && role != PlayerRole.Manager && role != PlayerRole.Janitor)
+                var role = oldPlayer.playerRole;
+                if (!doorInteractable.everyoneCanLock
+                    && (role != PlayerRole.Manager)
+                    && (role != PlayerRole.Janitor))
                 {
                     // Validate Placement
                     Collectible collectible = sender.GetCurrentCollectible();
@@ -65,8 +69,11 @@ namespace DDSS_LobbyGuard.Patches
                 }
             }
 
-            // Run Game Command
-            door.UserCode_CmdSetLockState__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, requestedState, __2);
+            // Apply State
+            door.NetworkisLocked = !door.NetworkisLocked;
+            if (door.NetworkisLocked)
+                door.RequestDoorState(0);
+            door.RpcSetLockState(door.NetworkisLocked);
 
             // Prevent Original
             return false;
