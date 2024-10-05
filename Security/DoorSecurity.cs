@@ -37,18 +37,11 @@ namespace DDSS_LobbyGuard.Security
                 yield return null;
 
             // Apply Closed State
-            yield return new WaitForSeconds(_doorCloseFinalDelayMs);
-            if (door.playerDetectionVolumeBackward.isPlayerInside
-                || door.playerDetectionVolumeForward.isPlayerInside)
-                yield return ApplyStateCoroutine(door, newState);
-            else
-            {
-                door.Networkstate = 0;
+            door.Networkstate = 0;
 
-                // Remove Coroutine from Cache
-                if (_doorStateCoroutines.ContainsKey(door))
-                    _doorStateCoroutines.Remove(door);
-            }
+            // Remove Coroutine from Cache
+            if (_doorStateCoroutines.ContainsKey(door))
+                _doorStateCoroutines.Remove(door);
         }
     }
 }
