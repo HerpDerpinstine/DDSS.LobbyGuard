@@ -57,6 +57,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_Usable>();
             ApplyPatch<Patch_VendingMachine>();
             ApplyPatch<Patch_VirusController>();
+            ApplyPatch<Patch_VoteBoxController>();
             ApplyPatch<Patch_WorkStationController>();
 
             // Log Success
