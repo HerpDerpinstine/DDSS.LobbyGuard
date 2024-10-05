@@ -12,7 +12,10 @@ Serverside Anti-Cheat for [Dale & Dawson Stationery Supplies](https://store.stea
 - Serverside Authoritative, Only the Lobby Host needs to have it installed
 - Seamless Integration with Gameplay
 - Extends Invite Codes to avoid Generation Conflicts (Disabled by Default)
+
 - Settings are found in ``UserData/LobbyGuard.cfg``
+
+- Discord: https://discord.gg/JDw423Wskf
 
 ---
 
