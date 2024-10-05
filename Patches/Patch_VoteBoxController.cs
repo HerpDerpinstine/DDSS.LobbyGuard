@@ -27,6 +27,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Value
+            __1.ReadNetworkIdentity();
             bool state = __1.ReadBool();
 
             // Run Game Command
