@@ -70,7 +70,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            binderObj.UserCode_CmdGrabDocument__String__String__NetworkIdentity__NetworkConnectionToClient(document, documentContent, __2.identity, __2);
+            binderObj.UserCode_CmdAddDocumentServer__String__String(document, documentContent);
 
             // Prevent Original
             return false;
