@@ -8,8 +8,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_Usable
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Usable), nameof(Usable.InvokeUserCode_CmdUse__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdUse__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(Usable), nameof(Usable.InvokeUserCode_CmdUse__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdUse__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -24,12 +24,11 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position, 
-                InteractionSecurity.MAX_DISTANCE_GRAB))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
             // Run Game Command
-            usable.UserCode_CmdUse__NetworkIdentity(sender);
+            usable.UserCode_CmdUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
@@ -52,8 +51,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position,
-                InteractionSecurity.MAX_DISTANCE_GRAB))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
             // Run Game Command
@@ -64,8 +62,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Usable), nameof(Usable.InvokeUserCode_CmdStopUse__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdStopUse__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(Usable), nameof(Usable.InvokeUserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -80,12 +78,11 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position,
-                InteractionSecurity.MAX_DISTANCE_GRAB))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
             // Run Game Command
-            usable.UserCode_CmdStopUse__NetworkIdentity(sender);
+            usable.UserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

@@ -120,8 +120,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdCopyDocumentFromPlayer__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdCopyDocumentFromPlayer__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdCopyDocumentFromPlayer__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdCopyDocumentFromPlayer__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {

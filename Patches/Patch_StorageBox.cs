@@ -9,8 +9,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_StorageBox
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(StorageBox), nameof(StorageBox.InvokeUserCode_CmdGrabObject__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdGrabObject__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(StorageBox), nameof(StorageBox.InvokeUserCode_CmdGrabObject__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdGrabObject__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -29,12 +29,8 @@ namespace DDSS_LobbyGuard.Patches
             if (collectible == null)
                 return false;
 
-            // Validate Grab
-            if (!InteractionSecurity.CanGrabCollectible(sender, collectible))
-                return false;
-
             // Run Game Command
-            box.UserCode_CmdGrabObject__NetworkIdentity(sender);
+            box.UserCode_CmdGrabObject__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

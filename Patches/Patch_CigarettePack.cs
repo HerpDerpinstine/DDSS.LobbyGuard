@@ -12,8 +12,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_CigarettePack
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(CigarettePack), nameof(CigarettePack.InvokeUserCode_CmdSmokeCigarette__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdSmokeCigarette__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(CigarettePack), nameof(CigarettePack.InvokeUserCode_CmdSmokeCigarette__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSmokeCigarette__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -55,7 +55,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            cigarettePack.UserCode_CmdSmokeCigarette__NetworkIdentity(sender);
+            cigarettePack.UserCode_CmdSmokeCigarette__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

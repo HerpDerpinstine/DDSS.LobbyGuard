@@ -17,8 +17,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.UserCode_CmdEnableFire__NetworkIdentity__Boolean))]
-        private static bool UserCode_CmdEnableFire__NetworkIdentity__Boolean_Prefix(TrashBin __instance, NetworkIdentity __0, bool __1)
+        [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.UserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient))]
+        private static bool UserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(TrashBin __instance, NetworkIdentity __0, bool __1)
         {
             // TrashBin Security
             TrashBinSecurity.OnEnableFireBegin(__0, __instance, __1);
@@ -28,8 +28,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.InvokeUserCode_CmdEnableFire__NetworkIdentity__Boolean))]
-        private static bool InvokeUserCode_CmdEnableFire__NetworkIdentity__Boolean_Prefix(
+        [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.InvokeUserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -60,7 +60,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Run Game Command
-            trashcan.UserCode_CmdEnableFire__NetworkIdentity__Boolean(sender, enabled);
+            trashcan.UserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, enabled, __2);
 
             // Prevent Original
             return false;

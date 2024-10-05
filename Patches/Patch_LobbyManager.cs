@@ -56,7 +56,7 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Drop It
-            usable.UserCode_CmdStopUse__NetworkIdentity(player);
+            usable.ServerStopUse(player);
         }
 
         [HarmonyPrefix]

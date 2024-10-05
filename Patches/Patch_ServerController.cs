@@ -17,8 +17,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ServerController), nameof(ServerController.UserCode_SetConnectionEnabled__NetworkIdentity__Boolean))]
-        private static bool UserCode_SetConnectionEnabled__NetworkIdentity__Boolean_Prefix(ServerController __instance, NetworkIdentity __0, bool __1)
+        [HarmonyPatch(typeof(ServerController), nameof(ServerController.UserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient))]
+        private static bool UserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(ServerController __instance, NetworkIdentity __0, bool __1)
         {
             // Server Security
             ServerSecurity.OnSetConnectionBegin(__0, __instance, __1);
@@ -28,8 +28,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ServerController), nameof(ServerController.InvokeUserCode_SetConnectionEnabled__NetworkIdentity__Boolean))]
-        private static bool InvokeUserCode_SetConnectionEnabled__NetworkIdentity__Boolean_Prefix(
+        [HarmonyPatch(typeof(ServerController), nameof(ServerController.InvokeUserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -60,7 +60,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Run Game Command
-            server.UserCode_SetConnectionEnabled__NetworkIdentity__Boolean(sender, enabled);
+            server.UserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, enabled, __2);
 
             // Prevent Original
             return false;

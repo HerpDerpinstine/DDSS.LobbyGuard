@@ -32,8 +32,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(VendingMachine), nameof(VendingMachine.InvokeUserCode_CmdSpawnItem__Int32))]
-        private static bool InvokeUserCode_CmdSpawnItem__Int32_Prefix(
+        [HarmonyPatch(typeof(VendingMachine), nameof(VendingMachine.InvokeUserCode_CmdSpawnItem__NetworkIdentity__Int32__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSpawnItem__NetworkIdentity__Int32__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -73,7 +73,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            machine.UserCode_CmdSpawnItem__Int32(itemIndex);
+            machine.UserCode_CmdSpawnItem__NetworkIdentity__Int32__NetworkConnectionToClient(sender, itemIndex, __2);
 
             // Prevent Original
             return false;

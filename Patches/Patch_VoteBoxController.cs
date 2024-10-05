@@ -8,8 +8,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_VoteBoxController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(VoteBoxController), nameof(VoteBoxController.InvokeUserCode_CmdVote__NetworkIdentity__Boolean))]
-        private static bool InvokeUserCode_CmdVote__NetworkIdentity__Boolean_Prefix(
+        [HarmonyPatch(typeof(VoteBoxController), nameof(VoteBoxController.InvokeUserCode_CmdVote__NetworkIdentity__Boolean__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdVote__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(
            NetworkBehaviour __0,
            NetworkReader __1,
            NetworkConnectionToClient __2)
@@ -31,7 +31,7 @@ namespace DDSS_LobbyGuard.Patches
             bool state = __1.ReadBool();
 
             // Run Game Command
-            box.UserCode_CmdVote__NetworkIdentity__Boolean(sender, state);
+            box.UserCode_CmdVote__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, state, __2);
 
             // Prevent Original
             return false;

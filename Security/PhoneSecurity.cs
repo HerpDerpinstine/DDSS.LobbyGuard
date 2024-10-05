@@ -39,7 +39,7 @@ namespace DDSS_LobbyGuard.Security
             _callSenderList[caller] = receiver;
 
             // Allow Call Attempt
-            phone.UserCode_CmdCall__String__String(caller, receiver);
+            phone.ServerCall(caller, receiver);
         }
 
         internal static void OnCallAnswer(PhoneManager phone,

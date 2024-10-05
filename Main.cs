@@ -29,7 +29,6 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_Cigarette>();
             ApplyPatch<Patch_CigarettePack>();
             ApplyPatch<Patch_CoffeeMachine>();
-            ApplyPatch<Patch_Collectible>();
             ApplyPatch<Patch_CollectibleHolder>();
             ApplyPatch<Patch_Consumable>();
             ApplyPatch<Patch_Document>();

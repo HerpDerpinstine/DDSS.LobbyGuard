@@ -11,7 +11,7 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(OfficeShelf), nameof(OfficeShelf.InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32))]
-        private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32_Prefix(NetworkReader __1)
+        private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32_Prefix(NetworkReader __1, NetworkConnectionToClient __2)
         {
             // Get Document
             string document = __1.ReadString();
@@ -70,7 +70,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            binderObj.UserCode_CmdAddDocument__String__String(document, documentContent);
+            binderObj.UserCode_CmdGrabDocument__String__String__NetworkIdentity__NetworkConnectionToClient(document, documentContent, __2.identity, __2);
 
             // Prevent Original
             return false;

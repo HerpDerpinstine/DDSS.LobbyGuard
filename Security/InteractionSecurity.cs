@@ -13,10 +13,7 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class InteractionSecurity
     {
-        private const int MAX_ITEMS_HELD = 2;
-
         internal const float MAX_DISTANCE = 2f;
-        internal const float MAX_DISTANCE_GRAB = 2.1f;
         internal const float MAX_SPANK_DISTANCE = 1f;
 
         internal const int MAX_DOCUMENTS_TRAY = 10;
@@ -61,55 +58,5 @@ namespace DDSS_LobbyGuard.Security
         }
         internal static bool CanSpawnItem(string interactableName, int maxCount)
             => GetTotalCountOfSpawnedItem(interactableName) < maxCount;
-
-        internal static bool CanGrabCollectible(NetworkIdentity player)
-        {
-            PlayerController controller = player.GetComponent<PlayerController>();
-            if (controller == null)
-                return false;
-
-            int count = controller.currentUsables.Count;
-            return (count < MAX_ITEMS_HELD);
-        }
-
-        internal static bool CanGrabCollectible(NetworkIdentity player, 
-            Collectible collectible)
-        {
-            PlayerController controller = player.GetComponent<PlayerController>();
-            if (controller == null)
-                return false;
-
-            int count = controller.currentUsables.Count;
-            return ((count < MAX_ITEMS_HELD) 
-                && (count < collectible.maxStack));
-        }
-
-        internal static bool IsHoldingCollectible(NetworkIdentity player)
-        {
-            PlayerController controller = player.GetComponent<PlayerController>();
-            if (controller == null)
-                return false;
-
-            return controller.currentUsables.Count > 0;
-        }
-
-        /*
-        internal static bool CanPickUpInfectedUsb(WorkStationController station, LobbyPlayer player)
-        {
-            LobbyPlayer stationOwner = station.NetworkownerLobbyPlayer.GetComponent<LobbyPlayer>();
-            if (stationOwner == null)
-                return false;
-            return CanInfectStation(station, player)
-                && (stationOwner == player);
-        }
-
-        internal static bool CanInfectStation(WorkStationController station, LobbyPlayer player)
-        {
-            TaskController component = player.GetComponent<TaskController>();
-            if (component == null)
-                return false;
-            return component.GetActiveTask() is InfectComputerTask;
-        }
-        */
     }
 }

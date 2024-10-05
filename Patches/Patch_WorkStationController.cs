@@ -57,8 +57,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdPickUpCigarettePack__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdPickUpCigarettePack__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdPickUpCigarettePack__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdPickUpCigarettePack__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -79,10 +79,6 @@ namespace DDSS_LobbyGuard.Patches
             if (prefabCig == null)
                 return false;
 
-            // Validate Placement
-            if (!InteractionSecurity.CanGrabCollectible(sender, prefabCig))
-                return false;
-
             // Get CigarettePack Interactable Name
             string interactableName = prefabCig.interactableName;
             if (string.IsNullOrEmpty(interactableName)
@@ -95,7 +91,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            station.UserCode_CmdPickUpCigarettePack__NetworkIdentity(sender);
+            station.UserCode_CmdPickUpCigarettePack__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
@@ -103,8 +99,8 @@ namespace DDSS_LobbyGuard.Patches
 
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdPickUpInfectedUsb__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdPickUpInfectedUsb__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdPickUpInfectedUsb__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdPickUpInfectedUsb__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -125,10 +121,6 @@ namespace DDSS_LobbyGuard.Patches
             if (prefabUsb == null)
                 return false;
 
-            // Validate Placement
-            if (!InteractionSecurity.CanGrabCollectible(sender, prefabUsb))
-                return false;
-
             // Get InfectedUsb Interactable Name
             string interactableName = prefabUsb.interactableName;
             if (string.IsNullOrEmpty(interactableName)
@@ -141,7 +133,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            station.UserCode_CmdPickUpInfectedUsb__NetworkIdentity(sender);
+            station.UserCode_CmdPickUpInfectedUsb__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

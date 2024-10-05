@@ -55,8 +55,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -79,20 +79,16 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
                 return false;
 
-            // Validate Placement
-            if (!InteractionSecurity.IsHoldingCollectible(sender))
-                return false;
-
             // Run Game Command
-            holder.UserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity(sender);
+            holder.UserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdGrabCollectible__NetworkIdentity__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdGrabCollectible__NetworkIdentity__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdGrabCollectible__NetworkIdentity__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdGrabCollectible__NetworkIdentity__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -123,17 +119,13 @@ namespace DDSS_LobbyGuard.Patches
             Collectible collectible = collectibleIdentity.GetComponent<Collectible>();
             if (collectible == null)
                 return false;
-                
-            // Validate Grab
-            if (!InteractionSecurity.CanGrabCollectible(sender, collectible))
-                return false;
 
             // Validate Collectible
             if (collectible.currentHolder != holder)
                 return false;
 
             // Run Game Command
-            holder.UserCode_CmdGrabCollectible__NetworkIdentity__NetworkIdentity(sender, collectibleIdentity);
+            holder.UserCode_CmdGrabCollectible__NetworkIdentity__NetworkIdentity__NetworkConnectionToClient(sender, collectibleIdentity, __2);
 
             // Prevent Original
             return false;

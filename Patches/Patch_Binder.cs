@@ -13,8 +13,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_Binder
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Binder), nameof(Binder.UserCode_CmdAddDocument__String__String))]
-        private static bool UserCode_CmdAddDocument__String__String_Prefix(Binder __instance, string __0, string __1)
+        [HarmonyPatch(typeof(Binder), nameof(Binder.UserCode_CmdAddDocumentServer__String__String))]
+        private static bool UserCode_CmdAddDocumentServer__String__String_Prefix(Binder __instance, string __0, string __1)
         {
             // Manually Run RPC on Server
             __instance.UserCode_RpcAddDocument__String__String(__0, __1);
@@ -24,7 +24,7 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Binder), nameof(Binder.UserCode_CmdAddDocument__Document__NetworkIdentity))]
+        [HarmonyPatch(typeof(Binder), nameof(Binder.UserCode_CmdAddDocument__Document__NetworkIdentity__NetworkConnectionToClient))]
         private static bool UserCode_CmdAddDocument__Document__NetworkIdentity_Prefix(Binder __instance, Document __0, NetworkIdentity __1)
         {
             // Manually Run RPC on Server
@@ -35,8 +35,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Binder), nameof(Binder.UserCode_CmdGrabDocument__String__String__NetworkIdentity))]
-        private static bool UserCode_CmdGrabDocument__String__String__NetworkIdentity_Prefix(Binder __instance, 
+        [HarmonyPatch(typeof(Binder), nameof(Binder.UserCode_CmdGrabDocument__String__String__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool UserCode_CmdGrabDocument__String__String__NetworkIdentity__NetworkConnectionToClient_Prefix(Binder __instance, 
             string __0, 
             string __1,
             NetworkIdentity __2)
@@ -49,8 +49,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocument__Document__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdAddDocument__Document__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocument__Document__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdAddDocument__Document__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -89,15 +89,15 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            binder.UserCode_CmdAddDocument__Document__NetworkIdentity(doc, sender);
+            binder.UserCode_CmdAddDocument__Document__NetworkIdentity__NetworkConnectionToClient(doc, sender, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocument__String__String))]
-        private static bool InvokeUserCode_CmdAddDocument__String__String_Prefix(
+        [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocumentServer__String__String))]
+        private static bool InvokeUserCode_CmdAddDocumentServer__String__String_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -136,15 +136,15 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            binder.UserCode_CmdAddDocument__String__String(doc.interactableName, doc.text);
+            binder.UserCode_CmdAddDocumentServer__String__String(doc.interactableName, doc.text);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdGrabDocument__String__String__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdGrabDocument__String__String__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdGrabDocument__String__String__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdGrabDocument__String__String__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -168,10 +168,6 @@ namespace DDSS_LobbyGuard.Patches
             if (collectible == null)
                 return false;
 
-            // Validate Placement
-            if (!InteractionSecurity.CanGrabCollectible(sender, collectible))
-                return false;
-
             // Get Document Name
             string documentName = __1.ReadString();
             if (string.IsNullOrEmpty(documentName)
@@ -185,7 +181,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            binder.UserCode_CmdGrabDocument__String__String__NetworkIdentity(doc.Item1, doc.Item2, sender);
+            binder.UserCode_CmdGrabDocument__String__String__NetworkIdentity__NetworkConnectionToClient(doc.Item1, doc.Item2, sender, __2);
 
             // Prevent Original
             return false;

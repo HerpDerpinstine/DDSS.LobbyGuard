@@ -11,8 +11,8 @@ namespace DDSS_LobbyGuard
     internal class Patch_Document
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Document), nameof(Document.InvokeUserCode_CmdSignDocument__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdSignDocument__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(Document), nameof(Document.InvokeUserCode_CmdSignDocument__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSignDocument__NetworkIdentity__NetworkConnectionToClient_Prefix(
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
@@ -46,7 +46,7 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Run Game Command
-            document.UserCode_CmdSignDocument__NetworkIdentity(sender);
+            document.UserCode_CmdSignDocument__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

@@ -9,8 +9,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_KitchenCabinetController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(KitchenCabinetController), nameof(KitchenCabinetController.InvokeUserCode_CmdSpawnAndGrab__NetworkIdentity__Int32))]
-        private static bool InvokeUserCode_CmdSpawnAndGrab__NetworkIdentity__Int32_Prefix(
+        [HarmonyPatch(typeof(KitchenCabinetController), nameof(KitchenCabinetController.InvokeUserCode_CmdSpawnAndGrab__NetworkIdentity__Int32__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSpawnAndGrab__NetworkIdentity__Int32__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -51,7 +51,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            cabinet.UserCode_CmdSpawnAndGrab__NetworkIdentity__Int32(sender, itemIndex);
+            cabinet.UserCode_CmdSpawnAndGrab__NetworkIdentity__Int32__NetworkConnectionToClient(sender, itemIndex, __2);
 
             // Prevent Original
             return false;

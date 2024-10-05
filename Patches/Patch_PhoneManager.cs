@@ -9,47 +9,15 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_PhoneManager
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.CmdCall))]
-        private static bool CmdCall_Prefix(string __0, string __1)
+        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.ServerCall))]
+        private static bool ServerCall_Prefix(PhoneManager __instance, string __0, string __1)
         {
             // Prevent Calling Self
             if (__0 == __1)
                 return false;
 
-            // Run Original
-            return true;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdCall__String__String))]
-        private static bool InvokeUserCode_CmdCall__String__String_Prefix(
-            NetworkBehaviour __0,
-            NetworkReader __1,
-            NetworkConnectionToClient __2)
-        {
-            // Get Phone
-            PhoneManager phone = __0.TryCast<PhoneManager>();
-
-            // Get and Ignore User Input Caller
-            string caller = __1.ReadString();
-
-            // Check for Server
-            if (!__2.identity.isServer)
-            {
-                // Get Player
-                LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
-                if (player == null)
-                    return false;
-
-                // Enforce Caller Number
-                caller = phone.GetPhoneNumber(player);
-            }
-
-            // Get New Receiver
-            string receiver = __1.ReadString();
-
             // Run Security
-            PhoneSecurity.OnCallAttempt(phone, caller, receiver);
+            PhoneSecurity.OnCallAttempt(__instance, __0, __1);
 
             // Prevent Original
             return false;

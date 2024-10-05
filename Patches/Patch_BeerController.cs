@@ -11,8 +11,8 @@ namespace DDSS_LobbyGuard
     internal class Patch_BeerController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(BeerController), nameof(BeerController.InvokeUserCode_CmdSetEmpty))]
-        private static bool InvokeUserCode_CmdSetEmpty_Prefix(
+        [HarmonyPatch(typeof(BeerController), nameof(BeerController.InvokeUserCode_CmdDrinkBeer__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdDrinkBeer__NetworkIdentity__NetworkConnectionToClient_Prefix(
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
@@ -46,7 +46,7 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Run Game Command
-            beer.UserCode_CmdSetEmpty();
+            beer.UserCode_CmdDrinkBeer__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

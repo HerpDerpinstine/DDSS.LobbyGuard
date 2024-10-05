@@ -11,8 +11,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_CatController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(CatController), nameof(CatController.InvokeUserCode_CmdFeed__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdFeed__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(CatController), nameof(CatController.InvokeUserCode_CmdFeed__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdFeed__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -38,15 +38,15 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            cat.UserCode_CmdFeed__NetworkIdentity(sender);
+            cat.UserCode_CmdFeed__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(CatController), nameof(CatController.InvokeUserCode_CmdPet__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdPet__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(CatController), nameof(CatController.InvokeUserCode_CmdPet__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdPet__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -61,7 +61,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            cat.UserCode_CmdPet__NetworkIdentity(sender);
+            cat.UserCode_CmdPet__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
