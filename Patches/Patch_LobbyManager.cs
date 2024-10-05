@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using System;
 
@@ -56,6 +57,29 @@ namespace DDSS_LobbyGuard.Patches
 
             // Prevent Original
             return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.UnRegisterPlayer))]
+        private static void UnRegisterPlayer_Prefix(LobbyManager __instance,
+            NetworkIdentity player)
+        {
+            // Validate Server
+            if (!__instance.isServer)
+                return;
+
+            // Get PlayerController
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if (controller == null)
+                return;
+
+            // Get Usable
+            Usable usable = controller.GetCurrentUsable();
+            if (usable == null)
+                return;
+
+            // Drop It
+            usable.UserCode_CmdStopUse__NetworkIdentity(player);
         }
 
         [HarmonyPrefix]
