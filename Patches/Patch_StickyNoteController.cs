@@ -50,12 +50,6 @@ namespace DDSS_LobbyGuard
                 || string.IsNullOrWhiteSpace(text))
                 return false;
 
-            // Apply Username to Label
-            string username = sender.GetUserName();
-            if (!string.IsNullOrEmpty(username)
-                && !string.IsNullOrWhiteSpace(username))
-                controller.label = $"{username.RemoveRichText()}'s Sticky Note";
-
             // Run Game Command
             controller.UserCode_CmdSetText__String(text.RemoveRichText());
 
