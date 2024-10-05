@@ -20,23 +20,6 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.KickPlayer))]
-        private static bool KickPlayer_Prefix(LobbyManager __instance, NetworkIdentity __0)
-        {
-            // Validate Player
-            if ((__0 == null)
-                || __0.WasCollected)
-                return false;
-
-            // Force-Disconnect
-            __instance.KickPlayerRPC(__0);
-            __0._connectionToClient.Disconnect();
-
-            // Prevent Original
-            return false;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.UnRegisterPlayer))]
         private static void UnRegisterPlayer_Prefix(LobbyManager __instance,
             NetworkIdentity player)

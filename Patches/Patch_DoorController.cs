@@ -38,6 +38,12 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Get State
+            __1.ReadNetworkIdentity();
+            bool requestedState = __1.ReadBool();
+            if (door.isLocked == requestedState)
+                return false;
+
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
@@ -70,10 +76,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Apply State
-            door.NetworkisLocked = !door.NetworkisLocked;
-            if (door.NetworkisLocked)
-                door.RequestDoorState(0);
-            door.RpcSetLockState(door.NetworkisLocked);
+            door.UserCode_CmdSetLockState__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, requestedState, __2);
 
             // Prevent Original
             return false;
