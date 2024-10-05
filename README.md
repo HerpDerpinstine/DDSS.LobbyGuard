@@ -3,6 +3,8 @@ Lobby Protection and Bug Fixing for [Dale & Dawson Stationery Supplies](https://
 
 - Protects Lobbies and Users from Malicious Exploits
 - Fixes a few Gameplay issues that are disruptive
+- Extends Invite Codes to avoid Generation Conflicts (Disabled by Default).
+- Settings are found in ``UserData/LobbyGuard.cfg``
 
 ---
 
