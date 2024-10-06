@@ -18,10 +18,6 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
-            // Check if Calling Self
-            if (caller == receiver)
-                return;
-
             // Check if already has Ongoing Call
             if (_callSenderList.ContainsKey(caller))
             {
@@ -37,9 +33,6 @@ namespace DDSS_LobbyGuard.Security
 
             // Cache New Attempt
             _callSenderList[caller] = receiver;
-
-            // Allow Call Attempt
-            phone.ServerCall(caller, receiver);
         }
 
         internal static void OnCallAnswer(PhoneManager phone,

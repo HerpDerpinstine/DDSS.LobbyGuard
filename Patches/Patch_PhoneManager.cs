@@ -19,8 +19,8 @@ namespace DDSS_LobbyGuard.Patches
             // Run Security
             PhoneSecurity.OnCallAttempt(__instance, __0, __1);
 
-            // Prevent Original
-            return false;
+            // Run Original
+            return true;
         }
 
         [HarmonyPrefix]
@@ -87,6 +87,7 @@ namespace DDSS_LobbyGuard.Patches
             string receiver = __1.ReadString();
 
             // Run Security
+            PhoneSecurity.OnCallCancel(phone, receiver, caller);
             PhoneSecurity.OnCallCancel(phone, caller, receiver);
 
             // Prevent Original
@@ -123,6 +124,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Security
             PhoneSecurity.OnCallEnd(phone, caller, receiver);
+            PhoneSecurity.OnCallEnd(phone, receiver, caller);
 
             // Prevent Original
             return false;
@@ -158,6 +160,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Security
             PhoneSecurity.OnCallDecline(phone, caller, receiver);
+            PhoneSecurity.OnCallDecline(phone, receiver, caller);
 
             // Prevent Original
             return false;
