@@ -46,9 +46,10 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Run Game Command
+            text = text.RemoveRichText();
             if (text.Length > 100)
                 text = text.Substring(0, 100);
-            __instance.UserCode_RpcSetText__String(text.RemoveRichText());
+            __instance.RpcSetText(text);
 
             // Prevent Original
             return false;
