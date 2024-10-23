@@ -23,7 +23,7 @@ jobs:
         run: dotnet restore
 
       - name: Build Melon
-        run: dotnet build --no-restore -c Release # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
+        run: dotnet build --no-restore -c Release
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
