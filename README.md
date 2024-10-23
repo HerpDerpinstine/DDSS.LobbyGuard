@@ -14,10 +14,10 @@ Serverside Anti-Cheat for [Dale & Dawson Stationery Supplies](https://store.stea
 - Extended Invite Codes to avoid Generation Conflicts (Disabled by Default)
 - Persistent Blacklist (Disabled by Default)
 
-- Settings are found in ``UserData/LobbyGuard/Config.cfg``
-- Blacklist Database is found in ``UserData/LobbyGuard/Blacklist.json``
+* Settings are found in ``UserData/LobbyGuard/Config.cfg``
+* Persistent Blacklist Database is found in ``UserData/LobbyGuard/Blacklist.json``
 
-- Discord: https://discord.gg/JDw423Wskf
+* Discord: https://discord.gg/JDw423Wskf
 
 ---
 
@@ -38,12 +38,12 @@ Serverside Anti-Cheat for [Dale & Dawson Stationery Supplies](https://store.stea
 
 ### PERSISTENT BLACKLIST:
 
-- If at any time you wish to remove someone from the database
-- delete everything between the `{` and `]`/`},` section including the brackets
+- To remove someone from the database delete their entry from `{` to `}`/`},`
 
-- The Blacklist Database Entries are layed out in the following structure:
+- Database Entries are layed out in the following structure:
 
 | Value | Description |
+| - | - |
 | SteamID | The SteamID64 of the User |
 | Name | The Name of the User at the time of blacklist |
 | Timestamp | (UTC) Date and Time of when this User was blacklisted |
