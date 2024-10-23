@@ -83,6 +83,7 @@ namespace DDSS_LobbyGuard
             InteractionSecurity.UpdateSettings();
             ServerSecurity.OnSceneLoad();
             TrashBinSecurity.OnSceneLoad();
+            StereoSecurity.OnSceneLoad();
         }
 
         private void ApplyPatch<T>()
