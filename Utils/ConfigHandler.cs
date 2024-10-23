@@ -21,12 +21,12 @@ namespace DDSS_LobbyGuard.Utils
             _prefs_ExtendedInviteCodes = CreatePref("ExtendedInviteCodes",
                 "Extended Invite Codes",
                 "Extends your Lobby Invite Codes to 8 Alpha-Numeric Characters instead of 4 Alpha Characters",
-                false);
+                true);
 
             _prefs_PersistentBlacklist = CreatePref("PersistentBlacklist",
-                "Persistent SteamID Blacklist",
+                "Persistent Blacklist",
                 "Makes Blacklisting of Players Persist and Save to File",
-                false);
+                true);
 
             // Save to File
             _prefs_Category.SaveToFile(false);

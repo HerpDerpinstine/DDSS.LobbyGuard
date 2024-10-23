@@ -5,14 +5,14 @@
 
 ---
 
-Serverside Anti-Cheat for [Dale & Dawson Stationery Supplies](https://store.steampowered.com/app/2920570/Dale__Dawson_Stationery_Supplies/)
+Serverside Anti-Cheat and Security for [Dale & Dawson Stationery Supplies](https://store.steampowered.com/app/2920570/Dale__Dawson_Stationery_Supplies/)
 
 - Protects Lobbies and Users from Malicious Exploits
-- Fixes a few Gameplay issues that are disruptive
+- Fixes Disruptive Gameplay issues
 - Serverside Authoritative, Only the Lobby Host needs to have it installed
 - Seamless Integration with Gameplay
-- Extended Invite Codes to avoid Generation Conflicts (Disabled by Default)
-- Persistent Blacklist (Disabled by Default)
+- Extended Invite Codes to avoid Generation Conflicts
+- Persistent Blacklist
 
 * Settings are found in ``UserData/LobbyGuard/Config.cfg``
 * Persistent Blacklist Database is found in ``UserData/LobbyGuard/Blacklist.json``
