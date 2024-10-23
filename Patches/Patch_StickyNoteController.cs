@@ -11,27 +11,18 @@ namespace DDSS_LobbyGuard
     internal class Patch_StickyNoteController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(StickyNoteController), nameof(StickyNoteController.InvokeUserCode_CmdSetText__String))]
-        private static bool InvokeUserCode_CmdSetText__String_Prefix(
-           NetworkBehaviour __0,
-           NetworkReader __1,
-           NetworkConnectionToClient __2)
+        [HarmonyPatch(typeof(StickyNoteController), nameof(StickyNoteController.UserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool UserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient_Prefix(
+            StickyNoteController __instance,
+            ref string __0,
+            NetworkConnectionToClient __2)
         {
             // Check for Server
             if (__2.identity.isServer)
                 return true;
 
-            // Get StickyNoteController
-            StickyNoteController controller = __0.TryCast<StickyNoteController>();
-            if (controller == null)
-                return false;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
-
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
-                return false;
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
@@ -40,21 +31,21 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Get StickyNoteController
-            controller = collectible.TryCast<StickyNoteController>();
-            if (controller == null)
+            __instance = collectible.TryCast<StickyNoteController>();
+            if (__instance == null)
                 return false;
 
             // Get Value
-            string text = __1.ReadString();
+            string text = __0;
             if (string.IsNullOrEmpty(text)
                 || string.IsNullOrWhiteSpace(text))
                 return false;
 
             // Run Game Command
-            controller.UserCode_CmdSetText__String(text.RemoveRichText());
+            __0 = text.RemoveRichText();
 
-            // Prevent Original
-            return false;
+            // Run Original
+            return true;
         }
     }
 }

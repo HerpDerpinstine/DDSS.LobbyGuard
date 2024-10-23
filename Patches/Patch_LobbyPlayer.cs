@@ -92,7 +92,7 @@ namespace DDSS_LobbyGuard.Patches
             // Remove Assistant Role from All Others
             if (requestedRole == SubRole.Assistant)
             {
-                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedPlayers)
+                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
                 {
                     // Get Old Player
                     LobbyPlayer oldPlayer = networkIdentity.GetComponent<LobbyPlayer>();
