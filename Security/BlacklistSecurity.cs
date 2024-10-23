@@ -32,13 +32,13 @@ namespace DDSS_LobbyGuard.Security
         {
             if (!ConfigHandler._prefs_PersistentBlacklist.Value)
                 return;
-            manager.blacklist.Clear();
 
             LoadFile();
 
             if (_blacklist.Count > 0)
                 foreach (BlacklistedPlayer player in _blacklist)
-                    manager.blacklist.Add(player.SteamID);
+                    if (!manager.blacklist.Contains(player.SteamID))
+                        manager.blacklist.Add(player.SteamID);
         }
 
         internal static void OnBlacklistPlayer(ulong steamId, string name)
