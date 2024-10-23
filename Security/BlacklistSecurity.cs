@@ -3,6 +3,7 @@ using Il2Cpp;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace DDSS_LobbyGuard.Security
@@ -11,7 +12,8 @@ namespace DDSS_LobbyGuard.Security
     public class BlacklistedPlayer
     {
         public ulong SteamID;
-        public string SteamName;
+        public string Name;
+        public string Timestamp;
     }
 
     internal static class BlacklistSecurity
@@ -39,7 +41,7 @@ namespace DDSS_LobbyGuard.Security
                     manager.blacklist.Add(player.SteamID);
         }
 
-        internal static void OnBlacklistPlayer(ulong steamId, string steamName)
+        internal static void OnBlacklistPlayer(ulong steamId, string name)
         {
             if (!ConfigHandler._prefs_PersistentBlacklist.Value)
                 return;
@@ -47,10 +49,11 @@ namespace DDSS_LobbyGuard.Security
             _blacklist.Add(new()
             {
                 SteamID = steamId,
-                SteamName = steamName
+                Name = name,
+                Timestamp = DateTime.Now.ToUniversalTime().ToString("G", DateTimeFormatInfo.InvariantInfo),
             });
             SaveFile();
-            MelonMain._logger.Msg($"Blacklisted Player: {steamId} - {steamName}");
+            MelonMain._logger.Msg($"Blacklisted Player: {steamId} - {name}");
         }
 
         internal static void SaveFile()
