@@ -43,7 +43,9 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Player
             if ((__0 == null)
                 || __0.WasCollected
-                || __0.isLocalPlayer)
+                || __0.isLocalPlayer
+                || (__0.gameObject == null)
+                || __0.gameObject.WasCollected)
                 return;
 
             // Destroy Player
