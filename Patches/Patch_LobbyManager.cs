@@ -18,6 +18,21 @@ namespace DDSS_LobbyGuard.Patches
             // Update Our Game Settings
             InteractionSecurity.UpdateSettings();
         }
+        
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.KickPlayer))]
+        private static void KickPlayer_Postfix(NetworkIdentity __0)
+        {
+            // Validate Player
+            if ((__0 == null)
+                || __0.WasCollected
+                || (__0.connectionToClient == null)
+                || __0.connectionToClient.WasCollected)
+                return;
+
+            // Drop the Connection
+            __0.connectionToClient.Disconnect();
+        }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.UnRegisterPlayer))]
