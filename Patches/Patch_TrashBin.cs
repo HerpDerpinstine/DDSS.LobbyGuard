@@ -1,7 +1,11 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using Il2CppProps.FireEx;
+using Il2CppProps.Scripts;
 using Il2CppProps.TrashBin;
 
 namespace DDSS_LobbyGuard.Patches
@@ -10,10 +14,12 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPostfix]
         [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.RpcEnableFire))]
-        private static void RpcEnableFire_Postfix(TrashBin __instance)
+        private static void RpcEnableFire_Postfix(TrashBin __instance, bool __1)
         {
             // TrashBin Security
-            TrashBinSecurity.OnEnableFireEnd(__instance);
+            __instance.isOnFire = __1;
+            if (!__1)
+                TrashBinSecurity.OnEnableFireEnd(__instance);
         }
 
         [HarmonyPrefix]
@@ -21,6 +27,7 @@ namespace DDSS_LobbyGuard.Patches
         private static bool UserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(TrashBin __instance, NetworkIdentity __0, bool __1)
         {
             // TrashBin Security
+            __instance.isOnFire = __1;
             TrashBinSecurity.OnEnableFireBegin(__0, __instance, __1);
 
             // Prevent Original
@@ -40,13 +47,36 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
+                return false;
+
             // Get Values
             __1.ReadNetworkIdentity();
             bool enabled = __1.ReadBool();
 
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
+            // Validate TrashBin
+            if (trashcan.isOnFire == enabled)
                 return false;
+
+            // Check for Extinguishing
+            if (!enabled)
+            {
+                // Validate Placement
+                Collectible collectible = sender.GetCurrentCollectible();
+                if ((collectible == null)
+                    || (collectible.GetIl2CppType() != Il2CppType.Of<FireExController>()))
+                    return false;
+
+                // Get FireExController
+                FireExController fireEx = collectible.TryCast<FireExController>();
+                if (fireEx == null)
+                    return false;
+
+                // Validate FireExController
+                if (!InteractionSecurity.IsWithinRange(fireEx.transform.position, trashcan.transform.position))
+                    return false;
+            }
 
             // Run Game Command
             trashcan.UserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, enabled, __2);
