@@ -35,7 +35,7 @@ namespace DDSS_LobbyGuard
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
             if ((collectible == null)
-                || (collectible.GetIl2CppType() != Il2CppType.Of<Document>()))
+                || (collectible.GetIl2CppType() != Il2CppType.Of<Consumable>()))
                 return false;
 
             // Get Consumable
