@@ -11,9 +11,11 @@ Serverside Anti-Cheat for [Dale & Dawson Stationery Supplies](https://store.stea
 - Fixes a few Gameplay issues that are disruptive
 - Serverside Authoritative, Only the Lobby Host needs to have it installed
 - Seamless Integration with Gameplay
-- Extends Invite Codes to avoid Generation Conflicts (Disabled by Default)
+- Extended Invite Codes to avoid Generation Conflicts (Disabled by Default)
+- Persistent Blacklist (Disabled by Default)
 
-- Settings are found in ``UserData/LobbyGuard.cfg``
+- Settings are found in ``UserData/LobbyGuard/Config.cfg``
+- Blacklist Database is found in ``UserData/LobbyGuard/Blacklist.json``
 
 - Discord: https://discord.gg/JDw423Wskf
 
@@ -31,6 +33,20 @@ Serverside Anti-Cheat for [Dale & Dawson Stationery Supplies](https://store.stea
 4) Download [DDSS.LobbyGuard](https://github.com/HerpDerpinstine/DDSS.LobbyGuard/releases) from Releases.
 5) Place ``DDSS.LobbyGuard.dll`` in the ``Mods`` folder of your Game's Install Folder.
 6) Start the Game.
+
+---
+
+### PERSISTENT BLACKLIST:
+
+- If at any time you wish to remove someone from the database
+- delete everything between the `{` and `]`/`},` section including the brackets
+
+- The Blacklist Database Entries are layed out in the following structure:
+
+| Value | Description |
+| SteamID | The SteamID64 of the User |
+| Name | The Name of the User at the time of blacklist |
+| Timestamp | (UTC) Date and Time of when this User was blacklisted |
 
 ---
 
