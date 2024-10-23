@@ -38,7 +38,7 @@ Serverside Anti-Cheat for [Dale & Dawson Stationery Supplies](https://store.stea
 
 ### PERSISTENT BLACKLIST:
 
-- To remove someone from the database delete their entry from `{` to `}`/`},`
+- To remove someone from the database delete their entry from `{` to `},`
 
 - Database Entries are layed out in the following structure:
 
