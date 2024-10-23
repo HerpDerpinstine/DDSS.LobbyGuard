@@ -18,6 +18,10 @@ namespace DDSS_LobbyGuard.Patches
             DoorController __instance,
             int __0)
         {
+            // Check for Lock
+            if (__instance.isLocked)
+                return false;
+
             // Apply State
             DoorSecurity.ApplyState(__instance, __0);
 
