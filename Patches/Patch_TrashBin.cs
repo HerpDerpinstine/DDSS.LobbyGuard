@@ -48,17 +48,6 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
                 return false;
 
-            // Check for Enable
-            if (enabled 
-                && !sender.isServer)
-            {
-                // Validate Slacker Role
-                LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-                if ((player == null)
-                    || (player.playerRole != PlayerRole.Slacker))
-                    return false;
-            }
-
             // Run Game Command
             trashcan.UserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, enabled, __2);
 
