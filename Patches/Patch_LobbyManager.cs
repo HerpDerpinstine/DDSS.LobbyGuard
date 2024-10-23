@@ -47,7 +47,7 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Destroy Player
-            GameObject.Destroy(__0.gameObject);
+            NetworkServer.Destroy(__0.gameObject);
         }
 
         [HarmonyPrefix]
