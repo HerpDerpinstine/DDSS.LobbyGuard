@@ -75,7 +75,9 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.WasCollected
                 || __0.isLocalPlayer
                 || (__0.netIdentity == null)
-                || __0.netIdentity.WasCollected)
+                || __0.netIdentity.WasCollected
+                || (__0.netIdentity.gameObject == null)
+                || __0.netIdentity.gameObject.WasCollected)
                 return;
 
             // Destroy Player
