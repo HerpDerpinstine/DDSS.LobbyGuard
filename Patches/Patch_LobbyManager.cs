@@ -31,11 +31,23 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.isLocalPlayer)
                 return false;
 
-            // Destroy Player
-            GameObject.Destroy(__0);
-
             // Run Original
             return true;
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.KickPlayer))]
+        private static void KickPlayer_Postfix(LobbyManager __instance,
+            NetworkIdentity __0)
+        {
+            // Validate Player
+            if ((__0 == null)
+                || __0.WasCollected
+                || __0.isLocalPlayer)
+                return;
+
+            // Destroy Player
+            GameObject.Destroy(__0);
         }
 
         [HarmonyPrefix]
@@ -49,11 +61,23 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.isLocalPlayer)
                 return false;
 
-            // Destroy Player
-            GameObject.Destroy(__0.netIdentity);
-
             // Run Original
             return true;
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.BlackListPlayer))]
+        private static void BlackListPlayer_Postfix(LobbyManager __instance,
+            LobbyPlayer __0)
+        {
+            // Validate Player
+            if ((__0 == null)
+                || __0.WasCollected
+                || __0.isLocalPlayer)
+                return;
+
+            // Destroy Player
+            GameObject.Destroy(__0.netIdentity);
         }
 
         [HarmonyPrefix]
