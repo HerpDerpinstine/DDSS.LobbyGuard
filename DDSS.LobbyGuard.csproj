@@ -13,10 +13,13 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Docs\**" />
     <Compile Remove="Libs\**" />
     <Compile Remove="Output\**" />
+    <EmbeddedResource Remove="Docs\**" />
     <EmbeddedResource Remove="Libs\**" />
     <EmbeddedResource Remove="Output\**" />
+    <None Remove="Docs\**" />
     <None Remove="Libs\**" />
     <None Remove="Output\**" />
   </ItemGroup>
