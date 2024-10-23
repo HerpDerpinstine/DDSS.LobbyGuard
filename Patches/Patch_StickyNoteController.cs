@@ -24,6 +24,10 @@ namespace DDSS_LobbyGuard
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, __instance.transform.position))
+                return false;
+
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
             if ((collectible == null)
@@ -42,10 +46,12 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Run Game Command
-            __0 = text.RemoveRichText();
+            if (text.Length > 100)
+                text = text.Substring(0, 100);
+            __instance.UserCode_RpcSetText__String(text.RemoveRichText());
 
-            // Run Original
-            return true;
+            // Prevent Original
+            return false;
         }
     }
 }
