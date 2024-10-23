@@ -16,8 +16,9 @@ namespace DDSS_LobbyGuard.Patches
             // Get DrawerController
             DrawerController drawer = __0.TryCast<DrawerController>();
 
-            // Check if Drawer is Open
-            if (!drawer.isOpen)
+            // Check if Drawer is Open and Unorganized
+            if (!drawer.isOpen
+                || drawer.isOrganized)
                 return false;
 
             // Get Sender
