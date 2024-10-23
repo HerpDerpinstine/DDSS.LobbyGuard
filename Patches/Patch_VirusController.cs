@@ -54,18 +54,11 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get VirusController
             VirusController controller = __0.TryCast<VirusController>();
-            if ((controller == null)
-                || (controller.computerController == null)
-                || (controller.computerController._workStationController == null)
-                || (controller.computerController._workStationController.usingPlayer == null))
+            if (controller == null)
                 return false;
 
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
-                return false;
-
-            // Check if Actually Sitting in Seat
-            if (controller.computerController._workStationController.usingPlayer != sender)
+            // Validate Player
+            if (!ComputerSecurity.ValidatePlayer(controller.computerController, sender))
                 return false;
 
             // Get Value
