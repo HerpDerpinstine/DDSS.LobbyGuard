@@ -6,6 +6,7 @@ using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using System;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -19,32 +20,53 @@ namespace DDSS_LobbyGuard.Patches
             InteractionSecurity.UpdateSettings();
         }
         
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.KickPlayer))]
-        private static void KickPlayer_Postfix(NetworkIdentity __0)
+        private static bool KickPlayer_Prefix(LobbyManager __instance, 
+            NetworkIdentity __0)
         {
             // Validate Player
             if ((__0 == null)
                 || __0.WasCollected
-                || (__0.connectionToClient == null)
-                || __0.connectionToClient.WasCollected)
-                return;
+                || __0.isLocalPlayer)
+                return false;
 
-            // Drop the Connection
-            __0.connectionToClient.Disconnect();
+            // Destroy Player
+            GameObject.Destroy(__0);
+
+            // Run Original
+            return true;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.BlackListPlayer))]
+        private static bool BlackListPlayer_Prefix(LobbyManager __instance,
+            LobbyPlayer __0)
+        {
+            // Validate Player
+            if ((__0 == null)
+                || __0.WasCollected
+                || __0.isLocalPlayer)
+                return false;
+
+            // Destroy Player
+            GameObject.Destroy(__0.netIdentity);
+
+            // Run Original
+            return true;
         }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.UnRegisterPlayer))]
         private static void UnRegisterPlayer_Prefix(LobbyManager __instance,
-            NetworkIdentity player)
+            NetworkIdentity __0)
         {
             // Validate Server
             if (!__instance.isServer)
                 return;
 
             // Get PlayerController
-            PlayerController controller = player.GetComponent<PlayerController>();
+            PlayerController controller = __0.GetComponent<PlayerController>();
             if (controller == null)
                 return;
 
@@ -54,7 +76,7 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Drop It
-            usable.ServerStopUse(player);
+            usable.ServerStopUse(__0);
         }
 
         [HarmonyPrefix]

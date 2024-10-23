@@ -1,11 +1,7 @@
 ﻿using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
-//using Il2CppObjects.Scripts;
 using Il2CppPlayer;
-//using Il2CppPlayer.Lobby;
-//using Il2CppPlayer.TaskManagement.Tasks;
-//using Il2CppPlayer.Tasks;
 using Il2CppProps.Scripts;
 using UnityEngine;
 
