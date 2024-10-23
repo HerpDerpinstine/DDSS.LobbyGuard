@@ -6,12 +6,19 @@ using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using System;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
     internal class Patch_LobbyManager
     {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.Awake))]
+        private static void Awake_Postfix(LobbyManager __instance)
+        {
+            // Update Blacklist
+            BlacklistSecurity.OnLobbyOpen(__instance);
+        }
+
         [HarmonyPostfix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.UpdateSettings))]
         private static void UpdateSettings_Postfix()
@@ -62,6 +69,9 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.WasCollected
                 || __0.isLocalPlayer)
                 return false;
+
+            // Tell Blacklist Security
+            BlacklistSecurity.OnBlacklistPlayer(__0.steamID, __0.steamUsername);
 
             // Run Original
             return true;

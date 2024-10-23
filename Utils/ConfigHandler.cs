@@ -8,11 +8,12 @@ namespace DDSS_LobbyGuard.Utils
     {
         private static MelonPreferences_Category _prefs_Category;
         internal static MelonPreferences_Entry<bool> _prefs_ExtendedInviteCodes;
+        internal static MelonPreferences_Entry<bool> _prefs_PersistentBlacklist;
 
         internal static void Setup()
         {
             // Create Preferences Category
-            string FilePath = Path.Combine(MelonEnvironment.UserDataDirectory, "LobbyGuard.cfg");
+            string FilePath = Path.Combine(MelonMain._userDataPath, "Config.cfg");
             _prefs_Category = MelonPreferences.CreateCategory("LobbyGuard", "LobbyGuard");
             _prefs_Category.SetFilePath(FilePath, true);
 
@@ -20,6 +21,11 @@ namespace DDSS_LobbyGuard.Utils
             _prefs_ExtendedInviteCodes = CreatePref("ExtendedInviteCodes",
                 "Extended Invite Codes",
                 "Extends your Lobby Invite Codes to 8 Alpha-Numeric Characters instead of 4 Alpha Characters",
+                false);
+
+            _prefs_PersistentBlacklist = CreatePref("PersistentBlacklist",
+                "Persistent SteamID Blacklist",
+                "Makes Blacklisting of Players Persist and Save to File",
                 false);
 
             // Save to File

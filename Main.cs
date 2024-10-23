@@ -3,12 +3,15 @@ using DDSS_LobbyGuard.Patches;
 using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using MelonLoader;
+using MelonLoader.Utils;
 using System;
+using System.IO;
 
 namespace DDSS_LobbyGuard
 {
     internal class MelonMain : MelonMod
     {
+        internal static string _userDataPath;
         internal static MelonLogger.Instance _logger;
 
         public override void OnInitializeMelon()
@@ -16,8 +19,14 @@ namespace DDSS_LobbyGuard
             // Cache Logger 
             _logger = LoggerInstance;
 
+            // Setup UserData Folder
+            _userDataPath = Path.Combine(MelonEnvironment.UserDataDirectory, Properties.BuildInfo.Name);
+            if (!Directory.Exists(_userDataPath))
+                Directory.CreateDirectory(_userDataPath);
+
             // Setup Config
             ConfigHandler.Setup();
+            BlacklistSecurity.Setup();
 
             // Register Custom Components
             ManagedEnumerator.Register();
