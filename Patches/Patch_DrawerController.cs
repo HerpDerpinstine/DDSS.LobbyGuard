@@ -60,7 +60,10 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Apply State
-            drawer.UserCode_CmdSetDrawerState__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, requestedState, __2);
+            drawer.NetworkisOpen = requestedState;
+            if (drawer.filingCabinetController.isOrganized && requestedState)
+                drawer.filingCabinetController.UserCode_CmdSetUnorganized();
+            drawer.RpcSetDrawerState(sender, requestedState);
 
             // Prevent Original
             return false;
