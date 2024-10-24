@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using Il2Cpp;
-using Il2CppMirror;
 
 namespace DDSS_LobbyGuard.Patches
 {
