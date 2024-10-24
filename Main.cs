@@ -32,6 +32,7 @@ namespace DDSS_LobbyGuard
             // Register Custom Components
             ManagedEnumerator.Register();
             KeyDestructionCallback.Register();
+            FireExDestructionCallback.Register();
 
             // Apply Patches
             ApplyPatches();

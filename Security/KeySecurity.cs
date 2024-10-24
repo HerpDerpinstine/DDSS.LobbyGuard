@@ -17,6 +17,7 @@ namespace DDSS_LobbyGuard.Security
         internal static void SpawnKey(KeyHolder holder)
         {
             if ((holder == null)
+                || holder.WasCollected
                 || !holder.isServer)
                 return;
 
@@ -32,6 +33,7 @@ namespace DDSS_LobbyGuard.Security
         internal static void SpawnKey(KeyController key)
         {
             if ((key == null)
+                || key.WasCollected
                 || !key.isServer
                 || !_allKeys.ContainsKey(key))
                 return;
