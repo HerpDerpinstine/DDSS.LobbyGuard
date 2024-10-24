@@ -43,9 +43,14 @@ namespace DDSS_LobbyGuard.Patches
             __instance.UserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity__NetworkConnectionToClient(sender, __1);
 
             // Reset Networked Scale to 1,1,1
-            collectible._networkRigidbodyUnreliable.interpolateScale = false;
-            collectible._networkRigidbodyUnreliable.syncScale = true;
-            collectible._networkRigidbodyUnreliable.SetScale(Vector3.one);
+            NetworkRigidbodyUnreliable networkRigidbody = collectible._networkRigidbodyUnreliable;
+            if ((networkRigidbody != null)
+                && !networkRigidbody.WasCollected)
+            {
+                networkRigidbody.interpolateScale = false;
+                networkRigidbody.syncScale = true;
+                networkRigidbody.SetScale(Vector3.one);
+            }
 
             // Prevent Original
             return false;
