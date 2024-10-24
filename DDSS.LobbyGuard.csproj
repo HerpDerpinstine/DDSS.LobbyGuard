@@ -32,7 +32,7 @@
 	<PackageReference Include="HarmonyX" Version="2.13.0">
 	  <PrivateAssets>all</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="LavaGang.MelonLoader" Version="0.6.4">
+    <PackageReference Include="LavaGang.MelonLoader" Version="0.6.5">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Il2CppInterop.Runtime" Version="1.4.5">
@@ -87,9 +87,6 @@
       <HintPath>Libs\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components\" />
   </ItemGroup>
   
 </Project>

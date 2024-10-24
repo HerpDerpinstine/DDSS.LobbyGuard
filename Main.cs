@@ -30,6 +30,7 @@ namespace DDSS_LobbyGuard
 
             // Register Custom Components
             ManagedEnumerator.Register();
+            KeyDestructionCallback.Register();
 
             // Apply Patches
             ApplyPatch<Patch_BeerController>();
@@ -85,6 +86,7 @@ namespace DDSS_LobbyGuard
             ServerSecurity.OnSceneLoad();
             TrashBinSecurity.OnSceneLoad();
             StereoSecurity.OnSceneLoad();
+            KeySecurity.OnSceneLoad();
         }
 
         private void ApplyPatch<T>()
