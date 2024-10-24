@@ -9,14 +9,8 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(FilingCabinetController), nameof(FilingCabinetController.InvokeUserCode_CmdSetUnorganized))]
-        private static bool InvokeUserCode_CmdSetUnorganized_Prefix(NetworkBehaviour __0,
-            NetworkReader __1,
-            NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdSetUnorganized_Prefix()
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Prevent Original
             return false;
         }

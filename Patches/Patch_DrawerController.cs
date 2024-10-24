@@ -18,8 +18,8 @@ namespace DDSS_LobbyGuard.Patches
             DrawerController drawer = __0.TryCast<DrawerController>();
 
             // Check if Drawer is Open and Unorganized
-            if (!drawer.isOpen
-                || drawer.isOrganized)
+            if (!drawer.NetworkisOpen
+                || drawer.NetworkisOrganized)
                 return false;
 
             // Get Sender
@@ -52,7 +52,7 @@ namespace DDSS_LobbyGuard.Patches
             // Get State
             __1.ReadNetworkIdentity();
             bool requestedState = __1.ReadBool();
-            if (drawer.isOpen == requestedState)
+            if (drawer.NetworkisOpen == requestedState)
                 return false;
 
             // Validate Distance
@@ -61,9 +61,32 @@ namespace DDSS_LobbyGuard.Patches
 
             // Apply State
             drawer.NetworkisOpen = requestedState;
-            if (drawer.filingCabinetController.isOrganized && requestedState)
-                drawer.filingCabinetController.UserCode_CmdSetUnorganized();
             drawer.RpcSetDrawerState(sender, requestedState);
+            drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
+
+            // Reset Organization for Entire Cabinet
+            if (requestedState)
+            {
+                // Check if Every Drawer has been Organized
+                bool isAllOrganized = false;
+                foreach (DrawerController drawerController in drawer.filingCabinetController.drawers)
+                {
+                    if (!drawerController.NetworkisOrganized)
+                    {
+                        isAllOrganized = false;
+                        break;
+                    }
+                    else
+                        isAllOrganized = true;
+                }
+
+                // Unorganize Drawers
+                if (isAllOrganized)
+                {
+                    drawer.filingCabinetController.UserCode_CmdSetUnorganized();
+                    drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
+                }
+            }
 
             // Prevent Original
             return false;
