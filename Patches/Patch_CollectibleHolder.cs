@@ -40,13 +40,6 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
                 return false;
 
-            // Get Object Name
-            __1.ReadNetworkIdentity();
-            string name = __1.ReadString();
-            if (string.IsNullOrEmpty(name)
-                || string.IsNullOrWhiteSpace(name))
-                return false;
-
             // Run Game Command
             holder.UserCode_CmdPlaceCollectible__NetworkIdentity__String(collectible.netIdentity,
                 collectible.label);
@@ -78,6 +71,11 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
+                return false;
+
+            // Validate Placement
+            Collectible collectible = sender.GetCurrentCollectible();
+            if (collectible == null)
                 return false;
 
             // Run Game Command

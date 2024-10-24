@@ -126,6 +126,12 @@ namespace DDSS_LobbyGuard.Patches
                 if (controller.lobbyPlayer.NetworkoriginalPlayerRole == PlayerRole.Slacker)
                     slackerCount--;
 
+                // Clamp Count
+                if (slackerCount < 0)
+                    slackerCount = 0;
+                if (specialistCount < 0)
+                    specialistCount = 0;
+
                 // Apply New Win Condition
                 GameManager.instance.SetWinCondition(specialistCount, slackerCount);
             }
