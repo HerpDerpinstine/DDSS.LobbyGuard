@@ -21,8 +21,6 @@ namespace DDSS_LobbyGuard.Patches
             if ((__1 == null)
                 || __1.WasCollected)
                 __1 = __0.connectionToClient;
-            if (!__1.identity.isServer)
-                return false;
 
             // Get Sender
             NetworkIdentity sender = __1.identity;
