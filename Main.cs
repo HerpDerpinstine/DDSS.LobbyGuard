@@ -1,5 +1,4 @@
 ﻿using DDSS_LobbyGuard.Components;
-using DDSS_LobbyGuard.Patches;
 using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
@@ -7,7 +6,6 @@ using MelonLoader;
 using MelonLoader.Utils;
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace DDSS_LobbyGuard
