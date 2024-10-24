@@ -3,6 +3,7 @@ using Il2CppMirror.FizzySteam;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_FizzySteamworks
     {
         [HarmonyPrefix]

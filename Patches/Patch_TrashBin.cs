@@ -3,13 +3,13 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.FireEx;
 using Il2CppProps.Scripts;
 using Il2CppProps.TrashBin;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_TrashBin
     {
         [HarmonyPostfix]

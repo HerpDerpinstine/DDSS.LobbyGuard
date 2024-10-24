@@ -6,6 +6,7 @@ using Il2CppProps.ServerRack;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_ServerController
     {
         [HarmonyPostfix]

@@ -2,10 +2,13 @@
 using DDSS_LobbyGuard.Patches;
 using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
+using HarmonyLib;
 using MelonLoader;
 using MelonLoader.Utils;
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace DDSS_LobbyGuard
 {
@@ -33,47 +36,7 @@ namespace DDSS_LobbyGuard
             KeyDestructionCallback.Register();
 
             // Apply Patches
-            ApplyPatch<Patch_BeerController>();
-            ApplyPatch<Patch_Binder>();
-            ApplyPatch<Patch_CatController>();
-            ApplyPatch<Patch_Cigarette>();
-            ApplyPatch<Patch_CigarettePack>();
-            ApplyPatch<Patch_CoffeeMachine>();
-            ApplyPatch<Patch_CollectibleHolder>();
-            ApplyPatch<Patch_ComputerController>();
-            ApplyPatch<Patch_Consumable>();
-            ApplyPatch<Patch_Document>();
-            ApplyPatch<Patch_DoorController>();
-            ApplyPatch<Patch_DrawerController>();
-            ApplyPatch<Patch_ElevatorDoorController>();
-            ApplyPatch<Patch_Fax>();
-            ApplyPatch<Patch_FizzySteamworks>();
-            ApplyPatch<Patch_KeyHolder>();
-            ApplyPatch<Patch_KitchenCabinetController>();
-            ApplyPatch<Patch_LobbyItem>();
-            ApplyPatch<Patch_LobbyManager>();
-            ApplyPatch<Patch_LobbyPlayer>();
-            ApplyPatch<Patch_Mug>();
-            ApplyPatch<Patch_NetworkManager>();
-            ApplyPatch<Patch_OfficeShelf>();
-            ApplyPatch<Patch_PaperShredder>();
-            ApplyPatch<Patch_PaperTray>();
-            ApplyPatch<Patch_PhoneManager>();
-            ApplyPatch<Patch_PlayerController>();
-            ApplyPatch<Patch_PlayerEffectController>();
-            ApplyPatch<Patch_Printer>();
-            ApplyPatch<Patch_ServerController>();
-            ApplyPatch<Patch_SteamMatchmaking>();
-            ApplyPatch<Patch_StereoController>();
-            ApplyPatch<Patch_StickyNoteController>();
-            ApplyPatch<Patch_StorageBox>();
-            ApplyPatch<Patch_Toilet>();
-            ApplyPatch<Patch_TrashBin>();
-            ApplyPatch<Patch_Usable>();
-            ApplyPatch<Patch_VendingMachine>();
-            ApplyPatch<Patch_VirusController>();
-            ApplyPatch<Patch_VoteBoxController>();
-            ApplyPatch<Patch_WorkStationController>();
+            ApplyPatches();
 
             // Log Success
             _logger.Msg("Initialized!");
@@ -90,16 +53,27 @@ namespace DDSS_LobbyGuard
             KeySecurity.OnSceneLoad();
         }
 
-        private void ApplyPatch<T>()
+        private void ApplyPatches()
         {
-            Type type = typeof(T);
-            try
+            Assembly melonAssembly = typeof(MelonMain).Assembly;
+            foreach (Type type in melonAssembly.GetValidTypes())
             {
-                HarmonyInstance.PatchAll(type);
-            }
-            catch (Exception e)
-            {
-                LoggerInstance.Error($"Exception while attempting to apply {type.Name}: {e}");
+                // Check Type for any Harmony Attribute
+                if (type.GetCustomAttribute<HarmonyPatch>() == null)
+                    continue;
+
+                // Apply
+                try
+                {
+                    if (MelonDebug.IsEnabled())
+                        LoggerInstance.Msg($"Applying {type.Name}");
+
+                    HarmonyInstance.PatchAll(type);
+                }
+                catch (Exception e)
+                {
+                    LoggerInstance.Error($"Exception while attempting to apply {type.Name}: {e}");
+                }
             }
         }
     }   

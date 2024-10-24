@@ -10,6 +10,7 @@ using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_DoorController
     {
         [HarmonyPrefix]

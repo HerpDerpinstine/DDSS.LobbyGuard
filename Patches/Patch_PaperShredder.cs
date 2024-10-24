@@ -5,6 +5,7 @@ using Il2CppProps.PaperShredder;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_PaperShredder
     {
         [HarmonyPrefix]

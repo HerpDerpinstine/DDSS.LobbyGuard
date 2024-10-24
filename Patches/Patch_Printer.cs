@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_Printer
     {
         [HarmonyPrefix]

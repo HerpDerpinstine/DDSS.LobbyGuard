@@ -3,6 +3,7 @@ using Il2CppSteamworks;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_SteamMatchmaking
     {
         [HarmonyPrefix]

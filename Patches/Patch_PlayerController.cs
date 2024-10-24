@@ -5,6 +5,7 @@ using Il2CppPlayer;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_PlayerController
     {
         [HarmonyPrefix]

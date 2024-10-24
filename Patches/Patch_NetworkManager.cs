@@ -6,6 +6,7 @@ using Il2CppMirror;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_NetworkManager
     {
         [HarmonyPrefix]

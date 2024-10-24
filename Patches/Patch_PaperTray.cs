@@ -6,6 +6,7 @@ using Il2CppProps.Misc.PaperTray;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_PaperTray
     {
         [HarmonyPrefix]

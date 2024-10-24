@@ -10,6 +10,7 @@ using System.Linq;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_Binder
     {
         [HarmonyPrefix]

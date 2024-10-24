@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_LobbyItem
     {
         internal static Dictionary<string, CSteamID> _lobbyList = new();

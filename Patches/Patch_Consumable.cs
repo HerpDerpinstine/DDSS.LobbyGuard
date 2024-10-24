@@ -3,11 +3,11 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
-using Il2CppProps.Printer;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard
 {
+    [HarmonyPatch]
     internal class Patch_Consumable
     {
         [HarmonyPrefix]

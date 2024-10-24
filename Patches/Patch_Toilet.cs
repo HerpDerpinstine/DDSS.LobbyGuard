@@ -5,6 +5,7 @@ using Il2CppProps.WC.Toilet;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_Toilet
     {
         [HarmonyPrefix]

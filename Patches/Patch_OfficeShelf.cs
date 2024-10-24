@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_OfficeShelf
     {
         [HarmonyPrefix]

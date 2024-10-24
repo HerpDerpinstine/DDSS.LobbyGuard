@@ -4,6 +4,7 @@ using Il2CppProps.Keys;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_KeyHolder
     {
         [HarmonyPrefix]

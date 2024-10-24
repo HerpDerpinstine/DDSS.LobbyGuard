@@ -8,6 +8,7 @@ using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard
 {
+    [HarmonyPatch]
     internal class Patch_Document
     {
         [HarmonyPrefix]

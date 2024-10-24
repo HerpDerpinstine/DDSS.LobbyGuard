@@ -9,6 +9,7 @@ using System;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_PlayerEffectController
     {
         [HarmonyPostfix]

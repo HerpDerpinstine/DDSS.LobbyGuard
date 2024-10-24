@@ -10,6 +10,7 @@ using Il2CppProps.WorkStation.InfectedUSB;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_WorkStationController
     {
         [HarmonyPrefix]

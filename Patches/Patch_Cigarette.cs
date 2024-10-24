@@ -8,6 +8,7 @@ using Il2CppProps.Smoking;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_Cigarette
     {
         [HarmonyPrefix]

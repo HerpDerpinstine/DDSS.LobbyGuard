@@ -6,6 +6,7 @@ using Il2CppPlayer.Lobby;
 
 namespace DDSS_LobbyGuard.Patches
 {
+    [HarmonyPatch]
     internal class Patch_PhoneManager
     {
         [HarmonyPrefix]
