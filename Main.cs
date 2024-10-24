@@ -48,6 +48,7 @@ namespace DDSS_LobbyGuard
             ApplyPatch<Patch_ElevatorDoorController>();
             ApplyPatch<Patch_Fax>();
             ApplyPatch<Patch_FizzySteamworks>();
+            ApplyPatch<Patch_KeyHolder>();
             ApplyPatch<Patch_KitchenCabinetController>();
             ApplyPatch<Patch_LobbyItem>();
             ApplyPatch<Patch_LobbyManager>();
