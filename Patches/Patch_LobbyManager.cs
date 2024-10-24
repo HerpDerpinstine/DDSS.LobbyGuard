@@ -114,7 +114,10 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Adjust Termination Offset
-            if ((GameManager.instance != null)
+            PlayerRole playerRole = controller.lobbyPlayer.NetworkplayerRole;
+            if ((playerRole != PlayerRole.Manager)
+                && (playerRole != PlayerRole.Janitor)
+                && (GameManager.instance != null)
                 && !GameManager.instance.WasCollected)
             {
                 // Get Original Count
@@ -122,9 +125,9 @@ namespace DDSS_LobbyGuard.Patches
                 int specialistCount = GameManager.instance.NetworkstartSpecialists;
 
                 // Get Player Role
-                if (controller.lobbyPlayer.NetworkoriginalPlayerRole == PlayerRole.Specialist)
+                if (playerRole == PlayerRole.Specialist)
                     specialistCount--;
-                if (controller.lobbyPlayer.NetworkoriginalPlayerRole == PlayerRole.Slacker)
+                else if (playerRole == PlayerRole.Slacker)
                     slackerCount--;
 
                 // Clamp Count
