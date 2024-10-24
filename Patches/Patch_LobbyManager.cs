@@ -104,7 +104,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity __0)
         {
             // Validate Server
-            if (!__instance.isServer)
+            if (!__instance.isServer
+                || !__instance.gameStarted)
                 return;
 
             // Get PlayerController
