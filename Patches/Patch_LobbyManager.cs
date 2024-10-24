@@ -2,6 +2,7 @@
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
@@ -110,6 +111,24 @@ namespace DDSS_LobbyGuard.Patches
             PlayerController controller = __0.GetComponent<PlayerController>();
             if (controller == null)
                 return;
+
+            // Adjust Termination Offset
+            if ((GameManager.instance != null)
+                && !GameManager.instance.WasCollected)
+            {
+                // Get Original Count
+                int slackerCount = GameManager.instance.NetworkstartSlackers;
+                int specialistCount = GameManager.instance.NetworkstartSpecialists;
+
+                // Get Player Role
+                if (controller.lobbyPlayer.NetworkoriginalPlayerRole == PlayerRole.Specialist)
+                    specialistCount--;
+                if (controller.lobbyPlayer.NetworkoriginalPlayerRole == PlayerRole.Slacker)
+                    slackerCount--;
+
+                // Apply New Win Condition
+                GameManager.instance.SetWinCondition(specialistCount, slackerCount);
+            }
 
             // Get Usable
             Usable usable = controller.GetCurrentUsable();
