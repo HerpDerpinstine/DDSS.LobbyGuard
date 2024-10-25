@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Components;
+using DDSS_LobbyGuard.GUI;
 using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
@@ -50,6 +51,7 @@ namespace DDSS_LobbyGuard
             TrashBinSecurity.OnSceneLoad();
             StereoSecurity.OnSceneLoad();
             KeySecurity.OnSceneLoad();
+            MainMenuPanelBuilder.OnSceneLoad();
         }
 
         private void ApplyPatches()
