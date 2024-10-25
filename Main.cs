@@ -51,7 +51,11 @@ namespace DDSS_LobbyGuard
             TrashBinSecurity.OnSceneLoad();
             StereoSecurity.OnSceneLoad();
             KeySecurity.OnSceneLoad();
-            MainMenuPanelBuilder.OnSceneLoad();
+
+            if (sceneName == "MainMenuScene") // Main Menu
+            {
+                MainMenuPanelBuilder.MainMenuInit();
+            }
         }
 
         private void ApplyPatches()

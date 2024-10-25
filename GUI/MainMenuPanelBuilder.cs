@@ -12,7 +12,7 @@ namespace DDSS_LobbyGuard.GUI
     {
         private static GameObject _newPanel;
 
-        internal static void OnSceneLoad()
+        internal static void MainMenuInit()
         {
             if ((_newPanel != null)
                 && !_newPanel.WasCollected)
@@ -36,8 +36,9 @@ namespace DDSS_LobbyGuard.GUI
 
             // Clone the Panel
             _newPanel = GameObject.Instantiate(aboutTab, aboutTab.transform.parent);
-            _newPanel.transform.localPosition = new(0.2f, 430.9f, 0f);
             _newPanel.name = Properties.BuildInfo.Name;
+            _newPanel.transform.localPosition = new(0f, 430f, 0f);
+            _newPanel.transform.SetSiblingIndex(aboutTab.transform.GetSiblingIndex() + 1);
 
             // Apply New Tab
             UiTab newTab = _newPanel.GetComponent<UiTab>();
@@ -50,12 +51,6 @@ namespace DDSS_LobbyGuard.GUI
                     tab.childTabs.Add(newTab);
                     break;
                 }
-
-            // Fix Panel Layering
-            int siblingIndex = aboutTab.transform.GetSiblingIndex() - 1;
-            if (siblingIndex < 0)
-                siblingIndex = 0;
-            _newPanel.transform.SetSiblingIndex(siblingIndex);
 
             // Get New Panel Title
             Transform titleTextTrans = _newPanel.transform.Find("NewsLetter/TopBar/Title");
