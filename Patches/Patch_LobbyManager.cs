@@ -44,23 +44,6 @@ namespace DDSS_LobbyGuard.Patches
             return true;
         }
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.KickPlayer))]
-        private static void KickPlayer_Postfix(LobbyManager __instance,
-            NetworkIdentity __0)
-        {
-            // Validate Player
-            if ((__0 == null)
-                || __0.WasCollected
-                || __0.isLocalPlayer
-                || (__0.gameObject == null)
-                || __0.gameObject.WasCollected)
-                return;
-
-            // Destroy Player
-            NetworkServer.Destroy(__0.gameObject);
-        }
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.BlackListPlayer))]
         private static bool BlackListPlayer_Prefix(LobbyManager __instance,
@@ -72,30 +55,8 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.isLocalPlayer)
                 return false;
 
-            // Tell Blacklist Security
-            BlacklistSecurity.OnBlacklistPlayer(__0.steamID, __0.steamUsername);
-
             // Run Original
             return true;
-        }
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.BlackListPlayer))]
-        private static void BlackListPlayer_Postfix(LobbyManager __instance,
-            LobbyPlayer __0)
-        {
-            // Validate Player
-            if ((__0 == null)
-                || __0.WasCollected
-                || __0.isLocalPlayer
-                || (__0.netIdentity == null)
-                || __0.netIdentity.WasCollected
-                || (__0.netIdentity.gameObject == null)
-                || __0.netIdentity.gameObject.WasCollected)
-                return;
-
-            // Destroy Player
-            NetworkServer.Destroy(__0.netIdentity.gameObject);
         }
 
         [HarmonyPrefix]
