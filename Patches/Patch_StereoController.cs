@@ -20,10 +20,6 @@ namespace DDSS_LobbyGuard.Patches
             // Get StereoController
             StereoController stereo = __0.TryCast<StereoController>();
 
-            // Validate State
-            if (!StereoSecurity.GetState(stereo))
-                return false;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -32,7 +28,6 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            StereoSecurity.ApplyState(stereo, false);
             stereo.UserCode_CmdStop__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
@@ -48,10 +43,6 @@ namespace DDSS_LobbyGuard.Patches
             // Get StereoController
             StereoController stereo = __0.TryCast<StereoController>();
 
-            // Validate State
-            if (StereoSecurity.GetState(stereo))
-                return false;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -60,7 +51,6 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            StereoSecurity.ApplyState(stereo, true);
             stereo.UserCode_CmdPlay__NetworkIdentity(sender);
 
             // Prevent Original
@@ -76,10 +66,6 @@ namespace DDSS_LobbyGuard.Patches
             // Get StereoController
             StereoController stereo = __0.TryCast<StereoController>();
 
-            // Validate State
-            if (StereoSecurity.GetState(stereo))
-                return false;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -88,7 +74,6 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            StereoSecurity.ApplyState(stereo, true);
             stereo.UserCode_CmdPlayCustom__NetworkIdentity(sender);
 
             // Prevent Original
@@ -103,10 +88,6 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get StereoController
             StereoController stereo = __0.TryCast<StereoController>();
-
-            // Validate State
-            if (StereoSecurity.GetState(stereo))
-                return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
@@ -137,7 +118,6 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            StereoSecurity.ApplyState(stereo, true);
             stereo.UserCode_CmdPlayCD__Int32(cd.songIndex);
 
             // Prevent Original
