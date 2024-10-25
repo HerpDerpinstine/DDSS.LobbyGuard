@@ -36,25 +36,24 @@ namespace DDSS_LobbyGuard.Patches
             if (!printer.allowStacking && (freeSlots <= 0))
                 return false;
 
-            // Get Values
-            string fileName = __1.ReadString();
-            string documentName = $"{userName.RemoveRichText()}'s Document";
-            string documentContent = __1.ReadString().RemoveRichText();
-
             // Get Document Content
+            bool setLabel = true;
+            string fileName = __1.ReadString();
+            string documentContent = __1.ReadString().RemoveRichText();
             if (!string.IsNullOrEmpty(fileName)
                 && !string.IsNullOrWhiteSpace(fileName))
             {
                 TextAsset textAsset = Resources.Load<TextAsset>("files/" + fileName);
                 if (textAsset != null)
                 {
-                    documentName = fileName;
+                    setLabel = false;
                     documentContent = textAsset.text;
                 }
+                else
+                    fileName = "Document";
             }
-            if (string.IsNullOrEmpty(documentName)
-                || string.IsNullOrWhiteSpace(documentName))
-                return false;
+            else
+                fileName = "Document";
             if (string.IsNullOrEmpty(documentContent)
                 || string.IsNullOrWhiteSpace(documentContent))
                 return false;
@@ -64,9 +63,15 @@ namespace DDSS_LobbyGuard.Patches
                 printer.printPos.position,
                 printer.printPos.rotation);
             NetworkServer.Spawn(docCopy.gameObject);
-            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, documentName);
-            docCopy.SetLabel(documentName);
+            string newLabel = setLabel
+                ? $"{userName.RemoveRichText()}'s Document"
+                : fileName;
+            if (newLabel == "SalesReport")
+                newLabel = "Sales Report";
+            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, newLabel);
+            docCopy.SetLabel(newLabel);
             docCopy.SetText(documentContent);
+            docCopy.SetName(setLabel ? newLabel : fileName);
 
             // Prevent Original
             return false;
@@ -169,6 +174,14 @@ namespace DDSS_LobbyGuard.Patches
                 printer.RpcSetImage(docCopy.netIdentity, doc.byteImg);
                 docCopy.Networksigned = doc.Networksigned;
                 docCopy.signed = doc.signed;
+                if ((docCopy.signedText != null)
+                    && !docCopy.signedText.WasCollected
+                    && (doc.signedText != null)
+                    && !doc.signedText.WasCollected)
+                {
+                    docCopy.signedText.text = doc.signedText.text;
+                    docCopy.signedText.SetAllDirty();
+                }
             }
             else if (collectibleType == Il2CppType.Of<Document>())
             {
@@ -182,14 +195,20 @@ namespace DDSS_LobbyGuard.Patches
                     printer.printPos.position,
                     printer.printPos.rotation);
                 NetworkServer.Spawn(docCopy.gameObject);
-                printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, docCopy.label);
+                printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, doc.label);
                 docCopy.SetName(doc.interactableName);
                 docCopy.SetText(doc.contentText.text);
                 docCopy.SetLabel(doc.label);
                 docCopy.Networksigned = doc.Networksigned;
                 docCopy.signed = doc.signed;
-                docCopy.signedText.text = doc.signedText.text;
-                docCopy.signedText.SetAllDirty();
+                if ((docCopy.signedText != null)
+                    && !docCopy.signedText.WasCollected
+                    && (doc.signedText != null)
+                    && !doc.signedText.WasCollected)
+                {
+                    docCopy.signedText.text = doc.signedText.text;
+                    docCopy.signedText.SetAllDirty();
+                }
             }
 
             // Prevent Original
