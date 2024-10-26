@@ -75,19 +75,19 @@ namespace DDSS_LobbyGuard.Patches
             // Get LobbyPlayer
             LobbyPlayer targetPlayer = __0.TryCast<LobbyPlayer>();
             if ((targetPlayer == null)
-                || (__2.identity == targetPlayer.netIdentity)
                 || (targetPlayer.playerRole == PlayerRole.Manager))
                 return false;
 
             // Validate Manager Role
-            LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || (player.playerRole != PlayerRole.Manager))
+            LobbyPlayer sender = __2.identity.GetComponent<LobbyPlayer>();
+            if ((sender == null)
+                || (sender.playerRole != PlayerRole.Manager)
+                || (sender == targetPlayer))
                 return false;
 
             // Validate Role
             SubRole requestedRole = (SubRole)__1.ReadInt();
-            if (requestedRole == player.subRole)
+            if (requestedRole == targetPlayer.NetworksubRole)
                 return false;
 
             // Remove Assistant Role from All Others
@@ -98,7 +98,7 @@ namespace DDSS_LobbyGuard.Patches
                     // Get Old Player
                     LobbyPlayer oldPlayer = networkIdentity.GetComponent<LobbyPlayer>();
                     if ((oldPlayer == null)
-                        || (oldPlayer.subRole != SubRole.Assistant))
+                        || (oldPlayer.NetworksubRole != SubRole.Assistant))
                         continue;
 
                     // Reset Role
@@ -107,7 +107,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Run Game Command
-            player.UserCode_CmdSetSubRole__SubRole(requestedRole);
+            targetPlayer.UserCode_CmdSetSubRole__SubRole(requestedRole);
 
             // Prevent Original
             return false;
