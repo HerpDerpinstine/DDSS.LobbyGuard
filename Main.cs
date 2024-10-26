@@ -28,6 +28,8 @@ namespace DDSS_LobbyGuard
 
             // Setup Config
             ConfigHandler.Setup();
+
+            // Setup Blacklist
             BlacklistSecurity.Setup();
 
             // Register Custom Components

@@ -33,7 +33,7 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void OnLobbyOpen(LobbyManager manager)
         {
-            if (!ConfigHandler._prefs_PersistentBlacklist.Value)
+            if (!ConfigHandler.Moderation.PersistentBlacklist.Value)
                 return;
 
             LoadFile();
@@ -46,7 +46,7 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void OnBlacklistPlayer(ulong steamId, string name)
         {
-            if (!ConfigHandler._prefs_PersistentBlacklist.Value)
+            if (!ConfigHandler.Moderation.PersistentBlacklist.Value)
                 return;
 
             _blacklist.Add(new()
@@ -71,7 +71,7 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void RequestKick(LobbyPlayer player)
         {
-            //if (ConfigHandler._prefs_ModerationConfirmation.Value
+            //if (ConfigHandler.Moderation.PromptForKick.Value
             //    && (UIManager.instance != null)
             //    && !UIManager.instance.WasCollected)
             //    UIManager.instance.ShowPrompt("Moderation Confirmation", $"Kick {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyKick(player)), new Action(() => { }));
@@ -81,7 +81,7 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void RequestBlacklist(LobbyPlayer player)
         {
-            //if (ConfigHandler._prefs_ModerationConfirmation.Value
+            //if (ConfigHandler.Moderation.PromptForBlacklist.Value
             //    && (UIManager.instance != null)
             //    && !UIManager.instance.WasCollected)
             //    UIManager.instance.ShowPrompt("Moderation Confirmation", $"Blacklist {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyBlacklist(player)), new Action(() => { }));
