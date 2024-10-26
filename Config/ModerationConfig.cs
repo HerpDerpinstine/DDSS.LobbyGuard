@@ -11,7 +11,7 @@ namespace DDSS_LobbyGuard.Config
         internal override MelonPreferences_Category CreateCategory(string filePath)
         {
             var cat = MelonPreferences.CreateCategory("Moderation", "Moderation");
-            cat.SetFilePath(filePath, true);
+            cat.SetFilePath(filePath, true, false);
             return cat;
         }
 

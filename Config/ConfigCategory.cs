@@ -12,7 +12,7 @@ namespace DDSS_LobbyGuard.Config
             string filePath = Path.Combine(MelonMain._userDataPath, "Config.cfg");
             Category = CreateCategory(filePath);
             CreatePreferences();
-            Save();
+            Category.SaveToFile(false);
         }
 
         internal virtual MelonPreferences_Category CreateCategory(string filePath) => default;

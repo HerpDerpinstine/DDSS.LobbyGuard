@@ -65,21 +65,26 @@ namespace DDSS_LobbyGuard
                 if (_firstMenuLoad)
                 {
                     _firstMenuLoad = false;
-
-                    if (_errorOccured)
-                        ShowPrompt("LobbyGuard Error",
-                            "Some Errors have occured during Initialization.\nLobbyGuard might cause instability or otherwise not function as intended.\nContinue?",
-                            "Play Game",
-                            "Quit",
-                            new Action(VersionCheck.Run),
-                            new Action(Application.Quit));
-                    else
-                        VersionCheck.Run();
+                    VersionCheck.Run();
                 }
             }
         }
 
-        public static void ShowPrompt(string title, string content, string confirmText, string cancelText, Action confirmAction, Action cancelAction)
+        internal static void InitErrorPrompt()
+        {
+            if (!ConfigHandler.General.PromptForInitializationError.Value
+                || !_errorOccured)
+                return;
+
+            ShowPrompt("Error",
+                "LobbyGuard encountered Errors during Initialization!\nThis might cause instability and/or crashing.\nContinue?",
+                "Play Game",
+                "Quit",
+                new Action(() => { }),
+                new Action(Application.Quit));
+        }
+
+        internal static void ShowPrompt(string title, string content, string confirmText, string cancelText, Action confirmAction, Action cancelAction)
         {
             if ((UIManager.instance == null)
                 || UIManager.instance.WasCollected)
