@@ -27,17 +27,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Kick Player
-            if ((player.NetworkplayerController != null)
-                && !player.NetworkplayerController.WasCollected)
-                LobbyManager.instance.KickPlayer(player.NetworkplayerController);
-
-            // Force-Disconnect
-            if ((player == null)
-                || player.WasCollected
-                || (player.connectionToClient == null)
-                || player.connectionToClient.WasCollected)
-                return false;
-            player.connectionToClient.Disconnect();
+            BlacklistSecurity.RequestKick(player);
 
             // Prevent Original
             return false;
@@ -61,21 +51,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Blacklist Player
-            BlacklistSecurity.OnBlacklistPlayer(player.steamID, player.steamUsername);
-            LobbyManager.instance.blacklist.Add(player.steamID);
-
-            // Kick Player
-            if ((player.NetworkplayerController != null)
-                && !player.NetworkplayerController.WasCollected)
-                LobbyManager.instance.KickPlayer(player.NetworkplayerController);
-
-            // Force-Disconnect
-            if ((player == null)
-                || player.WasCollected
-                || (player.connectionToClient == null)
-                || player.connectionToClient.WasCollected)
-                return false;
-            player.connectionToClient.Disconnect();
+            BlacklistSecurity.RequestBlacklist(player);
 
             // Prevent Original
             return false;

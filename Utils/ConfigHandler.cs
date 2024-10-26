@@ -1,5 +1,4 @@
 ﻿using MelonLoader;
-using MelonLoader.Utils;
 using System.IO;
 
 namespace DDSS_LobbyGuard.Utils
@@ -9,6 +8,7 @@ namespace DDSS_LobbyGuard.Utils
         private static MelonPreferences_Category _prefs_Category;
         internal static MelonPreferences_Entry<bool> _prefs_ExtendedInviteCodes;
         internal static MelonPreferences_Entry<bool> _prefs_PersistentBlacklist;
+        //internal static MelonPreferences_Entry<bool> _prefs_ModerationConfirmation;
 
         internal static void Setup()
         {
@@ -27,6 +27,11 @@ namespace DDSS_LobbyGuard.Utils
                 "Persistent Blacklist",
                 "Makes Blacklisting of Players Persist and Save to File",
                 true);
+
+            //_prefs_ModerationConfirmation = CreatePref("ModerationConfirmation",
+            //    "Moderation Confirmation",
+            //    "Prompts you to Confirm a Kick/Blacklist of a Player",
+            //    true);
 
             // Save to File
             _prefs_Category.SaveToFile(false);

@@ -1,5 +1,7 @@
 ﻿using DDSS_LobbyGuard.Utils;
 using Il2Cpp;
+using Il2CppPlayer.Lobby;
+//using Il2CppUMUI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,9 +13,10 @@ namespace DDSS_LobbyGuard.Security
     [Serializable]
     public class BlacklistedPlayer
     {
+        public string Timestamp;
         public ulong SteamID;
         public string Name;
-        public string Timestamp;
+        //public string Reason;
     }
 
     internal static class BlacklistSecurity
@@ -48,9 +51,9 @@ namespace DDSS_LobbyGuard.Security
 
             _blacklist.Add(new()
             {
-                SteamID = steamId,
-                Name = name,
                 Timestamp = DateTime.Now.ToUniversalTime().ToString("G", DateTimeFormatInfo.InvariantInfo),
+                SteamID = steamId,
+                Name = name
             });
             SaveFile();
             MelonMain._logger.Msg($"Blacklisted Player: {steamId} - {name}");
@@ -64,6 +67,49 @@ namespace DDSS_LobbyGuard.Security
                 return;
 
             _blacklist = JsonConvert.DeserializeObject<List<BlacklistedPlayer>>(File.ReadAllText(_filePath));
+        }
+
+        internal static void RequestKick(LobbyPlayer player)
+        {
+            //if (ConfigHandler._prefs_ModerationConfirmation.Value
+            //    && (UIManager.instance != null)
+            //    && !UIManager.instance.WasCollected)
+            //    UIManager.instance.ShowPrompt("Moderation Confirmation", $"Kick {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyKick(player)), new Action(() => { }));
+            //else
+                ApplyKick(player);
+        }
+
+        internal static void RequestBlacklist(LobbyPlayer player)
+        {
+            //if (ConfigHandler._prefs_ModerationConfirmation.Value
+            //    && (UIManager.instance != null)
+            //    && !UIManager.instance.WasCollected)
+            //    UIManager.instance.ShowPrompt("Moderation Confirmation", $"Blacklist {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyBlacklist(player)), new Action(() => { }));
+            //else
+                ApplyBlacklist(player);
+        }
+
+        private static void ApplyKick(LobbyPlayer player)
+        {
+            // Kick Player
+            if ((player.NetworkplayerController != null)
+                && !player.NetworkplayerController.WasCollected)
+                LobbyManager.instance.KickPlayer(player.NetworkplayerController);
+
+            // Force-Disconnect
+            if ((player != null)
+                && !player.WasCollected
+                && (player.connectionToClient != null)
+                && !player.connectionToClient.WasCollected)
+                player.connectionToClient.Disconnect();
+        }
+
+        private static void ApplyBlacklist(LobbyPlayer player)
+        {
+            // Blacklist Player
+            OnBlacklistPlayer(player.steamID, player.steamUsername);
+            LobbyManager.instance.blacklist.Add(player.steamID);
+            ApplyKick(player);
         }
     }
 }

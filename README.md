@@ -44,9 +44,9 @@ Serverside Anti-Cheat and Security for [Dale & Dawson Stationery Supplies](https
 
 | Value | Description |
 | - | - |
+| Timestamp | (UTC) Date and Time of when this User was blacklisted |
 | SteamID | The SteamID64 of the User |
 | Name | The Name of the User at the time of blacklist |
-| Timestamp | (UTC) Date and Time of when this User was blacklisted |
 
 ---
 
