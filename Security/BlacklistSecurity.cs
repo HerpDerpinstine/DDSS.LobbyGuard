@@ -71,20 +71,16 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void RequestKick(LobbyPlayer player)
         {
-            //if (ConfigHandler.Moderation.PromptForKick.Value
-            //    && (UIManager.instance != null)
-            //    && !UIManager.instance.WasCollected)
-            //    UIManager.instance.ShowPrompt("Moderation Confirmation", $"Kick {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyKick(player)), new Action(() => { }));
+            //if (ConfigHandler.Moderation.PromptForKick.Value)
+            //    MelonMain.ShowPrompt("Moderation Confirmation", $"Kick {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyKick(player)), new Action(() => { }));
             //else
                 ApplyKick(player);
         }
 
         internal static void RequestBlacklist(LobbyPlayer player)
         {
-            //if (ConfigHandler.Moderation.PromptForBlacklist.Value
-            //    && (UIManager.instance != null)
-            //    && !UIManager.instance.WasCollected)
-            //    UIManager.instance.ShowPrompt("Moderation Confirmation", $"Blacklist {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyBlacklist(player)), new Action(() => { }));
+            //if (ConfigHandler.Moderation.PromptForBlacklist.Value)
+            //    MelonMain.ShowPrompt("Moderation Confirmation", $"Blacklist {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyBlacklist(player)), new Action(() => { }));
             //else
                 ApplyBlacklist(player);
         }

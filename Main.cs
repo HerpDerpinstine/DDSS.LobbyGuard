@@ -2,12 +2,15 @@
 using DDSS_LobbyGuard.Config;
 using DDSS_LobbyGuard.GUI;
 using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
+using Il2CppUMUI;
 using MelonLoader;
 using MelonLoader.Utils;
 using System;
 using System.IO;
 using System.Reflection;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard
 {
@@ -15,6 +18,8 @@ namespace DDSS_LobbyGuard
     {
         internal static string _userDataPath;
         internal static MelonLogger.Instance _logger;
+        private static bool _errorOccured;
+        private static bool _firstMenuLoad = true;
 
         public override void OnInitializeMelon()
         {
@@ -56,7 +61,31 @@ namespace DDSS_LobbyGuard
             if (sceneName == "MainMenuScene") // Main Menu
             {
                 MainMenuPanelBuilder.MainMenuInit();
+
+                if (_firstMenuLoad)
+                {
+                    _firstMenuLoad = false;
+
+                    if (_errorOccured)
+                        ShowPrompt("LobbyGuard Error",
+                            "Some errors have occured during Initialization.\nLobbyGuard might not function as intended.\nContinue?",
+                            "Play Game",
+                            "Quit",
+                            new Action(VersionCheck.Run),
+                            new Action(Application.Quit));
+                    else
+                        VersionCheck.Run();
+                }
             }
+        }
+
+        public static void ShowPrompt(string title, string content, string confirmText, string cancelText, Action confirmAction, Action cancelAction)
+        {
+            if ((UIManager.instance == null)
+                || UIManager.instance.WasCollected)
+                return;
+
+            UIManager.instance.ShowPrompt(title, content, confirmText, cancelText, confirmAction, cancelAction);
         }
 
         private void ApplyPatches()
@@ -78,6 +107,7 @@ namespace DDSS_LobbyGuard
                 }
                 catch (Exception e)
                 {
+                    _errorOccured = true;
                     LoggerInstance.Error($"Exception while attempting to apply {type.Name}: {e}");
                 }
             }

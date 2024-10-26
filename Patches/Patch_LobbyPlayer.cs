@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
@@ -83,6 +84,10 @@ namespace DDSS_LobbyGuard.Patches
             if ((sender == null)
                 || (sender.NetworkplayerRole != PlayerRole.Manager)
                 || (sender == targetPlayer))
+                return false;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, targetPlayer.transform.position))
                 return false;
 
             // Validate Role
