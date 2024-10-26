@@ -18,7 +18,7 @@ namespace DDSS_LobbyGuard
     {
         internal static string _userDataPath;
         internal static MelonLogger.Instance _logger;
-        private static bool _errorOccured;
+        internal static bool _errorOccured;
         private static bool _firstMenuLoad = true;
 
         public override void OnInitializeMelon()
@@ -76,21 +76,53 @@ namespace DDSS_LobbyGuard
                 || !_errorOccured)
                 return;
 
-            ShowPrompt("Error",
-                "LobbyGuard encountered Errors during Initialization!\nThis might cause instability and/or crashing.\nContinue?",
-                "Play Game",
-                "Quit",
-                new Action(() => { }),
-                new Action(Application.Quit));
+            try
+            {
+                ShowPrompt("Error",
+                    "LobbyGuard encountered Errors during Initialization!\nThis might cause instability and/or crashing.\nContinue?",
+                    "Play Game",
+                    "Quit",
+                    new Action(() => { }),
+                    new Action(Application.Quit),
+                    new Action(() => { }));
+            }
+            catch (Exception ex)
+            {
+                _errorOccured = true;
+                _logger.Error(ex);
+            }
         }
 
-        internal static void ShowPrompt(string title, string content, string confirmText, string cancelText, Action confirmAction, Action cancelAction)
+        internal static void ShowPrompt(
+            string title,
+            string content,
+            string confirmText, 
+            string cancelText, 
+            Action confirmAction, 
+            Action cancelAction,
+            Action errorAction = null)
         {
             if ((UIManager.instance == null)
                 || UIManager.instance.WasCollected)
+            {
+                _errorOccured = true;
+                _logger.Error(new NullReferenceException("UIManager.instance"));
+                if (errorAction != null)
+                    errorAction();
                 return;
+            }
 
-            UIManager.instance.ShowPrompt(title, content, confirmText, cancelText, confirmAction, cancelAction);
+            try
+            {
+                UIManager.instance.ShowPrompt(title, content, confirmText, cancelText, confirmAction, cancelAction);
+            }
+            catch (Exception ex)
+            {
+                _errorOccured = true;
+                _logger.Error(ex);
+                if (errorAction != null)
+                    errorAction();
+            }
         }
 
         private void ApplyPatches()

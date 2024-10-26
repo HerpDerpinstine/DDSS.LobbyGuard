@@ -22,24 +22,39 @@ namespace DDSS_LobbyGuard.Utils
                 return;
             }
 
-            SemVersion currentVersion = SemVersion.Parse(Properties.BuildInfo.Version);
-            SemVersion newestVersion = CheckAPI(currentVersion).Result;
-            if (newestVersion <= currentVersion)
+            try
             {
-                MelonMain.InitErrorPrompt();
-                return;
-            }
+                SemVersion currentVersion = SemVersion.Parse(Properties.BuildInfo.Version);
+                SemVersion newestVersion = CheckAPI(currentVersion).Result;
 
-            MelonMain.ShowPrompt("Update Available",
-                $"LobbyGuard v{newestVersion} is available for download!\nQuit and Open Download Page?",
-                "Play Game",
-                "Quit and Open Page",
-                new Action(MelonMain.InitErrorPrompt),
-                new Action(() => 
+                MelonMain._logger.Msg($"Latest Version: {newestVersion}");
+
+                if (newestVersion <= currentVersion)
                 {
-                    Application.OpenURL($"{Properties.BuildInfo.DownloadLink}/releases/latest");
-                    Application.Quit();
-                }));
+                    MelonMain.InitErrorPrompt();
+                    return;
+                }
+
+                MelonMain._logger.Msg("Update is Available!");
+
+                MelonMain.ShowPrompt("Update Available",
+                    $"LobbyGuard v{newestVersion} is available for download!\nQuit and Open Download Page?",
+                    "Play Game",
+                    "Quit and Open Page",
+                    new Action(MelonMain.InitErrorPrompt),
+                    new Action(() =>
+                    {
+                        Application.OpenURL($"{Properties.BuildInfo.DownloadLink}/releases/latest");
+                        Application.Quit();
+                    }),
+                    new Action(MelonMain.InitErrorPrompt));
+            }
+            catch (Exception ex)
+            {
+                MelonMain._errorOccured = true;
+                MelonMain._logger.Error(ex);
+                MelonMain.InitErrorPrompt();
+            }
         }
 
         private static async Task<SemVersion> CheckAPI(SemVersion currentVersion)
