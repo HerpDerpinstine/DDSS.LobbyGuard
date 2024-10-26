@@ -67,7 +67,7 @@ namespace DDSS_LobbyGuard.Patches
                     return false; 
 
                 // Validate Role
-                var role = oldPlayer.playerRole;
+                var role = oldPlayer.NetworkplayerRole;
                 if (!doorInteractable.everyoneCanLock
                     && (role != PlayerRole.Manager)
                     && (role != PlayerRole.Janitor))

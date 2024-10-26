@@ -56,7 +56,7 @@ namespace DDSS_LobbyGuard.Patches
                 // Validate Slacker Role
                 LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
                 if ((player == null)
-                    || (player.playerRole != PlayerRole.Slacker))
+                    || (player.NetworkplayerRole != PlayerRole.Slacker))
                     return false;
             }
 

@@ -75,13 +75,13 @@ namespace DDSS_LobbyGuard.Patches
             // Get LobbyPlayer
             LobbyPlayer targetPlayer = __0.TryCast<LobbyPlayer>();
             if ((targetPlayer == null)
-                || (targetPlayer.playerRole == PlayerRole.Manager))
+                || (targetPlayer.NetworkplayerRole == PlayerRole.Manager))
                 return false;
 
             // Validate Manager Role
             LobbyPlayer sender = __2.identity.GetComponent<LobbyPlayer>();
             if ((sender == null)
-                || (sender.playerRole != PlayerRole.Manager)
+                || (sender.NetworkplayerRole != PlayerRole.Manager)
                 || (sender == targetPlayer))
                 return false;
 
