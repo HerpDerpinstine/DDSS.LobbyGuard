@@ -68,7 +68,7 @@ namespace DDSS_LobbyGuard
 
                     if (_errorOccured)
                         ShowPrompt("LobbyGuard Error",
-                            "Some errors have occured during Initialization.\nLobbyGuard might not function as intended.\nContinue?",
+                            "Some Errors have occured during Initialization.\nLobbyGuard might cause instability or otherwise not function as intended.\nContinue?",
                             "Play Game",
                             "Quit",
                             new Action(VersionCheck.Run),
