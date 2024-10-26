@@ -35,13 +35,13 @@ namespace DDSS_LobbyGuard.Patches
                 || (itemIndex > (cabinet.items.Count - 1)))
                 return false;
 
-            // Get Requested Item
-            Collectible item = cabinet.items[itemIndex];
-            if (item == null)
+            // Get Requested Collectible
+            Collectible collectible = cabinet.items[itemIndex];
+            if (collectible == null)
                 return false;
 
-            // Get Item Interactable Name
-            string interactableName = item.interactableName;
+            // Get Collectible Interactable Name
+            string interactableName = collectible.interactableName;
             if (string.IsNullOrEmpty(interactableName)
                 || string.IsNullOrWhiteSpace(interactableName))
                 return false;

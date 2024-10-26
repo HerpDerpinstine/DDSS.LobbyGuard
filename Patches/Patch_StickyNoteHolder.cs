@@ -1,10 +1,10 @@
 ﻿using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
+using Il2Cpp;
 using Il2CppMirror;
 using Il2CppProps.Scripts;
 using Il2CppProps.StickyNote;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -30,6 +30,11 @@ namespace DDSS_LobbyGuard.Patches
             if (collectible == null)
                 return false;
 
+            // Get StickyNoteController
+            StickyNoteController stickyNote = collectible.TryCast<StickyNoteController>();
+            if (stickyNote == null)
+                return false;
+
             // Validate Count
             int freeSlots = __instance.freePositions.Count;
             if (!__instance.allowStacking && (freeSlots <= 0))
@@ -41,16 +46,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Place the Sticky Note on the Door
             __instance.UserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity__NetworkConnectionToClient(sender, __1);
-
-            // Reset Networked Scale to 1,1,1
-            NetworkRigidbodyUnreliable networkRigidbody = collectible._networkRigidbodyUnreliable;
-            if ((networkRigidbody != null)
-                && !networkRigidbody.WasCollected)
-            {
-                networkRigidbody.interpolateScale = false;
-                networkRigidbody.syncScale = true;
-                networkRigidbody.SetScale(Vector3.one);
-            }
 
             // Prevent Original
             return false;
