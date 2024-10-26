@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Components;
+using DDSS_LobbyGuard.Config;
 using DDSS_LobbyGuard.GUI;
 using DDSS_LobbyGuard.Security;
-using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using MelonLoader;
 using MelonLoader.Utils;

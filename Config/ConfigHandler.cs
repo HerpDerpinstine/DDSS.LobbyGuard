@@ -1,6 +1,4 @@
-﻿using DDSS_LobbyGuard.Config;
-
-namespace DDSS_LobbyGuard.Utils
+﻿namespace DDSS_LobbyGuard.Config
 {
     internal static class ConfigHandler
     {

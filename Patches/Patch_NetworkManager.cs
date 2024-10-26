@@ -1,5 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
-using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;

@@ -1,4 +1,4 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Config;
 using Il2Cpp;
 using Il2CppPlayer.Lobby;
 //using Il2CppUMUI;
