@@ -83,6 +83,8 @@ namespace DDSS_LobbyGuard.Utils
                 JArray assets = (JArray)release["assets"];
                 if (assets.Count <= 0)
                     continue;
+                if ((bool)release["prerelease"])
+                    continue;
 
                 string version = (string)release["tag_name"];
                 SemVersion semVersion = SemVersion.Parse(version.Substring(1));
