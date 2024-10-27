@@ -40,8 +40,11 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.isLocalPlayer)
                 return false;
 
-            // Run Original
-            return true;
+            // Kick Player
+            BlacklistSecurity.RequestKick(__0.GetComponent<LobbyPlayer>());
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]

@@ -1,5 +1,6 @@
 ﻿using DDSS_LobbyGuard.Config;
 using Il2Cpp;
+using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 //using Il2CppUMUI;
 using Newtonsoft.Json;
@@ -87,16 +88,12 @@ namespace DDSS_LobbyGuard.Security
 
         private static void ApplyKick(LobbyPlayer player)
         {
-            // Kick Player
-            if ((player.NetworkplayerController != null)
-                && !player.NetworkplayerController.WasCollected)
-                LobbyManager.instance.KickPlayer(player.NetworkplayerController);
-
             // Force-Disconnect
             if ((player != null)
                 && !player.WasCollected
                 && (player.connectionToClient != null)
-                && !player.connectionToClient.WasCollected)
+                && !player.connectionToClient.WasCollected
+                && (player.connectionToClient is not LocalConnectionToClient))
                 player.connectionToClient.Disconnect();
         }
 
