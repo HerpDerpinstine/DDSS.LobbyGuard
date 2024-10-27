@@ -58,8 +58,11 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.isLocalPlayer)
                 return false;
 
-            // Run Original
-            return true;
+            // Blacklist Player
+            BlacklistSecurity.RequestBlacklist(__0);
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]

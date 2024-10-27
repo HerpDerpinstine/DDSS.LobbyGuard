@@ -99,10 +99,17 @@ namespace DDSS_LobbyGuard.Security
 
         private static void ApplyBlacklist(LobbyPlayer player)
         {
-            // Blacklist Player
-            OnBlacklistPlayer(player.steamID, player.steamUsername);
-            LobbyManager.instance.blacklist.Add(player.steamID);
-            ApplyKick(player);
+            if ((player != null)
+                && !player.WasCollected
+                && (player.connectionToClient != null)
+                && !player.connectionToClient.WasCollected
+                && (player.connectionToClient is not LocalConnectionToClient))
+            {
+                // Blacklist Player
+                OnBlacklistPlayer(player.steamID, player.steamUsername);
+                LobbyManager.instance.blacklist.Add(player.steamID);
+                ApplyKick(player);
+            }
         }
     }
 }
