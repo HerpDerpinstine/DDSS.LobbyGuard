@@ -26,7 +26,7 @@ namespace DDSS_LobbyGuard.Config
 
             StickyNotesOnOpenDoors = CreatePref("StickyNotesOnOpenDoors",
                 "Sticky Notes on Open Doors",
-                "Allows Sticky Notes to be placed on Doors while they are Open",
+                "Allows the Grabbing and Placing of Sticky Notes on Doors while they are Open",
                 false);
         }
     }

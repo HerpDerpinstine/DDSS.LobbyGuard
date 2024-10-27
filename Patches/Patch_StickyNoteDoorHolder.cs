@@ -60,7 +60,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Door State
             if (!ConfigHandler.Moderation.StickyNotesOnOpenDoors.Value
-                && (door.state > 0))
+                && (door.state != 0))
                 return false;
 
             // Place the Sticky Note on the Door
