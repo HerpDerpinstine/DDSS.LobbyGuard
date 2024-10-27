@@ -19,7 +19,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity __0,
             NetworkConnectionToClient __1)
         {
-            // Check for Server
+            // Get NetworkConnectionToClient
             if ((__1 == null)
                 || __1.WasCollected)
                 __1 = __0.connectionToClient;
