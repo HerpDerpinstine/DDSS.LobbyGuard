@@ -6,7 +6,7 @@
         public const string Description = "Serverside Anti-Cheat for Dale & Dawson";
         public const string Author = "Herp Derpinstine";
         public const string Company = "Lava Gang";
-        public const string Version = "1.5.5";
+        public const string Version = "1.5.6";
         public const string DownloadLink = "https://github.com/HerpDerpinstine/DDSS.LobbyGuard";
     }
 }
