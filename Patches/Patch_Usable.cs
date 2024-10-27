@@ -4,6 +4,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Scripts;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
 
@@ -43,31 +44,41 @@ namespace DDSS_LobbyGuard.Patches
             {
                 // Get StickyNoteController
                 StickyNoteController stickyNote = usable.TryCast<StickyNoteController>();
-                if ((stickyNote == null)
-                    || stickyNote.WasCollected)
-                    return false;
-
-                // Get Holder
-                CollectibleHolder holder = stickyNote.currentHolder;
-                if ((holder == null)
-                    || holder.WasCollected)
-                    return false;
-
-                // Get DoorInteractable
-                DoorInteractable doorInteractable = holder.parentInteractable.TryCast<DoorInteractable>();
-                if ((doorInteractable != null)
-                    && !doorInteractable.WasCollected)
+                if ((stickyNote != null)
+                    && !stickyNote.WasCollected)
                 {
-                    // Get DoorController
-                    DoorController door = doorInteractable.doorController;
-                    if ((door == null)
-                        || door.WasCollected)
-                        return false;
+                    // Get Holder
+                    CollectibleHolder holder = stickyNote.currentHolder;
+                    if ((holder != null)
+                        && !holder.WasCollected)
+                    {
+                        // Get DoorInteractable
+                        DoorInteractable doorInteractable = holder.parentInteractable.TryCast<DoorInteractable>();
+                        if ((doorInteractable != null)
+                            && !doorInteractable.WasCollected)
+                        {
+                            // Get DoorController
+                            DoorController door = doorInteractable.doorController;
+                            if ((door == null)
+                                || door.WasCollected)
+                                return false;
 
-                    // Validate Door State
-                    if (!ConfigHandler.Moderation.StickyNotesOnOpenDoors.Value
-                        && (door.Networkstate != 0))
-                        return false;
+                            // Validate Door State
+                            if (!ConfigHandler.General.StickyNotesOnOpenDoors.Value
+                                && (door.Networkstate != 0))
+                                return false;
+                        }
+
+                        // Get PlayerInteractable
+                        PlayerInteractable playerInteractable = holder.parentInteractable.TryCast<PlayerInteractable>();
+                        if ((playerInteractable != null)
+                            && !playerInteractable.WasCollected)
+                        {
+                            // Validate Player
+                            if (!ConfigHandler.General.StickyNotesOnPlayers.Value)
+                                return false;
+                        }
+                    }
                 }
             }
 

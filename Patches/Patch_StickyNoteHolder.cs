@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -42,6 +43,10 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, __instance.transform.position))
+                return false;
+
+            // Validate Player State
+            if (!ConfigHandler.General.StickyNotesOnPlayers.Value)
                 return false;
 
             // Place the Sticky Note on the Door

@@ -59,7 +59,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Door State
-            if (!ConfigHandler.Moderation.StickyNotesOnOpenDoors.Value
+            if (!ConfigHandler.General.StickyNotesOnOpenDoors.Value
                 && (door.Networkstate != 0))
                 return false;
 
