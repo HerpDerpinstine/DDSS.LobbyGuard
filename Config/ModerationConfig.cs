@@ -5,6 +5,8 @@ namespace DDSS_LobbyGuard.Config
     internal class ModerationConfig : ConfigCategory
     {
         internal MelonPreferences_Entry<bool> PersistentBlacklist;
+        internal MelonPreferences_Entry<bool> StickyNotesOnOpenDoors;
+
         //internal MelonPreferences_Entry<bool> PromptForKick;
         //internal MelonPreferences_Entry<bool> PromptForBlacklist;
 
@@ -21,6 +23,11 @@ namespace DDSS_LobbyGuard.Config
                 "Persistent Blacklist",
                 "Makes Blacklisting of Players Persist and Save to File",
                 true);
+
+            StickyNotesOnOpenDoors = CreatePref("StickyNotesOnOpenDoors",
+                "Sticky Notes on Open Doors",
+                "Allows Sticky Notes to be placed on Doors while they are Open",
+                false);
         }
     }
 }

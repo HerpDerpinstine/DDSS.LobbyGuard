@@ -1,8 +1,10 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
+using Il2CppProps.Door;
 using Il2CppProps.Scripts;
 using Il2CppProps.StickyNote;
 
@@ -42,6 +44,23 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, __instance.transform.position))
+                return false;
+
+            // Get DoorInteractable
+            DoorInteractable doorInteractable = __instance.parentInteractable.TryCast<DoorInteractable>();
+            if ((doorInteractable == null)
+                || doorInteractable.WasCollected)
+                return false;
+
+            // Get DoorController
+            DoorController door = doorInteractable.doorController;
+            if ((door == null)
+                || door.WasCollected)
+                return false;
+
+            // Validate Door State
+            if (!ConfigHandler.Moderation.StickyNotesOnOpenDoors.Value
+                && (door.state > 0))
                 return false;
 
             // Place the Sticky Note on the Door
