@@ -55,20 +55,20 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Get DoorInteractable
                 DoorInteractable doorInteractable = holder.parentInteractable.TryCast<DoorInteractable>();
-                if ((doorInteractable == null)
-                    || doorInteractable.WasCollected)
-                    return false;
+                if ((doorInteractable != null)
+                    && !doorInteractable.WasCollected)
+                {
+                    // Get DoorController
+                    DoorController door = doorInteractable.doorController;
+                    if ((door == null)
+                        || door.WasCollected)
+                        return false;
 
-                // Get DoorController
-                DoorController door = doorInteractable.doorController;
-                if ((door == null)
-                    || door.WasCollected)
-                    return false;
-
-                // Validate Door State
-                if (!ConfigHandler.Moderation.StickyNotesOnOpenDoors.Value
-                    && (door.state != 0))
-                    return false;
+                    // Validate Door State
+                    if (!ConfigHandler.Moderation.StickyNotesOnOpenDoors.Value
+                        && (door.state != 0))
+                        return false;
+                }
             }
 
             // Run Game Command
