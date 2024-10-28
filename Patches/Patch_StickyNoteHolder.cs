@@ -46,7 +46,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Player State
-            if (!ConfigHandler.General.StickyNotesOnPlayers.Value)
+            if (!ConfigHandler.Gameplay.StickyNotesOnPlayers.Value)
                 return false;
 
             // Place the Sticky Note on the Door

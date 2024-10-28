@@ -4,6 +4,7 @@
     {
         internal static GeneralConfig General;
         internal static ModerationConfig Moderation;
+        internal static GameplayConfig Gameplay;
 
         internal static void Setup()
         {
@@ -11,6 +12,8 @@
                 General = new();
             if (Moderation == null)
                 Moderation = new();
+            if (Gameplay == null)
+                Gameplay = new();
         }
     }
 }

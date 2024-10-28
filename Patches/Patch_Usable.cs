@@ -64,8 +64,11 @@ namespace DDSS_LobbyGuard.Patches
                                 return false;
 
                             // Validate Door State
-                            if (!ConfigHandler.General.StickyNotesOnOpenDoors.Value
+                            if (!ConfigHandler.Gameplay.StickyNotesOnOpenDoors.Value
                                 && (door.Networkstate != 0))
+                                return false;
+                            if (!ConfigHandler.Gameplay.StickyNotesOnClosedDoors.Value
+                                && (door.Networkstate == 0))
                                 return false;
                         }
 
@@ -75,7 +78,7 @@ namespace DDSS_LobbyGuard.Patches
                             && !playerInteractable.WasCollected)
                         {
                             // Validate Player
-                            if (!ConfigHandler.General.StickyNotesOnPlayers.Value)
+                            if (!ConfigHandler.Gameplay.StickyNotesOnPlayers.Value)
                                 return false;
                         }
                     }

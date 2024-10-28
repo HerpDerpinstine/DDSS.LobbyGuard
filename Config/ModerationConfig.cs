@@ -9,12 +9,8 @@ namespace DDSS_LobbyGuard.Config
         //internal MelonPreferences_Entry<bool> PromptForKick;
         //internal MelonPreferences_Entry<bool> PromptForBlacklist;
 
-        internal override MelonPreferences_Category CreateCategory(string filePath)
-        {
-            var cat = MelonPreferences.CreateCategory("Moderation", "Moderation");
-            cat.SetFilePath(filePath, true, false);
-            return cat;
-        }
+        internal override string GetName()
+            => "Moderation";
 
         internal override void CreatePreferences()
         {
