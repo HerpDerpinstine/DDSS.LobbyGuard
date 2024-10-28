@@ -107,13 +107,10 @@ namespace DDSS_LobbyGuard.Patches
                 GameManager.instance.SetWinCondition(specialistCount, slackerCount);
             }
 
-            // Get Usable
-            Usable usable = controller.GetCurrentUsable();
-            if (usable == null)
-                return;
-
             // Drop It
-            usable.ServerStopUse(__0);
+            foreach (Usable usable in controller.currentUsables)
+                if (usable != null)
+                    usable.ServerStopUse(__0);
         }
 
         [HarmonyPrefix]
