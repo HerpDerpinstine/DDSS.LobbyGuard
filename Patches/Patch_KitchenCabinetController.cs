@@ -74,10 +74,10 @@ namespace DDSS_LobbyGuard.Patches
                     string newName = $"{userName.RemoveRichText()}'s Sticky Note";
                     if (configValue == eConfigHostType.HOST_ONLY)
                         collectible.interactableName =
-                            collectible.label = $"{userName.RemoveRichText()}'s Sticky Note";
+                            collectible.label = newName;
                     else
                         collectible.NetworkinteractableName =
-                            collectible.Networklabel = $"{userName.RemoveRichText()}'s Sticky Note";
+                            collectible.Networklabel = newName;
                 }
             }
 
