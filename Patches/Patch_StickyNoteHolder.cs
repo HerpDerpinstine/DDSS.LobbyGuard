@@ -23,6 +23,12 @@ namespace DDSS_LobbyGuard.Patches
                 || __1.WasCollected)
                 __1 = __0.connectionToClient;
 
+            // Get StickyNoteHolder
+            StickyNoteHolder holder = __0.TryCast<StickyNoteHolder>();
+            if ((holder == null)
+                || holder.WasCollected)
+                return false;
+
             // Get Sender
             NetworkIdentity sender = __1.identity;
 
@@ -50,7 +56,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Place the Sticky Note on the Door
-            __instance.UserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity__NetworkConnectionToClient(sender, __1);
+            holder.UserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity__NetworkConnectionToClient(sender, __1);
 
             // Prevent Original
             return false;
