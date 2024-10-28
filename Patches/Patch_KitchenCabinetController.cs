@@ -1,8 +1,11 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppProps.Scripts;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -51,8 +54,22 @@ namespace DDSS_LobbyGuard.Patches
                 cabinet.maxItemCount))
                 return false;
 
-            // Run Game Command
-            cabinet.UserCode_CmdSpawnAndGrab__NetworkIdentity__Int32__NetworkConnectionToClient(sender, itemIndex, __2);
+            // Spawn a new Collectible
+            GameObject gameObject = GameObject.Instantiate(collectible.gameObject, cabinet.transform.position, cabinet.transform.rotation);
+            NetworkServer.Spawn(gameObject, __2);
+            collectible = gameObject.GetComponent<Collectible>();
+            collectible.UserCode_CmdUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Get StickyNoteController
+            if (collectible.GetIl2CppType() == Il2CppType.Of<StickyNoteController>())
+            {
+                // Apply New Name
+                string userName = sender.GetUserName();
+                if (!string.IsNullOrEmpty(userName)
+                    && !string.IsNullOrWhiteSpace(userName))
+                    collectible.NetworkinteractableName =
+                        collectible.Networklabel = $"{userName.RemoveRichText()}'s Sticky Note";
+            }
 
             // Prevent Original
             return false;
