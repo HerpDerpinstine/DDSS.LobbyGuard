@@ -11,6 +11,10 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(KeyHolder), nameof(KeyHolder.Start))]
         private static bool Start_Prefix(KeyHolder __instance)
         {
+            // Check for Server
+            if (!__instance.isServer)
+                return true;
+
             // Key Security
             KeySecurity.SpawnKey(__instance);
 
