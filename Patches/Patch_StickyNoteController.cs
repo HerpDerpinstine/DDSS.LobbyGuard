@@ -12,10 +12,10 @@ namespace DDSS_LobbyGuard
     internal class Patch_StickyNoteController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(StickyNoteController), nameof(StickyNoteController.UserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient))]
-        private static bool UserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient_Prefix(
-            StickyNoteController __instance,
-            ref string __0,
+        [HarmonyPatch(typeof(StickyNoteController), nameof(StickyNoteController.InvokeUserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient(
+            NetworkBehaviour __0,
+            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Check for Server
@@ -24,6 +24,11 @@ namespace DDSS_LobbyGuard
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+
+            // Get StickyNoteController
+            StickyNoteController __instance = __0.TryCast<StickyNoteController>();
+            if (__instance == null)
+                return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, __instance.transform.position))
@@ -41,7 +46,7 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Get Value
-            string text = __0;
+            string text = __1.ReadString();
             if (string.IsNullOrEmpty(text)
                 || string.IsNullOrWhiteSpace(text))
                 return false;
