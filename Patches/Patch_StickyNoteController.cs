@@ -13,7 +13,7 @@ namespace DDSS_LobbyGuard
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(StickyNoteController), nameof(StickyNoteController.InvokeUserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient(
+        private static bool InvokeUserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
