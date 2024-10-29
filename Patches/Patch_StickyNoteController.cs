@@ -45,16 +45,21 @@ namespace DDSS_LobbyGuard
             if (__instance == null)
                 return false;
 
-            // Get Value
+            // Validate Message Text
             string text = __1.ReadString();
             if (string.IsNullOrEmpty(text)
                 || string.IsNullOrWhiteSpace(text))
                 return false;
 
-            // Run Game Command
+            // Remove Rich Text
             text = text.RemoveRichText();
-            if (text.Length > 100)
-                text = text.Substring(0, 100);
+            if (text.Length > InteractionSecurity.MAX_STICKYNOTE_CHARS)
+                text = text.Substring(0, InteractionSecurity.MAX_STICKYNOTE_CHARS);
+            if (string.IsNullOrEmpty(text)
+                || string.IsNullOrWhiteSpace(text))
+                return false;
+
+            // Run Game Command
             __instance.RpcSetText(text);
 
             // Prevent Original

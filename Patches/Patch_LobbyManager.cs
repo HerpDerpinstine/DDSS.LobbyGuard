@@ -103,8 +103,9 @@ namespace DDSS_LobbyGuard.Patches
                 if (specialistCount < 0)
                     specialistCount = 0;
 
-                // Apply New Win Condition
-                GameManager.instance.SetWinCondition(specialistCount, slackerCount);
+                // Apply New Counts
+                GameManager.instance.NetworkstartSlackers = slackerCount;
+                GameManager.instance.NetworkstartSpecialists = specialistCount;
             }
 
             // Drop It
@@ -164,9 +165,17 @@ namespace DDSS_LobbyGuard.Patches
 
             // Remove Rich Text
             message = message.RemoveRichText();
+            if (message.Length > InteractionSecurity.MAX_CHAT_CHARS)
+                message = message.Substring(0, InteractionSecurity.MAX_CHAT_CHARS);
+            if (string.IsNullOrEmpty(message)
+                || string.IsNullOrWhiteSpace(message))
+                return false;
 
             // Invoke Game Method
-            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String(sender, message, DateTime.Now.ToString("HH:mm:ss"));
+            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String(
+                sender, 
+                message, 
+                DateTime.Now.ToString("HH:mm:ss"));
 
             // Prevent Original
             return false;

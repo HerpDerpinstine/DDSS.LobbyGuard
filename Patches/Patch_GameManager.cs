@@ -9,7 +9,6 @@ namespace DDSS_LobbyGuard.Patches
     [HarmonyPatch]
     internal class Patch_GameManager
     {
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.ServerFirePlayer))]
         private static bool ServerFirePlayer_Prefix(
