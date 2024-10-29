@@ -31,6 +31,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             drawer.UserCode_CmdOrganize__NetworkIdentity(sender);
+            drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
 
             // Prevent Original
             return false;
