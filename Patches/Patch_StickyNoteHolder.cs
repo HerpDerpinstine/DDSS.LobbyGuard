@@ -18,6 +18,13 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity __0,
             NetworkConnectionToClient __1)
         {
+            if ((__instance == null)
+                || __instance.WasCollected)
+                return false;
+
+            if (!__instance.isServer)
+                return true;
+
             if ((__0 == null)
                 || __0.WasCollected)
                 return false;
@@ -27,17 +34,16 @@ namespace DDSS_LobbyGuard.Patches
                 || __1.WasCollected)
                 __1 = __0.connectionToClient;
 
-            // Get Sender
-            NetworkIdentity sender = __1.identity;
-
             // Validate Placement
-            Collectible collectible = sender.GetCurrentCollectible();
-            if (collectible == null)
+            Collectible collectible = __0.GetCurrentCollectible();
+            if ((collectible == null)
+                || collectible.WasCollected)
                 return false;
 
             // Get StickyNoteController
             StickyNoteController stickyNote = collectible.TryCast<StickyNoteController>();
-            if (stickyNote == null)
+            if ((stickyNote == null)
+                || stickyNote.WasCollected)
                 return false;
 
             // Validate Count
@@ -46,7 +52,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, __instance.transform.position))
+            if (!InteractionSecurity.IsWithinRange(__0.transform.position, __instance.transform.position))
                 return false;
 
             // Validate Player State
@@ -54,7 +60,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Place the Sticky Note on the Door
-            __instance.UserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity__NetworkConnectionToClient(sender, __1);
+            __instance.UserCode_CmdPlaceCollectibleFromPlayer__NetworkIdentity__NetworkConnectionToClient(__0, __1);
 
             // Prevent Original
             return false;

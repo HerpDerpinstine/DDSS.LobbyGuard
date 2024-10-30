@@ -104,8 +104,7 @@ namespace DDSS_LobbyGuard.Patches
                     specialistCount = 0;
 
                 // Apply New Counts
-                GameManager.instance.NetworkstartSlackers = slackerCount;
-                GameManager.instance.NetworkstartSpecialists = specialistCount;
+                GameManager.instance.SetWinCondition(specialistCount, slackerCount);
             }
 
             // Drop It
