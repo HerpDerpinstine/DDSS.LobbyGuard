@@ -139,8 +139,8 @@ namespace DDSS_LobbyGuard.Patches
             Vector3 cursorPos = __1.ReadVector3();
 
             // Run Game Command
-            controller.cursor.localPosition = cursorPos;
             controller.UserCode_CmdSyncCursor__Vector3(cursorPos);
+            controller.cursor.localPosition = cursorPos;
 
             // Prevent Original
             return false;
