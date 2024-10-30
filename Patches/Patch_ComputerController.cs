@@ -30,10 +30,8 @@ namespace DDSS_LobbyGuard.Patches
             if (!ComputerSecurity.ValidatePlayer(controller, sender))
                 return false;
 
-            // Read Cursor Position
-            Vector3 cursorPos = __1.ReadVector3();
-
             // Read Button
+            __1.ReadVector3();
             int buttonId = __1.ReadInt();
             if ((buttonId < 0)
                 || (buttonId > 1))
@@ -50,7 +48,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdCursorUp__Vector3))]
         private static bool InvokeUserCode_CmdCursorUp__Vector3_Prefix(
             NetworkBehaviour __0,
-            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Check for Server
