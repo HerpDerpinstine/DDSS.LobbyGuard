@@ -40,7 +40,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            controller.UserCode_CmdClick__Vector3__Int32(cursorPos, buttonId);
+            controller.UserCode_CmdClick__Vector3__Int32(controller.cursor.localPosition, buttonId);
 
             // Prevent Original
             return false;
@@ -67,11 +67,8 @@ namespace DDSS_LobbyGuard.Patches
             if (!ComputerSecurity.ValidatePlayer(controller, sender))
                 return false;
 
-            // Read Cursor Position
-            Vector3 cursorPos = __1.ReadVector3();
-
             // Run Game Command
-            controller.UserCode_CmdCursorUp__Vector3(cursorPos);
+            controller.UserCode_CmdCursorUp__Vector3(controller.cursor.localPosition);
 
             // Prevent Original
             return false;
@@ -142,6 +139,7 @@ namespace DDSS_LobbyGuard.Patches
             Vector3 cursorPos = __1.ReadVector3();
 
             // Run Game Command
+            controller.cursor.localPosition = cursorPos;
             controller.UserCode_CmdSyncCursor__Vector3(cursorPos);
 
             // Prevent Original
