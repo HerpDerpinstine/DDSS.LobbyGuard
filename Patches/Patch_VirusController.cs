@@ -25,7 +25,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Role
             if ((__instance.computerController.user.NetworkplayerRole == PlayerRole.Slacker)
-                || !__instance.isFirewallActive)
+                || !__instance.NetworkisFirewallActive)
             {
                 // Get Game Rule
                 float probability = GameManager.instance.virusProbability;
@@ -64,7 +64,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Value
             bool state = __1.ReadBool();
-            if (controller.isFirewallActive == state)
+            if (controller.NetworkisFirewallActive == state)
                 return false;
 
             // Run Game Command
