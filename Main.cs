@@ -44,6 +44,7 @@ namespace DDSS_LobbyGuard
 
             // Apply Patches
             ApplyPatches();
+            MakeModHelperAware();
 
             // Log Success
             _logger.Msg("Initialized!");
@@ -148,6 +149,29 @@ namespace DDSS_LobbyGuard
                     LoggerInstance.Error($"Exception while attempting to apply {type.Name}: {e}");
                 }
             }
+        }
+
+        internal void MakeModHelperAware()
+        {
+            MelonMod modHelper = null;
+            foreach (var mod in RegisteredMelons)
+                if (mod.Info.Name == "ModHelper")
+                {
+                    modHelper = mod;
+                    break;
+                }
+            if (modHelper == null)
+                return;
+
+            Type modFilterType = modHelper.MelonAssembly.Assembly.GetType("DDSS_ModHelper.Utils.ModFilterHandler");
+            if (modFilterType == null) 
+                return;
+
+            MethodInfo method = modFilterType.GetMethod("AddOptionalMelon", BindingFlags.Public | BindingFlags.Static);
+            if (method == null) 
+                return;
+
+            method.Invoke(null, [this]);
         }
     }   
 }

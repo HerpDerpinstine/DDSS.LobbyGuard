@@ -43,5 +43,21 @@ namespace DDSS_LobbyGuard.Utils
                 return null;
             return usable.TryCast<Collectible>();
         }
+
+        internal static bool IsCabinetOrganized(this FilingCabinetController cabinet)
+        {
+            bool isAllOrganized = false;
+            foreach (DrawerController drawerController in cabinet.drawers)
+            {
+                if (!drawerController.NetworkisOrganized)
+                {
+                    isAllOrganized = false;
+                    break;
+                }
+                else
+                    isAllOrganized = true;
+            }
+            return isAllOrganized;
+        }
     }
 }
