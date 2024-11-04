@@ -63,6 +63,8 @@ namespace DDSS_LobbyGuard.Patches
             // Apply State
             drawer.NetworkisOpen = requestedState;
             drawer.RpcSetDrawerState(sender, requestedState);
+            if (sender.isLocalPlayer)
+                drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
 
             // Reset Organization for Entire Cabinet
             if (requestedState)
@@ -82,7 +84,11 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Unorganize Drawers
                 if (isAllOrganized)
+                {
                     drawer.filingCabinetController.UserCode_CmdSetUnorganized();
+                    if (sender.isLocalPlayer)
+                        drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
+                }
             }
 
             // Prevent Original
