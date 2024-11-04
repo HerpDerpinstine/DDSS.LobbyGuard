@@ -14,6 +14,10 @@ namespace DDSS_LobbyGuard.Patches
             // Check for Server
             if (!__instance.isServer)
                 return true;
+            if ((LobbyManager.instance == null)
+                || LobbyManager.instance.WasCollected
+                || !LobbyManager.instance._localPlayer.isHost)
+                return true;
 
             // Fire Extinguisher Security
             FireExSecurity.SpawnFireEx(__instance);
