@@ -1,5 +1,5 @@
-﻿using MelonLoader;
-using System.Collections.Generic;
+﻿using DDSS_LobbyGuard.GUI.Internal;
+using MelonLoader;
 using System.IO;
 
 namespace DDSS_LobbyGuard.Config
@@ -12,9 +12,11 @@ namespace DDSS_LobbyGuard.Config
         {
             string filePath = Path.Combine(MelonMain._userDataPath, "Config.cfg");
             Category = MelonPreferences.CreateCategory(GetName(), GetDisplayName());
+            Category.IsHidden = true;
             Category.SetFilePath(filePath, true, false);
             CreatePreferences();
             Category.SaveToFile(false);
+            ModSettingsFactory._validCategories.Add(Category);
         }
 
         internal virtual string GetName() => null;

@@ -88,27 +88,50 @@ namespace DDSS_LobbyGuard.GUI
             Transform creditsButtonTrans = _newPanel.transform.Find("NewsLetter/Credits");
             if (creditsButtonTrans != null)
             {
-                // Rename Object
-                creditsButtonTrans.name = "GitHub";
-                
-                // Set Text
-                TextMeshProUGUI creditsText = creditsButtonTrans.GetComponentInChildren<TextMeshProUGUI>();
-                if (creditsText != null)
-                    creditsText.text = "GitHub";
+                // Setup GitHub Button
+                SetupButton(
+                    creditsButtonTrans,
+                    new(-85, -66, 0),
+                    "GitHub",
+                    new Action(() => Application.OpenURL(Properties.BuildInfo.DownloadLink)));
 
-                // Remove Localization
-                LocalizedText localized = creditsButtonTrans.GetComponentInChildren<LocalizedText>();
-                if (localized != null)
-                    UnityEngine.Object.Destroy(localized);
+                // Setup Settings Button
+                Transform newButton = GameObject.Instantiate(creditsButtonTrans, creditsButtonTrans.parent);
+                SetupButton(
+                    newButton,
+                    new(85, -66, 0),
+                    "Settings",
+                    new Action(() => ModSettingsManager.OpenModSettings()));
+            }
 
-                // Apply new Button Callback
-                UMUIButton cloneSettingsButton = creditsButtonTrans.GetComponentInChildren<UMUIButton>();
-                if (cloneSettingsButton != null)
-                {
-                    // Create Event to Open Custom Tab
-                    cloneSettingsButton.OnClick = new();
-                    cloneSettingsButton.OnClick.AddListener(new Action(() => Application.OpenURL(Properties.BuildInfo.DownloadLink)));
-                }
+            ModSettingsManager.MainMenuInit();
+        }
+
+        internal static void SetupButton(Transform trans, Vector3 localPos, string text, Action onClick)
+        {
+            // Move Object
+            trans.localPosition = localPos;
+
+            // Rename Object
+            trans.name = text;
+
+            // Set Text
+            TextMeshProUGUI creditsText = trans.GetComponentInChildren<TextMeshProUGUI>();
+            if (creditsText != null)
+                creditsText.text = text;
+
+            // Remove Localization
+            LocalizedText localized = trans.GetComponentInChildren<LocalizedText>();
+            if (localized != null)
+                UnityEngine.Object.Destroy(localized);
+
+            // Apply new Button Callback
+            UMUIButton cloneSettingsButton = trans.GetComponentInChildren<UMUIButton>();
+            if (cloneSettingsButton != null)
+            {
+                // Create Event to Open Custom Tab
+                cloneSettingsButton.OnClick = new();
+                cloneSettingsButton.OnClick.AddListener(onClick);
             }
         }
     }
