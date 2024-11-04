@@ -1,5 +1,6 @@
 ﻿using DDSS_LobbyGuard.Security;
 using HarmonyLib;
+using Il2Cpp;
 using Il2CppProps.Keys;
 
 namespace DDSS_LobbyGuard.Patches
@@ -13,6 +14,10 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Check for Server
             if (!__instance.isServer)
+                return true;
+            if ((LobbyManager.instance == null)
+                || LobbyManager.instance.WasCollected
+                || !LobbyManager.instance._localPlayer.isHost)
                 return true;
 
             // Key Security
