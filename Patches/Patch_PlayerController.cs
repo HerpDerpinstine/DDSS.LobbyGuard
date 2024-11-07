@@ -10,11 +10,11 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdMovePlayer__Vector3))]
-        private static bool InvokeUserCode_CmdMovePlayer__Vector3_Prefix(NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdMovePlayer__Vector3_Prefix(NetworkBehaviour __0,
+            NetworkConnectionToClient __2)
         {
             // Get Sender
-            NetworkIdentity sender = __2.identity;
-            if (!sender.isLocalPlayer)
+            if (!__2.identity.isServer)
                 return false;
 
             // Run Original
