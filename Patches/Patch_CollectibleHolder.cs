@@ -31,9 +31,14 @@ namespace DDSS_LobbyGuard.Patches
             if (collectible == null)
                 return false;
 
-            // Validate Count
+            // Validate Free Slots
             int freeSlots = holder.freePositions.Count;
             if (!holder.allowStacking && (freeSlots <= 0))
+                return false;
+
+            // Validate Used Slots
+            int usedSlots = holder.collectibles.Count;
+            if (holder.allowStacking && (usedSlots >= InteractionSecurity.MAX_COLLECTIBLES_HOLDER))
                 return false;
 
             // Validate Distance
@@ -64,9 +69,14 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Validate Count
+            // Validate Free Slots
             int freeSlots = holder.freePositions.Count;
             if (!holder.allowStacking && (freeSlots <= 0))
+                return false;
+
+            // Validate Used Slots
+            int usedSlots = holder.collectibles.Count;
+            if (holder.allowStacking && (usedSlots >= InteractionSecurity.MAX_COLLECTIBLES_HOLDER))
                 return false;
 
             // Validate Distance

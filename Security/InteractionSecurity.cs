@@ -11,9 +11,16 @@ namespace DDSS_LobbyGuard.Security
 
         internal const int MAX_DOCUMENTS_TRAY = 10;
         internal const int MAX_DOCUMENTS_BINDER = 10;
+        internal const int MAX_DOCUMENTS_PRINTER = 10;
+
+        internal const int MAX_STICKYNOTES_PLAYER = 1;
+        internal const int MAX_STICKYNOTES_DOOR = 10;
+        internal const int MAX_COLLECTIBLES_HOLDER = 10;
 
         internal const int MAX_CHAT_CHARS = 50;
         internal const int MAX_STICKYNOTE_CHARS = 100;
+
+        internal const int MAX_DOCUMENT_CHARS = 100;
 
         internal static int MAX_CIGS { get; private set; }
         internal static int MAX_CIG_PACKS { get; private set; }

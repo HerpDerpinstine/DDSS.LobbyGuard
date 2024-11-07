@@ -31,9 +31,14 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(userName))
                 return false;
 
-            // Validate Count
+            // Validate Free Slots
             int freeSlots = printer.freePositions.Count;
             if (!printer.allowStacking && (freeSlots <= 0))
+                return false;
+
+            // Validate Used Slots
+            int usedSlots = printer.collectibles.Count;
+            if (printer.allowStacking && (usedSlots >= InteractionSecurity.MAX_DOCUMENTS_PRINTER))
                 return false;
 
             // Get Document Content
@@ -97,9 +102,14 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(userName))
                 return false;
 
-            // Validate Count
+            // Validate Free Slots
             int freeSlots = printer.freePositions.Count;
             if (!printer.allowStacking && (freeSlots <= 0))
+                return false;
+
+            // Validate Used Slots
+            int usedSlots = printer.collectibles.Count;
+            if (printer.allowStacking && (usedSlots >= InteractionSecurity.MAX_DOCUMENTS_PRINTER))
                 return false;
 
             // Get Image Data
@@ -137,9 +147,14 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Validate Count
+            // Validate Free Slots
             int freeSlots = printer.freePositions.Count;
             if (!printer.allowStacking && (freeSlots <= 0))
+                return false;
+
+            // Validate Used Slots
+            int usedSlots = printer.collectibles.Count;
+            if (printer.allowStacking && (usedSlots >= InteractionSecurity.MAX_DOCUMENTS_PRINTER))
                 return false;
 
             // Validate Distance

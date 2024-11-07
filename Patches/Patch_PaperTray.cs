@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using DDSS_LobbyGuard.Security;
+using HarmonyLib;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer.Lobby;
@@ -37,9 +38,14 @@ namespace DDSS_LobbyGuard.Patches
             if (tray == null) 
                 return false;
 
-            // Validate Count
+            // Validate Free Slots
             int freeSlots = tray.freePositions.Count;
             if (!tray.allowStacking && (freeSlots <= 0))
+                return false;
+
+            // Validate Used Slots
+            int usedSlots = tray.collectibles.Count;
+            if (tray.allowStacking && (usedSlots >= InteractionSecurity.MAX_DOCUMENTS_PRINTER))
                 return false;
 
             // Get Value

@@ -52,9 +52,14 @@ namespace DDSS_LobbyGuard.Patches
                 || stickyNote.WasCollected)
                 return false;
 
-            // Validate Count
+            // Validate Free Slots
             int freeSlots = __instance.freePositions.Count;
             if (!__instance.allowStacking && (freeSlots <= 0))
+                return false;
+
+            // Validate Used Slots
+            int usedSlots = __instance.collectibles.Count;
+            if (__instance.allowStacking && (usedSlots >= InteractionSecurity.MAX_STICKYNOTES_DOOR))
                 return false;
 
             // Validate Distance
