@@ -21,6 +21,10 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Validate Seat
+            if (toilet.NetworkusingPlayer != sender)
+                return false;
+
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, toilet.transform.position))
                 return false;
