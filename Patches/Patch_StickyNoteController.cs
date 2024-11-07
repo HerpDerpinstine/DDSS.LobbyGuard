@@ -18,10 +18,6 @@ namespace DDSS_LobbyGuard
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -45,6 +41,10 @@ namespace DDSS_LobbyGuard
             if (__instance == null)
                 return false;
 
+            // Check if Sticky Note is already Written To
+            if (__instance.hasBeenEdited)
+                return false;
+
             // Validate Message Text
             string text = __1.ReadString();
             if (string.IsNullOrEmpty(text)
@@ -61,6 +61,7 @@ namespace DDSS_LobbyGuard
 
             // Run Game Command
             __instance.RpcSetText(text);
+            __instance.UserCode_RpcSetText__String(text);
 
             // Prevent Original
             return false;
