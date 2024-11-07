@@ -40,7 +40,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Used Slots
             int usedSlots = printer.collectibles.Count;
-            if (printer.allowStacking && (usedSlots >= InteractionSecurity.MAX_DOCUMENTS_PRINTER))
+            if (printer.allowStacking && (usedSlots >= printer.maxPapers))
                 return false;
 
             // Validate Sender is on Workstation
@@ -125,7 +125,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Used Slots
             int usedSlots = printer.collectibles.Count;
-            if (printer.allowStacking && (usedSlots >= InteractionSecurity.MAX_DOCUMENTS_PRINTER))
+            if (printer.allowStacking && (usedSlots >= printer.maxPapers))
                 return false;
 
             // Validate Sender is on Workstation
@@ -184,7 +184,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Used Slots
             int usedSlots = printer.collectibles.Count;
-            if (printer.allowStacking && (usedSlots >= InteractionSecurity.MAX_DOCUMENTS_PRINTER))
+            if (printer.allowStacking && (usedSlots >= printer.maxPapers))
                 return false;
 
             // Validate Distance
