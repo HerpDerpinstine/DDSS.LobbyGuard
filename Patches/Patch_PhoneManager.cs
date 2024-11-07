@@ -2,6 +2,8 @@
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
+using Il2CppObjects.Scripts;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 
 namespace DDSS_LobbyGuard.Patches
@@ -45,6 +47,20 @@ namespace DDSS_LobbyGuard.Patches
                 if (player == null)
                     return false;
 
+                // Validate Sender is on Workstation
+                PlayerController controller = __2.identity.GetComponent<PlayerController>();
+                if ((controller == null)
+                    || controller.WasCollected
+                    || (controller.NetworkcurrentChair == null)
+                    || controller.NetworkcurrentChair.WasCollected)
+                    return false;
+
+                // Validate Chair
+                WorkStationController workStation = controller.NetworkcurrentChair.GetComponent<WorkStationController>();
+                if ((workStation == null)
+                    || workStation.WasCollected)
+                    return false;
+
                 // Enforce Receiver Number
                 receiver = phone.GetPhoneNumber(player);
             }
@@ -78,6 +94,20 @@ namespace DDSS_LobbyGuard.Patches
                 // Get Player
                 LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
                 if (player == null)
+                    return false;
+
+                // Validate Sender is on Workstation
+                PlayerController controller = __2.identity.GetComponent<PlayerController>();
+                if ((controller == null)
+                    || controller.WasCollected
+                    || (controller.NetworkcurrentChair == null)
+                    || controller.NetworkcurrentChair.WasCollected)
+                    return false;
+
+                // Validate Chair
+                WorkStationController workStation = controller.NetworkcurrentChair.GetComponent<WorkStationController>();
+                if ((workStation == null)
+                    || workStation.WasCollected)
                     return false;
 
                 // Enforce Caller Number
@@ -116,6 +146,20 @@ namespace DDSS_LobbyGuard.Patches
                 if (player == null)
                     return false;
 
+                // Validate Sender is on Workstation
+                PlayerController controller = __2.identity.GetComponent<PlayerController>();
+                if ((controller == null)
+                    || controller.WasCollected
+                    || (controller.NetworkcurrentChair == null)
+                    || controller.NetworkcurrentChair.WasCollected)
+                    return false;
+
+                // Validate Chair
+                WorkStationController workStation = controller.NetworkcurrentChair.GetComponent<WorkStationController>();
+                if ((workStation == null)
+                    || workStation.WasCollected)
+                    return false;
+
                 // Enforce Receiver Number
                 receiver = phone.GetPhoneNumber(player);
             }
@@ -150,6 +194,20 @@ namespace DDSS_LobbyGuard.Patches
                 // Get Player
                 LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
                 if (player == null)
+                    return false;
+
+                // Validate Sender is on Workstation
+                PlayerController controller = __2.identity.GetComponent<PlayerController>();
+                if ((controller == null)
+                    || controller.WasCollected
+                    || (controller.NetworkcurrentChair == null)
+                    || controller.NetworkcurrentChair.WasCollected)
+                    return false;
+
+                // Validate Chair
+                WorkStationController workStation = controller.NetworkcurrentChair.GetComponent<WorkStationController>();
+                if ((workStation == null)
+                    || workStation.WasCollected)
                     return false;
 
                 // Enforce Receiver Number

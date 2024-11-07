@@ -79,6 +79,15 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(documentContent))
                 return false;
 
+            if (setLabel)
+            {
+                if (documentContent.Length > InteractionSecurity.MAX_DOCUMENT_CHARS)
+                    documentContent = documentContent.Substring(0, InteractionSecurity.MAX_DOCUMENT_CHARS);
+                if (string.IsNullOrEmpty(documentContent)
+                    || string.IsNullOrWhiteSpace(documentContent))
+                    return false;
+            }
+
             // Create New Document Copy
             Document docCopy = UnityEngine.Object.Instantiate(printer.documentPrefab,
                 printer.printPos.position,
