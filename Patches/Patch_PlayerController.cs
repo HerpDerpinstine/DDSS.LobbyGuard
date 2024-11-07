@@ -9,6 +9,19 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_PlayerController
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdMovePlayer__Vector3))]
+        private static bool InvokeUserCode_CmdMovePlayer__Vector3_Prefix(NetworkConnectionToClient __2)
+        {
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if (!sender.isLocalPlayer)
+                return false;
+
+            // Run Original
+            return true;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdSpank__NetworkIdentity))]
         private static bool InvokeUserCode_CmdSpank__NetworkIdentity_Prefix(
             NetworkBehaviour __0,
