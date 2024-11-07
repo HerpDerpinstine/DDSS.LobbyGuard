@@ -45,7 +45,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Used Slots
             int usedSlots = tray.collectibles.Count;
-            if (tray.allowStacking && (usedSlots >= InteractionSecurity.MAX_DOCUMENTS_PRINTER))
+            if (tray.allowStacking && (usedSlots >= InteractionSecurity.MAX_DOCUMENTS_TRAY))
                 return false;
 
             // Get Value
