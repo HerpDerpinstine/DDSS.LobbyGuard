@@ -27,13 +27,6 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.UserCode_CmdMovePlayer__Vector3))]
-        private static void UserCode_CmdMovePlayer__Vector3_Prefix(PlayerController __instance, Vector3 __0)
-        {
-            __instance.lastPos = __0;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdSpank__NetworkIdentity))]
         private static bool InvokeUserCode_CmdSpank__NetworkIdentity_Prefix(
             NetworkBehaviour __0,
@@ -57,41 +50,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Prevent Original
             return false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.SetLocalVelocity))]
-        private static void SetLocalVelocity_Prefix(PlayerController __instance)
-        {
-            // Check for Game Start
-            if ((GameManager.instance.NetworktargetGameState != (int)GameStates.InGame)
-                && (GameManager.instance.NetworktargetGameState != (int)GameStates.Meeting))
-                return;
-
-            // Calculate First Velocity
-            Vector3 oldPos = __instance.lastPos;
-            Vector3 currentPos = __instance.transform.position;
-            var heading = (currentPos - oldPos);
-            heading.y = 0;
-            var currentSpeed = heading.magnitude;
-
-            // Check Sprint
-            bool isSprinting = __instance.NetworktargetState == (int)States.Sprint;
-            bool hasCoffeeEffect = !GameManager.instance.noSprinting 
-                || (__instance.GetComponent<PlayerEffectController>().NetworktargetState == (int)PlayerEffects.SpeedBoost);
-
-            // Get Max Speed
-            float maxSpeed = ((isSprinting && hasCoffeeEffect) 
-                ? __instance.sprintSpeed
-                : __instance.moveSpeed) / 100f;
-
-            // Validate Speed
-            if (currentSpeed <= (maxSpeed + 0.015f))
-                return;
-
-            // Set New Position
-            __instance.transform.position = oldPos;
-            __instance.CmdMovePlayer(oldPos);
         }
     }
 }
