@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppGameManagement;
@@ -57,6 +58,9 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.SetLocalVelocity))]
         private static void SetLocalVelocity_Prefix(PlayerController __instance)
         {
+            if (!ConfigHandler.Gameplay.PlayerVelocityEnforcement.Value)
+                return;
+
             // Check for Chair
             if (!NetworkServer.activeHost
                 || !__instance.isServer

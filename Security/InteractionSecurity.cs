@@ -1,11 +1,17 @@
-﻿using Il2Cpp;
+﻿using DDSS_LobbyGuard.Config;
+using Il2Cpp;
 using Il2CppGameManagement;
+using Il2CppMirror;
+using Il2CppPlayer.Lobby;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Security
 {
     internal static class InteractionSecurity
     {
+        private static Dictionary<LobbyPlayer, bool> _allSlackers = new();
+
         internal const float MAX_DISTANCE = 2f;
         internal const float MAX_SPANK_DISTANCE = 1f;
 
@@ -27,6 +33,11 @@ namespace DDSS_LobbyGuard.Security
 
         internal static int MAX_PLAYERS { get; private set; }
 
+        internal static (string, int) SET_PLAYERROLE_RPC_INFO = ("System.Void Player.Lobby.LobbyPlayer::RpcSetPlayerRole(Player.Lobby.PlayerRole,System.Boolean)", 1020802784);
+
+        internal static void OnSceneLoad()
+            => _allSlackers.Clear();
+
         internal static void UpdateSettings()
         {
             // Validate Game Rules Manager
@@ -41,6 +52,12 @@ namespace DDSS_LobbyGuard.Security
             MAX_INFECTED_USBS = MAX_PLAYERS;
             MAX_CIGS = MAX_PLAYERS * 3;
         }
+
+        internal static bool IsSlacker(LobbyPlayer player)
+            => _allSlackers.ContainsKey(player);
+
+        internal static void AddSlacker(LobbyPlayer player)
+            => _allSlackers[player] = true;
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
             float maxRange = MAX_DISTANCE)
@@ -60,5 +77,69 @@ namespace DDSS_LobbyGuard.Security
         }
         internal static bool CanSpawnItem(string interactableName, int maxCount)
             => GetTotalCountOfSpawnedItem(interactableName) < maxCount;
+
+        internal static PlayerRole GetWinner(GameManager manager)
+        {
+            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                return manager.GetWinner();
+
+            if (manager.onlyWinFromScore)
+                return PlayerRole.None;
+
+            if (manager.finalProductivityMeter >= 1f)
+                return PlayerRole.Specialist;
+
+            if (manager.finalProductivityMeter <= 0f)
+                return PlayerRole.Slacker;
+
+            int numberOfFiredEmployees = manager.GetNumberOfFiredEmployees();
+            int amountOfUnfiredSlackers = GetAmountOfUnfiredSlackers(LobbyManager.instance);
+            int amountOfUnfiredSpecialists = GetAmountOfUnfiredSpecialists(LobbyManager.instance);
+
+            if (amountOfUnfiredSlackers <= 0)
+                return PlayerRole.Specialist;
+
+            if (amountOfUnfiredSpecialists <= 0)
+                return PlayerRole.Slacker;
+
+            if (numberOfFiredEmployees >= manager.fireLimit)
+                return PlayerRole.Slacker;
+
+            return PlayerRole.None;
+
+        }
+
+        internal static int GetAmountOfUnfiredSlackers(LobbyManager manager)
+        {
+            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                return manager.GetAmountOfUnfiredSlackers();
+
+            int num = 0;
+            foreach (NetworkIdentity networkIdentity in manager.connectedLobbyPlayers)
+            {
+                LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
+                if (IsSlacker(player)
+                    && !player.isFired)
+                    num++;
+            }
+            return num;
+        }
+
+        internal static int GetAmountOfUnfiredSpecialists(LobbyManager manager)
+        {
+            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                return manager.GetAmountOfUnfiredSpecialists();
+
+            int num = 0;
+            foreach (NetworkIdentity networkIdentity in manager.connectedLobbyPlayers)
+            {
+                LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
+                if ((player.NetworkplayerRole == PlayerRole.Specialist)
+                    && !IsSlacker(player)
+                    && !player.isFired)
+                    num++;
+            }
+            return num;
+        }
     }
 }

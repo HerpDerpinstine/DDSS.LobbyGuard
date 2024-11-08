@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
@@ -94,7 +95,7 @@ namespace DDSS_LobbyGuard.Patches
                 printer.printPos.rotation);
             NetworkServer.Spawn(docCopy.gameObject);
             string newLabel = setLabel
-                ? $"{userName.RemoveRichText()}'s Document"
+                ? (ConfigHandler.Gameplay.UsernamesOnPrintedDocuments.Value ? $"{userName.RemoveRichText()}'s Document" : "Document")
                 : fileName;
             if (newLabel == "SalesReport")
                 newLabel = "Sales Report";
@@ -162,7 +163,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Create New Document Copy
-            string documentName = $"{userName.RemoveRichText()}'s Image";
+            string documentName = (ConfigHandler.Gameplay.UsernamesOnPrintedImages.Value ? $"{userName.RemoveRichText()}'s Image" : "Image");
             PrintedImage docCopy = GameObject.Instantiate<PrintedImage>(printer.printedImagePrefab,
                 printer.printPos.position, printer.printPos.rotation);
             NetworkServer.Spawn(docCopy.gameObject);

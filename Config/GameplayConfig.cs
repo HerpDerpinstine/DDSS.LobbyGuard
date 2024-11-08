@@ -4,28 +4,31 @@ namespace DDSS_LobbyGuard.Config
 {
     internal class GameplayConfig : ConfigCategory
     {
-        //internal MelonPreferences_Entry<eConfigHostType> UsernamesOnPrintedDocuments;
-        //internal MelonPreferences_Entry<eConfigHostType> UsernamesOnPrintedImages;
+        internal MelonPreferences_Entry<bool> UsernamesOnPrintedDocuments;
+        internal MelonPreferences_Entry<bool> UsernamesOnPrintedImages;
         internal MelonPreferences_Entry<eConfigHostType> UsernamesOnStickyNotes;
 
         internal MelonPreferences_Entry<bool> StickyNotesOnPlayers;
         internal MelonPreferences_Entry<bool> StickyNotesOnOpenDoors;
         internal MelonPreferences_Entry<bool> StickyNotesOnClosedDoors;
 
+        internal MelonPreferences_Entry<bool> HideSlackersFromClients;
+        internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
+
         internal override string GetName()
             => "Gameplay";
 
         internal override void CreatePreferences()
         {
-            //UsernamesOnPrintedDocuments = CreatePref("UsernamesOnPrintedDocuments",
-            //    "Usernames On Printed Documents",
-            //    "Puts the Player's Username in the Name of their Custom Printed Document",
-            //    eConfigHostType.ALL);
+            UsernamesOnPrintedDocuments = CreatePref("UsernamesOnPrintedDocuments",
+                "Usernames On Printed Documents",
+                "Puts the Player's Username in the Name of their Custom Printed Document",
+                true);
 
-            //UsernamesOnPrintedImages = CreatePref("UsernamesOnPrintedImages",
-            //    "Usernames On Printed Images",
-            //    "Puts the Player's Username in the Name of their Custom Printed Image",
-            //    eConfigHostType.ALL);
+            UsernamesOnPrintedImages = CreatePref("UsernamesOnPrintedImages",
+                "Usernames On Printed Images",
+                "Puts the Player's Username in the Name of their Custom Printed Image",
+                true);
 
             UsernamesOnStickyNotes = CreatePref("UsernamesOnStickyNotes",
                 "Usernames On Sticky Notes",
@@ -45,6 +48,16 @@ namespace DDSS_LobbyGuard.Config
             StickyNotesOnClosedDoors = CreatePref("StickyNotesOnClosedDoors",
                 "Sticky Notes on Closed Doors",
                 "Allows the Grabbing and Placing of Sticky Notes on Doors while they are Closed",
+                true);
+
+            HideSlackersFromClients = CreatePref("HideSlackersFromClients",
+                "Hide Slackers From Clients",
+                "Prevents Slacker Count from being broadcasted to Clients",
+                false);
+
+            PlayerVelocityEnforcement = CreatePref("PlayerVelocityEnforcement",
+                "Player Velocity Enforcement",
+                "Prevents Speedhacking using Context-Based Velocity Clamping",
                 true);
         }
     }
