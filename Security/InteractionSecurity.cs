@@ -33,8 +33,6 @@ namespace DDSS_LobbyGuard.Security
 
         internal static int MAX_PLAYERS { get; private set; }
 
-        internal static (string, int) SET_PLAYERROLE_RPC_INFO = ("System.Void Player.Lobby.LobbyPlayer::RpcSetPlayerRole(Player.Lobby.PlayerRole,System.Boolean)", 1020802784);
-
         internal static void OnSceneLoad()
             => _allSlackers.Clear();
 

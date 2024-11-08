@@ -14,6 +14,8 @@ namespace DDSS_LobbyGuard.Utils
 {
     internal static class Extensions
     {
+        private static (string, int) SET_PLAYERROLE_RPC_INFO = ("System.Void Player.Lobby.LobbyPlayer::RpcSetPlayerRole(Player.Lobby.PlayerRole,System.Boolean)", 1020802784);
+
         private static Regex _rtRegex = new Regex("<.*?>", RegexOptions.Compiled);
 
         internal static string RemoveRichText(this string val)
@@ -67,8 +69,8 @@ namespace DDSS_LobbyGuard.Utils
             networkWriterPooled.WriteInt((int)playerRole);
             networkWriterPooled.WriteBool(giveNewTasks);
             player.SendRPCInternal(
-                InteractionSecurity.SET_PLAYERROLE_RPC_INFO.Item1,
-                InteractionSecurity.SET_PLAYERROLE_RPC_INFO.Item2,
+                SET_PLAYERROLE_RPC_INFO.Item1,
+                SET_PLAYERROLE_RPC_INFO.Item2,
                 networkWriterPooled, 0, true);
             NetworkWriterPool.Return(networkWriterPooled);
         }
@@ -80,8 +82,8 @@ namespace DDSS_LobbyGuard.Utils
             networkWriterPooled.WriteBool(giveNewTasks);
             player.SendTargetRPCInternal(
                 receipient,
-                InteractionSecurity.SET_PLAYERROLE_RPC_INFO.Item1,
-                InteractionSecurity.SET_PLAYERROLE_RPC_INFO.Item2,
+                SET_PLAYERROLE_RPC_INFO.Item1,
+                SET_PLAYERROLE_RPC_INFO.Item2,
                 networkWriterPooled, 0);
             NetworkWriterPool.Return(networkWriterPooled);
         }
