@@ -71,7 +71,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Send Role
-            if (__instance.revealRoleAfterFiring
+            if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
+                && __instance.revealRoleAfterFiring
                 && InteractionSecurity.IsSlacker(player))
             {
                 player.NetworkplayerRole = PlayerRole.Slacker;
