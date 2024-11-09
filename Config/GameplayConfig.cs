@@ -12,8 +12,8 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> StickyNotesOnOpenDoors;
         internal MelonPreferences_Entry<bool> StickyNotesOnClosedDoors;
 
-        internal MelonPreferences_Entry<bool> HideSlackersFromClients;
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
+        internal MelonPreferences_Entry<bool> HideSlackersFromClients;
 
         internal override string GetName()
             => "Gameplay";
@@ -50,15 +50,15 @@ namespace DDSS_LobbyGuard.Config
                 "Allows the Grabbing and Placing of Sticky Notes on Doors while they are Closed",
                 true);
 
-            HideSlackersFromClients = CreatePref("HideSlackersFromClients",
-                "Hide Slackers From Clients",
-                "Prevents Slacker Count from being broadcasted to Clients",
-                false);
-
             PlayerVelocityEnforcement = CreatePref("PlayerVelocityEnforcement",
                 "Player Velocity Enforcement",
                 "Prevents Speedhacking using Context-Based Velocity Clamping",
                 true);
+
+            HideSlackersFromClients = CreatePref("HideSlackersFromClients",
+                "Hide Slackers From Clients",
+                "Prevents Slacker Count from being broadcasted to Clients",
+                false);
         }
     }
 }

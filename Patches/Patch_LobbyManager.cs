@@ -92,7 +92,7 @@ namespace DDSS_LobbyGuard.Patches
                 int specialistCount = GameManager.instance.NetworkstartSpecialists;
 
                 // Get Player Role
-                if (InteractionSecurity.IsSlacker(controller.lobbyPlayer))
+                if (playerRole == PlayerRole.Slacker)
                     slackerCount--;
                 else if (playerRole == PlayerRole.Specialist)
                     specialistCount--;

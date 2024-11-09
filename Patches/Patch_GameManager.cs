@@ -7,12 +7,29 @@ using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
     [HarmonyPatch]
     internal class Patch_GameManager
     {
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.GetFireLimit))]
+        private static bool GetFireLimit_Prefix(GameManager __instance, int __0, int __1, float __2, ref int __result)
+        {
+            // Check for Host
+            if (!NetworkServer.activeHost)
+                return true;
+
+            // Calculate Fire Limit
+            __result = Mathf.RoundToInt(__1 + __0 * __2);
+            __result = Mathf.Clamp(__result, 1, ((__1 + __0) - 1));
+
+            // Prevent Original
+            return false;
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.NetworktargetGameState), MethodType.Setter)]
         private static void NetworktargetGameState_set_Prefix(GameManager __instance, ref int __0)
