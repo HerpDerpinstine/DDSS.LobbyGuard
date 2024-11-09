@@ -24,11 +24,10 @@ namespace DDSS_LobbyGuard.Patches
             bool areYouHosting = NetworkServer.activeHost;
 
             // Create View Profile Button
-            bool isThisMe = __instance.playerLobbyUI.lobbyPlayer.isMine;
-            if (!isThisMe)
-                __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("View Profile"), new Action(__instance.playerLobbyUI.ViewProfile));
+            __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("View Profile"), new Action(__instance.playerLobbyUI.ViewProfile));
 
             // Check for Host and Other Players
+            bool isThisMe = __instance.playerLobbyUI.lobbyPlayer.isMine;
             if (areYouHosting && !isThisMe)
             {
                 // Create Mute Button
