@@ -25,9 +25,7 @@ namespace DDSS_LobbyGuard.Patches
             if (!__instance.isServer)
                 return true;
 
-            if ((LobbyManager.instance == null)
-                || LobbyManager.instance.WasCollected
-                || !LobbyManager.instance._localPlayer.isHost)
+            if (!NetworkServer.activeHost)
                 return true;
 
             if ((__0 == null)
