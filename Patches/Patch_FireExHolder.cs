@@ -1,6 +1,7 @@
 ﻿using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppMirror;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -14,9 +15,7 @@ namespace DDSS_LobbyGuard.Patches
             // Check for Server
             if (!__instance.isServer)
                 return true;
-            if ((LobbyManager.instance == null)
-                || LobbyManager.instance.WasCollected
-                || !LobbyManager.instance._localPlayer.isHost)
+            if (!NetworkServer.activeHost)
                 return true;
 
             // Fire Extinguisher Security
