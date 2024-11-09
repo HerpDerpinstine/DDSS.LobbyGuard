@@ -7,6 +7,7 @@ using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using System.Collections;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
@@ -14,22 +15,6 @@ namespace DDSS_LobbyGuard.Patches
     [HarmonyPatch]
     internal class Patch_GameManager
     {
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameManager), nameof(GameManager.GetFireLimit))]
-        private static bool GetFireLimit_Prefix(GameManager __instance, int __0, int __1, float __2, ref int __result)
-        {
-            // Check for Host
-            if (!NetworkServer.activeHost)
-                return true;
-
-            // Calculate Fire Limit
-            __result = Mathf.RoundToInt(__1 + __0 * __2);
-            __result = Mathf.Clamp(__result, 1, ((__1 + __0) - 1));
-
-            // Prevent Original
-            return false;
-        }
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.NetworktargetGameState), MethodType.Setter)]
         private static void NetworktargetGameState_set_Prefix(GameManager __instance, ref int __0)
@@ -126,6 +111,50 @@ namespace DDSS_LobbyGuard.Patches
 
             // Prevent Original
             return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.InvokeUserCode_CmdAddProductivityFromTaskCompletion__PlayerRole))]
+        private static bool InvokeUserCode_CmdAddProductivityFromTaskCompletion__PlayerRole_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Validate
+            if ((__2 == null)
+                || __2.WasCollected)
+                return false;
+
+            // Get GameManager
+            GameManager manager = __0.TryCast<GameManager>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
+
+            // Run Game Command
+            manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, player));
+
+            // Prevent Original
+            return false;
+        }
+
+        private static IEnumerator CoroutineAddProductivityFromTaskCompletion(GameManager manager, LobbyPlayer player)
+        {
+            if (manager.delayedScoreOnSlackerTasks)
+                yield return new WaitForSeconds(Random.Range(0f, 30f));
+
+            float num = 0f;
+            if (InteractionSecurity.IsSlacker(player))
+                num = manager.productivityPerSlackerTask / InteractionSecurity.GetAmountOfUnfiredSlackers(LobbyManager.instance);
+            else if (player.NetworkplayerRole == PlayerRole.Specialist)
+                num = manager.productivityPerSpecialistTask / InteractionSecurity.GetAmountOfUnfiredSpecialists(LobbyManager.instance);
+            else if (player.NetworkplayerRole == PlayerRole.Manager)
+                num = manager.productivityPerManagerTask;
+
+            manager.productivity += num;
+
+            yield break;
         }
     }
 }

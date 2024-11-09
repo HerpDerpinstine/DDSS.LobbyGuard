@@ -7,6 +7,8 @@ using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using System;
+using System.Collections;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -17,6 +19,10 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.Awake))]
         private static void Awake_Postfix(LobbyManager __instance)
         {
+            // Check for Host
+            if (!NetworkServer.activeHost)
+                return;
+
             // Update Blacklist
             BlacklistSecurity.OnLobbyOpen(__instance);
         }
@@ -25,10 +31,14 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.UpdateSettings))]
         private static void UpdateSettings_Postfix()
         {
+            // Check for Host
+            if (!NetworkServer.activeHost)
+                return;
+
             // Update Our Game Settings
             InteractionSecurity.UpdateSettings();
         }
-        
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.KickPlayer))]
         private static bool KickPlayer_Prefix(LobbyManager __instance, 
@@ -39,6 +49,10 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.WasCollected
                 || __0.isLocalPlayer)
                 return false;
+
+            // Check for Host
+            if (!NetworkServer.activeHost)
+                return true;
 
             // Kick Player
             BlacklistSecurity.RequestKick(__0.GetComponent<LobbyPlayer>());
@@ -58,6 +72,10 @@ namespace DDSS_LobbyGuard.Patches
                 || __0.isLocalPlayer)
                 return false;
 
+            // Check for Host
+            if (!NetworkServer.activeHost)
+                return true;
+
             // Blacklist Player
             BlacklistSecurity.RequestBlacklist(__0);
 
@@ -72,7 +90,8 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Validate Server
             if (!__instance.isServer
-                || !__instance.gameStarted)
+                || !__instance.gameStarted
+                || !NetworkServer.activeHost)
                 return;
 
             // Get PlayerController
@@ -104,6 +123,7 @@ namespace DDSS_LobbyGuard.Patches
                     specialistCount = 0;
 
                 // Apply New Counts
+                //GameManager.instance.SetWinCondition(specialistCount, slackerCount);
 				GameManager.instance.NetworkstartSlackers = slackerCount;
 				GameManager.instance.NetworkstartSpecialists = specialistCount;
             }
