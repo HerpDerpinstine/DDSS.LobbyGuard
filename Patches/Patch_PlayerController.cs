@@ -90,9 +90,11 @@ namespace DDSS_LobbyGuard.Patches
             if (magnitude <= maxSpeed)
                 return;
 
+            // Clamp Speed
             Vector3 newDistance = Vector3.ClampMagnitude(velocityNoUp, maxSpeed);
             newDistance.y = velocity.y;
 
+            // Force Position to Location
             Vector3 correctedPos = __instance.lastPos + newDistance;
             ForcePosition(__instance, correctedPos);
         }

@@ -52,10 +52,18 @@ namespace DDSS_LobbyGuard.Security
         }
 
         internal static bool IsSlacker(LobbyPlayer player)
-            => _allSlackers.ContainsKey(player);
+        {
+            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                return player.NetworkplayerRole == PlayerRole.Slacker;
+            return _allSlackers.ContainsKey(player);
+        }
 
         internal static void AddSlacker(LobbyPlayer player)
-            => _allSlackers[player] = true;
+        {
+            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                return;
+            _allSlackers[player] = true;
+        }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
             float maxRange = MAX_DISTANCE)
