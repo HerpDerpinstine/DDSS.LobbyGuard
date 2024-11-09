@@ -24,7 +24,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Role
-            if ((__instance.computerController.user.NetworkplayerRole == PlayerRole.Slacker)
+            if (InteractionSecurity.IsSlacker(__instance.computerController.user)
                 || !__instance.NetworkisFirewallActive)
             {
                 // Get Game Rule
