@@ -52,13 +52,17 @@ namespace DDSS_LobbyGuard
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
-            DoorSecurity.OnSceneLoad();
-            PhoneSecurity.OnSceneLoad();
-            InteractionSecurity.UpdateSettings();
-            ServerSecurity.OnSceneLoad();
-            TrashBinSecurity.OnSceneLoad();
-            KeySecurity.OnSceneLoad();
-            InteractionSecurity.OnSceneLoad();
+            if ((sceneName == "MainMenuScene")
+                || (sceneName == "LobbyScene"))
+            {
+                DoorSecurity.OnSceneLoad();
+                PhoneSecurity.OnSceneLoad();
+                InteractionSecurity.UpdateSettings();
+                ServerSecurity.OnSceneLoad();
+                TrashBinSecurity.OnSceneLoad();
+                KeySecurity.OnSceneLoad();
+                InteractionSecurity.OnSceneLoad();
+            }
 
             if (sceneName == "MainMenuScene") // Main Menu
             {
