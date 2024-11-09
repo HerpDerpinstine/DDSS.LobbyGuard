@@ -62,6 +62,7 @@ namespace DDSS_LobbyGuard
                 TrashBinSecurity.OnSceneLoad();
                 KeySecurity.OnSceneLoad();
                 InteractionSecurity.OnSceneLoad();
+                PlayerTriggerSecurity.OnSceneLoad();
             }
 
             if (sceneName == "MainMenuScene") // Main Menu

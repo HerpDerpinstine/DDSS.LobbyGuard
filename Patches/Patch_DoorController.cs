@@ -20,7 +20,12 @@ namespace DDSS_LobbyGuard.Patches
             int __0)
         {
             // Check for Lock
-            if (__instance.isLocked)
+            if (__instance.isLocked
+                && (__0 != 0))
+                return false;
+
+            // Check if already Open
+            if (__instance.Networkstate != 0)
                 return false;
 
             // Apply State

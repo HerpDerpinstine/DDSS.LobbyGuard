@@ -8,8 +8,7 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class DoorSecurity
     {
-        private const float _doorCloseInitialDelayMs = 2f;
-        private const float _doorCloseFinalDelayMs = 1f;
+        private const float _doorCloseDelay = 2f;
 
         private static Dictionary<DoorController, Coroutine> _doorStateCoroutines = new();
 
@@ -20,7 +19,6 @@ namespace DDSS_LobbyGuard.Security
         {
             if (_doorStateCoroutines.ContainsKey(door))
                 return;
-            door.StopAllCoroutines();
             _doorStateCoroutines[door] =
                 door.StartCoroutine(ApplyStateCoroutine(door, newState));
         }
@@ -29,7 +27,7 @@ namespace DDSS_LobbyGuard.Security
         {
             // Apply Open State
             door.Networkstate = newState;
-            yield return new WaitForSeconds(_doorCloseInitialDelayMs);
+            yield return new WaitForSeconds(_doorCloseDelay);
 
             // Wait for Player to get out of the way
             while (door.playerDetectionVolumeBackward.isPlayerInside
