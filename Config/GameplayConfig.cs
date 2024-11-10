@@ -56,7 +56,7 @@ namespace DDSS_LobbyGuard.Config
                 true);
 
             HideSlackersFromClients = CreatePref("HideSlackersFromClients",
-                "Hide Slackers From Clients",
+                "Hide Slackers from Clients",
                 "Prevents Slacker Count from being broadcasted to Clients",
                 false);
         }
