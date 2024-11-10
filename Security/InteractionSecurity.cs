@@ -3,6 +3,8 @@ using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using Il2CppTMPro;
+using Il2CppUI.Tabs.LobbyTab;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +13,7 @@ namespace DDSS_LobbyGuard.Security
     internal static class InteractionSecurity
     {
         private static Dictionary<LobbyPlayer, bool> _allSlackers = new();
+        private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
 
         internal const float MAX_DISTANCE = 2f;
         internal const float MAX_SPANK_DISTANCE = 1f;
@@ -34,7 +37,10 @@ namespace DDSS_LobbyGuard.Security
         internal static int MAX_PLAYERS { get; private set; }
 
         internal static void OnSceneLoad()
-            => _allSlackers.Clear();
+        {
+            _allSlackers.Clear();
+            _allCharacterNames.Clear();
+        }
 
         internal static void UpdateSettings()
         {
@@ -63,6 +69,16 @@ namespace DDSS_LobbyGuard.Security
             if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
                 return;
             _allSlackers[player] = true;
+        }
+
+        internal static void AddLobbyUICharacterName(PlayerLobbyUI ui, TextMeshProUGUI text)
+            => _allCharacterNames[ui] = text;
+
+        internal static TextMeshProUGUI GetLobbyUICharacterName(PlayerLobbyUI ui)
+        {
+            if (_allCharacterNames.TryGetValue(ui, out var text))
+                return text;
+            return null;
         }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,

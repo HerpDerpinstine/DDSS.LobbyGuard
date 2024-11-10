@@ -17,6 +17,9 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(PlayerLobbyUI), nameof(PlayerLobbyUI.Start))]
         private static void Start_Postfix(PlayerLobbyUI __instance)
         {
+            if (__instance.playerName == null)
+                return;
+
             // Check Config
             if (ConfigHandler.Lobby.CharacterNamesInPlayerList.Value)
             {
@@ -28,6 +31,7 @@ namespace DDSS_LobbyGuard.Patches
                 TextMeshProUGUI characterName = characterNameObj.GetComponent<TextMeshProUGUI>();
                 characterName.text = __instance.lobbyPlayer.Networkusername;
                 characterName.color = Color.black;
+                InteractionSecurity.AddLobbyUICharacterName(__instance, characterName);
 
                 // Move characterName
                 Vector3 localPos = __instance.playerName.transform.localPosition;
@@ -37,6 +41,23 @@ namespace DDSS_LobbyGuard.Patches
                 // Move playerName
                 localPos.y = -7;
                 __instance.playerName.transform.localPosition = localPos;
+            }
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(PlayerLobbyUI), nameof(PlayerLobbyUI.Update))]
+        private static void Update_Postfix(PlayerLobbyUI __instance)
+        {
+            if (__instance.playerName == null)
+                return;
+
+            // Check Config
+            if (ConfigHandler.Lobby.CharacterNamesInPlayerList.Value)
+            {
+                TextMeshProUGUI characterName = InteractionSecurity.GetLobbyUICharacterName(__instance);
+                if ((characterName != null)
+                    && !characterName.WasCollected)
+                    characterName.text = __instance.lobbyPlayer.Networkusername;
             }
         }
 
