@@ -11,8 +11,8 @@ namespace DDSS_LobbyGuard.Config
         internal ConfigCategory()
         {
             string filePath = Path.Combine(MelonMain._userDataPath, "Config.cfg");
-            Category = MelonPreferences.CreateCategory(GetName(), GetDisplayName());
-            Category.IsHidden = true;
+            Category = MelonPreferences.CreateCategory(GetName(), GetDisplayName(), true, false);
+            Category.DestroyFileWatcher();
             Category.SetFilePath(filePath, true, false);
             CreatePreferences();
             Category.SaveToFile(false);

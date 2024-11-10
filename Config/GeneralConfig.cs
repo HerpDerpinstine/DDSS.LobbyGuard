@@ -6,7 +6,6 @@ namespace DDSS_LobbyGuard.Config
     {
         internal MelonPreferences_Entry<bool> PromptForUpdateAvailable;
         internal MelonPreferences_Entry<bool> PromptForInitializationError;
-        internal MelonPreferences_Entry<bool> ExtendedInviteCodes;
 
         internal override string GetName()
             => "General";
@@ -21,11 +20,6 @@ namespace DDSS_LobbyGuard.Config
             PromptForInitializationError = CreatePref("PromptForInitializationError",
                 "Prompt For Initialization Error",
                 "Shows a Prompt if an Initialization Error occurs",
-                true);
-
-            ExtendedInviteCodes = CreatePref("ExtendedInviteCodes",
-                "Extended Invite Codes",
-                "Extends your Lobby Invite Codes to 8 Alpha-Numeric Characters instead of 4 Alpha Characters",
                 true);
         }
     }

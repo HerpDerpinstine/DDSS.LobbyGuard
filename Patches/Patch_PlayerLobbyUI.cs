@@ -1,14 +1,45 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using Il2CppTMPro;
 using Il2CppUI.Tabs.LobbyTab;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
     [HarmonyPatch]
     internal class Patch_PlayerLobbyUI
     {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(PlayerLobbyUI), nameof(PlayerLobbyUI.Start))]
+        private static void Start_Postfix(PlayerLobbyUI __instance)
+        {
+            // Check Config
+            if (ConfigHandler.Lobby.CharacterNamesInPlayerList.Value)
+            {
+                // Clone playerName
+                GameObject characterNameObj = GameObject.Instantiate(__instance.playerName.gameObject, __instance.playerName.transform.parent);
+                characterNameObj.name = "CharacterName";
+
+                // Set characterName
+                TextMeshProUGUI characterName = characterNameObj.GetComponent<TextMeshProUGUI>();
+                characterName.text = __instance.lobbyPlayer.Networkusername;
+                characterName.color = Color.black;
+
+                // Move characterName
+                Vector3 localPos = __instance.playerName.transform.localPosition;
+                localPos.y = 7;
+                characterName.transform.localPosition = localPos;
+
+                // Move playerName
+                localPos.y = -7;
+                __instance.playerName.transform.localPosition = localPos;
+            }
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerLobbyUI), nameof(PlayerLobbyUI.KickPlayer))]
         private static bool KickPlayer_Prefix(PlayerLobbyUI __instance)

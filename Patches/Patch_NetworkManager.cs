@@ -14,7 +14,7 @@ namespace DDSS_LobbyGuard.Patches
         private static void StartHost_Prefix()
         {
             // Check if the setting is on
-            if (!ConfigHandler.General.ExtendedInviteCodes.Value)
+            if (!ConfigHandler.Lobby.ExtendedInviteCodes.Value)
                 return;
 
             // Check if already has Invite Code
