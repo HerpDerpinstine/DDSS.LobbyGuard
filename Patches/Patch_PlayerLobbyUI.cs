@@ -2,7 +2,6 @@
 using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2Cpp;
-using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppTMPro;
 using Il2CppUI.Tabs.LobbyTab;

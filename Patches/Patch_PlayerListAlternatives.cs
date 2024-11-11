@@ -26,16 +26,16 @@ namespace DDSS_LobbyGuard.Patches
             // Create View Profile Button
             __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("View Profile"), new Action(__instance.playerLobbyUI.ViewProfile));
 
+            // Create Mute Button
+            if (__instance.playerLobbyUI.lobbyPlayer.IsMuted())
+                __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Unmute"), new Action(__instance.playerLobbyUI.Unmute));
+            else
+                __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Mute"), new Action(__instance.playerLobbyUI.Mute));
+
             // Check for Host and Other Players
             bool isThisMe = __instance.playerLobbyUI.lobbyPlayer.isMine;
             if (areYouHosting && !isThisMe)
             {
-                // Create Mute Button
-                if (__instance.playerLobbyUI.lobbyPlayer.IsMuted())
-                    __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Unmute"), new Action(__instance.playerLobbyUI.Unmute));
-                else
-                    __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Mute"), new Action(__instance.playerLobbyUI.Mute));
-
                 // Create Kick Button
                 __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Kick"), new Action(__instance.playerLobbyUI.KickPlayer));
 
