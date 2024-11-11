@@ -4,8 +4,10 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppGameManagement;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using System;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -30,8 +32,11 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.DeserializeSyncVars))]
-        private static void DeserializeSyncVars_Prefix(LobbyPlayer __instance)
+        private static void DeserializeSyncVars_Prefix(LobbyPlayer __instance, NetworkReader __0, bool __1)
         {
+            if (__instance._Mirror_SyncVarHookDelegate_steamID == null)
+                __instance._Mirror_SyncVarHookDelegate_steamID = new Action<ulong, ulong>((ulong a, ulong b) => { });
+
             if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
                 return;
             if (!NetworkServer.activeHost)
@@ -50,8 +55,11 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.SerializeSyncVars))]
-        private static void SerializeSyncVars_Prefix(LobbyPlayer __instance)
+        private static void SerializeSyncVars_Prefix(LobbyPlayer __instance, NetworkWriter __0, bool __1)
         {
+            if (__instance._Mirror_SyncVarHookDelegate_steamID == null)
+                __instance._Mirror_SyncVarHookDelegate_steamID = new Action<ulong, ulong>((ulong a, ulong b) => { });
+
             if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
                 return;
             if (!NetworkServer.activeHost)
