@@ -7,6 +7,7 @@ using Il2CppGameManagement;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using Il2CppSteamworks;
 using System;
 
 namespace DDSS_LobbyGuard.Patches
@@ -31,12 +32,28 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.DeserializeSyncVars))]
-        private static void DeserializeSyncVars_Prefix(LobbyPlayer __instance, NetworkReader __0, bool __1)
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.VerifySteamId))]
+        private static bool VerifySteamId_Prefix(LobbyPlayer __instance, ulong __0, ulong __1)
         {
-            if (__instance._Mirror_SyncVarHookDelegate_steamID == null)
-                __instance._Mirror_SyncVarHookDelegate_steamID = new Action<ulong, ulong>((ulong a, ulong b) => { });
+            // Check for Host
+            if (!NetworkServer.activeHost)
+                return false;
 
+            // Convert ulong to CSteamID
+            CSteamID steamID_new = new(__1);
+
+            // Validate CSteamID
+            if (!steamID_new.IsValid())
+                __instance.connectionToClient.Disconnect();
+            
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.DeserializeSyncVars))]
+        private static void DeserializeSyncVars_Prefix(LobbyPlayer __instance)
+        {
             if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
                 return;
             if (!NetworkServer.activeHost)
@@ -55,11 +72,8 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.SerializeSyncVars))]
-        private static void SerializeSyncVars_Prefix(LobbyPlayer __instance, NetworkWriter __0, bool __1)
+        private static void SerializeSyncVars_Prefix(LobbyPlayer __instance)
         {
-            if (__instance._Mirror_SyncVarHookDelegate_steamID == null)
-                __instance._Mirror_SyncVarHookDelegate_steamID = new Action<ulong, ulong>((ulong a, ulong b) => { });
-
             if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
                 return;
             if (!NetworkServer.activeHost)
