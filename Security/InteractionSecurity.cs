@@ -59,6 +59,8 @@ namespace DDSS_LobbyGuard.Security
 
         internal static bool IsSlacker(LobbyPlayer player)
         {
+            if (player == null)
+                return false;
             if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
                 return player.NetworkplayerRole == PlayerRole.Slacker;
             return _allSlackers.ContainsKey(player);
@@ -66,6 +68,8 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void AddSlacker(LobbyPlayer player)
         {
+            if (player == null)
+                return;
             if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
                 return;
             _allSlackers[player] = true;
