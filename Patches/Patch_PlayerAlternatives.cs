@@ -31,22 +31,26 @@ namespace DDSS_LobbyGuard.Patches
             // Create View Profile Button
             __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("View Profile"), new Action(__instance.playerLobbyUI.ViewProfile));
 
-            // Create Mute/Unmute Button
-            //if (__instance.playerLobbyUI.lobbyPlayer.IsMuted())
-            //    __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Unmute"), new Action(() => TogglePlayerMute(__instance)));
-            //else
-            //    __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Mute"), new Action(() => TogglePlayerMute(__instance)));
-
-            // Check for Host and Other Players
+            // Check for Other Players
             bool isThisMe = __instance.playerLobbyUI.lobbyPlayer.isMine;
-            if (areYouHosting && !isThisMe)
+            if (!isThisMe)
             {
+                // Create Mute/Unmute Button
+                //if (__instance.playerLobbyUI.lobbyPlayer.IsMuted())
+                //    __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Unmute"), new Action(() => TogglePlayerMute(__instance)));
+                //else
+                //    __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Mute"), new Action(() => TogglePlayerMute(__instance)));
 
-                // Create Kick Button
-                __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Kick"), new Action(__instance.playerLobbyUI.KickPlayer));
+                // Check for Host and Other Players
+                if (areYouHosting)
+                {
 
-                // Create Blacklist Button
-                __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Blacklist"), new Action(__instance.playerLobbyUI.BlacklistPlayer));
+                    // Create Kick Button
+                    __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Kick"), new Action(__instance.playerLobbyUI.KickPlayer));
+
+                    // Create Blacklist Button
+                    __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Blacklist"), new Action(__instance.playerLobbyUI.BlacklistPlayer));
+                }
             }
 
             // Fix Panel Size
