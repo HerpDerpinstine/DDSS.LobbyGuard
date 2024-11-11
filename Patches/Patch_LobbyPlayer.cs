@@ -39,15 +39,8 @@ namespace DDSS_LobbyGuard.Patches
             if (!NetworkServer.activeHost)
                 return false;
 
-            // Convert ulong to CSteamID
-            CSteamID steamID_new = new(__1);
-
-            // Validate CSteamID
-            if (!steamID_new.IsValid())
-                __instance.connectionToClient.Disconnect();
-            
-            // Prevent Original
-            return false;
+            // Run Original
+            return true;
         }
 
         [HarmonyPrefix]
