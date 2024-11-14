@@ -11,7 +11,7 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(RemoteProcedureCalls), nameof(RemoteProcedureCalls.RegisterRpc))]
         private static void RegisterRpc_Prefix(string __1)
         {
-            RPCHelper.OnRegistered(__1);
+            RPCHelper.OnRegister(__1);
         }
     }
 }

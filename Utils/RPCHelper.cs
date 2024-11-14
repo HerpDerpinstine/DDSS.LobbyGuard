@@ -24,7 +24,7 @@ namespace DDSS_LobbyGuard.Utils
         internal static (string, int) Get(eType type)
             => _typeToQuery[type];
 
-        internal static void OnRegistered(string functionFullName)
+        internal static void OnRegister(string functionFullName)
         {
             foreach (var pair in _typeToQuery)
             {
