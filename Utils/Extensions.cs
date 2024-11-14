@@ -14,8 +14,6 @@ namespace DDSS_LobbyGuard.Utils
 {
     internal static class Extensions
     {
-        private static (string, int) SET_PLAYERROLE_RPC_INFO = ("System.Void Player.Lobby.LobbyPlayer::RpcSetPlayerRole(Player.Lobby.PlayerRole,System.Boolean)", 1020802784);
-
         private static Regex _rtRegex = new Regex("<.*?>", RegexOptions.Compiled);
 
         internal static string RemoveRichText(this string val)
@@ -66,25 +64,26 @@ namespace DDSS_LobbyGuard.Utils
         internal static void RpcSetPlayerRoleAll(this LobbyPlayer player, PlayerRole playerRole, bool giveNewTasks)
         {
             NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
+
             networkWriterPooled.WriteInt((int)playerRole);
             networkWriterPooled.WriteBool(giveNewTasks);
-            player.SendRPCInternal(
-                SET_PLAYERROLE_RPC_INFO.Item1,
-                SET_PLAYERROLE_RPC_INFO.Item2,
-                networkWriterPooled, 0, true);
+
+            var rpcInfo = RPCHelper.Get(RPCHelper.eType.LobbyPlayer_RpcSetPlayerRole);
+            player.SendRPCInternal(rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0, true);
+
             NetworkWriterPool.Return(networkWriterPooled);
         }
 
         internal static void RpcSetPlayerRoleSpecific(this LobbyPlayer player, NetworkConnectionToClient receipient, PlayerRole playerRole, bool giveNewTasks)
         {
             NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
+
             networkWriterPooled.WriteInt((int)playerRole);
             networkWriterPooled.WriteBool(giveNewTasks);
-            player.SendTargetRPCInternal(
-                receipient,
-                SET_PLAYERROLE_RPC_INFO.Item1,
-                SET_PLAYERROLE_RPC_INFO.Item2,
-                networkWriterPooled, 0);
+
+            var rpcInfo = RPCHelper.Get(RPCHelper.eType.LobbyPlayer_RpcSetPlayerRole);
+            player.SendTargetRPCInternal(receipient, rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0);
+
             NetworkWriterPool.Return(networkWriterPooled);
         }
     }
