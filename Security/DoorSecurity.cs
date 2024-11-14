@@ -17,8 +17,9 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void ApplyState(DoorController door, int newState)
         {
-            if (_doorStateCoroutines.ContainsKey(door))
-                return;
+            //if (_doorStateCoroutines.ContainsKey(door))
+            //    return;
+            door.StopAllCoroutines();
             _doorStateCoroutines[door] =
                 door.StartCoroutine(ApplyStateCoroutine(door, newState));
         }
