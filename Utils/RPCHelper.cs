@@ -19,10 +19,6 @@ namespace DDSS_LobbyGuard.Utils
         private static Dictionary<eType, (string, int)> _typeToQuery = new()
         {
             [eType.LobbyPlayer_RpcSetPlayerRole] = ("Player.Lobby.LobbyPlayer::RpcSetPlayerRole", 0),
-
-            [eType.ComputerController_RpcClick] = ("Computer.Scripts.System.ComputerController::RpcClick", 0),
-            [eType.ComputerController_RpcCursorUp] = ("Computer.Scripts.System.ComputerController::RpcCursorUp", 0),
-            [eType.ComputerController_RpcSyncCursor] = ("Computer.Scripts.System.ComputerController::RpcSyncCursor", 0),
         };
 
         internal static (string, int) Get(eType type)
