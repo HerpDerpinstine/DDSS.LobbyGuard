@@ -4,6 +4,7 @@ using DDSS_LobbyGuard.GUI;
 using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
+using Il2CppMirror;
 using Il2CppUMUI;
 using MelonLoader;
 using MelonLoader.Utils;
@@ -45,6 +46,10 @@ namespace DDSS_LobbyGuard
             // Apply Patches
             ApplyPatches();
             MakeModHelperAware();
+
+            // Prevent Exceptions from causing Disconnects
+            NetworkServer.exceptionsDisconnect = false;
+            NetworkClient.exceptionsDisconnect = false;
 
             // Log Success
             _logger.Msg("Initialized!");
