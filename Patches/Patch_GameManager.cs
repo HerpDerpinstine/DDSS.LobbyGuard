@@ -53,6 +53,7 @@ namespace DDSS_LobbyGuard.Patches
                 }
             }
 
+            // Run Original
             return true;
         }
 
@@ -60,17 +61,14 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.ServerFirePlayer))]
         private static bool ServerFirePlayer_Prefix(
             GameManager __instance,
-            NetworkIdentity __0, // player
-            bool __1, // onlyDemoteOrFire
-            bool __2) // resetDesk
+            NetworkIdentity __0) // player
         {
             // Get LobbyPlayer
             LobbyPlayer player = __0.GetComponent<LobbyPlayer>();
             if (player == null)
-                return false;
-            if (player.NetworkisFired
-                && (player.NetworkplayerRole != PlayerRole.Janitor))
-                return false;
+                return true;
+            if (player.NetworkisFired)
+                return true;
 
             // Send Role
             if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
@@ -82,35 +80,8 @@ namespace DDSS_LobbyGuard.Patches
                 player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
             }
 
-            if (__instance.isServer)
-                VoteBoxController.instance.ServerResetVote();
-
-            __instance.RpcResetTerminationTimer(__instance.terminationMaxTime);
-
-            if (!__1)
-                __instance.ServerFinnishMeeting();
-
-            var janitorList = LobbyManager.instance.GetJanitorPlayers();
-            bool flag = !player.NetworkisFired
-                && (player.NetworkplayerRole != PlayerRole.Janitor)
-                && (__instance.NetworkjanitorAmount > 0)
-                && (janitorList.Count < __instance.NetworkjanitorAmount);
-
-            if (__2)
-                player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
-
-            player.RpcFirePlayer(true, !flag, player.NetworkplayerRole);
-
-            if (flag)
-                player.ServerSetPlayerRole(PlayerRole.Janitor);
-
-            player.NetworkisFired = true;
-
-            if (!__1 && (InteractionSecurity.GetWinner(__instance) != PlayerRole.None))
-                __instance.EndGameIfFinished();
-
-            // Prevent Original
-            return false;
+            // Run Original
+            return true;
         }
 
         [HarmonyPrefix]
