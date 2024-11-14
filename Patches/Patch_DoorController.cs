@@ -7,6 +7,7 @@ using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -14,11 +15,24 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_DoorController
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.Start))]
+        private static void Start_Prefix(DoorController __instance)
+        {
+            // Fix Colliders
+            DoorSecurity.FixColliderSize(__instance.playerDetectionVolumeForward);
+            DoorSecurity.FixColliderSize(__instance.playerDetectionVolumeBackward);
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetDoorState__Int32))]
         private static bool UserCode_CmdSetDoorState__Int32_Prefix(
             DoorController __instance,
             int __0)
         {
+            // Check for Open Request
+            if (__0 == 0)
+                return false;
+
             // Check for Lock
             if (__instance.isLocked
                 && (__0 != 0))

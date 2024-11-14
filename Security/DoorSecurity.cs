@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Utils;
 using Il2Cpp;
+using Il2CppProps.Door;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Security
@@ -10,18 +10,10 @@ namespace DDSS_LobbyGuard.Security
     {
         private const float _doorCloseDelay = 2f;
 
-        private static Dictionary<DoorController, Coroutine> _doorStateCoroutines = new();
-
-        internal static void OnSceneLoad()
-            => _doorStateCoroutines.Clear();
-
         internal static void ApplyState(DoorController door, int newState)
         {
-            //if (_doorStateCoroutines.ContainsKey(door))
-            //    return;
             door.StopAllCoroutines();
-            _doorStateCoroutines[door] =
-                door.StartCoroutine(ApplyStateCoroutine(door, newState));
+            door.StartCoroutine(ApplyStateCoroutine(door, newState));
         }
 
         private static IEnumerator ApplyStateCoroutine(DoorController door, int newState)
@@ -37,10 +29,27 @@ namespace DDSS_LobbyGuard.Security
 
             // Apply Closed State
             door.Networkstate = 0;
+        }
 
-            // Remove Coroutine from Cache
-            if (_doorStateCoroutines.ContainsKey(door))
-                _doorStateCoroutines.Remove(door);
+        internal static void FixColliderSize(PlayerDetectionVolume volume)
+        {
+            if ((volume == null)
+                && volume.WasCollected)
+                return;
+
+            BoxCollider collider = volume.GetComponent<BoxCollider>();
+            if ((collider == null)
+                || collider.WasCollected)
+                return;
+
+            Vector3 size = collider.size;
+            if (size.x < 0.5f)
+                size.x = 0.5f;
+            if (size.y < 0.5f)
+                size.y = 0.5f;
+            if (size.z < 0.5f)
+                size.z = 0.5f;
+            collider.size = size;
         }
     }
 }
