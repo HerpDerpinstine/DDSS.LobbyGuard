@@ -49,7 +49,7 @@ namespace DDSS_LobbyGuard.Patches
                 {
                     player.NetworkplayerRole = PlayerRole.Slacker;
                     player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
-                    player.RpcSetPlayerRoleAll(PlayerRole.Slacker, false);
+                    player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
                 }
             }
 
@@ -79,7 +79,7 @@ namespace DDSS_LobbyGuard.Patches
             {
                 player.NetworkplayerRole = PlayerRole.Slacker;
                 player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
-                player.RpcSetPlayerRoleAll(PlayerRole.Slacker, false);
+                player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
             }
 
             if (__instance.isServer)

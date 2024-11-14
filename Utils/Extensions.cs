@@ -1,7 +1,5 @@
 ﻿using DDSS_LobbyGuard.Components;
-using DDSS_LobbyGuard.Security;
 using Il2Cpp;
-using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
@@ -61,7 +59,7 @@ namespace DDSS_LobbyGuard.Utils
             return isAllOrganized;
         }
 
-        internal static void RpcSetPlayerRoleAll(this LobbyPlayer player, PlayerRole playerRole, bool giveNewTasks)
+        internal static void CustomRpcSetPlayerRole(this LobbyPlayer player, PlayerRole playerRole, bool giveNewTasks, NetworkConnectionToClient receipient = null)
         {
             NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
 
@@ -69,20 +67,10 @@ namespace DDSS_LobbyGuard.Utils
             networkWriterPooled.WriteBool(giveNewTasks);
 
             var rpcInfo = RPCHelper.Get(RPCHelper.eType.LobbyPlayer_RpcSetPlayerRole);
-            player.SendRPCInternal(rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0, true);
-
-            NetworkWriterPool.Return(networkWriterPooled);
-        }
-
-        internal static void RpcSetPlayerRoleSpecific(this LobbyPlayer player, NetworkConnectionToClient receipient, PlayerRole playerRole, bool giveNewTasks)
-        {
-            NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
-
-            networkWriterPooled.WriteInt((int)playerRole);
-            networkWriterPooled.WriteBool(giveNewTasks);
-
-            var rpcInfo = RPCHelper.Get(RPCHelper.eType.LobbyPlayer_RpcSetPlayerRole);
-            player.SendTargetRPCInternal(receipient, rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0);
+            if (receipient == null)
+                player.SendRPCInternal(rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0, true);
+            else
+                player.SendTargetRPCInternal(receipient, rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0);
 
             NetworkWriterPool.Return(networkWriterPooled);
         }

@@ -100,7 +100,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Send Real Role to Player
             InteractionSecurity.AddSlacker(__instance);
-            __instance.RpcSetPlayerRoleSpecific(__instance.connectionToClient, __0, true);
+            __instance.CustomRpcSetPlayerRole(__0, true, __instance.connectionToClient);
 
             // Check to Fake for All
             //if (!GameManager.instance.slackersCanSeeSlackers)
@@ -110,7 +110,7 @@ namespace DDSS_LobbyGuard.Patches
                     if ((networkConnectionToClient != null)
                         && !networkConnectionToClient.WasCollected
                         && (networkConnectionToClient.connectionId != __instance.connectionToClient.connectionId))
-                        __instance.RpcSetPlayerRoleSpecific(networkConnectionToClient, PlayerRole.Specialist, false);
+                        __instance.CustomRpcSetPlayerRole(PlayerRole.Specialist, false, networkConnectionToClient);
             //}
             //else
             //{
@@ -125,15 +125,15 @@ namespace DDSS_LobbyGuard.Patches
             //                || (player.NetworkplayerRole == PlayerRole.Slacker))
             //            {
                             // Send __instance Role -> player
-            //                __instance.RpcSetPlayerRoleSpecific(networkConnectionToClient, PlayerRole.Slacker, false);
+            //                __instance.RpcSetPlayerRoleSpecific(PlayerRole.Slacker, false, networkConnectionToClient);
 
                             // Send player Role -> __instance
-            //                player.RpcSetPlayerRoleSpecific(__instance.connectionToClient, PlayerRole.Slacker, false);
+            //                player.RpcSetPlayerRoleSpecific(PlayerRole.Slacker, false, __instance.connectionToClient);
             //            }
             //            else
             //            {
                             // Send __instance Fake Role -> player
-            //                __instance.RpcSetPlayerRoleSpecific(networkConnectionToClient, PlayerRole.Specialist, false);
+            //                __instance.RpcSetPlayerRoleSpecific(PlayerRole.Specialist, false, networkConnectionToClient);
             //            }
             //        }
             //}
