@@ -16,10 +16,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -31,14 +27,14 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Read Button
-            __1.ReadVector3();
+            Vector3 clickpos = __1.ReadVector3();
             int buttonId = __1.ReadInt();
             if ((buttonId < 0)
                 || (buttonId > 1))
                 return false;
 
             // Run Game Command
-            controller.UserCode_CmdClick__Vector3__Int32(controller.cursor.localPosition, buttonId);
+            controller.UserCode_CmdClick__Vector3__Int32(clickpos, buttonId);
 
             // Prevent Original
             return false;
@@ -48,12 +44,9 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdCursorUp__Vector3))]
         private static bool InvokeUserCode_CmdCursorUp__Vector3_Prefix(
             NetworkBehaviour __0,
+            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -64,8 +57,11 @@ namespace DDSS_LobbyGuard.Patches
             if (!ComputerSecurity.ValidatePlayer(controller, sender))
                 return false;
 
+            // Read Button
+            Vector3 clickpos = __1.ReadVector3();
+
             // Run Game Command
-            controller.UserCode_CmdCursorUp__Vector3(controller.cursor.localPosition);
+            controller.UserCode_CmdCursorUp__Vector3(clickpos);
 
             // Prevent Original
             return false;
@@ -78,10 +74,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -118,10 +110,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -137,7 +125,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             controller.UserCode_CmdSyncCursor__Vector3(cursorPos);
-            controller.cursor.localPosition = cursorPos;
 
             // Prevent Original
             return false;
