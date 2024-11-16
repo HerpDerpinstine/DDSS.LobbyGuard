@@ -54,7 +54,7 @@ namespace DDSS_LobbyGuard.Config
 
             ProductivityFromTaskCompletion = CreatePref("ProductivityFromTaskCompletion",
                 "Productivity from Task Completion",
-                "Allows Productivity from being Gained from Task Completion",
+                "Allows Productivity to be Gained from Task Completion",
                 true);
 
             PlayerVelocityEnforcement = CreatePref("PlayerVelocityEnforcement",
