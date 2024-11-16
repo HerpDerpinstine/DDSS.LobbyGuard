@@ -122,7 +122,7 @@ namespace DDSS_LobbyGuard.Patches
 
         private static IEnumerator CoroutineAddProductivityFromTaskCompletion(GameManager manager, LobbyPlayer player)
         {
-            if (manager.delayedScoreOnSlackerTasks)
+            if (manager.NetworkdelayedScoreOnSlackerTasks)
                 yield return new WaitForSeconds(Random.Range(0f, 30f));
 
             if ((manager != null)
@@ -134,11 +134,11 @@ namespace DDSS_LobbyGuard.Patches
             {
                 float num = 0f;
                 if (InteractionSecurity.IsSlacker(player))
-                    num = manager.productivityPerSlackerTask / InteractionSecurity.GetAmountOfUnfiredSlackers(LobbyManager.instance);
+                    num = manager.NetworkproductivityPerSlackerTask / InteractionSecurity.GetAmountOfUnfiredSlackers(LobbyManager.instance);
                 else if (player.NetworkplayerRole == PlayerRole.Specialist)
-                    num = manager.productivityPerSpecialistTask / InteractionSecurity.GetAmountOfUnfiredSpecialists(LobbyManager.instance);
+                    num = manager.NetworkproductivityPerSpecialistTask / InteractionSecurity.GetAmountOfUnfiredSpecialists(LobbyManager.instance);
                 else if (player.NetworkplayerRole == PlayerRole.Manager)
-                    num = manager.productivityPerManagerTask;
+                    num = manager.NetworkproductivityPerManagerTask;
 
                 manager.productivity += num;
             }
