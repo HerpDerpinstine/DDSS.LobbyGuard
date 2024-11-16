@@ -74,5 +74,16 @@ namespace DDSS_LobbyGuard.Utils
 
             NetworkWriterPool.Return(networkWriterPooled);
         }
+
+        internal static LobbyPlayer GetLobbyPlayerFromConnection(this NetworkConnectionToClient connection)
+        {
+            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
+            {
+                LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
+                if (player.connectionToClient == connection)
+                    return player;
+            }
+            return null;
+        }
     }
 }

@@ -101,11 +101,10 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
+            LobbyPlayer player = __2.GetLobbyPlayerFromConnection();
 
             // Run Game Command
-            if (player != null)
-                manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, player));
+            manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, player));
 
             // Prevent Original
             return false;
@@ -115,8 +114,6 @@ namespace DDSS_LobbyGuard.Patches
         {
             if (manager.delayedScoreOnSlackerTasks)
                 yield return new WaitForSeconds(Random.Range(0f, 30f));
-            if (player == null)
-                yield break;
 
             float num = 0f;
             if (InteractionSecurity.IsSlacker(player))
