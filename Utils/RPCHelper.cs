@@ -10,10 +10,6 @@ namespace DDSS_LobbyGuard.Utils
             NONE,
 
             LobbyPlayer_RpcSetPlayerRole,
-
-            ComputerController_RpcClick,
-            ComputerController_RpcCursorUp,
-            ComputerController_RpcSyncCursor,
         }
 
         private static Dictionary<eType, (string, int)> _typeToQuery = new()
