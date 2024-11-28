@@ -57,10 +57,10 @@ namespace DDSS_LobbyGuard.Config
                 "Allows Productivity to be Gained from Task Completion",
                 true);
 
-            PlayerVelocityEnforcement = CreatePref("PlayerVelocityEnforcement",
-                "Player Velocity Enforcement",
+            PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",
+                "Enforce Player Velocity",
                 "Prevents Speedhacking using Context-Based Velocity Clamping",
-                true);
+                false);
 
             HideSlackersFromClients = CreatePref("HideSlackersFromClients",
                 "Hide Slackers from Clients",

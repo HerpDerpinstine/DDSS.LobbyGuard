@@ -43,7 +43,7 @@ namespace DDSS_LobbyGuard.GUI
             // Apply New Tab
             UiTab newTab = _newPanel.GetComponent<UiTab>();
             newTab.InitTab();
-            UIManager.instance.tabs[Properties.BuildInfo.Name] = newTab;
+            UIManager.instance.tabs["LobbyGuardSettings"] = newTab;
             MenuTab[] mainMenuTabs = Resources.FindObjectsOfTypeAll<MenuTab>();
             if (tabs.Length > 0)
                 foreach (MenuTab tab in mainMenuTabs)
