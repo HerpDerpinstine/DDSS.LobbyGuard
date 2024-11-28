@@ -15,6 +15,13 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.ServerCall))]
         private static bool ServerCall_Prefix(PhoneManager __instance, string __0, string __1)
         {
+            // Validate Input
+            if (string.IsNullOrEmpty(__0)
+                || string.IsNullOrWhiteSpace(__0)
+                || string.IsNullOrEmpty(__1)
+                || string.IsNullOrWhiteSpace(__1))
+                return false;
+
             // Prevent Calling Self
             if (__0 == __1)
                 return false;
@@ -35,16 +42,23 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Phone
             PhoneManager phone = __0.TryCast<PhoneManager>();
+            if ((phone == null)
+                || phone.WasCollected)
+                return false;
 
             // Get and Ignore User Input Receiver
             string receiver = __1.ReadString();
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return false;
 
             // Check for Server
             if (!__2.identity.isServer)
             {
                 // Get Player
                 LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
-                if (player == null)
+                if ((player == null)
+                    || player.WasCollected)
                     return false;
 
                 // Validate Sender is on Workstation
@@ -63,10 +77,16 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Enforce Receiver Number
                 receiver = phone.GetPhoneNumber(player);
+                if (string.IsNullOrEmpty(receiver)
+                    || string.IsNullOrWhiteSpace(receiver))
+                    return false;
             }
 
             // Get New Caller
             string caller = __1.ReadString();
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
 
             // Run Security
             PhoneSecurity.OnCallAnswer(phone, caller, receiver);
@@ -84,9 +104,15 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Phone
             PhoneManager phone = __0.TryCast<PhoneManager>();
+            if ((phone == null)
+                || phone.WasCollected)
+                return false;
 
             // Get and Ignore User Input Caller
             string caller = __1.ReadString();
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
 
             // Check for Server
             if (!__2.identity.isServer)
@@ -112,10 +138,16 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Enforce Caller Number
                 caller = phone.GetPhoneNumber(player);
+                if (string.IsNullOrEmpty(caller)
+                    || string.IsNullOrWhiteSpace(caller))
+                    return false;
             }
 
             // Get New Receiver
             string receiver = __1.ReadString();
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return false;
 
             // Run Security
             PhoneSecurity.OnCallCancel(phone, receiver, caller);
@@ -134,9 +166,15 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Phone
             PhoneManager phone = __0.TryCast<PhoneManager>();
+            if ((phone == null)
+                || phone.WasCollected)
+                return false;
 
             // Get and Ignore User Input Receiver
             string receiver = __1.ReadString();
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return false;
 
             // Check for Server
             if (!__2.identity.isServer)
@@ -162,10 +200,16 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Enforce Receiver Number
                 receiver = phone.GetPhoneNumber(player);
+                if (string.IsNullOrEmpty(receiver)
+                    || string.IsNullOrWhiteSpace(receiver))
+                    return false;
             }
 
             // Get New Caller
             string caller = __1.ReadString();
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
 
             // Run Security
             PhoneSecurity.OnCallEnd(phone, caller, receiver);
@@ -184,10 +228,16 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Phone
             PhoneManager phone = __0.TryCast<PhoneManager>();
+            if ((phone == null)
+                || phone.WasCollected)
+                return false;
 
             // Get and Ignore User Input Receiver
             string receiver = __1.ReadString();
-            
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return false;
+
             // Check for Server
             if (!__2.identity.isServer)
             {
@@ -212,10 +262,16 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Enforce Receiver Number
                 receiver = phone.GetPhoneNumber(player);
+                if (string.IsNullOrEmpty(receiver)
+                    || string.IsNullOrWhiteSpace(receiver))
+                    return false;
             }
 
             // Get New Caller
             string caller = __1.ReadString();
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
 
             // Run Security
             PhoneSecurity.OnCallDecline(phone, caller, receiver);
