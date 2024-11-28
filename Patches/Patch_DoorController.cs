@@ -18,6 +18,10 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.Start))]
         private static void Start_Prefix(DoorController __instance)
         {
+            if ((__instance == null)
+                || __instance.WasCollected)
+                return;
+
             // Fix Colliders
             DoorSecurity.FixColliderSize(__instance.playerDetectionVolumeForward);
             DoorSecurity.FixColliderSize(__instance.playerDetectionVolumeBackward);
