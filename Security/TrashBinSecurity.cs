@@ -1,4 +1,5 @@
 ﻿using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.TrashBin;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,16 @@ namespace DDSS_LobbyGuard.Security
             // Check for Already Running Coroutine
             if (_enableFireCoroutines.ContainsKey(trashcan))
                 trashcan.StopCoroutine(_enableFireCoroutines[trashcan]);
+
+            // Validate Role
+            if (state)
+            {
+                LobbyPlayer lobbyplayer = sender.GetComponent<LobbyPlayer>();
+                if ((lobbyplayer == null)
+                    || lobbyplayer.WasCollected
+                    || lobbyplayer.NetworkisFired)
+                    return;
+            }
 
             // Cache New Coroutine
             _enableFireCoroutines[trashcan] =
