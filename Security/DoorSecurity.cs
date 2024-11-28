@@ -12,23 +12,39 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void ApplyState(DoorController door, int newState)
         {
+            if ((door == null)
+                || door.WasCollected)
+                return;
+
             door.StopAllCoroutines();
             door.StartCoroutine(ApplyStateCoroutine(door, newState));
         }
 
         private static IEnumerator ApplyStateCoroutine(DoorController door, int newState)
         {
+            if ((door == null)
+                || door.WasCollected)
+                yield break;
+
             // Apply Open State
             door.Networkstate = newState;
             yield return new WaitForSeconds(_doorCloseDelay);
 
             // Wait for Player to get out of the way
-            while (door.playerDetectionVolumeBackward.isPlayerInside
-                || door.playerDetectionVolumeForward.isPlayerInside)
+            while ((door != null)
+                && !door.WasCollected
+                && (door.playerDetectionVolumeBackward != null)
+                && !door.playerDetectionVolumeBackward.WasCollected
+                && (door.playerDetectionVolumeForward != null)
+                && !door.playerDetectionVolumeForward.WasCollected
+                && (door.playerDetectionVolumeBackward.isPlayerInside
+                    || door.playerDetectionVolumeForward.isPlayerInside))
                 yield return null;
 
             // Apply Closed State
-            door.Networkstate = 0;
+            if ((door != null)
+                || !door.WasCollected)
+                door.Networkstate = 0;
         }
 
         internal static void FixColliderSize(PlayerDetectionVolume volume)
