@@ -7,6 +7,7 @@ using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
+using System;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
@@ -33,6 +34,8 @@ namespace DDSS_LobbyGuard.Patches
             DoorController __instance,
             int __0)
         {
+            __0 = Mathf.Clamp(__0, -1, 1);
+
             // Check for Open Request
             if (__0 == 0)
                 return false;
@@ -62,12 +65,23 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get DoorController
             DoorController door = __0.TryCast<DoorController>();
+            if ((door == null)
+                || door.WasCollected)
+                return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
 
             // Get State
-            __1.ReadNetworkIdentity();
+            try
+            {
+                __1.ReadNetworkIdentity();
+            }
+            catch
+            { }
             bool requestedState = __1.ReadBool();
             if (door.isLocked == requestedState)
                 return false;
@@ -81,13 +95,15 @@ namespace DDSS_LobbyGuard.Patches
             {
                 // Get Player
                 LobbyPlayer oldPlayer = sender.GetComponent<LobbyPlayer>();
-                if (oldPlayer == null)
+                if ((oldPlayer == null)
+                    || oldPlayer.WasCollected)
                     return false;
 
                 // Get DoorInteractable
                 DoorInteractable doorInteractable = door.GetComponentInChildren<DoorInteractable>();
-                if (doorInteractable == null)
-                    return false; 
+                if ((doorInteractable == null)
+                    || doorInteractable.WasCollected)
+                    return false;
 
                 // Validate Role
                 var role = oldPlayer.NetworkplayerRole;
@@ -98,6 +114,7 @@ namespace DDSS_LobbyGuard.Patches
                     // Validate Placement
                     Collectible collectible = sender.GetCurrentCollectible();
                     if ((collectible == null)
+                        || collectible.WasCollected
                         || (collectible.GetIl2CppType() != Il2CppType.Of<KeyController>()))
                         return false;
                 }
@@ -119,12 +136,18 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get DoorController
             DoorController door = __0.TryCast<DoorController>();
+            if ((door == null)
+                || door.WasCollected)
+                return false;
 
             // Get Requested Lock State
-            int stateIndex = __1.ReadInt();
+            int stateIndex = Mathf.Clamp(__1.ReadInt(), -1, 1);
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
