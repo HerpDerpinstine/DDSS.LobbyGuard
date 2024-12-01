@@ -177,7 +177,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Document from List
             Il2CppSystem.ValueTuple<string, string, InteractionAlternative>[] docs = binder.documents.ToArray();
-            Il2CppSystem.ValueTuple<string, string, InteractionAlternative> doc = docs.First(x => x.Item1 == documentName);
+            Il2CppSystem.ValueTuple<string, string, InteractionAlternative> doc = docs.FirstOrDefault(x => x.Item1 == documentName);
             if (doc == null)
                 return false;
 
