@@ -92,21 +92,16 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Get Lobby Player
-            LobbyPlayer player = __instance.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || player.WasCollected)
+            LobbyPlayer lobbyPlayer = __0.GetComponent<LobbyPlayer>();
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
                 return;
 
             // Validate Game State
             if (__instance.gameStarted)
             {
-                // Get PlayerController
-                PlayerController controller = __0.GetComponent<PlayerController>();
-                if (controller == null)
-                    return;
-
                 // Adjust Termination Offset
-                PlayerRole playerRole = controller.lobbyPlayer.NetworkplayerRole;
+                PlayerRole playerRole = lobbyPlayer.NetworkplayerRole;
                 if ((playerRole != PlayerRole.Manager)
                     && (playerRole != PlayerRole.Janitor)
                     && (GameManager.instance != null)
@@ -136,8 +131,11 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Remove Steam ID
-            if (!player.isLocalPlayer)
-                LobbySecurity.RemoveValidSteamID(player.steamID);
+            LobbyPlayer localPlayer = __instance.GetLocalPlayer();
+            if ((localPlayer != null)
+                && !localPlayer.WasCollected
+                && (localPlayer.steamID != lobbyPlayer.steamID))
+                LobbySecurity.RemoveValidSteamID(lobbyPlayer.steamID);
         }
 
         [HarmonyPrefix]
