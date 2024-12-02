@@ -88,48 +88,61 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Validate Server
             if (!__instance.isServer
-                || !__instance.gameStarted
                 || !NetworkServer.activeHost)
                 return;
 
-            // Get PlayerController
-            PlayerController controller = __0.GetComponent<PlayerController>();
-            if (controller == null)
+            // Get Lobby Player
+            LobbyPlayer player = __instance.GetComponent<LobbyPlayer>();
+            if ((player == null)
+                || player.WasCollected)
                 return;
 
-            // Adjust Termination Offset
-            PlayerRole playerRole = controller.lobbyPlayer.NetworkplayerRole;
-            if ((playerRole != PlayerRole.Manager)
-                && (playerRole != PlayerRole.Janitor)
-                && (GameManager.instance != null)
-                && !GameManager.instance.WasCollected)
+            // Validate Game State
+            if (__instance.gameStarted)
             {
-                // Get Original Count
-                int slackerCount = GameManager.instance.NetworkstartSlackers;
-                int specialistCount = GameManager.instance.NetworkstartSpecialists;
+                // Get PlayerController
+                PlayerController controller = __0.GetComponent<PlayerController>();
+                if (controller == null)
+                    return;
 
-                // Get Player Role
-                if (playerRole == PlayerRole.Slacker)
-                    slackerCount--;
-                else if (playerRole == PlayerRole.Specialist)
-                    specialistCount--;
+                // Adjust Termination Offset
+                PlayerRole playerRole = controller.lobbyPlayer.NetworkplayerRole;
+                if ((playerRole != PlayerRole.Manager)
+                    && (playerRole != PlayerRole.Janitor)
+                    && (GameManager.instance != null)
+                    && !GameManager.instance.WasCollected)
+                {
+                    // Get Original Count
+                    int slackerCount = GameManager.instance.NetworkstartSlackers;
+                    int specialistCount = GameManager.instance.NetworkstartSpecialists;
 
-                // Clamp Count
-                if (slackerCount < 0)
-                    slackerCount = 0;
-                if (specialistCount < 0)
-                    specialistCount = 0;
+                    // Get Player Role
+                    if (playerRole == PlayerRole.Slacker)
+                        slackerCount--;
+                    else if (playerRole == PlayerRole.Specialist)
+                        specialistCount--;
 
-                // Apply New Counts
-                //GameManager.instance.SetWinCondition(specialistCount, slackerCount);
-				GameManager.instance.NetworkstartSlackers = slackerCount;
-				GameManager.instance.NetworkstartSpecialists = specialistCount;
+                    // Clamp Count
+                    if (slackerCount < 0)
+                        slackerCount = 0;
+                    if (specialistCount < 0)
+                        specialistCount = 0;
+
+                    // Apply New Counts
+                    //GameManager.instance.SetWinCondition(specialistCount, slackerCount);
+                    GameManager.instance.NetworkstartSlackers = slackerCount;
+                    GameManager.instance.NetworkstartSpecialists = specialistCount;
+                }
+
+                // Drop It
+                foreach (Usable usable in controller.currentUsables)
+                    if (usable != null)
+                        usable.ServerStopUse(__0);
             }
 
-            // Drop It
-            foreach (Usable usable in controller.currentUsables)
-                if (usable != null)
-                    usable.ServerStopUse(__0);
+            // Remove Steam ID
+            if (!player.isLocalPlayer)
+                LobbySecurity.RemoveValidSteamID(player.steamID);
         }
 
         [HarmonyPrefix]

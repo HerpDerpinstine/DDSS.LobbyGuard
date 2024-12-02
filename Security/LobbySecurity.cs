@@ -6,7 +6,7 @@ namespace DDSS_LobbyGuard.Security
     {
         private static List<ulong> _validIds = new List<ulong>();
 
-        internal static void SceneLoad()
+        internal static void MainMenuInit()
             => _validIds.Clear();
 
         internal static bool IsSteamIDInUse(ulong steamID)
