@@ -6,6 +6,7 @@ using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using Il2CppSteamworks;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -35,6 +36,21 @@ namespace DDSS_LobbyGuard.Patches
             // Check for Host
             if (!NetworkServer.activeHost)
                 return false;
+
+            // Validate SteamID
+            CSteamID steamId = new(__1);
+            if (!steamId.IsValid())
+            {
+                __instance.connectionToClient.Disconnect();
+                return false;
+            }
+
+            // Player Check
+            if (LobbyManager.instance.steamIdsInLobby.Contains(steamId))
+            {
+                __instance.connectionToClient.Disconnect();
+                return false;
+            }
 
             // Run Original
             return true;
