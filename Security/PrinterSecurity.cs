@@ -17,11 +17,15 @@ namespace DDSS_LobbyGuard.Security
             // Parse Texture
             Texture2D _tempTexture = new(MAX_WIDTH, MAX_HEIGHT);
 
-            Il2CppImageConversionManager.LoadImage(_tempTexture, bytes);
-
             // Validate
-            bool returnVal = VerifyImage(printer, _tempTexture);
+            bool returnVal = Il2CppImageConversionManager.LoadImage(_tempTexture, bytes);
+            if (returnVal)
+                returnVal = VerifyImage(printer, _tempTexture);
+
+            // Destroy Texture
             GameObject.Destroy(_tempTexture);
+
+            // Return Result
             return returnVal;
         }
 
