@@ -27,7 +27,12 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
-            if (collectible == null)
+            if ((collectible == null)
+                || collectible.WasCollected)
+                return false;
+
+            // Validate Holder
+            if (!CollectibleHolderSecurity.CanPlace(holder, collectible))
                 return false;
 
             // Validate Free Slots
@@ -84,7 +89,12 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
-            if (collectible == null)
+            if ((collectible == null)
+                || collectible.WasCollected)
+                return false;
+
+            // Validate Holder
+            if (!CollectibleHolderSecurity.CanPlace(holder, collectible))
                 return false;
 
             // Run Game Command
@@ -125,7 +135,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Collectible
             Collectible collectible = collectibleIdentity.GetComponent<Collectible>();
-            if (collectible == null)
+            if ((collectible == null)
+                || collectible.WasCollected)
                 return false;
 
             // Validate Collectible
