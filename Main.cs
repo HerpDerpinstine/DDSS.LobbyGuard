@@ -72,7 +72,7 @@ namespace DDSS_LobbyGuard
             if (sceneName == "MainMenuScene") // Main Menu
             {
                 MainMenuPanelBuilder.MainMenuInit();
-                LobbySecurity.MainMenuInit();
+                LobbySecurity.OnSceneLoad();
 
                 if (_firstMenuLoad)
                 {

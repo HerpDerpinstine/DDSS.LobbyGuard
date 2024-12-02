@@ -133,11 +133,6 @@ namespace DDSS_LobbyGuard.Patches
                     GameManager.instance.NetworkstartSlackers = slackerCount;
                     GameManager.instance.NetworkstartSpecialists = specialistCount;
                 }
-
-                // Drop It
-                foreach (Usable usable in controller.currentUsables)
-                    if (usable != null)
-                        usable.ServerStopUse(__0);
             }
 
             // Remove Steam ID
