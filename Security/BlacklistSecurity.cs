@@ -57,7 +57,6 @@ namespace DDSS_LobbyGuard.Security
                 Name = name
             });
             SaveFile();
-            MelonMain._logger.Msg($"Blacklisted Player: {steamId} - {name}");
         }
 
         internal static void SaveFile()
@@ -86,7 +85,7 @@ namespace DDSS_LobbyGuard.Security
                 ApplyBlacklist(player);
         }
 
-        private static void ApplyKick(LobbyPlayer player)
+        private static void ApplyKick(LobbyPlayer player, bool isBlacklist = false)
         {
             // Force-Disconnect
             if ((player != null)
@@ -94,7 +93,11 @@ namespace DDSS_LobbyGuard.Security
                 && (player.connectionToClient != null)
                 && !player.connectionToClient.WasCollected
                 && (player.connectionToClient is not LocalConnectionToClient))
+            {
                 player.connectionToClient.Disconnect();
+                if (!isBlacklist)
+                    MelonMain._logger.Msg($"Kicked Player: {player.steamUsername} - {player.Networkusername} - {player.steamID}");
+            }
         }
 
         private static void ApplyBlacklist(LobbyPlayer player)
@@ -108,7 +111,8 @@ namespace DDSS_LobbyGuard.Security
                 // Blacklist Player
                 OnBlacklistPlayer(player.steamID, player.steamUsername);
                 LobbyManager.instance.blacklist.Add(player.steamID);
-                ApplyKick(player);
+                ApplyKick(player, true);
+                MelonMain._logger.Msg($"Blacklisted Player: {player.steamUsername} - {player.Networkusername} - {player.steamID}");
             }
         }
     }
