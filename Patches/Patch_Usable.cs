@@ -93,6 +93,7 @@ namespace DDSS_LobbyGuard.Patches
             {
                 // Check for Handshake
                 if (!ConfigHandler.Gameplay.GrabbingWhileHandshaking.Value
+                    && (controller.NetworktargetUBState == (int)UpperBodyStates.RequestHandShake)
                     && (controller.NetworktargetUBState == (int)UpperBodyStates.PerformHandShake))
                     return false;
 
