@@ -44,7 +44,6 @@ namespace DDSS_LobbyGuard.Patches
                 // Check for Host and Other Players
                 if (areYouHosting)
                 {
-
                     // Create Kick Button
                     __instance.InstantiateButton(LocalizationManager.instance.GetLocalizedValue("Kick"), new Action(__instance.playerLobbyUI.KickPlayer));
 
@@ -62,10 +61,12 @@ namespace DDSS_LobbyGuard.Patches
             return false;
         }
 
+        /*
         private static void TogglePlayerMute(PlayerAlternatives alternatives)
         {
             alternatives.playerLobbyUI.lobbyPlayer.SetMuted(!alternatives.playerLobbyUI.lobbyPlayer.isMuted);
             alternatives.UpdateTab();
         }
+        */
     }
 }
