@@ -7,6 +7,7 @@ using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppSteamworks;
+using System.Collections.Generic;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -29,31 +30,25 @@ namespace DDSS_LobbyGuard.Patches
             __0 = __0.RemoveRichText();
         }
 
-        [HarmonyPrefix]
+        [HarmonyPostfix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.VerifySteamId))]
-        private static bool VerifySteamId_Prefix(LobbyPlayer __instance, ulong __0, ulong __1)
+        private static void VerifySteamId_Postfix(LobbyPlayer __instance, ulong __0, ulong __1)
         {
             // Check for Host
-            if (!NetworkServer.activeHost)
-                return false;
-
-            // Validate SteamID
-            CSteamID steamId = new(__1);
-            if (!steamId.IsValid())
-            {
-                __instance.connectionToClient.Disconnect();
-                return false;
-            }
+            if (!NetworkServer.activeHost
+                || !__instance.connectionToClient.isReady)
+                return;
 
             // Player Check
-            if (LobbyManager.instance.steamIdsInLobby.Contains(steamId))
+            if (LobbySecurity.IsSteamIDInUse(__1))
             {
                 __instance.connectionToClient.Disconnect();
-                return false;
+                return;
             }
 
-            // Run Original
-            return true;
+            // Add SteamID
+            LobbySecurity.RemoveValidSteamID(__0);
+            LobbySecurity.AddValidSteamID(__1);
         }
 
         [HarmonyPrefix]
