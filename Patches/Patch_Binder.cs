@@ -76,13 +76,15 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
             if ((collectible == null)
+                || collectible.WasCollected
                 || ((collectible.GetIl2CppType() != Il2CppType.Of<Document>())
                     && (collectible.GetIl2CppType() != Il2CppType.Of<PrintedImage>())))
                 return false;
 
             // Get Document
             Document doc = collectible.TryCast<Document>();
-            if (doc == null)
+            if ((doc == null)
+                || doc.WasCollected)
                 return false;
 
             // Validate Distance
@@ -123,13 +125,15 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
             if ((collectible == null)
+                || collectible.WasCollected
                 || ((collectible.GetIl2CppType() != Il2CppType.Of<Document>())
                     && (collectible.GetIl2CppType() != Il2CppType.Of<PrintedImage>())))
                 return false;
 
             // Get Document
             Document doc = collectible.TryCast<Document>();
-            if (doc == null)
+            if ((doc == null)
+                || doc.WasCollected)
                 return false;
 
             // Validate Distance
@@ -166,7 +170,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Collectible
             Collectible collectible = binder.documentPrefab.GetComponent<Collectible>();
-            if (collectible == null)
+            if ((collectible == null)
+                || collectible.WasCollected)
                 return false;
 
             // Get Document Name
@@ -178,7 +183,8 @@ namespace DDSS_LobbyGuard.Patches
             // Get Document from List
             Il2CppSystem.ValueTuple<string, string, InteractionAlternative>[] docs = binder.documents.ToArray();
             Il2CppSystem.ValueTuple<string, string, InteractionAlternative> doc = docs.FirstOrDefault(x => x.Item1 == documentName);
-            if (doc == null)
+            if ((doc == null)
+                || doc.WasCollected)
                 return false;
 
             // Run Game Command

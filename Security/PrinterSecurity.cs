@@ -14,16 +14,24 @@ namespace DDSS_LobbyGuard.Security
 
         internal static bool VerifyImage(Printer printer, Il2CppStructArray<byte> bytes)
         {
+            // Validate Byte Array
+            if ((bytes == null)
+                || bytes.WasCollected
+                || bytes.Count <= 0)
+                return false;
+
             // Parse Texture
             Texture2D _tempTexture = new(MAX_WIDTH, MAX_HEIGHT);
 
-            // Validate
+            // Load and Validate Texture
             bool returnVal = Il2CppImageConversionManager.LoadImage(_tempTexture, bytes);
             if (returnVal)
                 returnVal = VerifyImage(printer, _tempTexture);
 
             // Destroy Texture
-            GameObject.Destroy(_tempTexture);
+            if ((_tempTexture != null)
+                && !_tempTexture.WasCollected)
+                GameObject.Destroy(_tempTexture);
 
             // Return Result
             return returnVal;
@@ -32,7 +40,9 @@ namespace DDSS_LobbyGuard.Security
         internal static bool VerifyImage(Printer printer, Texture2D texture)
         {
             // Validate
-            if ((texture.width > MAX_WIDTH)
+            if ((texture == null)
+                || texture.WasCollected
+                || (texture.width > MAX_WIDTH)
                 || (texture.height > MAX_HEIGHT)
                 || !printer.VerifyImageColors(texture))
             {
