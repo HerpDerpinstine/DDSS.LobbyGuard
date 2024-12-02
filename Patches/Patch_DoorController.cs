@@ -85,6 +85,10 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
 
+            // Validate Lock Request
+            if (!door.PlayerCanChangeLockState(sender))
+                return false;
+
             // Check for Server
             if (!sender.isServer)
             {
