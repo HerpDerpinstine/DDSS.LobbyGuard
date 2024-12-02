@@ -6,8 +6,6 @@ using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
-using Il2CppSteamworks;
-using System.Collections.Generic;
 
 namespace DDSS_LobbyGuard.Patches
 {

@@ -5,6 +5,8 @@ using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
+using Il2CppPlayer.Lobby;
+using Il2CppPlayer.Tasks;
 using Il2CppProps.Scripts;
 using Il2CppProps.WorkStation.InfectedUSB;
 
@@ -51,6 +53,17 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Destroy Jelly
                 jelly.ServerDestroyCollectible();
+            }
+
+            // Manually Trigger Task Locally
+            if (sender.isLocalPlayer
+                && enabled)
+            {
+                // Get Workstation Owner and Trigger TaskHook
+                LobbyPlayer component = station.NetworkownerLobbyPlayer.GetComponent<LobbyPlayer>();
+                if ((component != null)
+                    && !component.WasCollected)
+                    TaskHook.TriggerTaskHookCommandStatic(new TaskHook(null, "Stapler", component.Networkusername, "Put in Jelly", null, null));
             }
 
             // Send RPC
