@@ -204,7 +204,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Role
-            SubRole requestedRole = (SubRole)__1.ReadInt();
+            SubRole requestedRole = (SubRole)__1.SafeReadInt();
             if (requestedRole == targetPlayer.NetworksubRole)
                 return false;
 

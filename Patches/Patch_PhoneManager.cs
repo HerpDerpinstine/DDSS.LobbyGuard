@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
@@ -47,7 +48,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get and Ignore User Input Receiver
-            string receiver = __1.ReadString();
+            string receiver = __1.SafeReadString();
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
                 return false;
@@ -83,7 +84,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Get New Caller
-            string caller = __1.ReadString();
+            string caller = __1.SafeReadString();
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller))
                 return false;
@@ -109,7 +110,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get and Ignore User Input Caller
-            string caller = __1.ReadString();
+            string caller = __1.SafeReadString();
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller))
                 return false;
@@ -144,7 +145,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Get New Receiver
-            string receiver = __1.ReadString();
+            string receiver = __1.SafeReadString();
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
                 return false;
@@ -171,7 +172,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get and Ignore User Input Receiver
-            string receiver = __1.ReadString();
+            string receiver = __1.SafeReadString();
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
                 return false;
@@ -206,7 +207,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Get New Caller
-            string caller = __1.ReadString();
+            string caller = __1.SafeReadString();
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller))
                 return false;
@@ -233,7 +234,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get and Ignore User Input Receiver
-            string receiver = __1.ReadString();
+            string receiver = __1.SafeReadString();
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
                 return false;
@@ -268,7 +269,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Get New Caller
-            string caller = __1.ReadString();
+            string caller = __1.SafeReadString();
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller))
                 return false;

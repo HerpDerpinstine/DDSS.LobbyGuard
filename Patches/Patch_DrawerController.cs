@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
@@ -51,8 +52,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Get State
-            __1.ReadNetworkIdentity();
-            bool requestedState = __1.ReadBool();
+            __1.SafeReadNetworkIdentity();
+            bool requestedState = __1.SafeReadBool();
             if (drawer.NetworkisOpen == requestedState)
                 return false;
 

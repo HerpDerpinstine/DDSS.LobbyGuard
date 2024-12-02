@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppGameManagement;
@@ -63,7 +64,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Value
-            bool state = __1.ReadBool();
+            bool state = __1.SafeReadBool();
             if (controller.NetworkisFirewallActive == state)
                 return false;
 

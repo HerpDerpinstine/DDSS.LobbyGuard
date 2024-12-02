@@ -65,7 +65,7 @@ namespace DDSS_LobbyGuard.Patches
                 return true;
 
             // Get Value
-            float amount = __1.ReadFloat();
+            float amount = __1.SafeReadFloat();
 
             // Get Mug
             Mug mug = __0.TryCast<Mug>();

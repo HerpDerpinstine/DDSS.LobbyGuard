@@ -88,7 +88,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.InvokeUserCode_CmdAddProductivityFromTaskCompletion__PlayerRole))]
         private static bool InvokeUserCode_CmdAddProductivityFromTaskCompletion__PlayerRole_Prefix(
             NetworkBehaviour __0,
-            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Validate

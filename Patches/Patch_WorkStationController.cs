@@ -27,8 +27,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Get Values
-            __1.ReadNetworkIdentity();
-            bool enabled = __1.ReadBool();
+            __1.SafeReadNetworkIdentity();
+            bool enabled = __1.SafeReadBool();
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(

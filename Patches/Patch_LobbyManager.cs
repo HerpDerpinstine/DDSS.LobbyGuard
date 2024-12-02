@@ -7,8 +7,6 @@ using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using System;
-using System.Collections;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -175,8 +173,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Get Message and Enforce Timestamp
-            __1.ReadNetworkIdentity();
-            string message = __1.ReadString();
+            __1.SafeReadNetworkIdentity();
+            string message = __1.SafeReadString();
 
             // Validate Message Text
             if (string.IsNullOrEmpty(message)

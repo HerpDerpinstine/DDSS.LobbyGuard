@@ -60,8 +60,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Document Content
             bool setLabel = true;
-            string fileName = __1.ReadString();
-            string documentContent = __1.ReadString().RemoveRichText();
+            string fileName = __1.SafeReadString();
+            string documentContent = __1.SafeReadString().RemoveRichText();
             if (!string.IsNullOrEmpty(fileName)
                 && !string.IsNullOrWhiteSpace(fileName))
             {
@@ -90,19 +90,36 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Create New Document Copy
-            Document docCopy = UnityEngine.Object.Instantiate(printer.documentPrefab,
+            GameObject docObj = GameObject.Instantiate(printer.documentPrefab.gameObject,
                 printer.printPos.position,
                 printer.printPos.rotation);
-            NetworkServer.Spawn(docCopy.gameObject);
+            if ((docObj == null)
+                || docObj.WasCollected)
+                return false;
+
+            // Get New Document
+            Document docCopy = docObj.GetComponent<Document>();
+            if ((docCopy == null)
+                || docCopy.WasCollected)
+                return false;
+
+            // Spawn the Object on the Server
+            NetworkServer.Spawn(docObj);
+
+            // Get New Label
             string newLabel = setLabel
-                ? (ConfigHandler.Gameplay.UsernamesOnPrintedDocuments.Value ? $"{userName.RemoveRichText()}'s Document" : "Document")
+                ? (ConfigHandler.Gameplay.UsernamesOnPrintedDocuments.Value ? $"{userName.RemoveRichText()}'s Document" : "Printed Document")
                 : fileName;
             if (newLabel == "SalesReport")
                 newLabel = "Sales Report";
-            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, newLabel);
+
+            // Apply Label and Text
             docCopy.SetLabel(newLabel);
             docCopy.SetText(documentContent);
             docCopy.SetName(setLabel ? newLabel : fileName);
+
+            // Place Document in Printer
+            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, newLabel);
 
             // Prevent Original
             return false;
@@ -153,7 +170,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Image Data
-            byte[] imageData = __1.ReadBytesAndSize();
+            byte[] imageData = __1.SafeReadBytesAndSize();
             if ((imageData == null)
                 || (imageData.Length <= 0))
                 return false;
@@ -163,13 +180,31 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Create New Document Copy
-            string documentName = (ConfigHandler.Gameplay.UsernamesOnPrintedImages.Value ? $"{userName.RemoveRichText()}'s Image" : "Image");
-            PrintedImage docCopy = GameObject.Instantiate<PrintedImage>(printer.printedImagePrefab,
+            GameObject imgObj = GameObject.Instantiate(printer.printedImagePrefab.gameObject,
                 printer.printPos.position, printer.printPos.rotation);
-            NetworkServer.Spawn(docCopy.gameObject);
-            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, documentName);
-            docCopy.SetLabel(documentName);
-            printer.RpcSetImage(docCopy.netIdentity, imageData);
+            if ((imgObj == null)
+                || imgObj.WasCollected)
+                return false;
+
+            // Get New Image
+            PrintedImage imgCopy = imgObj.GetComponent<PrintedImage>();
+            if ((imgCopy == null)
+                || imgCopy.WasCollected)
+                return false;
+
+            // Spawn the Object on the Server
+            NetworkServer.Spawn(imgObj);
+
+            // Get New Label
+            string newLabel = (ConfigHandler.Gameplay.UsernamesOnPrintedImages.Value ? $"{userName.RemoveRichText()}'s Image" : "Printed Image");
+
+            // Set Label and Image
+            imgCopy.SetLabel(newLabel);
+            imgCopy.SetName(imgCopy.interactableName);
+            printer.RpcSetImage(imgCopy.netIdentity, imageData);
+
+            // Place Image in Printer
+            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(imgCopy.netIdentity, newLabel);
 
             // Prevent Original
             return false;
@@ -203,7 +238,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
-            if (collectible == null)
+            if ((collectible == null)
+                || collectible.WasCollected)
                 return false;
 
             // Validate Type
@@ -211,32 +247,51 @@ namespace DDSS_LobbyGuard.Patches
             if (collectibleType == Il2CppType.Of<PrintedImage>())
             {
                 // Get Document
-                PrintedImage doc = collectible.TryCast<PrintedImage>();
-                if (doc == null)
+                PrintedImage img = collectible.TryCast<PrintedImage>();
+                if (img == null)
                     return false;
 
                 // Verify Image
-                if (!PrinterSecurity.VerifyImage(printer, doc))
+                if (!PrinterSecurity.VerifyImage(printer, img))
                     return false;
 
-                // Create New Document Copy
-                PrintedImage docCopy = GameObject.Instantiate<PrintedImage>(printer.printedImagePrefab,
+                // Create New Image Copy
+                GameObject imgObj = GameObject.Instantiate(printer.printedImagePrefab.gameObject,
                     printer.printPos.position, printer.printPos.rotation);
-                NetworkServer.Spawn(docCopy.gameObject);
-                printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, doc.label);
-                docCopy.SetName(doc.interactableName);
-                docCopy.SetLabel(doc.label);
-                printer.RpcSetImage(docCopy.netIdentity, doc.byteImg);
-                docCopy.Networksigned = doc.Networksigned;
-                docCopy.signed = doc.signed;
-                if ((docCopy.signedText != null)
-                    && !docCopy.signedText.WasCollected
-                    && (doc.signedText != null)
-                    && !doc.signedText.WasCollected)
+                if ((imgObj == null)
+                    || imgObj.WasCollected)
+                    return false;
+
+                // Get New Image
+                PrintedImage imgCopy = imgObj.GetComponent<PrintedImage>();
+                if ((imgCopy == null)
+                    || imgCopy.WasCollected)
+                    return false;
+
+                // Spawn the Object on the Server
+                NetworkServer.Spawn(imgObj);
+
+                // Set Label and Image
+                imgCopy.SetLabel(img.label);
+                imgCopy.SetName(img.interactableName);
+                printer.RpcSetImage(imgCopy.netIdentity, img.byteImg);
+
+                // Set Signed State
+                imgCopy.Networksigned = img.Networksigned;
+                imgCopy.signed = img.signed;
+
+                // Set Signed Text
+                if ((imgCopy.signedText != null)
+                    && !imgCopy.signedText.WasCollected
+                    && (img.signedText != null)
+                    && !img.signedText.WasCollected)
                 {
-                    docCopy.signedText.text = doc.signedText.text;
-                    docCopy.signedText.SetAllDirty();
+                    imgCopy.signedText.text = img.signedText.text;
+                    imgCopy.signedText.SetAllDirty();
                 }
+
+                // Place Image in Printer
+                printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(imgCopy.netIdentity, img.label);
             }
             else if (collectibleType == Il2CppType.Of<Document>())
             {
@@ -244,18 +299,34 @@ namespace DDSS_LobbyGuard.Patches
                 Document doc = collectible.TryCast<Document>();
                 if (doc == null)
                     return false;
-                
+
                 // Create New Document Copy
-                Document docCopy = UnityEngine.Object.Instantiate(printer.documentPrefab,
+                GameObject docObj = GameObject.Instantiate(printer.documentPrefab.gameObject,
                     printer.printPos.position,
                     printer.printPos.rotation);
+                if ((docObj == null)
+                    || docObj.WasCollected)
+                    return false;
+
+                // Get New Document
+                Document docCopy = docObj.GetComponent<Document>();
+                if ((docCopy == null)
+                    || docCopy.WasCollected)
+                    return false;
+
+                // Spawn the Object on the Server
                 NetworkServer.Spawn(docCopy.gameObject);
-                printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, doc.label);
+
+                // Set Label and Text
+                docCopy.SetLabel(doc.label);
                 docCopy.SetName(doc.interactableName);
                 docCopy.SetText(doc.contentText.text);
-                docCopy.SetLabel(doc.label);
+
+                // Set Signed State
                 docCopy.Networksigned = doc.Networksigned;
                 docCopy.signed = doc.signed;
+
+                // Set Signed Text
                 if ((docCopy.signedText != null)
                     && !docCopy.signedText.WasCollected
                     && (doc.signedText != null)
@@ -264,6 +335,9 @@ namespace DDSS_LobbyGuard.Patches
                     docCopy.signedText.text = doc.signedText.text;
                     docCopy.signedText.SetAllDirty();
                 }
+
+                // Place Image in Printer
+                printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, doc.label);
             }
 
             // Prevent Original

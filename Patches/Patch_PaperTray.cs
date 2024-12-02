@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
@@ -49,7 +50,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Value
-            string document = __1.ReadString();
+            string document = __1.SafeReadString();
             if (string.IsNullOrEmpty(document)
                 || string.IsNullOrWhiteSpace(document))
                 return false;

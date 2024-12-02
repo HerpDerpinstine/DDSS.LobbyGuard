@@ -46,7 +46,7 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Validate Message Text
-            string text = __1.ReadString();
+            string text = __1.SafeReadString();
             if (string.IsNullOrEmpty(text)
                 || string.IsNullOrWhiteSpace(text))
                 return false;

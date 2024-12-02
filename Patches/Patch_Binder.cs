@@ -170,7 +170,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Document Name
-            string documentName = __1.ReadString();
+            string documentName = __1.SafeReadString();
             if (string.IsNullOrEmpty(documentName)
                 || string.IsNullOrWhiteSpace(documentName))
                 return false;

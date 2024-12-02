@@ -13,7 +13,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String))]
         private static bool InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String_Prefix(
             NetworkBehaviour __0,
-            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Check for Server
@@ -121,8 +120,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Collectible NetworkIdentity
-            __1.ReadNetworkIdentity();
-            NetworkIdentity collectibleIdentity = __1.ReadNetworkIdentity();
+            __1.SafeReadNetworkIdentity();
+            NetworkIdentity collectibleIdentity = __1.SafeReadNetworkIdentity();
 
             // Get Collectible
             Collectible collectible = collectibleIdentity.GetComponent<Collectible>();

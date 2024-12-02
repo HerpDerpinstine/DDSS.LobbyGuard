@@ -76,13 +76,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get State
-            try
-            {
-                __1.ReadNetworkIdentity();
-            }
-            catch
-            { }
-            bool requestedState = __1.ReadBool();
+            __1.SafeReadNetworkIdentity();
+            bool requestedState = __1.SafeReadBool();
             if (door.isLocked == requestedState)
                 return false;
 
@@ -141,7 +136,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Requested Lock State
-            int stateIndex = Mathf.Clamp(__1.ReadInt(), -1, 1);
+            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
 
             // Get Sender
             NetworkIdentity sender = __2.identity;

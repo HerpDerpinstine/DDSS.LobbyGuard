@@ -52,8 +52,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Values
-            __1.ReadNetworkIdentity();
-            bool enabled = __1.ReadBool();
+            __1.SafeReadNetworkIdentity();
+            bool enabled = __1.SafeReadBool();
 
             // Validate TrashBin
             if (trashcan.isOnFire == enabled)

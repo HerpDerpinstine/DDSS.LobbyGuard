@@ -46,13 +46,13 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Effect
-            int effectValue = __1.ReadInt();
+            int effectValue = __1.SafeReadInt();
             if (!Enum.IsDefined(typeof(PlayerEffects), effectValue)
                 || (effectValue == controller.NetworktargetState))
                 return false;
 
             // Validate Duration
-            float duration = __1.ReadFloat();
+            float duration = __1.SafeReadFloat();
             if ((duration <= 0)
                 || (duration > 180))
                 return false;

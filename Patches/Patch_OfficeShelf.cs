@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
 using Il2CppProps;
@@ -15,22 +16,22 @@ namespace DDSS_LobbyGuard.Patches
         private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32_Prefix(NetworkReader __1, NetworkConnectionToClient __2)
         {
             // Get Document
-            string document = __1.ReadString();
+            string document = __1.SafeReadString();
             if (string.IsNullOrEmpty(document)
                 || string.IsNullOrWhiteSpace(document))
                 return false;
 
             // Get FileName
-            string fileName = __1.ReadString();
+            string fileName = __1.SafeReadString();
             if (string.IsNullOrEmpty(fileName)
                 || string.IsNullOrWhiteSpace(fileName))
                 return false;
 
             // Get Document Category
-            DocumentCategory documentCategory = (DocumentCategory)__1.ReadInt();
+            DocumentCategory documentCategory = (DocumentCategory)__1.SafeReadInt();
 
             // Get Binder
-            int binder = __1.ReadInt();
+            int binder = __1.SafeReadInt();
             if (binder < 0)
                 return false;
 

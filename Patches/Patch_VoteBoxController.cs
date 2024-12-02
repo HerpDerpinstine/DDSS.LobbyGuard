@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
@@ -28,8 +29,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Value
-            __1.ReadNetworkIdentity();
-            bool state = __1.ReadBool();
+            __1.SafeReadNetworkIdentity();
+            bool state = __1.SafeReadBool();
 
             // Run Game Command
             box.UserCode_CmdVote__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, state, __2);

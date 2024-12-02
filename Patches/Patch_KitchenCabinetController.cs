@@ -31,8 +31,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Index
-            __1.ReadNetworkIdentity();
-            int itemIndex = __1.ReadInt();
+            __1.SafeReadNetworkIdentity();
+            int itemIndex = __1.SafeReadInt();
 
             // Validate Index
             if ((itemIndex < 0)

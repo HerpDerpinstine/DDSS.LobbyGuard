@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppComputer.Scripts.System;
 using Il2CppMirror;
@@ -27,8 +28,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Read Button
-            Vector3 clickpos = __1.ReadVector3();
-            int buttonId = __1.ReadInt();
+            Vector3 clickpos = __1.SafeReadVector3();
+            int buttonId = __1.SafeReadInt();
             if ((buttonId < 0)
                 || (buttonId > 1))
                 return false;
@@ -58,7 +59,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Read Button
-            Vector3 clickpos = __1.ReadVector3();
+            Vector3 clickpos = __1.SafeReadVector3();
 
             // Run Game Command
             controller.UserCode_CmdCursorUp__Vector3(clickpos);
@@ -85,7 +86,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Read String
-            string keyCodeStr = __1.ReadString();
+            string keyCodeStr = __1.SafeReadString();
             if (string.IsNullOrEmpty(keyCodeStr)
                 || string.IsNullOrWhiteSpace(keyCodeStr))
                 return false;
@@ -121,7 +122,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Read Cursor Position
-            Vector3 cursorPos = __1.ReadVector3();
+            Vector3 cursorPos = __1.SafeReadVector3();
 
             // Run Game Command
             controller.UserCode_CmdSyncCursor__Vector3(cursorPos);

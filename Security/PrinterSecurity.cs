@@ -8,11 +8,15 @@ namespace DDSS_LobbyGuard.Security
     {
         private const int MAX_WIDTH = 87;
         private const int MAX_HEIGHT = 60;
+        
+        internal static bool VerifyImage(Printer printer, PrintedImage image)
+            => VerifyImage(printer, image.byteImg);
 
         internal static bool VerifyImage(Printer printer, Il2CppStructArray<byte> bytes)
         {
             // Parse Texture
             Texture2D _tempTexture = new(MAX_WIDTH, MAX_HEIGHT);
+
             Il2CppImageConversionManager.LoadImage(_tempTexture, bytes);
 
             // Validate
@@ -21,10 +25,6 @@ namespace DDSS_LobbyGuard.Security
             return returnVal;
         }
 
-        internal static bool VerifyImage(Printer printer, PrintedImage image)
-            => VerifyImage(printer, image.renderer.material.mainTexture);
-        internal static bool VerifyImage(Printer printer, Texture texture)
-            => VerifyImage(printer, texture.TryCast<Texture2D>());
         internal static bool VerifyImage(Printer printer, Texture2D texture)
         {
             // Validate

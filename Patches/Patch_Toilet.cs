@@ -12,7 +12,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(Toilet), nameof(Toilet.InvokeUserCode_CmdShit__NetworkIdentity))]
         private static bool InvokeUserCode_CmdShit__NetworkIdentity_Prefix(
             NetworkBehaviour __0,
-            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Get Toilet
