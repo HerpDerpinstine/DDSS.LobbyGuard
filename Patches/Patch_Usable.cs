@@ -115,6 +115,59 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
+
+            // Get Usable Type
+            Il2CppSystem.Type usableType = usable.GetIl2CppType();
+            if ((usableType == null)
+                || usableType.WasCollected)
+                return false;
+
+            // Check for StickyNoteController
+            if (usableType == Il2CppType.Of<StickyNoteController>())
+            {
+                // Get StickyNoteController
+                StickyNoteController stickyNote = usable.TryCast<StickyNoteController>();
+                if ((stickyNote != null)
+                    && !stickyNote.WasCollected)
+                {
+                    // Get Holder
+                    CollectibleHolder holder = stickyNote.currentHolder;
+                    if ((holder != null)
+                        && !holder.WasCollected)
+                    {
+                        // Get DoorInteractable
+                        DoorInteractable doorInteractable = holder.parentInteractable.TryCast<DoorInteractable>();
+                        if ((doorInteractable != null)
+                            && !doorInteractable.WasCollected)
+                        {
+                            // Get DoorController
+                            DoorController door = doorInteractable.doorController;
+                            if ((door == null)
+                                || door.WasCollected)
+                                return false;
+
+                            // Validate Door State
+                            if (!ConfigHandler.Gameplay.StickyNotesOnOpenDoors.Value
+                                && (door.Networkstate != 0))
+                                return false;
+                            if (!ConfigHandler.Gameplay.StickyNotesOnClosedDoors.Value
+                                && (door.Networkstate == 0))
+                                return false;
+                        }
+
+                        // Get PlayerInteractable
+                        PlayerInteractable playerInteractable = holder.parentInteractable.TryCast<PlayerInteractable>();
+                        if ((playerInteractable != null)
+                            && !playerInteractable.WasCollected)
+                        {
+                            // Validate Player
+                            if (!ConfigHandler.Gameplay.StickyNotesOnPlayers.Value)
+                                return false;
+                        }
+                    }
+                }
+            }
+
             // Run Game Command
             usable.UserCode_CmdUseNoTypeVerification__NetworkIdentity(sender);
 
