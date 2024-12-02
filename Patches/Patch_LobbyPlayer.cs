@@ -34,7 +34,10 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Check for Host
             if (!NetworkServer.activeHost
-                || !__instance.connectionToClient.isReady)
+                || (__instance.connectionToClient == null)
+                || __instance.connectionToClient.WasCollected
+                || !__instance.connectionToClient.isReady
+                || !__instance.connectionToClient.isAuthenticated)
                 return;
 
             // Player Check
