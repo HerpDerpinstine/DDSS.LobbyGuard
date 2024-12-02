@@ -17,6 +17,9 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
 
+        internal MelonPreferences_Entry<bool> GrabbingWhileEmoting;
+        internal MelonPreferences_Entry<bool> GrabbingWhileHandshaking;
+
         internal override string GetName()
             => "Gameplay";
 
@@ -65,6 +68,16 @@ namespace DDSS_LobbyGuard.Config
             HideSlackersFromClients = CreatePref("HideSlackersFromClients",
                 "Hide Slackers from Clients",
                 "Prevents Slacker Count from being broadcasted to Clients",
+                false);
+
+            GrabbingWhileEmoting = CreatePref("GrabbingWhileEmoting",
+                "Grabbing while Emoting",
+                "Allows the Grabbing of Usables while Emoting",
+                false);
+
+            GrabbingWhileHandshaking = CreatePref("GrabbingWhileHandshaking",
+                "Grabbing while Handshaking",
+                "Allows the Grabbing of Usables while Handshaking",
                 false);
         }
     }

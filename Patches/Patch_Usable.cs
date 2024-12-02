@@ -4,7 +4,9 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer;
 using Il2CppPlayer.Scripts;
+using Il2CppPlayer.StateMachineLogic;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
 
@@ -83,6 +85,27 @@ namespace DDSS_LobbyGuard.Patches
                         }
                     }
                 }
+            }
+            
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller != null)
+                && !controller.WasCollected)
+            {
+                // Check for Handshake
+                if (!ConfigHandler.Gameplay.GrabbingWhileHandshaking.Value
+                    && (controller.NetworktargetUBState == (int)UpperBodyStates.PerformHandShake))
+                    return false;
+
+                // Check for Emotes
+                if (!ConfigHandler.Gameplay.GrabbingWhileEmoting.Value
+                    && ((controller.NetworktargetState == (int)States.Dancing)
+                        || (controller.NetworktargetState == (int)States.Humping)
+                        || (controller.NetworktargetState == (int)States.Beg)
+                        || (controller.NetworktargetUBState == (int)UpperBodyStates.PoundChest)
+                        || (controller.NetworktargetUBState == (int)UpperBodyStates.Waving)
+                        || (controller.NetworktargetUBState == (int)UpperBodyStates.Clapping)
+                        || (controller.NetworktargetUBState == (int)UpperBodyStates.FacePalm)))
+                    return false;
             }
 
             // Run Game Command
