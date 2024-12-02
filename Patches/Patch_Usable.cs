@@ -115,7 +115,6 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
-
             // Get Usable Type
             Il2CppSystem.Type usableType = usable.GetIl2CppType();
             if ((usableType == null)
