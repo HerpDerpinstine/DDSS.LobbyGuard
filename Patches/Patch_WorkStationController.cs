@@ -48,10 +48,13 @@ namespace DDSS_LobbyGuard.Patches
                 Jelly jelly = collectible.TryCast<Jelly>();
                 if (jelly == null)
                     return false;
+
+                // Destroy Jelly
+                jelly.ServerDestroyCollectible();
             }
 
-            // Run Game Command
-            station.UserCode_CmdEnableJelly__NetworkIdentity__Boolean(sender, enabled);
+            // Send RPC
+            station.RPCEnableJelly(enabled);
 
             // Prevent Original
             return false;
