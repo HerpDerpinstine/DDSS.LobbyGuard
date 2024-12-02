@@ -75,6 +75,17 @@ namespace DDSS_LobbyGuard.Security
             _allSlackers[player] = true;
         }
 
+        internal static void RemoveSlacker(LobbyPlayer player)
+        {
+            if (player == null)
+                return;
+            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                return;
+            if (!_allSlackers.ContainsKey(player))
+                return;
+            _allSlackers.Remove(player);
+        }
+
         internal static void AddLobbyUICharacterName(PlayerLobbyUI ui, TextMeshProUGUI text)
             => _allCharacterNames[ui] = text;
 

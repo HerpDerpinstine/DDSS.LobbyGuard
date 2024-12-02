@@ -6,7 +6,9 @@ using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
+using Il2CppObjects.Scripts;
 using Il2CppPlayer.Lobby;
+using Il2CppPlayer.Tasks;
 using System.Collections;
 using UnityEngine;
 
@@ -58,16 +60,88 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.ReplaceManager))]
+        private static bool ReplaceManager_Prefix(GameManager __instance)
+        {
+            // Find New Manager
+            LobbyPlayer lobbyPlayer = __instance.FindNewManager();
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
+                return false;
+
+            // Get Old Manager
+            LobbyPlayer managerPlayer = LobbyManager.instance.GetManagerPlayer();
+
+            // Reset Old Manager
+            if ((managerPlayer != null)
+                && !managerPlayer.WasCollected)
+            {
+                if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
+                    && InteractionSecurity.IsSlacker(lobbyPlayer))
+                    managerPlayer.ServerSetPlayerRole(PlayerRole.Slacker);
+                else
+                    managerPlayer.ServerSetPlayerRole(lobbyPlayer.playerRole);
+            }
+
+            // Set New Manager
+            lobbyPlayer.ServerSetPlayerRole(PlayerRole.Manager);
+
+            // Apply Game Rule
+            bool flag = GameRulesSettingsManager.instance.GetSetting("Fire the old manager after vote") == 1f;
+            if ((managerPlayer != null)
+                && !managerPlayer.WasCollected)
+            {
+                if (flag)
+                {
+                    // Fire Old Manager
+                    __instance.ServerFirePlayer(managerPlayer.netIdentity, true, false);
+                    managerPlayer.NetworkisFired = true;
+                }
+                else
+                {
+                    // Assign Old Manager Workstation
+                    managerPlayer.ServerSetWorkStation(lobbyPlayer.NetworkworkStationController, managerPlayer.playerRole, false);
+
+                    // Reset Old Manager Tasks
+                    TaskController managerComponent = managerPlayer.GetComponent<TaskController>();
+                    if (managerComponent != null)
+                        managerComponent.RpcClearTaskQueue();
+                }
+            }
+
+            // Assign New Manager Workstation
+            lobbyPlayer.ServerSetWorkStation(__instance.managerWorkStationController, PlayerRole.Manager, flag);
+
+            // Reset New Manager Tasks
+            TaskController component = lobbyPlayer.GetComponent<TaskController>();
+            if (component != null)
+                component.RpcClearTaskQueue();
+
+            // Display New Roles
+            if ((managerPlayer != null)
+                && !managerPlayer.WasCollected)
+                __instance.RpcDisplayNewRoles(lobbyPlayer.netIdentity, managerPlayer.netIdentity);
+            else
+                __instance.RpcDisplayNewRoles(lobbyPlayer.netIdentity, null);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.ServerFirePlayer))]
         private static bool ServerFirePlayer_Prefix(
             GameManager __instance,
-            NetworkIdentity __0) // player
+            NetworkIdentity __0, // player
+            bool __1, // onlyDemoteOrFire
+            bool __2) // resetDesk
         {
             // Get LobbyPlayer
             LobbyPlayer player = __0.GetComponent<LobbyPlayer>();
             if (player == null)
                 return true;
-            if (player.NetworkisFired)
+            if (player.NetworkisFired
+                && (player.NetworkplayerRole != PlayerRole.Janitor))
                 return true;
 
             // Send Role
@@ -80,8 +154,45 @@ namespace DDSS_LobbyGuard.Patches
                 player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
             }
 
-            // Run Original
-            return true;
+            // Reset Vote
+            if (__instance.isServer)
+                VoteBoxController.instance.ServerResetVote();
+
+            // Reset Termination Timer
+            __instance.RpcResetTerminationTimer(__instance.terminationMaxTime);
+
+            // End Meeting
+            if (!__1)
+                __instance.ServerFinnishMeeting();
+
+            // Get Janitor Count
+            var janitorList = LobbyManager.instance.GetJanitorPlayers();
+            bool flag = !player.NetworkisFired
+                && (player.NetworkplayerRole != PlayerRole.Janitor)
+                && (__instance.NetworkjanitorAmount > 0)
+                && (janitorList.Count < __instance.NetworkjanitorAmount);
+
+            // Reset Workstation
+            if (__2)
+                player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
+
+            // Fire Player
+            player.RpcFirePlayer(true, !flag, player.NetworkplayerRole);
+
+            // Assign Janitor Role
+            if (flag)
+                player.ServerSetPlayerRole(PlayerRole.Janitor);
+
+            // Apply Fired State
+            player.NetworkisFired = true;
+
+            // End Match if Winner is Found
+            if (!__1
+                && (InteractionSecurity.GetWinner(__instance) != PlayerRole.None))
+                __instance.EndGameIfFinished();
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]

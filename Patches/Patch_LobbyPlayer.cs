@@ -91,9 +91,13 @@ namespace DDSS_LobbyGuard.Patches
 
             // Check for Slacker Role
             if (!NetworkServer.activeHost
-                || !__instance.isServer
-                || (__0 != PlayerRole.Slacker))
+                || !__instance.isServer)
                 return true;
+            if (__0 != PlayerRole.Slacker)
+            {
+                InteractionSecurity.RemoveSlacker(__instance);
+                return true;
+            }
 
             // Send Real Role to Player
             InteractionSecurity.AddSlacker(__instance);
