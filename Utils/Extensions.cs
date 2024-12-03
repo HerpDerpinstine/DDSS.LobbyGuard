@@ -47,8 +47,11 @@ namespace DDSS_LobbyGuard.Utils
         internal static bool IsPointing(this PlayerController player)
             => (player.NetworktargetUBState == (int)UpperBodyStates.Pointing);
 
-        internal static bool IsWaving(this PlayerController player)
-            => (player.NetworktargetUBState == (int)UpperBodyStates.Waving);
+        internal static bool IsRaisingHand(this PlayerController player)
+            => (player.NetworktargetUBState == (int)UpperBodyStates.RaiseHand);
+
+        internal static bool IsClapping(this PlayerController player)
+            => (player.NetworktargetUBState == (int)UpperBodyStates.Clapping);
 
         internal static bool IsHandShaking(this PlayerController player)
             => ((player.NetworktargetUBState == (int)UpperBodyStates.RequestHandShake)

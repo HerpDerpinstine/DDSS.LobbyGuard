@@ -190,9 +190,10 @@ namespace DDSS_LobbyGuard.Security
                 || controller.WasCollected)
                 return false;
 
-            // Check for Point
-            if ((isChair || !ConfigHandler.Gameplay.GrabbingWhilePointing.Value)
-                && controller.IsPointing())
+            // Check for Point or Hand Raise
+            if (!isChair
+                && !ConfigHandler.Gameplay.GrabbingWhilePointing.Value
+                && (controller.IsPointing() || controller.IsRaisingHand()))
                 return false;
 
             // Check for Handshake
@@ -201,13 +202,9 @@ namespace DDSS_LobbyGuard.Security
                 return false;
 
             // Check for Emotes
-            if ((isChair || !ConfigHandler.Gameplay.GrabbingWhileEmoting.Value)
-                && controller.IsEmoting())
-                return false;
-
-            // Check for Wave
-            if (isChair
-                && controller.IsWaving())
+            if (controller.IsEmoting()
+                && ((isChair && !controller.IsClapping())
+                    || (!isChair && !ConfigHandler.Gameplay.GrabbingWhileEmoting.Value)))
                 return false;
 
             // Allow Grab
@@ -222,9 +219,10 @@ namespace DDSS_LobbyGuard.Security
                 || controller.WasCollected)
                 return false;
 
-            // Check for Point
-            if ((isChair || !ConfigHandler.Gameplay.DroppingWhilePointing.Value)
-                && controller.IsPointing())
+            // Check for Point or Hand Raise
+            if (!isChair
+                && !ConfigHandler.Gameplay.DroppingWhilePointing.Value
+                && (controller.IsPointing() || controller.IsRaisingHand()))
                 return false;
 
             // Check for Handshake
@@ -233,13 +231,9 @@ namespace DDSS_LobbyGuard.Security
                 return false;
 
             // Check for Emotes
-            if ((isChair || !ConfigHandler.Gameplay.DroppingWhileEmoting.Value)
-                && controller.IsEmoting())
-                return false;
-
-            // Check for Wave
-            if (isChair
-                && controller.IsWaving())
+            if (controller.IsEmoting()
+                && ((isChair && !controller.IsClapping())
+                    || (!isChair && !ConfigHandler.Gameplay.DroppingWhileEmoting.Value)))
                 return false;
 
             // Allow Drop
