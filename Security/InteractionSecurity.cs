@@ -1,8 +1,11 @@
 ﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Utils;
 using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
+using Il2CppPlayer.StateMachineLogic;
 using Il2CppTMPro;
 using Il2CppUI.Tabs.LobbyTab;
 using System.Collections.Generic;
@@ -177,6 +180,56 @@ namespace DDSS_LobbyGuard.Security
                     num++;
             }
             return num;
+        }
+
+        internal static bool CanGrabUsable(NetworkIdentity player, bool isChair)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            // Check for Point
+            if ((isChair || !ConfigHandler.Gameplay.GrabbingWhilePointing.Value)
+                && controller.IsPointing())
+                return false;
+
+            // Check for Handshake
+            if ((isChair || !ConfigHandler.Gameplay.GrabbingWhileHandshaking.Value)
+                && controller.IsHandShaking())
+                return false;
+
+            // Check for Emotes
+            if ((isChair || !ConfigHandler.Gameplay.GrabbingWhileEmoting.Value)
+                && controller.IsEmoting())
+                return false;
+
+            return true;
+        }
+
+        internal static bool CanDropUsable(NetworkIdentity player, bool isChair)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            // Check for Point
+            if ((isChair || !ConfigHandler.Gameplay.DroppingWhilePointing.Value)
+                && controller.IsPointing())
+                return false;
+
+            // Check for Handshake
+            if ((isChair || !ConfigHandler.Gameplay.DroppingWhileHandshaking.Value)
+                && controller.IsHandShaking())
+                return false;
+
+            // Check for Emotes
+            if ((isChair || !ConfigHandler.Gameplay.DroppingWhileEmoting.Value)
+                && controller.IsEmoting())
+                return false;
+
+            return true;
         }
     }
 }

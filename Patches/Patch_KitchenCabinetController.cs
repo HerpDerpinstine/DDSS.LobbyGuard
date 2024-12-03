@@ -26,6 +26,10 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Validate Grab
+            if (!InteractionSecurity.CanGrabUsable(sender, false))
+                return false;
+
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, cabinet.transform.position))
                 return false;

@@ -4,9 +4,8 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
-using Il2CppPlayer;
+using Il2CppObjects.Scripts;
 using Il2CppPlayer.Scripts;
-using Il2CppPlayer.StateMachineLogic;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
 
@@ -31,7 +30,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!__2.identity.isServer
+            if (!sender.isServer
                 && !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
@@ -86,28 +85,10 @@ namespace DDSS_LobbyGuard.Patches
                     }
                 }
             }
-            
-            PlayerController controller = sender.GetComponent<PlayerController>();
-            if ((controller != null)
-                && !controller.WasCollected)
-            {
-                // Check for Handshake
-                if (!ConfigHandler.Gameplay.GrabbingWhileHandshaking.Value
-                    && (controller.NetworktargetUBState == (int)UpperBodyStates.RequestHandShake)
-                    && (controller.NetworktargetUBState == (int)UpperBodyStates.PerformHandShake))
-                    return false;
 
-                // Check for Emotes
-                if (!ConfigHandler.Gameplay.GrabbingWhileEmoting.Value
-                    && ((controller.NetworktargetState == (int)States.Dancing)
-                        || (controller.NetworktargetState == (int)States.Humping)
-                        || (controller.NetworktargetState == (int)States.Beg)
-                        || (controller.NetworktargetUBState == (int)UpperBodyStates.PoundChest)
-                        || (controller.NetworktargetUBState == (int)UpperBodyStates.Waving)
-                        || (controller.NetworktargetUBState == (int)UpperBodyStates.Clapping)
-                        || (controller.NetworktargetUBState == (int)UpperBodyStates.FacePalm)))
-                    return false;
-            }
+            // Validate Grab
+            if (!InteractionSecurity.CanGrabUsable(sender, usable.TryCast<Chair>()))
+                return false;
 
             // Run Game Command
             usable.UserCode_CmdUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -122,10 +103,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Usable
             Usable usable = __0.TryCast<Usable>();
             if ((usable == null)
@@ -136,7 +113,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+            if (!sender.isServer
+                && !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
             // Get Usable Type
@@ -191,6 +169,10 @@ namespace DDSS_LobbyGuard.Patches
                 }
             }
 
+            // Validate Grab
+            if (!InteractionSecurity.CanGrabUsable(sender, usable.TryCast<Chair>()))
+                return false;
+
             // Run Game Command
             usable.UserCode_CmdUseNoTypeVerification__NetworkIdentity(sender);
 
@@ -204,10 +186,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Usable
             Usable usable = __0.TryCast<Usable>();
             if ((usable == null)
@@ -218,7 +196,12 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+            if (!sender.isServer
+                && !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                return false;
+
+            // Validate Drop
+            if (!InteractionSecurity.CanDropUsable(sender, usable.TryCast<Chair>()))
                 return false;
 
             // Run Game Command

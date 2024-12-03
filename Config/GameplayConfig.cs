@@ -18,7 +18,13 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
 
         internal MelonPreferences_Entry<bool> GrabbingWhileEmoting;
+        internal MelonPreferences_Entry<bool> DroppingWhileEmoting;
+
+        internal MelonPreferences_Entry<bool> GrabbingWhilePointing;
+        internal MelonPreferences_Entry<bool> DroppingWhilePointing;
+
         internal MelonPreferences_Entry<bool> GrabbingWhileHandshaking;
+        internal MelonPreferences_Entry<bool> DroppingWhileHandshaking;
 
         internal override string GetName()
             => "Gameplay";
@@ -75,9 +81,29 @@ namespace DDSS_LobbyGuard.Config
                 "Allows the Grabbing of Usables while Emoting",
                 false);
 
+            DroppingWhileEmoting = CreatePref("DroppingWhileEmoting",
+                "Dropping while Emoting",
+                "Allows the Dropping of Usables while Emoting",
+                false);
+
+            GrabbingWhilePointing = CreatePref("GrabbingWhilePointing",
+                "Grabbing while Pointing",
+                "Allows the Grabbing of Usables while Pointing",
+                true);
+
+            DroppingWhilePointing = CreatePref("DroppingWhilePointing",
+                "Dropping while Pointing",
+                "Allows the Dropping of Usables while Pointing",
+                false);
+
             GrabbingWhileHandshaking = CreatePref("GrabbingWhileHandshaking",
                 "Grabbing while Handshaking",
                 "Allows the Grabbing of Usables while Handshaking",
+                false);
+
+            DroppingWhileHandshaking = CreatePref("DroppingWhileHandshaking",
+                "Dropping while Handshaking",
+                "Allows the Dropping of Usables while Handshaking",
                 false);
         }
     }

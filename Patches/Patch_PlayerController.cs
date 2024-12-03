@@ -19,7 +19,7 @@ namespace DDSS_LobbyGuard.Patches
         private static bool InvokeUserCode_CmdMovePlayer__Vector3_Prefix(NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
-            // Get Sender
+            // Check for Server
             if (!__2.identity.isServer)
                 return false;
 

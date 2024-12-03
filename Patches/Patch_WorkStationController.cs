@@ -107,6 +107,10 @@ namespace DDSS_LobbyGuard.Patches
                 InteractionSecurity.MAX_CIG_PACKS))
                 return false;
 
+            // Validate Grab
+            if (!InteractionSecurity.CanGrabUsable(sender, false))
+                return false;
+
             // Run Game Command
             station.UserCode_CmdPickUpCigarettePack__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
@@ -146,6 +150,10 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Count
             if (!InteractionSecurity.CanSpawnItem(interactableName,
                 InteractionSecurity.MAX_INFECTED_USBS))
+                return false;
+
+            // Validate Grab
+            if (!InteractionSecurity.CanGrabUsable(sender, false))
                 return false;
 
             // Run Game Command

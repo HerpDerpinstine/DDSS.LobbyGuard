@@ -3,6 +3,7 @@ using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
+using Il2CppPlayer.StateMachineLogic;
 using Il2CppProps.Scripts;
 using System.Collections;
 using System.Text.RegularExpressions;
@@ -42,6 +43,22 @@ namespace DDSS_LobbyGuard.Utils
                 return null;
             return usable.TryCast<Collectible>();
         }
+
+        internal static bool IsPointing(this PlayerController player)
+            => (player.NetworktargetUBState == (int)UpperBodyStates.Pointing);
+
+        internal static bool IsHandShaking(this PlayerController player)
+            => ((player.NetworktargetUBState == (int)UpperBodyStates.RequestHandShake)
+                || (player.NetworktargetUBState == (int)UpperBodyStates.PerformHandShake));
+
+        internal static bool IsEmoting(this PlayerController player)
+            => ((player.NetworktargetState == (int)States.Dancing)
+                || (player.NetworktargetState == (int)States.Humping)
+                || (player.NetworktargetState == (int)States.Beg)
+                || (player.NetworktargetUBState == (int)UpperBodyStates.PoundChest)
+                || (player.NetworktargetUBState == (int)UpperBodyStates.Waving)
+                || (player.NetworktargetUBState == (int)UpperBodyStates.Clapping)
+                || (player.NetworktargetUBState == (int)UpperBodyStates.FacePalm));
 
         internal static bool IsCabinetOrganized(this FilingCabinetController cabinet)
         {

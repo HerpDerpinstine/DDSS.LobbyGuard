@@ -65,6 +65,10 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Validate Drop
+            if (!InteractionSecurity.CanDropUsable(sender, false))
+                return false;
+
             // Validate Count
             if (binder.documents.Count >= InteractionSecurity.MAX_DOCUMENTS_BINDER)
                 return false;
@@ -114,6 +118,10 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Validate Drop
+            if (!InteractionSecurity.CanDropUsable(sender, false))
+                return false;
+
             // Validate Count
             if (binder.documents.Count >= InteractionSecurity.MAX_DOCUMENTS_BINDER)
                 return false;
@@ -159,6 +167,10 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+
+            // Validate Grab
+            if (!InteractionSecurity.CanGrabUsable(sender, false))
+                return false;
 
             // Validate Count
             if (binder.documents.Count <= 0)

@@ -1,10 +1,9 @@
-﻿using DDSS_LobbyGuard.Config;
-using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
+using Il2Cpp;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
-using Il2CppPlayer;
-using Il2CppPlayer.StateMachineLogic;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
@@ -12,6 +11,8 @@ namespace DDSS_LobbyGuard.Patches
     [HarmonyPatch]
     internal class Patch_CollectibleHolder
     {
+        private static Il2CppSystem.Type _keysType = Il2CppType.Of<KeyController>();
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String))]
         private static bool InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String_Prefix(
@@ -35,7 +36,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Holder
-            if (!CollectibleHolderSecurity.CanPlace(holder, collectible))
+            if (!CollectibleHolderSecurity.CanPlace(sender, holder, collectible))
                 return false;
 
             // Validate Free Slots
@@ -97,7 +98,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Holder
-            if (!CollectibleHolderSecurity.CanPlace(holder, collectible))
+            if (!CollectibleHolderSecurity.CanPlace(sender, holder, collectible))
                 return false;
 
             // Run Game Command
@@ -146,27 +147,9 @@ namespace DDSS_LobbyGuard.Patches
             if (collectible.currentHolder != holder)
                 return false;
 
-            PlayerController controller = sender.GetComponent<PlayerController>();
-            if ((controller != null)
-                && !controller.WasCollected)
-            {
-                // Check for Handshake
-                if (!ConfigHandler.Gameplay.GrabbingWhileHandshaking.Value
-                    && (controller.NetworktargetUBState == (int)UpperBodyStates.RequestHandShake)
-                    && (controller.NetworktargetUBState == (int)UpperBodyStates.PerformHandShake))
-                    return false;
-
-                // Check for Emotes
-                if (!ConfigHandler.Gameplay.GrabbingWhileEmoting.Value
-                    && ((controller.NetworktargetState == (int)States.Dancing)
-                        || (controller.NetworktargetState == (int)States.Humping)
-                        || (controller.NetworktargetState == (int)States.Beg)
-                        || (controller.NetworktargetUBState == (int)UpperBodyStates.PoundChest)
-                        || (controller.NetworktargetUBState == (int)UpperBodyStates.Waving)
-                        || (controller.NetworktargetUBState == (int)UpperBodyStates.Clapping)
-                        || (controller.NetworktargetUBState == (int)UpperBodyStates.FacePalm)))
-                    return false;
-            }
+            // Validate Grab
+            if (!InteractionSecurity.CanGrabUsable(sender, false))
+                return false;
 
             // Run Game Command
             holder.UserCode_CmdGrabCollectible__NetworkIdentity__NetworkIdentity__NetworkConnectionToClient(sender, collectibleIdentity, __2);

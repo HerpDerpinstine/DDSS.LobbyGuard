@@ -1,5 +1,6 @@
 ﻿using Il2Cpp;
 using Il2CppInterop.Runtime;
+using Il2CppMirror;
 using Il2CppProps;
 using Il2CppProps.FireEx;
 using Il2CppProps.Keys;
@@ -20,15 +21,21 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class CollectibleHolderSecurity
     {
-        internal static bool CanPlace(CollectibleHolder holder, Collectible collectible)
+        private static Type _trashBinType = Il2CppType.Of<TrashBin>();
+
+        internal static bool CanPlace(NetworkIdentity player, CollectibleHolder holder, Collectible collectible)
         {
+            // Validate Drop
+            if (!InteractionSecurity.CanDropUsable(player, false))
+                return false;
+
             // Get Holder Type
             Type holderType = holder.GetIl2CppType();
 
             // Check if Holder is Restricted
             if (!_whitelist.TryGetValue(holderType,
                 out Dictionary<Type, bool> allowedCollectibleTypes))
-                return true;
+                return false;
 
             // Get Collectible Type
             Type collectibleType = collectible.GetIl2CppType();
@@ -38,7 +45,7 @@ namespace DDSS_LobbyGuard.Security
                 return true;
 
             // Handle TrashBin Specifically
-            if (holderType == Il2CppType.Of<TrashBin>())
+            if (holderType == _trashBinType)
                 return collectible.isTrashable;
 
             // Return False
