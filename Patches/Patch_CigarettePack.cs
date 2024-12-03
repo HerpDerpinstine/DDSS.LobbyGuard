@@ -6,6 +6,7 @@ using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppProps.Scripts;
 using Il2CppProps.Smoking;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -56,7 +57,11 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            cigarettePack.UserCode_CmdSmokeCigarette__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            cigarettePack.UserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            GameObject gameObject = GameObject.Instantiate(cigarettePack.cigarettePrefab, cigarettePack.transform.position, cigarettePack.transform.rotation);
+            NetworkServer.Spawn(gameObject, sender.connectionToClient);
+            Usable usable = gameObject.GetComponent<Usable>();
+            usable.UserCode_CmdUseNoTypeVerification__NetworkIdentity(sender);
 
             // Prevent Original
             return false;
