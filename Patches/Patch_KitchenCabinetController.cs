@@ -27,7 +27,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Grab
-            if (!InteractionSecurity.CanGrabUsable(sender, false))
+            if (!InteractionSecurity.CanUseUsable(sender, false))
                 return false;
 
             // Validate Distance

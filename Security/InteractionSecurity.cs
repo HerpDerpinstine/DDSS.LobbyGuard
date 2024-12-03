@@ -182,7 +182,7 @@ namespace DDSS_LobbyGuard.Security
             return num;
         }
 
-        internal static bool CanGrabUsable(NetworkIdentity player, bool isChair)
+        internal static bool CanUseUsable(NetworkIdentity player, bool isChair)
         {
             // Get PlayerController
             PlayerController controller = player.GetComponent<PlayerController>();
@@ -214,7 +214,7 @@ namespace DDSS_LobbyGuard.Security
             return true;
         }
 
-        internal static bool CanDropUsable(NetworkIdentity player, bool isChair)
+        internal static bool CanStopUseUsable(NetworkIdentity player, bool isChair)
         {
             // Get PlayerController
             PlayerController controller = player.GetComponent<PlayerController>();

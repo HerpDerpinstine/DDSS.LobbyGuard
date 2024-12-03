@@ -26,7 +26,7 @@ namespace DDSS_LobbyGuard.Security
         internal static bool CanPlace(NetworkIdentity player, CollectibleHolder holder, Collectible collectible)
         {
             // Validate Drop
-            if (!InteractionSecurity.CanDropUsable(player, false))
+            if (!InteractionSecurity.CanStopUseUsable(player, false))
                 return false;
 
             // Get Holder Type

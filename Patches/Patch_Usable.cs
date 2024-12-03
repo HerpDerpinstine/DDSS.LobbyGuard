@@ -87,7 +87,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Validate Grab
-            if (!InteractionSecurity.CanGrabUsable(sender, usable.TryCast<Chair>()))
+            if (!InteractionSecurity.CanUseUsable(sender, usable.TryCast<Chair>()))
                 return false;
 
             // Run Game Command
@@ -170,7 +170,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Validate Grab
-            if (!InteractionSecurity.CanGrabUsable(sender, usable.TryCast<Chair>()))
+            if (!InteractionSecurity.CanUseUsable(sender, usable.TryCast<Chair>()))
                 return false;
 
             // Run Game Command
@@ -201,7 +201,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Drop
-            if (!InteractionSecurity.CanDropUsable(sender, usable.TryCast<Chair>()))
+            if (!InteractionSecurity.CanStopUseUsable(sender, usable.TryCast<Chair>()))
                 return false;
 
             // Run Game Command

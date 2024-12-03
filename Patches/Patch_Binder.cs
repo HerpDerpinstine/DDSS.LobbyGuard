@@ -66,7 +66,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Drop
-            if (!InteractionSecurity.CanDropUsable(sender, false))
+            if (!InteractionSecurity.CanStopUseUsable(sender, false))
                 return false;
 
             // Validate Count
@@ -119,7 +119,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Drop
-            if (!InteractionSecurity.CanDropUsable(sender, false))
+            if (!InteractionSecurity.CanStopUseUsable(sender, false))
                 return false;
 
             // Validate Count
@@ -169,7 +169,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Grab
-            if (!InteractionSecurity.CanGrabUsable(sender, false))
+            if (!InteractionSecurity.CanUseUsable(sender, false))
                 return false;
 
             // Validate Count

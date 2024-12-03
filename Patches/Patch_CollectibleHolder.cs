@@ -148,7 +148,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Grab
-            if (!InteractionSecurity.CanGrabUsable(sender, false))
+            if (!InteractionSecurity.CanUseUsable(sender, false))
                 return false;
 
             // Run Game Command
