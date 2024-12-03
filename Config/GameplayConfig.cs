@@ -89,7 +89,7 @@ namespace DDSS_LobbyGuard.Config
             GrabbingWhilePointing = CreatePref("GrabbingWhilePointing",
                 "Grabbing while Pointing",
                 "Allows the Grabbing of Usables while Pointing",
-                true);
+                false);
 
             DroppingWhilePointing = CreatePref("DroppingWhilePointing",
                 "Dropping while Pointing",
