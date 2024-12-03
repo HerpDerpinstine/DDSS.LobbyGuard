@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -62,6 +63,26 @@ namespace DDSS_LobbyGuard
             // Run Game Command
             __instance.RpcSetText(text);
             __instance.UserCode_RpcSetText__String(text);
+
+            eConfigHostType configValue = ConfigHandler.Gameplay.UsernamesOnStickyNotes.Value;
+            if (configValue != eConfigHostType.DISABLED)
+            {
+                // Apply New Name
+                string userName = sender.GetUserName();
+                if (!string.IsNullOrEmpty(userName)
+                    && !string.IsNullOrWhiteSpace(userName))
+                {
+                    string newName = $"{userName.RemoveRichText()}'s Sticky Note";
+                    if (configValue == eConfigHostType.HOST_ONLY)
+                        collectible.interactableName =
+                            collectible.label = newName;
+                    else
+                        collectible.NetworkinteractableName =
+                            collectible.Networklabel = newName;
+                }
+            }
+
+            __instance.UpdateCollectible();
 
             // Prevent Original
             return false;
