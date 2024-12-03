@@ -184,6 +184,7 @@ namespace DDSS_LobbyGuard.Security
 
         internal static bool CanGrabUsable(NetworkIdentity player, bool isChair)
         {
+            // Get PlayerController
             PlayerController controller = player.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
@@ -204,11 +205,18 @@ namespace DDSS_LobbyGuard.Security
                 && controller.IsEmoting())
                 return false;
 
+            // Check for Wave
+            if (isChair
+                && controller.IsWaving())
+                return false;
+
+            // Allow Grab
             return true;
         }
 
         internal static bool CanDropUsable(NetworkIdentity player, bool isChair)
         {
+            // Get PlayerController
             PlayerController controller = player.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
@@ -229,6 +237,12 @@ namespace DDSS_LobbyGuard.Security
                 && controller.IsEmoting())
                 return false;
 
+            // Check for Wave
+            if (isChair
+                && controller.IsWaving())
+                return false;
+
+            // Allow Drop
             return true;
         }
     }
