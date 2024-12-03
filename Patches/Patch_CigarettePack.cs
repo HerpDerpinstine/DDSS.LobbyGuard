@@ -24,10 +24,6 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, cigarettePack.transform.position))
-                return false;
-
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
             if ((collectible == null)
@@ -37,6 +33,10 @@ namespace DDSS_LobbyGuard.Patches
             // Get CigarettePack
             cigarettePack = collectible.TryCast<CigarettePack>();
             if (cigarettePack == null)
+                return false;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, cigarettePack.transform.position))
                 return false;
 
             // Get Cigarette from Prefab

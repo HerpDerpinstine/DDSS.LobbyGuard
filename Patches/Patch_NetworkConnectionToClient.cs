@@ -13,6 +13,9 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(NetworkConnectionToClient), nameof(NetworkConnectionToClient.DestroyOwnedObjects))]
         private static bool DestroyOwnedObjects_Prefix(NetworkConnectionToClient __instance)
         {
+            if (__instance.owned == null)
+                return false;
+
             // Create Local Copy of Owned List
             HashSet<NetworkIdentity> ownedObjs = [.. __instance.owned];
 
@@ -23,7 +26,8 @@ namespace DDSS_LobbyGuard.Patches
             foreach (NetworkIdentity networkIdentity in ownedObjs)
             {
                 // Validate Identity
-                if (networkIdentity == null)
+                if ((networkIdentity == null)
+                    || networkIdentity.WasCollected)
                     continue;
 
                 // Validate Player
@@ -35,6 +39,11 @@ namespace DDSS_LobbyGuard.Patches
                     // Get All Held Usables
                     foreach (Usable usable in player.currentUsables.ToArray())
                     {
+                        // Validate Usable
+                        if ((usable == null)
+                            || usable.WasCollected)
+                            continue;
+
                         // Prevent Destruction
                         ownedObjs.Remove(usable.netIdentity);
 
@@ -45,7 +54,7 @@ namespace DDSS_LobbyGuard.Patches
                         usable.UserCode_RpcOnStopUse__NetworkIdentity(networkIdentity);
 
                         // Change Ownership
-                        usable.netIdentity.SetClientOwner(NetworkClient.localPlayer.connectionToClient);
+                        usable.netIdentity.SetClientOwner(networkIdentity.connectionToClient);
                     }
                 }
             }
@@ -54,7 +63,8 @@ namespace DDSS_LobbyGuard.Patches
             foreach (NetworkIdentity networkIdentity in ownedObjs)
             {
                 // Validate Identity
-                if (networkIdentity == null)
+                if ((networkIdentity == null)
+                    || networkIdentity.WasCollected)
                     continue;
 
                 // Validate Scene

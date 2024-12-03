@@ -108,7 +108,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get New Label
             string newLabel = setLabel
-                ? (ConfigHandler.Gameplay.UsernamesOnPrintedDocuments.Value ? $"{userName.RemoveRichText()}'s Document" : "Printed Document")
+                ? (ConfigHandler.Gameplay.UsernamesOnPrintedDocuments.Value ? $"{userName.RemoveRichText()}'s Document" : "Document")
                 : fileName;
             if (newLabel == "SalesReport")
                 newLabel = "Sales Report";
