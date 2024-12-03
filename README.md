@@ -14,7 +14,7 @@ Serverside Anti-Cheat and Security for [Dale & Dawson Stationery Supplies](https
 - Extended Invite Codes to avoid Generation Conflicts
 - Persistent Blacklist
 
-* Settings are found in ``UserData/LobbyGuard/Config.cfg``
+* Settings are found in the In-Game Menu
 * Persistent Blacklist Database is found in ``UserData/LobbyGuard/Blacklist.json``
 
 * Discord: https://discord.gg/JDw423Wskf
