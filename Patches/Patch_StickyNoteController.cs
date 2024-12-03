@@ -61,9 +61,9 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Run Game Command
-            __instance.RpcSetText(text);
-            __instance.UserCode_RpcSetText__String(text);
+            __instance.UserCode_CmdSetText__String__NetworkIdentity__NetworkConnectionToClient(text, sender, __2);
 
+            // Change Name
             eConfigHostType configValue = ConfigHandler.Gameplay.UsernamesOnStickyNotes.Value;
             if (configValue != eConfigHostType.DISABLED)
             {
