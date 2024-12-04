@@ -33,16 +33,6 @@ namespace DDSS_LobbyGuard.Security
             if (_enableFireCoroutines.ContainsKey(trashcan))
                 trashcan.StopCoroutine(_enableFireCoroutines[trashcan]);
 
-            // Validate Role
-            if (state)
-            {
-                LobbyPlayer lobbyplayer = sender.GetComponent<LobbyPlayer>();
-                if ((lobbyplayer == null)
-                    || lobbyplayer.WasCollected
-                    || lobbyplayer.NetworkisFired)
-                    return;
-            }
-
             // Cache New Coroutine
             _enableFireCoroutines[trashcan] =
                 trashcan.StartCoroutine(
