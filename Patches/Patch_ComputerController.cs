@@ -87,8 +87,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Read String
             string keyCodeStr = __1.SafeReadString();
-            if (string.IsNullOrEmpty(keyCodeStr)
-                || string.IsNullOrWhiteSpace(keyCodeStr))
+            if (keyCodeStr == null)
                 return false;
 
             // Validate String Length

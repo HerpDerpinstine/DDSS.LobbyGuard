@@ -203,7 +203,7 @@ namespace DDSS_LobbyGuard.Security
 
             // Check for Emotes
             if (controller.IsEmoting()
-                && ((isChair && !controller.IsClapping())
+                && ((isChair && !controller.IsClapping() && !controller.IsWaving() && !controller.IsFacePalming())
                     || (!isChair && !ConfigHandler.Gameplay.GrabbingWhileEmoting.Value)))
                 return false;
 
@@ -232,7 +232,7 @@ namespace DDSS_LobbyGuard.Security
 
             // Check for Emotes
             if (controller.IsEmoting()
-                && ((isChair && !controller.IsClapping())
+                && ((isChair && !controller.IsClapping() && !controller.IsWaving() && !controller.IsFacePalming())
                     || (!isChair && !ConfigHandler.Gameplay.DroppingWhileEmoting.Value)))
                 return false;
 
