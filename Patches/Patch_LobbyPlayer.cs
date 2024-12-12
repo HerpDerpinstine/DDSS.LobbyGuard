@@ -28,8 +28,8 @@ namespace DDSS_LobbyGuard.Patches
             __0 = __0.RemoveRichText();
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
         private static void NetworksteamID_Prefix(LobbyPlayer __instance, ulong __0)
         {
             // Check for Host
@@ -161,38 +161,79 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.InvokeUserCode_CmdSetLocalPlayer__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_CmdSetLocalPlayer__NetworkConnectionToClient_Prefix(NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdSetLocalPlayer__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
+            NetworkConnectionToClient __2)
         {
             // Validate Server
-            if (!__2.identity.isServer)
+            if (__2.identity.isServer)
+                return true;
+
+            // Validate Sender
+            LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
+            if ((sender == null)
+                || sender.WasCollected)
                 return false;
 
-            // Run Original
-            return true;
+            // Run Game Command
+            sender.UserCode_CmdSetLocalPlayer__NetworkConnectionToClient(__2);
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.InvokeUserCode_CmdReplacePlayer__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_CmdReplacePlayer__NetworkConnectionToClient_Prefix(NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdReplacePlayer__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
+            NetworkConnectionToClient __2)
         {
             // Validate Server
-            if (!__2.identity.isServer)
+            if ((__2.identity == null)
+                || __2.identity.WasCollected)
+                return false;
+            if (__2.identity.isServer)
+                return true;
+
+            // Validate Sender
+            LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
+            if ((sender == null)
+                || sender.WasCollected
+                || sender.isFired
+                || ((sender.NetworkplayerController != null)
+                    && !sender.NetworkplayerController.WasCollected))
                 return false;
 
-            // Run Original
-            return true;
+            // Run Game Command
+            sender.UserCode_CmdReplacePlayer__NetworkConnectionToClient(__2);
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.InvokeUserCode_CmdReplacePlayerWithSpectator__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_CmdReplacePlayerWithSpectator__NetworkConnectionToClient_Prefix(NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdReplacePlayerWithSpectator__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
+            NetworkConnectionToClient __2)
         {
             // Validate Server
-            if (!__2.identity.isServer)
+            if ((__2.identity == null)
+                || __2.identity.WasCollected)
+                return false;
+            if (__2.identity.isServer)
+                return true;
+
+            // Validate Sender
+            LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
+            if ((sender == null)
+                || sender.WasCollected
+                || !sender.isFired
+                || (sender.NetworkplayerRole != PlayerRole.None))
                 return false;
 
-            // Run Original
-            return true;
+            // Run Game Command
+            sender.UserCode_CmdReplacePlayerWithSpectator__NetworkConnectionToClient(__2);
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]
@@ -209,12 +250,14 @@ namespace DDSS_LobbyGuard.Patches
             // Get LobbyPlayer
             LobbyPlayer targetPlayer = __0.TryCast<LobbyPlayer>();
             if ((targetPlayer == null)
+                || targetPlayer.WasCollected
                 || (targetPlayer.NetworkplayerRole == PlayerRole.Manager))
                 return false;
 
             // Validate Manager Role
             LobbyPlayer sender = __2.identity.GetComponent<LobbyPlayer>();
             if ((sender == null)
+                || sender.WasCollected
                 || (sender.NetworkplayerRole != PlayerRole.Manager)
                 || (sender == targetPlayer))
                 return false;
