@@ -28,9 +28,9 @@ namespace DDSS_LobbyGuard.Patches
             __0 = __0.RemoveRichText();
         }
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.VerifySteamId))]
-        private static void VerifySteamId_Postfix(LobbyPlayer __instance, ulong __0, ulong __1)
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
+        private static void NetworksteamID_Prefix(LobbyPlayer __instance, ulong __0)
         {
             // Check for Host
             if (!NetworkServer.activeHost
@@ -43,15 +43,15 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Player Check
-            if (LobbySecurity.IsSteamIDInUse(__1))
+            if (LobbySecurity.IsSteamIDInUse(__0))
             {
                 __instance.connectionToClient.Disconnect();
                 return;
             }
 
             // Add SteamID
-            LobbySecurity.RemoveValidSteamID(__0);
-            LobbySecurity.AddValidSteamID(__1);
+            LobbySecurity.RemoveValidSteamID(__instance.steamID);
+            LobbySecurity.AddValidSteamID(__0);
         }
 
         [HarmonyPrefix]
