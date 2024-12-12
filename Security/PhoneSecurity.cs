@@ -14,10 +14,28 @@ namespace DDSS_LobbyGuard.Security
             _callReceiverList.Clear();
         }
 
+        private static bool Validate(PhoneManager phone,
+            string caller,
+            string receiver)
+        {
+            if ((phone == null)
+                || phone.WasCollected
+                || string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller)
+                || string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver)
+                || (caller == receiver))
+                return false;
+            return true;
+        }
+
         internal static void OnCallAttempt(PhoneManager phone,
             string caller,
             string receiver)
         {
+            if (!Validate(phone, caller, receiver))
+                return;
+
             // Check if already has Ongoing Call
             if (_callSenderList.ContainsKey(caller))
             {
@@ -39,8 +57,7 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
-            // Check if Calling Self
-            if (caller == receiver)
+            if (!Validate(phone, caller, receiver))
                 return;
 
             // Check if already has Ongoing Call
@@ -67,8 +84,7 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
-            // Check if Calling Self
-            if (caller == receiver)
+            if (!Validate(phone, caller, receiver))
                 return;
 
             // Check if there is an Ongoing Call Attempt
@@ -99,8 +115,7 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
-            // Check if Calling Self
-            if (caller == receiver)
+            if (!Validate(phone, caller, receiver))
                 return;
 
             // Check if there is an Ongoing Call Attempt
@@ -132,8 +147,7 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
-            // Check if Calling Self
-            if (caller == receiver)
+            if (!Validate(phone, caller, receiver))
                 return;
 
             // Check if already has Ongoing Call
