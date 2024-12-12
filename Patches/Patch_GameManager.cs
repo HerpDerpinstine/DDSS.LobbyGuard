@@ -64,65 +64,58 @@ namespace DDSS_LobbyGuard.Patches
         private static bool ReplaceManager_Prefix(GameManager __instance)
         {
             // Find New Manager
-            LobbyPlayer lobbyPlayer = __instance.FindNewManager();
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected)
+            LobbyPlayer newManager = __instance.FindNewManager();
+            if ((newManager == null)
+                || newManager.WasCollected)
                 return false;
 
-            // Get Old Manager
-            LobbyPlayer managerPlayer = LobbyManager.instance.GetManagerPlayer();
-
-            // Reset Old Manager
-            if ((managerPlayer != null)
-                && !managerPlayer.WasCollected)
-            {
-                if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
-                    && InteractionSecurity.IsSlacker(lobbyPlayer))
-                    managerPlayer.ServerSetPlayerRole(PlayerRole.Slacker);
-                else
-                    managerPlayer.ServerSetPlayerRole(lobbyPlayer.playerRole);
-            }
-
-            // Set New Manager
-            lobbyPlayer.ServerSetPlayerRole(PlayerRole.Manager);
-
-            // Apply Game Rule
+            // Get Game Rule
             bool flag = GameRulesSettingsManager.instance.GetSetting("Fire the old manager after vote") == 1f;
-            if ((managerPlayer != null)
-                && !managerPlayer.WasCollected)
+
+            // Get Old Manager
+            LobbyPlayer oldManager = LobbyManager.instance.GetManagerPlayer();
+            if ((oldManager != null)
+                && !oldManager.WasCollected)
             {
                 if (flag)
                 {
                     // Fire Old Manager
-                    __instance.ServerFirePlayer(managerPlayer.netIdentity, true, false);
-                    managerPlayer.NetworkisFired = true;
+                    __instance.ServerFirePlayer(oldManager.netIdentity, true, false);
+                    oldManager.NetworkisFired = true;
                 }
                 else
                 {
-                    // Assign Old Manager Workstation
-                    managerPlayer.ServerSetWorkStation(lobbyPlayer.NetworkworkStationController, managerPlayer.playerRole, false);
-
-                    // Reset Old Manager Tasks
-                    TaskController managerComponent = managerPlayer.GetComponent<TaskController>();
-                    if (managerComponent != null)
-                        managerComponent.RpcClearTaskQueue();
+                    if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
+                        && InteractionSecurity.IsSlacker(oldManager))
+                        oldManager.ServerSetPlayerRole(PlayerRole.Slacker);
+                    else
+                        oldManager.ServerSetPlayerRole(newManager.playerRole);
                 }
+
+                // Assign Old Manager Workstation
+                oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, oldManager.playerRole, false);
+
+                // Reset Old Manager Tasks
+                TaskController managerComponent = oldManager.GetComponent<TaskController>();
+                if (managerComponent != null)
+                    managerComponent.RpcClearTaskQueue();
             }
 
-            // Assign New Manager Workstation
-            lobbyPlayer.ServerSetWorkStation(__instance.managerWorkStationController, PlayerRole.Manager, flag);
+            // Set New Manager
+            newManager.ServerSetPlayerRole(PlayerRole.Manager);
+            newManager.ServerSetWorkStation(__instance.managerWorkStationController, PlayerRole.Manager, flag);
 
             // Reset New Manager Tasks
-            TaskController component = lobbyPlayer.GetComponent<TaskController>();
+            TaskController component = newManager.GetComponent<TaskController>();
             if (component != null)
                 component.RpcClearTaskQueue();
 
             // Display New Roles
-            if ((managerPlayer != null)
-                && !managerPlayer.WasCollected)
-                __instance.RpcDisplayNewRoles(lobbyPlayer.netIdentity, managerPlayer.netIdentity);
+            if ((oldManager != null)
+                && !oldManager.WasCollected)
+                __instance.RpcDisplayNewRoles(newManager.netIdentity, oldManager.netIdentity);
             else
-                __instance.RpcDisplayNewRoles(lobbyPlayer.netIdentity, null);
+                __instance.RpcDisplayNewRoles(newManager.netIdentity, null);
 
             // Prevent Original
             return false;
@@ -140,18 +133,45 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer player = __0.GetComponent<LobbyPlayer>();
             if (player == null)
                 return true;
+
             if (player.NetworkisFired
                 && (player.NetworkplayerRole != PlayerRole.Janitor))
-                return true;
+                return false;
 
-            // Send Role
-            if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
-                && __instance.revealRoleAfterFiring
-                && InteractionSecurity.IsSlacker(player))
+            if (player.NetworkplayerRole == PlayerRole.Manager)
+                __instance.ReplaceManager();
+            else
             {
-                player.NetworkplayerRole = PlayerRole.Slacker;
-                player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
-                player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
+                // Send Role
+                if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
+                    && __instance.revealRoleAfterFiring
+                    && InteractionSecurity.IsSlacker(player))
+                {
+                    player.NetworkplayerRole = PlayerRole.Slacker;
+                    player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
+                    player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
+                }
+
+                // Get Janitor Count
+                var janitorList = LobbyManager.instance.GetJanitorPlayers();
+                bool flag = !player.NetworkisFired
+                    && (player.NetworkplayerRole != PlayerRole.Janitor)
+                    && (__instance.NetworkjanitorAmount > 0)
+                    && (janitorList.Count < __instance.NetworkjanitorAmount);
+
+                // Reset Workstation
+                if (__2)
+                    player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
+
+                // Fire Player
+                player.RpcFirePlayer(true, !flag, player.NetworkplayerRole);
+
+                // Assign Janitor Role
+                if (flag)
+                    player.ServerSetPlayerRole(PlayerRole.Janitor);
+
+                // Apply Fired State
+                player.NetworkisFired = true;
             }
 
             // Reset Vote
@@ -164,27 +184,6 @@ namespace DDSS_LobbyGuard.Patches
             // End Meeting
             if (!__1)
                 __instance.ServerFinnishMeeting();
-
-            // Get Janitor Count
-            var janitorList = LobbyManager.instance.GetJanitorPlayers();
-            bool flag = !player.NetworkisFired
-                && (player.NetworkplayerRole != PlayerRole.Janitor)
-                && (__instance.NetworkjanitorAmount > 0)
-                && (janitorList.Count < __instance.NetworkjanitorAmount);
-
-            // Reset Workstation
-            if (__2)
-                player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
-
-            // Fire Player
-            player.RpcFirePlayer(true, !flag, player.NetworkplayerRole);
-
-            // Assign Janitor Role
-            if (flag)
-                player.ServerSetPlayerRole(PlayerRole.Janitor);
-
-            // Apply Fired State
-            player.NetworkisFired = true;
 
             // End Match if Winner is Found
             if (!__1
