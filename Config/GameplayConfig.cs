@@ -14,6 +14,10 @@ namespace DDSS_LobbyGuard.Config
 
         internal MelonPreferences_Entry<bool> CloseDoorsOnLock;
 
+        internal MelonPreferences_Entry<bool> SpawnManagerKeys;
+
+        internal MelonPreferences_Entry<bool> AllowJanitorsToVote;
+
         internal MelonPreferences_Entry<bool> ProductivityFromTaskCompletion;
 
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
@@ -66,6 +70,16 @@ namespace DDSS_LobbyGuard.Config
             CloseDoorsOnLock = CreatePref("CloseDoorsOnLock",
                 "Close Doors On Lock",
                 "Close Doors when Locking",
+                true);
+
+            SpawnManagerKeys = CreatePref("SpawnManagerKeys",
+                "Spawn Manager Keys",
+                "Allows Spawning of Keys in Manager's Office",
+                true);
+
+            AllowJanitorsToVote = CreatePref("AllowJanitorsToVote",
+                "Allow Janitors to Vote",
+                "Allows Janitors to Vote on Manager",
                 true);
 
             ProductivityFromTaskCompletion = CreatePref("ProductivityFromTaskCompletion",

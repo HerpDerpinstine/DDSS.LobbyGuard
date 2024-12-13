@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2CppMirror;
 using Il2CppProps.Keys;
@@ -17,6 +18,9 @@ namespace DDSS_LobbyGuard.Patches
                 return true;
             if (!NetworkServer.activeHost)
                 return true;
+
+            if (!ConfigHandler.Gameplay.SpawnManagerKeys.Value)
+                return false;
 
             // Key Security
             KeySecurity.SpawnKey(__instance);
