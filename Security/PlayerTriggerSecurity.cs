@@ -16,7 +16,7 @@ namespace DDSS_LobbyGuard.Security
         internal static bool IsColliderValid(Collider other)
             => ((other != null)
                 && !other.WasCollected
-                && (other.gameObject.layer != 11) 
+                && (other.gameObject.layer != 11)
                 && (other.gameObject.layer != 13));
 
         internal static void OnEnter(PlayerDetectionVolume trigger, Collider other)

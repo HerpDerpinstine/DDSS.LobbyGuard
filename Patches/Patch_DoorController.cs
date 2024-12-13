@@ -7,7 +7,6 @@ using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
-using System;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
