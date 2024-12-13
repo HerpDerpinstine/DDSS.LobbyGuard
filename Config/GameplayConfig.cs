@@ -80,7 +80,7 @@ namespace DDSS_LobbyGuard.Config
             AllowJanitorsToVote = CreatePref("AllowJanitorsToVote",
                 "Allow Janitors to Vote",
                 "Allows Janitors to Vote on Manager",
-                true);
+                false);
 
             ProductivityFromTaskCompletion = CreatePref("ProductivityFromTaskCompletion",
                 "Productivity from Task Completion",
