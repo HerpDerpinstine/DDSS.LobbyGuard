@@ -7,7 +7,6 @@ using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -22,35 +21,14 @@ namespace DDSS_LobbyGuard.Patches
                 || __instance.WasCollected)
                 return;
 
-            // Fix Colliders
-            DoorSecurity.FixColliderSize(__instance.playerDetectionVolumeForward);
-            DoorSecurity.FixColliderSize(__instance.playerDetectionVolumeBackward);
+            // Start Door
+            DoorSecurity.DoorStart(__instance);
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetDoorState__Int32))]
-        private static bool UserCode_CmdSetDoorState__Int32_Prefix(
-            DoorController __instance,
-            int __0)
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetDoorState__Int32))]
+        private static bool InvokeUserCode_CmdSetDoorState__Int32_Prefix()
         {
-            __0 = Mathf.Clamp(__0, -1, 1);
-
-            // Check for Open Request
-            if (__0 == 0)
-                return false;
-
-            // Check for Lock
-            if (__instance.isLocked
-                && (__0 != 0))
-                return false;
-
-            // Check if already Open
-            if (__instance.Networkstate != 0)
-                return false;
-
-            // Apply State
-            DoorSecurity.ApplyState(__instance, __0);
-
             // Prevent Original
             return false;
         }
@@ -120,39 +98,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Apply State
             door.UserCode_CmdSetLockState__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, requestedState, __2);
-
-            // Prevent Original
-            return false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetDoorState__Int32))]
-        private static bool InvokeUserCode_CmdSetDoorState__Int32_Prefix(
-            NetworkBehaviour __0,
-            NetworkReader __1,
-            NetworkConnectionToClient __2)
-        {
-            // Get DoorController
-            DoorController door = __0.TryCast<DoorController>();
-            if ((door == null)
-                || door.WasCollected)
-                return false;
-
-            // Get Requested Lock State
-            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
-
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-            if ((sender == null)
-                || sender.WasCollected)
-                return false;
-
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
-                return false;
-
-            // Run Game Command
-            door.UserCode_CmdSetDoorState__Int32(stateIndex);
 
             // Prevent Original
             return false;

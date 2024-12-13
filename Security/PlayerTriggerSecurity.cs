@@ -34,9 +34,7 @@ namespace DDSS_LobbyGuard.Security
                 count = 0;
 
             _playerCounts[trigger] = count++;
-
             trigger.isPlayerInside = true;
-
             trigger.StartCoroutine(ColliderCheckCoroutine(trigger, other));
         }
 

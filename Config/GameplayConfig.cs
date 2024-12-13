@@ -12,6 +12,8 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> StickyNotesOnOpenDoors;
         internal MelonPreferences_Entry<bool> StickyNotesOnClosedDoors;
 
+        internal MelonPreferences_Entry<bool> CloseDoorsOnLock;
+
         internal MelonPreferences_Entry<bool> ProductivityFromTaskCompletion;
 
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
@@ -59,6 +61,11 @@ namespace DDSS_LobbyGuard.Config
             StickyNotesOnClosedDoors = CreatePref("StickyNotesOnClosedDoors",
                 "Sticky Notes on Closed Doors",
                 "Allows the Grabbing and Placing of Sticky Notes on Doors while they are Closed",
+                true);
+
+            CloseDoorsOnLock = CreatePref("CloseDoorsOnLock",
+                "Close Doors On Lock",
+                "Close Doors when Locking",
                 true);
 
             ProductivityFromTaskCompletion = CreatePref("ProductivityFromTaskCompletion",
