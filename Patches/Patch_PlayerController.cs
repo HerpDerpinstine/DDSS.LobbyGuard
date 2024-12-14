@@ -33,17 +33,16 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
+
             // Get PlayerController
             PlayerController player = __0.TryCast<PlayerController>();
             if ((player == null)
                 || player.WasCollected)
-                return false;
-
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-            if ((sender == null)
-                || sender.WasCollected
-                || (player.netIdentity == sender))
                 return false;
 
             // Validate Distance

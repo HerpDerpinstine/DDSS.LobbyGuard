@@ -1,8 +1,6 @@
 ﻿using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
-using Il2Cpp;
-using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppProps.Scripts;
 
@@ -11,12 +9,11 @@ namespace DDSS_LobbyGuard.Patches
     [HarmonyPatch]
     internal class Patch_CollectibleHolder
     {
-        private static Il2CppSystem.Type _keysType = Il2CppType.Of<KeyController>();
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String))]
         private static bool InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String_Prefix(
             NetworkBehaviour __0,
+            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Check for Server
@@ -35,8 +32,13 @@ namespace DDSS_LobbyGuard.Patches
                 || sender.WasCollected)
                 return false;
 
-            // Validate Placement
-            Collectible collectible = sender.GetCurrentCollectible();
+            NetworkIdentity collectibleIdentity = __1.SafeReadNetworkIdentity();
+            if ((collectibleIdentity == null)
+                || collectibleIdentity.WasCollected)
+                return false;
+
+            // Get Collectible
+            Collectible collectible = collectibleIdentity.GetComponent<Collectible>();
             if ((collectible == null)
                 || collectible.WasCollected)
                 return false;
@@ -52,11 +54,12 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Used Slots
             int usedSlots = holder.collectibles.Count;
-            if (holder.allowStacking && (usedSlots >= InteractionSecurity.MAX_COLLECTIBLES_HOLDER))
+            if (!holder.allowStacking
+                && (usedSlots >= InteractionSecurity.MAX_COLLECTIBLES_HOLDER))
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
+            if (!InteractionSecurity.IsWithinRange(collectible.transform.position, holder.transform.position))
                 return false;
 
             // Run Game Command
@@ -96,7 +99,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Used Slots
             int usedSlots = holder.collectibles.Count;
-            if (holder.allowStacking && (usedSlots >= InteractionSecurity.MAX_COLLECTIBLES_HOLDER))
+            if (!holder.allowStacking 
+                && (usedSlots >= InteractionSecurity.MAX_COLLECTIBLES_HOLDER))
                 return false;
 
             // Validate Distance
@@ -165,9 +169,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Collectible
-            if ((collectible.currentHolder == null)
-                || collectible.currentHolder.WasCollected
-                || (collectible.currentHolder != holder))
+            if (collectible.currentHolder != holder)
                 return false;
 
             // Validate Grab

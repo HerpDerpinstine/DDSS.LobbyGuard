@@ -5,6 +5,7 @@ using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Misc.PaperTray;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -54,6 +55,12 @@ namespace DDSS_LobbyGuard.Patches
             if (string.IsNullOrEmpty(document)
                 || string.IsNullOrWhiteSpace(document))
                 return false;
+
+            TextAsset textAsset = Resources.Load<TextAsset>("files/" + document);
+            if ((textAsset == null)
+                || textAsset.WasCollected)
+                return false;
+            GameObject.Destroy(textAsset);
 
             // Run Game Command
             tray.UserCode_CmdSpawnDocument__String(document);

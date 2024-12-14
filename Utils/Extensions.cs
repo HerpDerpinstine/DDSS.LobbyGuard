@@ -27,15 +27,26 @@ namespace DDSS_LobbyGuard.Utils
         internal static string GetUserName(this NetworkIdentity player)
         {
             PlayerController controller = player.GetComponent<PlayerController>();
-            if (controller == null)
+            if ((controller == null)
+                || controller.WasCollected)
                 return null;
 
-            return controller.NetworklobbyPlayer.username;
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
+                return null;
+
+            return lobbyPlayer.username;
         }
 
         internal static PlayerRole GetPlayerRole(this NetworkIdentity player)
         {
-            LobbyPlayer lobbyPlayer = player.GetComponent<LobbyPlayer>();
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return PlayerRole.None;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
             if ((lobbyPlayer == null)
                 || lobbyPlayer.WasCollected)
                 return PlayerRole.None;
@@ -46,11 +57,15 @@ namespace DDSS_LobbyGuard.Utils
         internal static Collectible GetCurrentCollectible(this NetworkIdentity player)
         {
             PlayerController controller = player.GetComponent<PlayerController>();
-            if (controller == null)
+            if ((controller == null)
+                || controller.WasCollected)
                 return null;
+
             Usable usable = controller.GetCurrentUsable();
-            if (usable == null)
+            if ((usable == null)
+                || usable.WasCollected)
                 return null;
+
             return usable.TryCast<Collectible>();
         }
 
@@ -87,6 +102,10 @@ namespace DDSS_LobbyGuard.Utils
             bool isAllOrganized = false;
             foreach (DrawerController drawerController in cabinet.drawers)
             {
+                if ((drawerController == null)
+                    || drawerController.WasCollected)
+                    continue;
+
                 if (!drawerController.NetworkisOrganized)
                 {
                     isAllOrganized = false;
@@ -116,9 +135,21 @@ namespace DDSS_LobbyGuard.Utils
 
         internal static LobbyPlayer GetLobbyPlayerFromConnection(this NetworkConnectionToClient connection)
         {
+            if ((connection == null)
+                || connection.WasCollected)
+                return null;
+
             foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
             {
+                if ((networkIdentity == null)
+                    || networkIdentity.WasCollected)
+                    continue;
+
                 LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
+                if ((player == null)
+                    || player.WasCollected)
+                    continue;
+
                 if (player.connectionToClient == connection)
                     return player;
             }
