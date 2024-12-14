@@ -108,8 +108,7 @@ namespace DDSS_LobbyGuard.Patches
             __instance.RpcResetTerminationTimer(__instance.terminationMaxTime);
             
             // Reset Vote
-            if (__instance.isServer)
-                VoteBoxController.instance.ServerResetVote();
+            VoteBoxController.instance.ServerResetVote();
 
             // Reset New Manager Tasks
             TaskController component = newManager.GetComponent<TaskController>();
@@ -122,9 +121,6 @@ namespace DDSS_LobbyGuard.Patches
                 __instance.RpcDisplayNewRoles(newManager.netIdentity, oldManager.netIdentity);
             else
                 __instance.RpcDisplayNewRoles(newManager.netIdentity, null);
-
-            if (InteractionSecurity.GetWinner(__instance) != PlayerRole.None)
-                __instance.EndGameIfFinished();
 
             // Prevent Original
             return false;

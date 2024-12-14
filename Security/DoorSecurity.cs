@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using Il2Cpp;
 using Il2CppProps.Door;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Security
@@ -10,6 +11,13 @@ namespace DDSS_LobbyGuard.Security
     internal static class DoorSecurity
     {
         private const float _doorAnimationDelay = 2f;
+        private static Dictionary<DoorController, Coroutine> _applyStateCoroutines = new();
+
+        internal static void OnSceneLoad()
+        {
+            // Clear Cached Coroutines
+            _applyStateCoroutines.Clear();
+        }
 
         internal static void DoorStart(DoorController door)
         {
@@ -23,8 +31,10 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void ApplyState(DoorController door, int newState)
         {
-            door.StopAllCoroutines();
-            door.StartCoroutine(ApplyStateCoroutine(door, newState));
+            if (_applyStateCoroutines.ContainsKey(door))
+                return;
+            _applyStateCoroutines[door] = 
+                door.StartCoroutine(ApplyStateCoroutine(door, newState));
         }
 
         private static bool IsDoorValid(DoorController door)
@@ -106,6 +116,9 @@ namespace DDSS_LobbyGuard.Security
             // Close Door
             if (IsDoorValid(door))
                 door.Networkstate = 0;
+
+            if (_applyStateCoroutines.ContainsKey(door))
+                _applyStateCoroutines.Remove(door);
 
             yield break;
         }

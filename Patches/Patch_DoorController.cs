@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -33,17 +34,22 @@ namespace DDSS_LobbyGuard.Patches
              NetworkReader __1,
              NetworkConnectionToClient __2)
         {
+            // Get Requested Lock State
+            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
+
+            // Apply Server State
             if (__2.identity.isServer)
+            {
+                if (stateIndex == 0)
+                    return ConfigHandler.Gameplay.CloseDoorsOnLock.Value;
                 return true;
+            }
 
             // Get DoorController
             DoorController door = __0.TryCast<DoorController>();
             if ((door == null)
                 || door.WasCollected)
                 return false;
-
-            // Get Requested Lock State
-            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
 
             // Check for Open Request
             if (stateIndex == 0)
