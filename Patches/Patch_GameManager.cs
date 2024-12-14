@@ -6,7 +6,6 @@ using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
-using Il2CppObjects.Scripts;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using System.Collections;
@@ -138,41 +137,36 @@ namespace DDSS_LobbyGuard.Patches
                 && (player.NetworkplayerRole != PlayerRole.Janitor))
                 return false;
 
-            if (player.NetworkplayerRole == PlayerRole.Manager)
-                __instance.ReplaceManager();
-            else
+            // Send Role
+            if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
+                && __instance.revealRoleAfterFiring
+                && InteractionSecurity.IsSlacker(player))
             {
-                // Send Role
-                if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
-                    && __instance.revealRoleAfterFiring
-                    && InteractionSecurity.IsSlacker(player))
-                {
-                    player.NetworkplayerRole = PlayerRole.Slacker;
-                    player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
-                    player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
-                }
-
-                // Get Janitor Count
-                var janitorList = LobbyManager.instance.GetJanitorPlayers();
-                bool flag = !player.NetworkisFired
-                    && (player.NetworkplayerRole != PlayerRole.Janitor)
-                    && (__instance.NetworkjanitorAmount > 0)
-                    && (janitorList.Count < __instance.NetworkjanitorAmount);
-
-                // Reset Workstation
-                if (__2)
-                    player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
-
-                // Fire Player
-                player.RpcFirePlayer(true, !flag, player.NetworkplayerRole);
-
-                // Assign Janitor Role
-                if (flag)
-                    player.ServerSetPlayerRole(PlayerRole.Janitor);
-
-                // Apply Fired State
-                player.NetworkisFired = true;
+                player.NetworkplayerRole = PlayerRole.Slacker;
+                player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
+                player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
             }
+
+            // Get Janitor Count
+            var janitorList = LobbyManager.instance.GetJanitorPlayers();
+            bool flag = !player.NetworkisFired
+                && (player.NetworkplayerRole != PlayerRole.Janitor)
+                && (__instance.NetworkjanitorAmount > 0)
+                && (janitorList.Count < __instance.NetworkjanitorAmount);
+
+            // Reset Workstation
+            if (__2)
+                player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
+
+            // Fire Player
+            player.RpcFirePlayer(true, !flag, player.NetworkplayerRole);
+
+            // Assign Janitor Role
+            if (flag)
+                player.ServerSetPlayerRole(PlayerRole.Janitor);
+
+            // Apply Fired State
+            player.NetworkisFired = true;
 
             // Reset Vote
             if (__instance.isServer)
