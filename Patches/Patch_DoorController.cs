@@ -28,22 +28,40 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetDoorState__Int32))]
+        private static bool UserCode_CmdSetDoorState__Int32_Prefix(
+            DoorController __instance,
+            int __0)
+        {
+            __0 = Mathf.Clamp(__0, -1, 1);
+
+            // Check for Lock
+            if (__instance.NetworkisLocked)
+                return false;
+
+            // Check if already Open
+            if (__instance.Networkstate != 0)
+                return false;
+
+            // Apply State
+            DoorSecurity.ApplyState(__instance, __0);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetDoorState__Int32))]
         private static bool InvokeUserCode_CmdSetDoorState__Int32_Prefix(
              NetworkBehaviour __0,
              NetworkReader __1,
              NetworkConnectionToClient __2)
         {
-            // Get Requested Lock State
-            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
-
-            // Apply Server State
-            if (__2.identity.isServer)
-            {
-                if (stateIndex == 0)
-                    return ConfigHandler.Gameplay.CloseDoorsOnLock.Value;
-                return true;
-            }
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
 
             // Get DoorController
             DoorController door = __0.TryCast<DoorController>();
@@ -51,31 +69,31 @@ namespace DDSS_LobbyGuard.Patches
                 || door.WasCollected)
                 return false;
 
-            // Check for Open Request
+            // Get Requested Lock State
+            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
             if (stateIndex == 0)
-                return false;
+            {
+                if (sender.isServer)
+                {
+                    if (!ConfigHandler.Gameplay.CloseDoorsOnLock.Value)
+                        return false;
+                }
+                else
+                    return false;
+            }
 
-            // Check for Lock
-            if (door.NetworkisLocked
-                && (stateIndex != 0))
-                return false;
-
-            // Check if already Open
-            if (door.Networkstate != 0)
-                return false;
-
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-            if ((sender == null)
-                || sender.WasCollected)
+            if (sender.isServer
+                && (stateIndex == 0)
+                && !ConfigHandler.Gameplay.CloseDoorsOnLock.Value)
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+            if (!sender.isServer
+                && !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
 
-            // Apply State
-            DoorSecurity.ApplyState(door, stateIndex);
+            // Run Game Command
+            door.UserCode_CmdSetDoorState__Int32(stateIndex);
 
             // Prevent Original
             return false;
