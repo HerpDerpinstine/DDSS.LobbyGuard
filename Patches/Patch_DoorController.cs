@@ -7,6 +7,7 @@ using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -27,8 +28,49 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetDoorState__Int32))]
-        private static bool InvokeUserCode_CmdSetDoorState__Int32_Prefix()
+        private static bool InvokeUserCode_CmdSetDoorState__Int32_Prefix(
+             NetworkBehaviour __0,
+             NetworkReader __1,
+             NetworkConnectionToClient __2)
         {
+            if (__2.identity.isServer)
+                return true;
+
+            // Get DoorController
+            DoorController door = __0.TryCast<DoorController>();
+            if ((door == null)
+                || door.WasCollected)
+                return false;
+
+            // Get Requested Lock State
+            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
+
+            // Check for Open Request
+            if (stateIndex == 0)
+                return false;
+
+            // Check for Lock
+            if (door.NetworkisLocked
+                && (stateIndex != 0))
+                return false;
+
+            // Check if already Open
+            if (door.Networkstate != 0)
+                return false;
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+                return false;
+
+            // Apply State
+            DoorSecurity.ApplyState(door, stateIndex);
+
             // Prevent Original
             return false;
         }
@@ -55,7 +97,7 @@ namespace DDSS_LobbyGuard.Patches
             // Get State
             __1.SafeReadNetworkIdentity();
             bool requestedState = __1.SafeReadBool();
-            if (door.isLocked == requestedState)
+            if (door.NetworkisLocked == requestedState)
                 return false;
 
             // Validate Distance

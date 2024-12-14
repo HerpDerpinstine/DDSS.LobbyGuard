@@ -19,9 +19,12 @@ namespace DDSS_LobbyGuard.Security
 
             FixColliderSize(door.playerDetectionVolumeForward);
             FixColliderSize(door.playerDetectionVolumeBackward);
+        }
 
+        internal static void ApplyState(DoorController door, int newState)
+        {
             door.StopAllCoroutines();
-            door.StartCoroutine(CheckStateCoroutine(door));
+            door.StartCoroutine(ApplyStateCoroutine(door, newState));
         }
 
         private static bool IsDoorValid(DoorController door)
@@ -80,33 +83,29 @@ namespace DDSS_LobbyGuard.Security
             collider.size = size;
         }
 
-        internal static IEnumerator CheckStateCoroutine(DoorController door)
+        internal static IEnumerator ApplyStateCoroutine(DoorController door, int newState)
         {
-            // Loop
-            while (IsDoorValid(door))
-            {
-                // Check if Door should be Open
-                int volumeState = 0;
-                while (IsDoorValid(door)
-                    && ((volumeState = GetVolumeState(door)) == 0))
-                    yield return null;
+            // Check if Door should be Open
+            int volumeState = 0;
+            while (IsDoorValid(door)
+                && ((volumeState = GetVolumeState(door)) == 0))
+                yield return null;
 
-                // Open Door
-                if (IsDoorValid(door))
-                    door.Networkstate = volumeState;
+            // Open Door
+            if (IsDoorValid(door))
+                door.Networkstate = newState;
 
-                // Wait for Animation
-                yield return new WaitForSeconds(_doorAnimationDelay);
+            // Wait for Animation
+            yield return new WaitForSeconds(_doorAnimationDelay);
 
-                // Check if Door should be Closed
-                while (IsDoorValid(door)
-                    && ((volumeState = GetVolumeState(door)) != 0))
-                    yield return new WaitForSeconds(1f);
+            // Check if Door should be Closed
+            while (IsDoorValid(door)
+                && ((volumeState = GetVolumeState(door)) != 0))
+                yield return new WaitForSeconds(1f);
 
-                // Close Door
-                if (IsDoorValid(door))
-                    door.Networkstate = volumeState;
-            }
+            // Close Door
+            if (IsDoorValid(door))
+                door.Networkstate = 0;
 
             yield break;
         }
