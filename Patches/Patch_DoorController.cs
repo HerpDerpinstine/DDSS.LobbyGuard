@@ -36,7 +36,8 @@ namespace DDSS_LobbyGuard.Patches
             __0 = Mathf.Clamp(__0, -1, 1);
 
             // Check for Lock
-            if (__instance.NetworkisLocked)
+            if ((__0 == 0)
+                || __instance.NetworkisLocked)
                 return false;
 
             // Check if already Open
@@ -71,21 +72,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Requested Lock State
             int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
-            if (stateIndex == 0)
-            {
-                if (sender.isServer)
-                {
-                    if (!ConfigHandler.Gameplay.CloseDoorsOnLock.Value)
-                        return false;
-                }
-                else
-                    return false;
-            }
-
-            if (sender.isServer
-                && (stateIndex == 0)
-                && !ConfigHandler.Gameplay.CloseDoorsOnLock.Value)
-                return false;
 
             // Validate Distance
             if (!sender.isServer

@@ -95,27 +95,36 @@ namespace DDSS_LobbyGuard.Security
 
         internal static IEnumerator ApplyStateCoroutine(DoorController door, int newState)
         {
-            // Check if Door should be Open
-            int volumeState = 0;
-            while (IsDoorValid(door)
-                && ((volumeState = GetVolumeState(door)) == 0))
-                yield return null;
-
             // Open Door
             if (IsDoorValid(door))
                 door.Networkstate = newState;
 
             // Wait for Animation
-            yield return new WaitForSeconds(_doorAnimationDelay);
+            for (int i = 0; i < (_doorAnimationDelay / 0.1f); i++)
+            {
+                if (GetLockState(door))
+                    break;
+                else
+                    yield return new WaitForSeconds(0.1f);
+            }
 
             // Check if Door should be Closed
+            int volumeState = 0;
             while (IsDoorValid(door)
                 && ((volumeState = GetVolumeState(door)) != 0))
-                yield return new WaitForSeconds(1f);
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (GetLockState(door))
+                        break;
+                    else
+                        yield return new WaitForSeconds(0.1f);
+                }
+            }
 
             // Close Door
             if (IsDoorValid(door))
-                door.Networkstate = 0;
+                door.Networkstate = volumeState;
 
             if (_applyStateCoroutines.ContainsKey(door))
                 _applyStateCoroutines.Remove(door);
