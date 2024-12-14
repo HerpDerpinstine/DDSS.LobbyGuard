@@ -25,9 +25,15 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get CollectibleHolder
             CollectibleHolder holder = __0.TryCast<CollectibleHolder>();
+            if ((holder == null)
+                || holder.WasCollected)
+                return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
@@ -73,9 +79,15 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get CollectibleHolder
             CollectibleHolder holder = __0.TryCast<CollectibleHolder>();
+            if ((holder == null)
+                || holder.WasCollected)
+                return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
 
             // Validate Free Slots
             int freeSlots = holder.freePositions.Count;
@@ -121,9 +133,15 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get CollectibleHolder
             CollectibleHolder holder = __0.TryCast<CollectibleHolder>();
+            if ((holder == null)
+                || holder.WasCollected)
+                return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
 
             // Validate Count
             if (holder.freePositions.Count >= holder.collectiblePositions.Count)
@@ -136,6 +154,9 @@ namespace DDSS_LobbyGuard.Patches
             // Get Collectible NetworkIdentity
             __1.SafeReadNetworkIdentity();
             NetworkIdentity collectibleIdentity = __1.SafeReadNetworkIdentity();
+            if ((collectibleIdentity == null)
+                || collectibleIdentity.WasCollected)
+                return false;
 
             // Get Collectible
             Collectible collectible = collectibleIdentity.GetComponent<Collectible>();
@@ -144,7 +165,9 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Collectible
-            if (collectible.currentHolder != holder)
+            if ((collectible.currentHolder == null)
+                || collectible.currentHolder.WasCollected
+                || (collectible.currentHolder != holder))
                 return false;
 
             // Validate Grab
