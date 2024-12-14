@@ -60,7 +60,6 @@ namespace DDSS_LobbyGuard.Patches
             if ((textAsset == null)
                 || textAsset.WasCollected)
                 return false;
-            GameObject.Destroy(textAsset);
 
             // Run Game Command
             tray.UserCode_CmdSpawnDocument__String(document);

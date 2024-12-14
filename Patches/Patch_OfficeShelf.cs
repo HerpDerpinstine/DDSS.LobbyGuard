@@ -63,7 +63,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Document Content
             TextAsset textAsset = Resources.Load<TextAsset>("files/" + fileName);
-            if (textAsset == null)
+            if ((textAsset == null)
+                || textAsset.WasCollected)
                 return false;
 
             string documentContent = textAsset.text;

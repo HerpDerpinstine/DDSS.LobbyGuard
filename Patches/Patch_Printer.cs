@@ -66,7 +66,8 @@ namespace DDSS_LobbyGuard.Patches
                 && !string.IsNullOrWhiteSpace(fileName))
             {
                 TextAsset textAsset = Resources.Load<TextAsset>("files/" + fileName);
-                if (textAsset != null)
+                if ((textAsset != null)
+                    && !textAsset.WasCollected)
                 {
                     setLabel = false;
                     documentContent = textAsset.text;
