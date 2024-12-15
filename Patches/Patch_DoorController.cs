@@ -1,5 +1,4 @@
-﻿using DDSS_LobbyGuard.Config;
-using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -19,7 +18,8 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.Start))]
         private static void Start_Prefix(DoorController __instance)
         {
-            if ((__instance == null)
+            if (!NetworkServer.activeHost
+                || (__instance == null)
                 || __instance.WasCollected)
                 return;
 
