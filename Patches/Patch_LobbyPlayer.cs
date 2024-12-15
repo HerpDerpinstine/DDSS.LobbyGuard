@@ -55,6 +55,18 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.VerifySteamId))]
+        private static bool VerifySteamId_Prefix()
+        {
+            // Check for Server
+            if (!NetworkServer.activeHost)
+                return false;
+
+            // Run Original
+            return true;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.DeserializeSyncVars))]
         private static void DeserializeSyncVars_Prefix(LobbyPlayer __instance)
         {
