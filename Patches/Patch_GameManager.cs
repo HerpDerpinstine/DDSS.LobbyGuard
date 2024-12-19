@@ -255,30 +255,28 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, player));
+            manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, InteractionSecurity.IsSlacker(player) ? PlayerRole.Slacker : player.NetworkplayerRole));
 
             // Prevent Original
             return false;
         }
 
-        private static IEnumerator CoroutineAddProductivityFromTaskCompletion(GameManager manager, LobbyPlayer player)
+        private static IEnumerator CoroutineAddProductivityFromTaskCompletion(GameManager manager, PlayerRole role)
         {
             if (manager.NetworkdelayedScoreOnSlackerTasks)
                 yield return new WaitForSeconds(Random.Range(0f, 30f));
 
             if ((manager != null)
                 && !manager.WasCollected
-                && (player != null)
-                && !player.WasCollected
                 && (LobbyManager.instance != null)
                 && !LobbyManager.instance.WasCollected)
             {
                 float num = 0f;
-                if (InteractionSecurity.IsSlacker(player))
+                if (role == PlayerRole.Slacker)
                     num = manager.NetworkproductivityPerSlackerTask / InteractionSecurity.GetAmountOfUnfiredSlackers(LobbyManager.instance);
-                else if (player.NetworkplayerRole == PlayerRole.Specialist)
+                else if (role == PlayerRole.Specialist)
                     num = manager.NetworkproductivityPerSpecialistTask / InteractionSecurity.GetAmountOfUnfiredSpecialists(LobbyManager.instance);
-                else if (player.NetworkplayerRole == PlayerRole.Manager)
+                else if (role == PlayerRole.Manager)
                     num = manager.NetworkproductivityPerManagerTask;
 
                 manager.productivity += num;
