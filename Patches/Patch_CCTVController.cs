@@ -18,7 +18,7 @@ namespace DDSS_LobbyGuard.Patches
             CCTVController camera = __0.TryCast<CCTVController>();
             if ((camera == null)
                 || camera.WasCollected
-                || !camera.isActivated)
+                || !camera.CanUpdateFirmware())
                 return false;
 
             // Get Sender
