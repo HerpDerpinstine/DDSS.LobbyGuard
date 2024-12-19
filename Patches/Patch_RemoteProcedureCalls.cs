@@ -12,8 +12,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(RemoteProcedureCalls), nameof(RemoteProcedureCalls.RegisterDelegate))]
         private static void RegisterDelegate_Prefix(string __1, RemoteCallType __2)
         {
-            MelonMain._logger.Msg($"RegisterDelegate: {__1} - {Enum.GetName(__2)}");
-
             if (__2 == RemoteCallType.ClientRpc)
                 RPCHelper.OnRegister(__1);
         }

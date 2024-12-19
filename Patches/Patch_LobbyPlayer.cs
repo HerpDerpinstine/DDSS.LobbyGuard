@@ -28,8 +28,8 @@ namespace DDSS_LobbyGuard.Patches
             __0 = __0.RemoveRichText();
         }
 
-        //[HarmonyPrefix]
-        //[HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
         private static void NetworksteamID_Prefix(LobbyPlayer __instance, ulong __0)
         {
             // Check for Host
