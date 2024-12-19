@@ -2,6 +2,7 @@
 using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
+using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
@@ -15,6 +16,39 @@ namespace DDSS_LobbyGuard.Patches
     [HarmonyPatch]
     internal class Patch_Printer
     {
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdFill__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdFill__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkIdentity __0,
+            NetworkConnectionToClient __2)
+        {
+            // Get Printer
+            Printer printer = __0.TryCast<Printer>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, printer.transform.position))
+                return false;
+
+            // Validate Placement
+            Collectible collectible = sender.GetCurrentCollectible();
+            if ((collectible == null)
+                || collectible.WasCollected)
+                return false;
+
+            // Validate PaperReam
+            PaperReam paperReam = collectible.TryCast<PaperReam>();
+            if ((paperReam == null)
+                || paperReam.WasCollected)
+                return false;
+
+            printer.UserCode_CmdFill__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Prevent Original
+            return false;
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdPrintDocument__String__String))]
         private static bool InvokeUserCode_CmdPrintDocument__String__String_Prefix(
