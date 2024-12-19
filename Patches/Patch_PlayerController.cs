@@ -38,7 +38,7 @@ namespace DDSS_LobbyGuard.Patches
                 || sender.WasCollected)
                 return false;
 
-            // Validate Sender is on Workstation
+            // Validate Sender
             PlayerController controller = __2.identity.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)

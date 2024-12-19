@@ -209,6 +209,20 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.GetPlayerRole() != PlayerRole.Slacker)
+                return false;
+
+            // Get Player
+            LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
+            if ((player == null)
+                || player.WasCollected)
+                return false;
+
+            // Validate WorkStationController
+            station = player.workStationController;
+            if ((station == null)
+                || station.WasCollected)
+                return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(
