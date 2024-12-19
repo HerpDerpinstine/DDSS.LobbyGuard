@@ -20,6 +20,8 @@ namespace DDSS_LobbyGuard.Config
 
         internal MelonPreferences_Entry<bool> ProductivityFromTaskCompletion;
 
+        internal MelonPreferences_Entry<bool> PlayerLeavesReduceTerminations;
+
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
 
@@ -85,6 +87,11 @@ namespace DDSS_LobbyGuard.Config
             ProductivityFromTaskCompletion = CreatePref("ProductivityFromTaskCompletion",
                 "Productivity from Task Completion",
                 "Allows Productivity to be Gained from Task Completion",
+                true);
+
+            PlayerLeavesReduceTerminations = CreatePref("PlayerLeavesReduceTerminations",
+                "Player Leaves Reduce Terminations",
+                "Allows Terminations to be Decreased from Players Disconnecting",
                 true);
 
             PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",

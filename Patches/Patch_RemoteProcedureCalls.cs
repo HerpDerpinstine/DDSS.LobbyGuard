@@ -1,6 +1,7 @@
 ﻿using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror.RemoteCalls;
+using System;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -8,10 +9,13 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_RemoteProcedureCalls
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(RemoteProcedureCalls), nameof(RemoteProcedureCalls.RegisterRpc))]
-        private static void RegisterRpc_Prefix(string __1)
+        [HarmonyPatch(typeof(RemoteProcedureCalls), nameof(RemoteProcedureCalls.RegisterDelegate))]
+        private static void RegisterDelegate_Prefix(string __1, RemoteCallType __2)
         {
-            RPCHelper.OnRegister(__1);
+            MelonMain._logger.Msg($"RegisterDelegate: {__1} - {Enum.GetName(__2)}");
+
+            if (__2 == RemoteCallType.ClientRpc)
+                RPCHelper.OnRegister(__1);
         }
     }
 }

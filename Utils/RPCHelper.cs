@@ -8,7 +8,6 @@ namespace DDSS_LobbyGuard.Utils
         internal enum eType
         {
             NONE,
-
             LobbyPlayer_RpcSetPlayerRole,
         }
 

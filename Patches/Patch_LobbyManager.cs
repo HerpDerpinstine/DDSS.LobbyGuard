@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -97,7 +98,8 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Validate Game State
-            if (__instance.gameStarted)
+            if (__instance.gameStarted
+                && !ConfigHandler.Gameplay.PlayerLeavesReduceTerminations.Value)
             {
                 // Adjust Termination Offset
                 PlayerRole playerRole = lobbyPlayer.NetworkplayerRole;

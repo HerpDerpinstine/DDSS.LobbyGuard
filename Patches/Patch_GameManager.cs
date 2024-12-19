@@ -127,6 +127,39 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.ServerSetAssistant))]
+        private static bool ServerSetAssistant_Prefix(
+            GameManager __instance,
+            NetworkIdentity __0) // newAssistant
+        {
+            // Get LobbyPlayer
+            LobbyPlayer targetPlayer = __0.GetComponent<LobbyPlayer>();
+            if ((targetPlayer == null)
+                || targetPlayer.WasCollected
+                || (targetPlayer.NetworkplayerRole == PlayerRole.Manager)
+                || (targetPlayer.NetworksubRole == SubRole.Assistant))
+                return false;
+
+            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
+            {
+                // Get Old Player
+                LobbyPlayer oldPlayer = networkIdentity.GetComponent<LobbyPlayer>();
+                if ((oldPlayer == null)
+                    || (oldPlayer.NetworksubRole != SubRole.Assistant))
+                    continue;
+
+                // Reset Role
+                oldPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
+            }
+
+            // Run Game Command
+            targetPlayer.UserCode_CmdSetSubRole__SubRole((targetPlayer.NetworksubRole == SubRole.Assistant) ? SubRole.None : SubRole.Assistant);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.ServerFirePlayer))]
         private static bool ServerFirePlayer_Prefix(
             GameManager __instance,
