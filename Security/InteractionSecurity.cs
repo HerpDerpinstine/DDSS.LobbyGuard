@@ -19,7 +19,7 @@ namespace DDSS_LobbyGuard.Security
         private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
 
         internal const float MAX_DISTANCE = 2f;
-        internal const float MAX_SPANK_DISTANCE = 1f;
+        internal const float MAX_PLAYER_INTERACT_DISTANCE = 1f;
 
         internal const int MAX_DOCUMENTS_TRAY = 10;
         internal const int MAX_DOCUMENTS_BINDER = 10;

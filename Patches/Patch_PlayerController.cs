@@ -55,7 +55,7 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(
                 sender.transform.position, 
                 player.transform.position, 
-                InteractionSecurity.MAX_SPANK_DISTANCE))
+                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
                 return false;
 
             // Run Game Command
