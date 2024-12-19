@@ -141,29 +141,48 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.InvokeUserCode_CmdForceManagerRole__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdForceManagerRole__NetworkIdentity_Prefix(NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdForceManagerRole__NetworkIdentity_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
         {
-            // Validate
-            if ((__2 == null)
-                || __2.WasCollected)
-                return false;
-
-            // Check for Server
-            if (__2.identity.isServer)
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if (sender.isServer)
                 return true;
 
             // Check for Lobby
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "LobbyScene")
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "LobbyScene")
                 return false;
 
-            // Validate Manager Role when In-Game
-            LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
+            // Check Sender
+            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
             if ((player == null)
-                || (player.NetworkplayerRole != PlayerRole.Manager))
+                || player.WasCollected
+                || !player.isHost)
                 return false;
 
-            // Run Original
-            return true;
+            // Get LobbyManager
+            LobbyManager manager = __0.TryCast<LobbyManager>();
+
+            // Get Target
+            NetworkIdentity netIdentity = __1.SafeReadNetworkIdentity();
+            if ((netIdentity == null)
+                || netIdentity.WasCollected)
+                return false;
+
+            // Validate Manager Role
+            LobbyPlayer target = netIdentity.GetComponent<LobbyPlayer>();
+            if ((target == null)
+                || target.WasCollected
+                || (target.NetworkplayerRole == PlayerRole.Manager))
+                return false;
+
+            // Invoke Game Method
+            manager.UserCode_CmdForceManagerRole__NetworkIdentity(netIdentity);
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]
