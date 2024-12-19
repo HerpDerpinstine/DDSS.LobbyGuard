@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.FireEx;
 using Il2CppProps.Scripts;
 using Il2CppProps.TrashBin;
@@ -60,7 +61,16 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Check for Extinguishing
-            if (!enabled)
+            if (enabled)
+            {
+                // Get Player
+                LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
+                if ((player == null)
+                    || player.WasCollected
+                    || !InteractionSecurity.IsSlacker(player))
+                    return false;
+            }
+            else
             {
                 // Validate Placement
                 Collectible collectible = sender.GetCurrentCollectible();
