@@ -40,10 +40,6 @@ namespace DDSS_LobbyGuard.Patches
             if (doc == null)
                 return false;
 
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(fax.transform.position, doc.transform.position))
-                return false;
-
             // Run Game Command
             fax.UserCode_CmdFax__NetworkIdentity(sender);
 
