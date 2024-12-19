@@ -39,10 +39,17 @@ namespace DDSS_LobbyGuard.Patches
                 || sender.WasCollected)
                 return false;
 
+            // Validate Sender is on Workstation
+            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
             // Get PlayerController
             PlayerController player = __0.TryCast<PlayerController>();
             if ((player == null)
-                || player.WasCollected)
+                || player.WasCollected
+                || (controller == player))
                 return false;
 
             // Validate Distance
