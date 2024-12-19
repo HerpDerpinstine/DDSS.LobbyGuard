@@ -69,6 +69,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.GetPlayerRole() != PlayerRole.Slacker)
+                return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(
