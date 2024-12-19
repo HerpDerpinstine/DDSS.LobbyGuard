@@ -16,6 +16,84 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_WorkStationController
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Get WorkStationController
+            WorkStationController station = __0.TryCast<WorkStationController>();
+            if ((station == null)
+                || station.WasCollected)
+                return false;
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if (sender.GetPlayerRole() != PlayerRole.Manager)
+                return false;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, station.transform.position))
+                return false;
+
+            // Get Target
+            __1.SafeReadNetworkIdentity();
+            NetworkIdentity targetIdentity = __1.SafeReadNetworkIdentity();
+            if ((targetIdentity == null)
+                || targetIdentity.WasCollected)
+                return false;
+
+            LobbyPlayer target = targetIdentity.GetComponent<LobbyPlayer>();
+            if ((target == null)
+                || target.WasCollected)
+                return false;
+
+            station.UserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient(sender, target, __2);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdSetVirus__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSetVirus__NetworkIdentity__NetworkConnectionToClient_Prefix(
+            NetworkBehaviour __0,
+            NetworkConnectionToClient __2)
+        {
+            // Get WorkStationController
+            WorkStationController station = __0.TryCast<WorkStationController>();
+            if ((station == null)
+                || station.WasCollected)
+                return false;
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(
+                sender.transform.position,
+                station.transform.position))
+                return false;
+
+            // Validate Placement
+            Collectible collectible = sender.GetCurrentCollectible();
+            if (collectible == null)
+                return false;
+
+            // Get InfectedUsb
+            InfectedUsb usb = collectible.TryCast<InfectedUsb>();
+            if (usb == null)
+                return false;
+
+            // Run Game Command
+            station.UserCode_CmdSetVirus__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdEnableJelly__NetworkIdentity__Boolean))]
         private static bool InvokeUserCode_CmdEnableJelly__NetworkIdentity__Boolean_Prefix(
             NetworkBehaviour __0,

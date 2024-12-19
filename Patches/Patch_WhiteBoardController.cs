@@ -72,7 +72,7 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(WhiteBoardController), nameof(WhiteBoardController.InvokeUserCode_CmdEndMeeting__NetworkIdentity__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_CmdEndMeeting__NetworkIdentity__NetworkConnectionToClient(
+        private static bool InvokeUserCode_CmdEndMeeting__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
