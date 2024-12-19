@@ -17,10 +17,6 @@ namespace DDSS_LobbyGuard
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get BeerController
             BeerController beer = __0.TryCast<BeerController>();
             if ((beer == null)

@@ -136,8 +136,7 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer targetPlayer = __0.GetComponent<LobbyPlayer>();
             if ((targetPlayer == null)
                 || targetPlayer.WasCollected
-                || (targetPlayer.NetworkplayerRole == PlayerRole.Manager)
-                || (targetPlayer.NetworksubRole == SubRole.Assistant))
+                || (targetPlayer.NetworkplayerRole == PlayerRole.Manager))
                 return false;
 
             foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
