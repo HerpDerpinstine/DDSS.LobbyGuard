@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 using Il2CppProps.Smoking;
 
@@ -22,6 +23,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, cigarette.transform.position))

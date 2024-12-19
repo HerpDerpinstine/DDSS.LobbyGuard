@@ -47,7 +47,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
+                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
                 return false;
 
             interact.UserCode_PromoteToAssistant__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -92,7 +93,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
+                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
                 return false;
 
             interact.UserCode_DemoteFromAssistant__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -119,6 +121,12 @@ namespace DDSS_LobbyGuard.Patches
             PlayerController controller = sender.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
                 return false;
 
             // Validate Interactable
@@ -160,6 +168,12 @@ namespace DDSS_LobbyGuard.Patches
                 || controller.WasCollected)
                 return false;
 
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
+                return false;
+
             // Validate Interactable
             PlayerInteractable senderInteract = controller.playerInteractable;
             if ((senderInteract == null)
@@ -198,6 +212,11 @@ namespace DDSS_LobbyGuard.Patches
             if ((controller == null)
                 || controller.WasCollected)
                 return false;
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
+                return false;
 
             // Validate Interactable
             PlayerInteractable senderInteract = controller.playerInteractable;
@@ -207,7 +226,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
+                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
                 return false;
 
             senderInteract.UserCode_CmdResetHandShake();
@@ -238,6 +258,12 @@ namespace DDSS_LobbyGuard.Patches
                 || controller.WasCollected)
                 return false;
 
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
+                return false;
+
             // Validate Interactable
             PlayerInteractable senderInteract = controller.playerInteractable;
             if ((senderInteract == null)
@@ -246,7 +272,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
+                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
                 return false;
 
             senderInteract.UserCode_CmdResetHandShakeRequest__NetworkIdentity(sender);
@@ -275,6 +302,12 @@ namespace DDSS_LobbyGuard.Patches
                 || controller.WasCollected)
                 return false;
 
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
+                return false;
+
             // Validate Interactable
             PlayerInteractable senderInteract = controller.playerInteractable;
             if ((senderInteract == null)
@@ -283,7 +316,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
+                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
                 return false;
 
             senderInteract.UserCode_CmdResetOutgoingHandShake();

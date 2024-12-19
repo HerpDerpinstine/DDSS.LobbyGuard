@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -27,7 +28,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, drawer.transform.position))
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, drawer.transform.position))
                 return false;
 
             // Run Game Command
@@ -51,14 +53,15 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Validate Distance
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, drawer.transform.position))
+                return false;
+
             // Get State
             __1.SafeReadNetworkIdentity();
             bool requestedState = __1.SafeReadBool();
             if (drawer.NetworkisOpen == requestedState)
-                return false;
-
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, drawer.transform.position))
                 return false;
 
             // Apply State

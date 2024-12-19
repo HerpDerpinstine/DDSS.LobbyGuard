@@ -1,7 +1,9 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -23,6 +25,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, machine.transform.position))

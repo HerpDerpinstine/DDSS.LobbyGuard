@@ -1,10 +1,12 @@
 ﻿using DDSS_LobbyGuard.Config;
 using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
+using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Scripts;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
@@ -30,9 +32,12 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!sender.isServer
-                && !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
-                return false;
+            if (!sender.isServer)
+            {
+                if (sender.IsGhost()
+                    || InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                    return false;
+            }
 
             // Get Usable Type
             Il2CppSystem.Type usableType = usable.GetIl2CppType();
@@ -113,9 +118,12 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!sender.isServer
-                && !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
-                return false;
+            if (!sender.isServer)
+            {
+                if (sender.IsGhost()
+                    || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                    return false;
+            }
 
             // Get Usable Type
             Il2CppSystem.Type usableType = usable.GetIl2CppType();
@@ -196,9 +204,12 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!sender.isServer
-                && !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
-                return false;
+            if (!sender.isServer)
+            {
+                if (sender.IsGhost()
+                    || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                    return false;
+            }
 
             // Validate Drop
             if (!InteractionSecurity.CanStopUseUsable(sender, usable.TryCast<Chair>()))

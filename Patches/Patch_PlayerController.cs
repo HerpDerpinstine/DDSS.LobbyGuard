@@ -1,10 +1,12 @@
 ﻿using DDSS_LobbyGuard.Config;
 using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppPlayer;
+using Il2CppPlayer.Lobby;
 using Il2CppPlayer.PlayerEffects;
 using Il2CppPlayer.StateMachineLogic;
 using UnityEngine;
@@ -42,6 +44,12 @@ namespace DDSS_LobbyGuard.Patches
             PlayerController controller = __2.identity.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
                 return false;
 
             // Get PlayerController

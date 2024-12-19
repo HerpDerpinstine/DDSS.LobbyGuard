@@ -1,6 +1,8 @@
 ﻿using DDSS_LobbyGuard.Security;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.WC.Toilet;
 
 namespace DDSS_LobbyGuard.Patches
@@ -25,7 +27,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, toilet.transform.position))
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, toilet.transform.position))
                 return false;
 
             // Run Game Command

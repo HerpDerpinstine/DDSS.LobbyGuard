@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppComputer.Scripts.System;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
@@ -19,6 +20,10 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected
+                || sender.IsGhost())
+                return false;
 
             // Get ComputerController
             ComputerController controller = __0.TryCast<ComputerController>();
@@ -50,6 +55,10 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected
+                || sender.IsGhost())
+                return false;
 
             // Get ComputerController
             ComputerController controller = __0.TryCast<ComputerController>();
@@ -77,6 +86,10 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected
+                || sender.IsGhost())
+                return false;
 
             // Get ComputerController
             ComputerController controller = __0.TryCast<ComputerController>();
@@ -112,6 +125,16 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected
+                || sender.IsGhost())
+                return false;
+
+            // Validate Role
+            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
+            if ((player == null)
+                || player.IsGhost())
+                return false;
 
             // Get ComputerController
             ComputerController controller = __0.TryCast<ComputerController>();

@@ -3,6 +3,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppPlayer.PlayerEffects;
 using Il2CppProps.Scripts;
 using System;
@@ -39,6 +40,8 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Get PlayerEffectController
             PlayerEffectController controller = sender.GetComponent<PlayerEffectController>();

@@ -4,6 +4,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
@@ -27,7 +28,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, mug.transform.position))
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, mug.transform.position))
                 return false;
 
             // Validate Placement
@@ -70,7 +72,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, mug.transform.position))
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, mug.transform.position))
                 return false;
 
             // Check if should Fill or Drink

@@ -4,6 +4,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.Printer;
 using Il2CppProps.Scripts;
 
@@ -25,7 +26,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, fax.transform.position))
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, fax.transform.position))
                 return false;
 
             // Validate Placement

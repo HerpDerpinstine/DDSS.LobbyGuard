@@ -2,6 +2,7 @@
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
@@ -29,7 +30,8 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
             if ((sender == null)
-                || sender.WasCollected)
+                || sender.WasCollected
+                || sender.IsGhost())
                 return false;
 
             NetworkIdentity collectibleIdentity = __1.SafeReadNetworkIdentity();
@@ -89,7 +91,8 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
             if ((sender == null)
-                || sender.WasCollected)
+                || sender.WasCollected
+                || sender.IsGhost())
                 return false;
 
             // Validate Free Slots
@@ -144,7 +147,8 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
             if ((sender == null)
-                || sender.WasCollected)
+                || sender.WasCollected
+                || sender.IsGhost())
                 return false;
 
             // Validate Count

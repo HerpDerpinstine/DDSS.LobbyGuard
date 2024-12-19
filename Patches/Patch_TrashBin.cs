@@ -47,9 +47,12 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.isServer)
+                return true;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
                 return false;
 
             // Get Values
@@ -60,14 +63,17 @@ namespace DDSS_LobbyGuard.Patches
             if (trashcan.isOnFire == enabled)
                 return false;
 
+            // Get Player
+            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
+            if ((player == null)
+                || player.WasCollected)
+                return false;
+
             // Check for Extinguishing
             if (enabled)
             {
                 // Get Player
-                LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-                if ((player == null)
-                    || player.WasCollected
-                    || !InteractionSecurity.IsSlacker(player))
+                if (!InteractionSecurity.IsSlacker(player))
                     return false;
             }
             else
@@ -108,7 +114,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
                 return false;
 
             // Run Game Command

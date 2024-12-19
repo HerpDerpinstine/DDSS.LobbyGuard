@@ -74,9 +74,12 @@ namespace DDSS_LobbyGuard.Patches
             int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
 
             // Validate Distance
-            if (!sender.isServer
-                && !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
-                return false;
+            if (!sender.isServer)
+            {
+                if (sender.IsGhost()
+                    || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+                    return false;
+            }
 
             // Run Game Command
             door.UserCode_CmdSetDoorState__Int32(stateIndex);
@@ -124,7 +127,8 @@ namespace DDSS_LobbyGuard.Patches
                 // Get Player
                 LobbyPlayer oldPlayer = sender.GetComponent<LobbyPlayer>();
                 if ((oldPlayer == null)
-                    || oldPlayer.WasCollected)
+                    || oldPlayer.WasCollected
+                    || oldPlayer.IsGhost())
                     return false;
 
                 // Get DoorInteractable
@@ -168,7 +172,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
 
             // Run Game Command

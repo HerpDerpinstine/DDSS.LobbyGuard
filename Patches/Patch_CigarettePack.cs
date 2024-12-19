@@ -4,6 +4,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 using Il2CppProps.Smoking;
 using UnityEngine;
@@ -24,6 +25,11 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+
+            // Validate Role
+            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
+            if (sender.IsGhost())
+                return false;
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();

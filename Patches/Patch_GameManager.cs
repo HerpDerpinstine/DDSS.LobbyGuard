@@ -251,7 +251,9 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
             LobbyPlayer player = __2.GetLobbyPlayerFromConnection();
             if ((player == null)
-                || player.WasCollected)
+                || player.WasCollected
+                || player.IsGhost()
+                || player.IsJanitor())
                 return false;
 
             // Run Game Command

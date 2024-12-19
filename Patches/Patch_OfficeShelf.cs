@@ -15,6 +15,10 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(OfficeShelf), nameof(OfficeShelf.InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32))]
         private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32_Prefix(NetworkReader __1, NetworkConnectionToClient __2)
         {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Get Document
             string document = __1.SafeReadString();
             if (string.IsNullOrEmpty(document)

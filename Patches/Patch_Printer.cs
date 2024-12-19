@@ -7,6 +7,7 @@ using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.Printer;
 using Il2CppProps.Scripts;
 using UnityEngine;
@@ -28,7 +29,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, printer.transform.position))
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, printer.transform.position))
                 return false;
 
             // Validate Placement
@@ -61,6 +63,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Get Sender Username
             string userName = sender.GetUserName();
@@ -173,6 +177,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Get Sender Username
             string userName = sender.GetUserName();
@@ -256,6 +262,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Validate Free Slots
             int freeSlots = printer.freePositions.Count;

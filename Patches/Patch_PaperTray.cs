@@ -27,7 +27,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Player
             LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-            if (player == null)
+            if ((player == null)
+                || player.IsGhost())
                 return false;
 
             // Get Workstation

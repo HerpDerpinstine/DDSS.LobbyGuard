@@ -70,17 +70,18 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            // Validate Distance
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(
+                sender.transform.position,
+                station.transform.position))
+                return false;
+
             // Get Player
             LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
             if ((player == null)
                 || player.WasCollected
                 || !InteractionSecurity.IsSlacker(player))
-                return false;
-
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(
-                sender.transform.position,
-                station.transform.position))
                 return false;
 
             // Validate Placement
@@ -113,15 +114,16 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Get Values
-            __1.SafeReadNetworkIdentity();
-            bool enabled = __1.SafeReadBool();
-
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(
                 sender.transform.position,
                 station.transform.position))
                 return false;
+
+            // Get Values
+            __1.SafeReadNetworkIdentity();
+            bool enabled = __1.SafeReadBool();
 
             // Validate Placement
             if (enabled)
@@ -171,7 +173,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(
                 sender.transform.position,
                 station.transform.position))
                 return false;

@@ -60,7 +60,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Player
-            if (!ComputerSecurity.ValidatePlayer(controller.computerController, sender))
+            if (sender.IsGhost()
+                || !ComputerSecurity.ValidatePlayer(controller.computerController, sender))
                 return false;
 
             // Get Value

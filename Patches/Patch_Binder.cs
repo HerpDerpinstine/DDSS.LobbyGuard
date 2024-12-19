@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppProps;
 using Il2CppProps.Printer;
 using Il2CppProps.Scripts;
@@ -64,6 +65,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Validate Drop
             if (!InteractionSecurity.CanStopUseUsable(sender, false))
@@ -117,6 +120,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Validate Drop
             if (!InteractionSecurity.CanStopUseUsable(sender, false))
@@ -167,6 +172,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Validate Grab
             if (!InteractionSecurity.CanUseUsable(sender, false))

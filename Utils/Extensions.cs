@@ -39,6 +39,48 @@ namespace DDSS_LobbyGuard.Utils
             return lobbyPlayer.username;
         }
 
+        internal static bool IsGhost(this LobbyPlayer player)
+            => (player.NetworkplayerRole == PlayerRole.None) || (player.NetworkisFired && (player.NetworkplayerRole != PlayerRole.Janitor));
+        internal static bool IsGhost(this PlayerController controller)
+        {
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
+                return true;
+
+            return lobbyPlayer.IsGhost();
+        }
+        internal static bool IsGhost(this NetworkIdentity player)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return true;
+
+            return controller.IsGhost();
+        }
+
+        internal static bool IsJanitor(this LobbyPlayer player)
+            => player.NetworkisFired && (player.NetworkplayerRole == PlayerRole.Janitor);
+        internal static bool IsJanitor(this PlayerController controller)
+        {
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
+                return false;
+
+            return lobbyPlayer.IsJanitor();
+        }
+        internal static bool IsJanitor(this NetworkIdentity player)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            return controller.IsJanitor();
+        }
+
         internal static PlayerRole GetPlayerRole(this NetworkIdentity player)
         {
             PlayerController controller = player.GetComponent<PlayerController>();
