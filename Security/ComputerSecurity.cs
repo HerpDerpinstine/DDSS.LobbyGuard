@@ -1,10 +1,14 @@
 ﻿using Il2CppComputer.Scripts.System;
 using Il2CppMirror;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Security
 {
     internal static class ComputerSecurity
     {
+        internal static Dictionary<string, Color> _playerAddresses = new();
+
         internal static bool ValidatePlayer(ComputerController computer,
             NetworkIdentity player)
         {

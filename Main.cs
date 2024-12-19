@@ -68,6 +68,7 @@ namespace DDSS_LobbyGuard
                 InteractionSecurity.OnSceneLoad();
                 PlayerTriggerSecurity.OnSceneLoad();
                 DoorSecurity.OnSceneLoad();
+                ComputerSecurity._playerAddresses.Clear();
             }
 
             if (sceneName == "MainMenuScene") // Main Menu
