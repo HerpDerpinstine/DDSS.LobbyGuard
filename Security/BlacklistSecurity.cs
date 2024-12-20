@@ -41,7 +41,8 @@ namespace DDSS_LobbyGuard.Security
 
             if (_blacklist.Count > 0)
                 foreach (BlacklistedPlayer player in _blacklist)
-                    if (!manager.blacklist.Contains(player.SteamID))
+                    if ((player.SteamID != 0)
+                        && !manager.blacklist.Contains(player.SteamID))
                         manager.blacklist.Add(player.SteamID);
         }
 
@@ -94,9 +95,9 @@ namespace DDSS_LobbyGuard.Security
                 && !player.connectionToClient.WasCollected
                 && (player.connectionToClient is not LocalConnectionToClient))
             {
-                player.connectionToClient.Disconnect();
                 if (!isBlacklist)
                     MelonMain._logger.Msg($"Kicked Player: {player.NetworksteamUsername} - {player.Networkusername} - {player.NetworksteamID}");
+                player.connectionToClient.Disconnect();
             }
         }
 
@@ -108,19 +109,10 @@ namespace DDSS_LobbyGuard.Security
                 && !player.connectionToClient.WasCollected
                 && (player.connectionToClient is not LocalConnectionToClient))
             {
-                string userName = player.NetworksteamUsername;
-                string characterName = player.Networkusername;
-
-                ulong steamId = player.NetworksteamID;
-                if (steamId != 0)
-                {
-                    OnBlacklistPlayer(steamId, userName);
-                    LobbyManager.instance.blacklist.Add(steamId);
-                    MelonMain._logger.Warning($"Player {userName} has not set their SteamID! Falling back to Kick...");
-                }
-                else
-                    MelonMain._logger.Msg($"Blacklisted Player: {userName} - {characterName} - {player.NetworksteamID}");
-                ApplyKick(player, (steamId != 0));
+                OnBlacklistPlayer(player.NetworksteamID, player.NetworksteamUsername);
+                LobbyManager.instance.blacklist.Add(player.NetworksteamID);
+                MelonMain._logger.Msg($"Blacklisted Player: {player.NetworksteamUsername} - {player.Networkusername} - {player.NetworksteamID}");
+                ApplyKick(player, true);
             }
         }
     }

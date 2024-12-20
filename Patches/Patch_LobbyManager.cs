@@ -67,7 +67,8 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Player
             if ((__0 == null)
                 || __0.WasCollected
-                || __0.isLocalPlayer)
+                || __0.isLocalPlayer
+                || (__0.NetworksteamID == 0))
                 return false;
 
             // Check for Host

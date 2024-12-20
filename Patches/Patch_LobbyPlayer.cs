@@ -39,13 +39,11 @@ namespace DDSS_LobbyGuard.Patches
                 || (__instance.connectionToClient == null)
                 || __instance.connectionToClient.WasCollected
                 || !__instance.connectionToClient.isReady
-                || !__instance.connectionToClient.isAuthenticated
-                || (__instance.steamID != 0))
+                || !__instance.connectionToClient.isAuthenticated)
                 return;
 
             // Player Check
-            if ((__0 == 0)
-                || LobbySecurity.IsSteamIDInUse(__0))
+            if (LobbySecurity.IsSteamIDInUse(__0))
             {
                 __instance.connectionToClient.Disconnect();
                 return;
@@ -123,6 +121,7 @@ namespace DDSS_LobbyGuard.Patches
             if (!NetworkServer.activeHost
                 || !__instance.isServer)
                 return true;
+
             if (__0 != PlayerRole.Slacker)
             {
                 InteractionSecurity.RemoveSlacker(__instance);
