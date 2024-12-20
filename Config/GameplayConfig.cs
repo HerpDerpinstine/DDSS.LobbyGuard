@@ -19,6 +19,9 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> SpawnManagerKeys;
 
         internal MelonPreferences_Entry<bool> AllowJanitorsToVote;
+        internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
+        internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
+
 
         internal MelonPreferences_Entry<bool> ProductivityFromTaskCompletion;
 
@@ -93,6 +96,16 @@ namespace DDSS_LobbyGuard.Config
                 "Allow Janitors to Vote",
                 "Allows Janitors to Vote on Manager",
                 false);
+
+            AllowJanitorsToLockDoors = CreatePref("AllowJanitorsToLockDoors",
+                "Allow Janitors to Lock Doors",
+                "Allows Janitors to Lock Doors",
+                true);
+
+            AllowJanitorsToUnlockDoors = CreatePref("AllowJanitorsToUnlockDoors",
+                "Allow Janitors to Unlock Doors",
+                "Allows Janitors to Unlock Doors",
+                true);
 
             ProductivityFromTaskCompletion = CreatePref("ProductivityFromTaskCompletion",
                 "Productivity from Task Completion",

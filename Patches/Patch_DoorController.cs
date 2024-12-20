@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -140,15 +141,30 @@ namespace DDSS_LobbyGuard.Patches
                 // Validate Role
                 var role = oldPlayer.NetworkplayerRole;
                 if (!doorInteractable.everyoneCanLock
-                    && (role != PlayerRole.Manager)
-                    && (role != PlayerRole.Janitor))
+                    && (role != PlayerRole.Manager))
                 {
-                    // Validate Placement
-                    Collectible collectible = sender.GetCurrentCollectible();
-                    if ((collectible == null)
-                        || collectible.WasCollected
-                        || (collectible.GetIl2CppType() != Il2CppType.Of<KeyController>()))
-                        return false;
+                    if (role == PlayerRole.Janitor)
+                    {
+                        if (requestedState)
+                        {
+                            if (!ConfigHandler.Gameplay.AllowJanitorsToLockDoors.Value)
+                                return false;
+                        }
+                        else
+                        {
+                            if (!ConfigHandler.Gameplay.AllowJanitorsToUnlockDoors.Value)
+                                return false;
+                        }
+                    }
+                    else
+                    {
+                        // Validate Placement
+                        Collectible collectible = sender.GetCurrentCollectible();
+                        if ((collectible == null)
+                            || collectible.WasCollected
+                            || (collectible.GetIl2CppType() != Il2CppType.Of<KeyController>()))
+                            return false;
+                    }
                 }
             }
 
