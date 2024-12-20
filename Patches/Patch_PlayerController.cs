@@ -32,6 +32,7 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdSpank__NetworkIdentity))]
         private static bool InvokeUserCode_CmdSpank__NetworkIdentity_Prefix(
             NetworkBehaviour __0,
+            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Get Sender
@@ -52,22 +53,8 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
-            // Get PlayerController
-            PlayerController player = __0.TryCast<PlayerController>();
-            if ((player == null)
-                || player.WasCollected
-                || (controller == player))
-                return false;
-
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(
-                sender.transform.position, 
-                player.transform.position, 
-                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
-                return false;
-
             // Run Game Command
-            player.UserCode_CmdSpank__NetworkIdentity(sender);
+            controller.UserCode_CmdSpank__NetworkIdentity(sender);
 
             // Prevent Original
             return false;

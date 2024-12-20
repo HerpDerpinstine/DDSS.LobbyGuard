@@ -47,8 +47,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
-                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
                 return false;
 
             interact.UserCode_PromoteToAssistant__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -93,8 +92,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
-                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
                 return false;
 
             interact.UserCode_DemoteFromAssistant__NetworkIdentity__NetworkConnectionToClient(sender, __2);
