@@ -24,6 +24,9 @@ namespace DDSS_LobbyGuard.Config
 
         internal MelonPreferences_Entry<bool> PlayerLeavesReduceTerminations;
 
+        internal MelonPreferences_Entry<int> SlackerTrashBinFireDelay;
+        internal MelonPreferences_Entry<int> SlackerServerOutageDelay;
+
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
 
@@ -100,6 +103,16 @@ namespace DDSS_LobbyGuard.Config
                 "Player Leaves Reduce Terminations",
                 "Allows Terminations to be Decreased from Players Disconnecting",
                 true);
+
+            SlackerTrashBinFireDelay = CreatePref("SlackerTrashBinFireDelay",
+                "Slacker TrashBin Fire Delay",
+                "Seconds until TrashBin Fire Ignites from Slacker Task",
+                4);
+
+            SlackerServerOutageDelay = CreatePref("SlackerServerOutageDelay",
+                "Slacker Server Outage Delay",
+                "Seconds until Server Outage from Slacker Task",
+                6);
 
             PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",
                 "Enforce Player Velocity",

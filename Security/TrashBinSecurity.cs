@@ -1,5 +1,5 @@
-﻿using Il2CppMirror;
-using Il2CppPlayer.Lobby;
+﻿using DDSS_LobbyGuard.Config;
+using Il2CppMirror;
 using Il2CppProps.TrashBin;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +8,6 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class TrashBinSecurity
     {
-        private const float FIRE_DELAY = 4f;
         private static Dictionary<TrashBin, Coroutine> _enableFireCoroutines = new();
 
         internal static void OnSceneLoad()
@@ -36,7 +35,7 @@ namespace DDSS_LobbyGuard.Security
             // Cache New Coroutine
             _enableFireCoroutines[trashcan] =
                 trashcan.StartCoroutine(
-                    trashcan.DelayedEnableFire(sender, state, state ? FIRE_DELAY : 0f));
+                    trashcan.DelayedEnableFire(sender, state, state ? ConfigHandler.Gameplay.SlackerTrashBinFireDelay.Value : 0f));
         }
     }
 }

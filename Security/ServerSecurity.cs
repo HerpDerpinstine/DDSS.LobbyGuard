@@ -1,4 +1,5 @@
-﻿using Il2CppMirror;
+﻿using DDSS_LobbyGuard.Config;
+using Il2CppMirror;
 using Il2CppProps.ServerRack;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,6 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class ServerSecurity
     {
-        private const float CONNECTION_DELAY = 6f;
         private static Dictionary<ServerController, Coroutine> _setConnectionCoroutines = new();
 
         internal static void OnSceneLoad()
@@ -35,7 +35,7 @@ namespace DDSS_LobbyGuard.Security
             // Cache New Coroutine
             _setConnectionCoroutines[controller] =
                 controller.StartCoroutine(
-                    controller.DelayedSetConnection(sender, state, state ? 0f : CONNECTION_DELAY));
+                    controller.DelayedSetConnection(sender, state, state ? 0f : ConfigHandler.Gameplay.SlackerServerOutageDelay.Value));
         }
     }
 }
