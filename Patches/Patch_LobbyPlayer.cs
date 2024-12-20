@@ -39,11 +39,13 @@ namespace DDSS_LobbyGuard.Patches
                 || (__instance.connectionToClient == null)
                 || __instance.connectionToClient.WasCollected
                 || !__instance.connectionToClient.isReady
-                || !__instance.connectionToClient.isAuthenticated)
+                || !__instance.connectionToClient.isAuthenticated
+                || (__instance.steamID != 0))
                 return;
 
             // Player Check
-            if (LobbySecurity.IsSteamIDInUse(__0))
+            if ((__0 == 0)
+                || LobbySecurity.IsSteamIDInUse(__0))
             {
                 __instance.connectionToClient.Disconnect();
                 return;
