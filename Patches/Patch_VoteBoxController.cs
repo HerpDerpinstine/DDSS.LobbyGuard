@@ -31,8 +31,7 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
             if ((sender == null)
-                || sender.WasCollected
-                || sender.IsGhost())
+                || sender.WasCollected)
                 return false;
 
             // Validate Distance
