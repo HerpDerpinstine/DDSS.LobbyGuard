@@ -30,10 +30,7 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdSpank__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdSpank__NetworkIdentity_Prefix(
-            NetworkBehaviour __0,
-            NetworkReader __1,
-            NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdSpank__NetworkIdentity_Prefix(NetworkConnectionToClient __2)
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
