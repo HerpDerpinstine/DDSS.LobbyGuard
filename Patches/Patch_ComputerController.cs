@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppComputer.Scripts.System;
 using Il2CppMirror;
+using Il2CppObjects.Scripts;
 using Il2CppPlayer.Lobby;
 using UnityEngine;
 
@@ -130,12 +131,6 @@ namespace DDSS_LobbyGuard.Patches
                 || sender.IsGhost())
                 return false;
 
-            // Validate Role
-            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || player.IsGhost())
-                return false;
-
             // Get ComputerController
             ComputerController controller = __0.TryCast<ComputerController>();
 
@@ -148,6 +143,114 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             controller.UserCode_CmdSyncCursor__Vector3(cursorPos);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdCreateFile__String__String))]
+        private static bool InvokeUserCode_CmdCreateFile__String__String_Prefix(
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
+
+            if (sender.isServer)
+                return true;
+
+            // Validate Role
+            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
+            if ((player == null)
+                || player.WasCollected
+                || player.IsGhost())
+                return false;
+
+            // Get Workstation
+            WorkStationController workstation = player.workStationController;
+            if ((workstation == null)
+                || workstation.WasCollected)
+                return false;
+
+            // Get ComputerController
+            ComputerController controller = workstation.computerController;
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            // Override Path, Unused Anyways
+            string path = "User/Desktop";
+
+            // Get FileName
+            string fileName = __1.SafeReadString();
+            if (string.IsNullOrEmpty(fileName)
+                || string.IsNullOrWhiteSpace(fileName))
+                return false;
+
+            TextAsset textAsset = Resources.Load<TextAsset>("files/" + fileName);
+            if ((textAsset == null)
+                || textAsset.WasCollected)
+                return false;
+
+            controller.UserCode_CmdCreateFile__String__String(fileName, path);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdRemoveFile__String__String))]
+        private static bool InvokeUserCode_CmdRemoveFile__String__String_Prefix(
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
+
+            if (sender.isServer)
+                return true;
+
+            // Validate Role
+            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
+            if ((player == null)
+                || player.WasCollected
+                || player.IsGhost())
+                return false;
+
+            // Get Workstation
+            WorkStationController workstation = player.workStationController;
+            if ((workstation == null)
+                || workstation.WasCollected)
+                return false;
+
+            // Get ComputerController
+            ComputerController controller = workstation.computerController;
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            // Override Path, Unused Anyways
+            string path = "User/Desktop";
+
+            // Get FileName
+            string fileName = __1.SafeReadString();
+            if (string.IsNullOrEmpty(fileName)
+                || string.IsNullOrWhiteSpace(fileName))
+                return false;
+
+            TextAsset textAsset = Resources.Load<TextAsset>("files/" + fileName);
+            if ((textAsset == null)
+                || textAsset.WasCollected)
+                return false;
+
+            controller.UserCode_CmdRemoveFile__String__String(fileName, path);
 
             // Prevent Original
             return false;
