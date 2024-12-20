@@ -5,6 +5,7 @@ using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using Il2CppProps.Scripts;
@@ -71,17 +72,21 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(
+            if (!InteractionSecurity.IsWithinRange(
                 sender.transform.position,
                 station.transform.position))
                 return false;
 
-            // Get Player
-            LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || player.WasCollected
-                || !InteractionSecurity.IsSlacker(player))
+            // Validate Sender
+            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || !InteractionSecurity.IsSlacker(lobbyPlayer))
                 return false;
 
             // Validate Placement
@@ -218,15 +223,20 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Get Player
-            LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || player.WasCollected
-                || !InteractionSecurity.IsSlacker(player))
+            // Validate Sender
+            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || !InteractionSecurity.IsSlacker(lobbyPlayer))
                 return false;
 
             // Validate WorkStationController
-            station = player.workStationController;
+            station = lobbyPlayer.NetworkworkStationController;
             if ((station == null)
                 || station.WasCollected)
                 return false;
