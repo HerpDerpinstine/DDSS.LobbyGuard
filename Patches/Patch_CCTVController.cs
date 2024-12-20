@@ -19,17 +19,18 @@ namespace DDSS_LobbyGuard.Patches
             // Get CCTVController
             CCTVController camera = __0.TryCast<CCTVController>();
             if ((camera == null)
-                || camera.WasCollected
-                || !camera.CanUpdateFirmware())
+                || camera.WasCollected)
                 return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            if (sender.IsGhost())
+            if ((sender == null)
+                || sender.WasCollected
+                || sender.IsGhost())
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position, InteractionSecurity.MAX_DISTANCE_CCTV))
                 return false;
 
             // Run Game Command

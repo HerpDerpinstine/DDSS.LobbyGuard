@@ -137,7 +137,7 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, 
                 interact.transform.position,
-                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
+                InteractionSecurity.MAX_DISTANCE_PLAYER))
                 return false;
 
             interact.UserCode_AcceptHandShake__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -182,7 +182,7 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, 
                 interact.transform.position,
-                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
+                InteractionSecurity.MAX_DISTANCE_PLAYER))
                 return false;
 
             interact.UserCode_CmdRequestHandShake__NetworkIdentity(sender);
@@ -225,7 +225,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
-                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
+                InteractionSecurity.MAX_DISTANCE_PLAYER))
                 return false;
 
             senderInteract.UserCode_CmdResetHandShake();
@@ -271,7 +271,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
-                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
+                InteractionSecurity.MAX_DISTANCE_PLAYER))
                 return false;
 
             senderInteract.UserCode_CmdResetHandShakeRequest__NetworkIdentity(sender);
@@ -315,7 +315,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
-                InteractionSecurity.MAX_PLAYER_INTERACT_DISTANCE))
+                InteractionSecurity.MAX_DISTANCE_PLAYER))
                 return false;
 
             senderInteract.UserCode_CmdResetOutgoingHandShake();

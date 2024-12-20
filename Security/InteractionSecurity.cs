@@ -18,8 +18,10 @@ namespace DDSS_LobbyGuard.Security
         private static Dictionary<LobbyPlayer, bool> _allSlackers = new();
         private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
 
-        internal const float MAX_DISTANCE = 2f;
-        internal const float MAX_PLAYER_INTERACT_DISTANCE = 1f;
+        internal const float MAX_DISTANCE_DEFAULT = 2f;
+
+        internal const float MAX_DISTANCE_PLAYER = 1f;
+        internal const float MAX_DISTANCE_CCTV = 3f;
 
         internal const int MAX_DOCUMENTS_TRAY = 10;
         internal const int MAX_DOCUMENTS_BINDER = 10;
@@ -100,11 +102,12 @@ namespace DDSS_LobbyGuard.Security
         }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
-            float maxRange = MAX_DISTANCE)
+            float maxRange = MAX_DISTANCE_DEFAULT)
         {
             float distance = Vector3.Distance(posA, posB);
             if (distance < 0f)
                 distance *= -1f;
+
             return distance <= maxRange;
         }
 
