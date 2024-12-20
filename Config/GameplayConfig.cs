@@ -12,6 +12,8 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> StickyNotesOnOpenDoors;
         internal MelonPreferences_Entry<bool> StickyNotesOnClosedDoors;
 
+        internal MelonPreferences_Entry<bool> PrinterCopiesWithSignature;
+
         internal MelonPreferences_Entry<bool> CloseDoorsOnLock;
 
         internal MelonPreferences_Entry<bool> SpawnManagerKeys;
@@ -68,6 +70,11 @@ namespace DDSS_LobbyGuard.Config
                 "Sticky Notes on Closed Doors",
                 "Allows the Grabbing and Placing of Sticky Notes on Doors while they are Closed",
                 true);
+
+            PrinterCopiesWithSignature = CreatePref("PrinterCopiesWithSignature",
+                "Printer Copies with Signature",
+                "Printer transfers the Signature of a Signed Document over to the Copy Document",
+                false);
 
             CloseDoorsOnLock = CreatePref("CloseDoorsOnLock",
                 "Close Doors On Lock",

@@ -319,18 +319,21 @@ namespace DDSS_LobbyGuard.Patches
                 imgCopy.SetName(img.interactableName);
                 printer.RpcSetImage(imgCopy.netIdentity, img.byteImg);
 
-                // Set Signed State
-                imgCopy.Networksigned = img.Networksigned;
-                imgCopy.signed = img.signed;
-
-                // Set Signed Text
-                if ((imgCopy.signedText != null)
-                    && !imgCopy.signedText.WasCollected
-                    && (img.signedText != null)
-                    && !img.signedText.WasCollected)
+                if (ConfigHandler.Gameplay.PrinterCopiesWithSignature.Value)
                 {
-                    imgCopy.signedText.text = img.signedText.text;
-                    imgCopy.signedText.SetAllDirty();
+                    // Set Signed State
+                    imgCopy.Networksigned = img.Networksigned;
+                    imgCopy.signed = img.signed;
+
+                    // Set Signed Text
+                    if ((imgCopy.signedText != null)
+                        && !imgCopy.signedText.WasCollected
+                        && (img.signedText != null)
+                        && !img.signedText.WasCollected)
+                    {
+                        imgCopy.signedText.text = img.signedText.text;
+                        imgCopy.signedText.SetAllDirty();
+                    }
                 }
 
                 // Place Image in Printer
@@ -365,18 +368,21 @@ namespace DDSS_LobbyGuard.Patches
                 docCopy.SetName(doc.interactableName);
                 docCopy.SetText(doc.contentText.text);
 
-                // Set Signed State
-                docCopy.Networksigned = doc.Networksigned;
-                docCopy.signed = doc.signed;
-
-                // Set Signed Text
-                if ((docCopy.signedText != null)
-                    && !docCopy.signedText.WasCollected
-                    && (doc.signedText != null)
-                    && !doc.signedText.WasCollected)
+                if (ConfigHandler.Gameplay.PrinterCopiesWithSignature.Value)
                 {
-                    docCopy.signedText.text = doc.signedText.text;
-                    docCopy.signedText.SetAllDirty();
+                    // Set Signed State
+                    docCopy.Networksigned = doc.Networksigned;
+                    docCopy.signed = doc.signed;
+
+                    // Set Signed Text
+                    if ((docCopy.signedText != null)
+                        && !docCopy.signedText.WasCollected
+                        && (doc.signedText != null)
+                        && !doc.signedText.WasCollected)
+                    {
+                        docCopy.signedText.text = doc.signedText.text;
+                        docCopy.signedText.SetAllDirty();
+                    }
                 }
 
                 // Place Image in Printer
