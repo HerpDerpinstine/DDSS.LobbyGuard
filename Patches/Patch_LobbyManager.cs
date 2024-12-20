@@ -42,15 +42,15 @@ namespace DDSS_LobbyGuard.Patches
         private static bool KickPlayer_Prefix(LobbyManager __instance, 
             NetworkIdentity __0)
         {
+            // Check for Host
+            if (!NetworkServer.activeHost)
+                return true;
+
             // Validate Player
             if ((__0 == null)
                 || __0.WasCollected
                 || __0.isLocalPlayer)
                 return false;
-
-            // Check for Host
-            if (!NetworkServer.activeHost)
-                return true;
 
             // Kick Player
             BlacklistSecurity.RequestKick(__0.GetComponent<LobbyPlayer>());
@@ -64,16 +64,16 @@ namespace DDSS_LobbyGuard.Patches
         private static bool BlackListPlayer_Prefix(LobbyManager __instance,
             LobbyPlayer __0)
         {
+            // Check for Host
+            if (!NetworkServer.activeHost)
+                return true;
+
             // Validate Player
             if ((__0 == null)
                 || __0.WasCollected
                 || __0.isLocalPlayer
                 || (__0.NetworksteamID == 0))
                 return false;
-
-            // Check for Host
-            if (!NetworkServer.activeHost)
-                return true;
 
             // Blacklist Player
             BlacklistSecurity.RequestBlacklist(__0);
