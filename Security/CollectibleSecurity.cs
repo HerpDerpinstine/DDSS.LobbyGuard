@@ -104,8 +104,6 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void SpawnBinderStart(OfficeShelf shelf)
         {
-            if (!BinderManager.instance.binders.ContainsKey(shelf.shelfCategory))
-                BinderManager.instance.binders[shelf.shelfCategory] = new();
             for (int i = 0; i < 10; i++)
                 SpawnBinder(shelf, i);
         }
