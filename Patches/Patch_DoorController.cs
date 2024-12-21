@@ -5,6 +5,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
@@ -122,49 +123,50 @@ namespace DDSS_LobbyGuard.Patches
             if (!door.PlayerCanChangeLockState(sender))
                 return false;
 
-            // Check for Server
-            if (!sender.isServer)
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            // Get Player
+            LobbyPlayer oldPlayer = controller.NetworklobbyPlayer;
+            if ((oldPlayer == null)
+                || oldPlayer.WasCollected
+                || oldPlayer.IsGhost())
+                return false;
+
+            // Get DoorInteractable
+            DoorInteractable doorInteractable = door.GetComponentInChildren<DoorInteractable>();
+            if ((doorInteractable == null)
+                || doorInteractable.WasCollected)
+                return false;
+
+            // Validate Role
+            var role = oldPlayer.NetworkplayerRole;
+            if (!doorInteractable.everyoneCanLock
+                && (role != PlayerRole.Manager))
             {
-                // Get Player
-                LobbyPlayer oldPlayer = sender.GetComponent<LobbyPlayer>();
-                if ((oldPlayer == null)
-                    || oldPlayer.WasCollected
-                    || oldPlayer.IsGhost())
-                    return false;
-
-                // Get DoorInteractable
-                DoorInteractable doorInteractable = door.GetComponentInChildren<DoorInteractable>();
-                if ((doorInteractable == null)
-                    || doorInteractable.WasCollected)
-                    return false;
-
-                // Validate Role
-                var role = oldPlayer.NetworkplayerRole;
-                if (!doorInteractable.everyoneCanLock
-                    && (role != PlayerRole.Manager))
+                if (role == PlayerRole.Janitor)
                 {
-                    if (role == PlayerRole.Janitor)
+                    if (requestedState)
                     {
-                        if (requestedState)
-                        {
-                            if (!ConfigHandler.Gameplay.AllowJanitorsToLockDoors.Value)
-                                return false;
-                        }
-                        else
-                        {
-                            if (!ConfigHandler.Gameplay.AllowJanitorsToUnlockDoors.Value)
-                                return false;
-                        }
+                        if (!ConfigHandler.Gameplay.AllowJanitorsToLockDoors.Value)
+                            return false;
                     }
                     else
                     {
-                        // Validate Placement
-                        Collectible collectible = sender.GetCurrentCollectible();
-                        if ((collectible == null)
-                            || collectible.WasCollected
-                            || (collectible.GetIl2CppType() != Il2CppType.Of<KeyController>()))
+                        if (!ConfigHandler.Gameplay.AllowJanitorsToUnlockDoors.Value)
                             return false;
                     }
+                }
+                else
+                {
+                    // Validate Placement
+                    Collectible collectible = sender.GetCurrentCollectible();
+                    if ((collectible == null)
+                        || collectible.WasCollected
+                        || (collectible.GetIl2CppType() != Il2CppType.Of<KeyController>()))
+                        return false;
                 }
             }
 
