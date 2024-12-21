@@ -14,12 +14,12 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Check for Server
             if (!__instance.isServer)
-                return true;
+                return false;
             if (!NetworkServer.activeHost)
-                return true;
+                return false;
 
             // Fire Extinguisher Security
-            FireExSecurity.SpawnFireEx(__instance);
+            CollectibleHolderSecurity.SpawnFireEx(__instance);
 
             // Prevent Original
             return false;

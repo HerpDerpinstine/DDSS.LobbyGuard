@@ -12,6 +12,27 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_OfficeShelf
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(OfficeShelf), nameof(OfficeShelf.Start))]
+        private static bool Start_Prefix(OfficeShelf __instance)
+        {
+            // Add Shelf to BinderManager
+            if (!BinderManager.instance.shelves.ContainsKey(__instance.shelfCategory))
+                BinderManager.instance.shelves.Add(__instance.shelfCategory, __instance);
+
+            // Check for Server
+            if (!__instance.isServer)
+                return false;
+            if (!NetworkServer.activeHost)
+                return false;
+
+            // Spawn Binders
+            CollectibleHolderSecurity.SpawnBinderStart(__instance);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(OfficeShelf), nameof(OfficeShelf.InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32))]
         private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32_Prefix(NetworkReader __1, NetworkConnectionToClient __2)
         {

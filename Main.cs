@@ -40,8 +40,7 @@ namespace DDSS_LobbyGuard
 
             // Register Custom Components
             ManagedEnumerator.Register();
-            KeyDestructionCallback.Register();
-            FireExDestructionCallback.Register();
+            CollectibleDestructionCallback.Register();
 
             // Apply Patches
             ApplyPatches();
@@ -64,7 +63,7 @@ namespace DDSS_LobbyGuard
                 InteractionSecurity.UpdateSettings();
                 ServerSecurity.OnSceneLoad();
                 TrashBinSecurity.OnSceneLoad();
-                KeySecurity.OnSceneLoad();
+                CollectibleHolderSecurity.OnSceneLoad();
                 InteractionSecurity.OnSceneLoad();
                 PlayerTriggerSecurity.OnSceneLoad();
                 DoorSecurity.OnSceneLoad();

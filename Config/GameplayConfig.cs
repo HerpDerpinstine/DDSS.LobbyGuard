@@ -17,6 +17,7 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> CloseDoorsOnLock;
 
         internal MelonPreferences_Entry<bool> SpawnManagerKeys;
+        internal MelonPreferences_Entry<bool> SpawnStereoCDs;
 
         internal MelonPreferences_Entry<bool> AllowJanitorsToVote;
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
@@ -90,6 +91,11 @@ namespace DDSS_LobbyGuard.Config
             SpawnManagerKeys = CreatePref("SpawnManagerKeys",
                 "Spawn Manager Keys",
                 "Allows Spawning of Keys in Manager's Office",
+                true);
+
+            SpawnStereoCDs = CreatePref("SpawnStereoCDs",
+                "Spawn Stereo CDs",
+                "Allows Spawning of CDs next to the Stereo",
                 true);
 
             AllowJanitorsToVote = CreatePref("AllowJanitorsToVote",

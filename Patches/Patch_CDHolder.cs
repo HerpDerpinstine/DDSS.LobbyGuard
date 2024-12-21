@@ -2,27 +2,27 @@
 using DDSS_LobbyGuard.Security;
 using HarmonyLib;
 using Il2CppMirror;
-using Il2CppProps.Keys;
+using Il2CppProps.Stereo;
 
 namespace DDSS_LobbyGuard.Patches
 {
     [HarmonyPatch]
-    internal class Patch_KeyHolder
+    internal class Patch_CDHolder
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(KeyHolder), nameof(KeyHolder.Start))]
-        private static bool Start_Prefix(KeyHolder __instance)
+        [HarmonyPatch(typeof(CDHolder), nameof(CDHolder.Start))]
+        private static bool Start_Prefix(CDHolder __instance)
         {
             // Check for Server
             if (!__instance.isServer)
                 return false;
             if (!NetworkServer.activeHost)
                 return false;
-            if (!ConfigHandler.Gameplay.SpawnManagerKeys.Value)
+            if (!ConfigHandler.Gameplay.SpawnStereoCDs.Value)
                 return false;
 
-            // Key Security
-            CollectibleHolderSecurity.SpawnKey(__instance);
+            // Security
+            CollectibleHolderSecurity.SpawnCDStart(__instance);
 
             // Prevent Original
             return false;
