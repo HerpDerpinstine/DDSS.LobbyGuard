@@ -38,31 +38,31 @@ namespace DDSS_LobbyGuard.Components
                 || (gameObject == null)
                 || gameObject.WasCollected
                 || !gameObject.scene.isLoaded
-                || !CollectibleHolderSecurity._holderSpawnCache.TryGetValue(gameObject, out CollectibleHolder holder))
+                || !CollectibleSecurity._holderSpawnCache.TryGetValue(gameObject, out CollectibleHolder holder))
                 return;
 
-            CollectibleHolderSecurity._holderSpawnCache.Remove(gameObject);
+            CollectibleSecurity._holderSpawnCache.Remove(gameObject);
 
             switch (collectibleType)
             {
                 case eCollectibleType.CD:
-                    CollectibleHolderSecurity.SpawnCD(holder.TryCast<CDHolder>(), extraIndex);
+                    CollectibleSecurity.SpawnCD(holder.TryCast<CDHolder>(), extraIndex);
                     break;
 
                 case eCollectibleType.KEYS:
-                    CollectibleHolderSecurity.SpawnKey(holder.TryCast<KeyHolder>());
+                    CollectibleSecurity.SpawnKey(holder.TryCast<KeyHolder>());
                     break;
 
                 case eCollectibleType.BINDER:
-                    CollectibleHolderSecurity.SpawnBinder(holder.TryCast<OfficeShelf>(), extraIndex);
+                    CollectibleSecurity.SpawnBinder(holder.TryCast<OfficeShelf>(), extraIndex);
                     break;
 
                 case eCollectibleType.FIRE_EX:
-                    CollectibleHolderSecurity.SpawnFireEx(holder.TryCast<FireExHolder>());
+                    CollectibleSecurity.SpawnFireEx(holder.TryCast<FireExHolder>());
                     break;
 
                 case eCollectibleType.STORAGE_BOX:
-                    CollectibleHolderSecurity.SpawnStorageBox(holder.TryCast<ShelfController>(), extraIndex);
+                    CollectibleSecurity.SpawnStorageBox(holder.TryCast<ShelfController>(), extraIndex);
                     break;
 
                 default:

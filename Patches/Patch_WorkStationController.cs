@@ -10,12 +10,48 @@ using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using Il2CppProps.Scripts;
 using Il2CppProps.WorkStation.InfectedUSB;
+using Il2CppProps.WorkStation.Mouse;
+using Il2CppProps.WorkStation.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
 {
     [HarmonyPatch]
     internal class Patch_WorkStationController
     {
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.SpawnDeskItems))]
+        private static bool SpawnDeskItems_Prefix(WorkStationController __instance, PlayerRole __0)
+        {
+            // Check for Server
+            if (!__instance.isServer)
+                return false;
+            if (!NetworkServer.activeHost)
+                return false;
+
+            // Spawn New Mouse
+            MouseHolder mouseHolder = __instance.mouseHolder;
+            if ((mouseHolder != null)
+                && !mouseHolder.WasCollected)
+            {
+                mouseHolder.ServerDestroyAllCollectibles();
+                CollectibleSecurity.SpawnMouse(__instance.mousePrefab, mouseHolder);
+            }
+
+            // Spawn New Mug
+            MugHolder mugHolder = __instance.mugHolder;
+            if ((mugHolder != null)
+                && !mugHolder.WasCollected)
+            {
+                mugHolder.ServerDestroyAllCollectibles();
+                CollectibleSecurity.SpawnMug(
+                    (__0 == PlayerRole.Manager) ? __instance.bossMugPrefab : __instance.mugPrefab,
+                    mugHolder);
+            }
+
+            // Prevent Original
+            return false;
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient_Prefix(

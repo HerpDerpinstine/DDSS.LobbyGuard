@@ -26,7 +26,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Spawn Binders
-            CollectibleHolderSecurity.SpawnBinderStart(__instance);
+            CollectibleSecurity.SpawnBinderStart(__instance);
 
             // Prevent Original
             return false;

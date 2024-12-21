@@ -25,7 +25,7 @@ using UnityEngine;
 
 namespace DDSS_LobbyGuard.Security
 {
-    internal static class CollectibleHolderSecurity
+    internal static class CollectibleSecurity
     {
         private static Type _trashBinType = Il2CppType.Of<TrashBin>();
 
@@ -62,6 +62,18 @@ namespace DDSS_LobbyGuard.Security
             // Return False
             return false;
         }
+
+        internal static void SpawnMug(GameObject prefab, MugHolder holder)
+            => SpawnAndPlace<Mug, MugHolder>(prefab,
+                holder,
+                CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK,
+                null);
+        
+        internal static void SpawnMouse(GameObject prefab, MouseHolder holder)
+            => SpawnAndPlace<Mouse, MouseHolder>(prefab,
+                holder,
+                CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK,
+                null);
 
         internal static void SpawnKey(KeyHolder holder)
             => SpawnAndPlace<KeyController, KeyHolder>(holder.keyPrefab,
@@ -133,10 +145,10 @@ namespace DDSS_LobbyGuard.Security
                 holder,
                 (T obj) =>
                 {
-                    _holderSpawnCache[obj.gameObject] = holder;
-
                     if (type != CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK)
                     {
+                        _holderSpawnCache[obj.gameObject] = holder;
+
                         CollectibleDestructionCallback callback = obj.gameObject.AddComponent<CollectibleDestructionCallback>();
                         callback.collectibleType = type;
                         callback.extraIndex = extraIndex;

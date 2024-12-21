@@ -18,6 +18,7 @@ namespace DDSS_LobbyGuard.Config
 
         internal MelonPreferences_Entry<bool> SpawnManagerKeys;
         internal MelonPreferences_Entry<bool> SpawnStereoCDs;
+        internal MelonPreferences_Entry<bool> SpawnUnassignedDeskItems;
 
         internal MelonPreferences_Entry<bool> AllowJanitorsToVote;
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
@@ -96,6 +97,11 @@ namespace DDSS_LobbyGuard.Config
             SpawnStereoCDs = CreatePref("SpawnStereoCDs",
                 "Spawn Stereo CDs",
                 "Allows Spawning of CDs next to the Stereo",
+                true);
+
+            SpawnUnassignedDeskItems = CreatePref("SpawnUnassignedDeskItems",
+                "Spawn Unassigned Desk Items",
+                "Allows Spawning of Mugs and Mouses on Desks that haven't been Assigned",
                 true);
 
             AllowJanitorsToVote = CreatePref("AllowJanitorsToVote",

@@ -19,7 +19,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Spawn Binders
-            CollectibleHolderSecurity.SpawnStorageBoxStart(__instance);
+            CollectibleSecurity.SpawnStorageBoxStart(__instance);
 
             // Prevent Original
             return false;
@@ -36,7 +36,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Spawn Binders
-            CollectibleHolderSecurity.SpawnStorageBox(__instance, __0);
+            CollectibleSecurity.SpawnStorageBox(__instance, __0);
 
             // Prevent Original
             return false;

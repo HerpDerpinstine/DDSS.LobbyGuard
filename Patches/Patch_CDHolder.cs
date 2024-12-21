@@ -22,7 +22,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Security
-            CollectibleHolderSecurity.SpawnCDStart(__instance);
+            CollectibleSecurity.SpawnCDStart(__instance);
 
             // Prevent Original
             return false;

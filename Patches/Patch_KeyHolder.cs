@@ -22,7 +22,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Key Security
-            CollectibleHolderSecurity.SpawnKey(__instance);
+            CollectibleSecurity.SpawnKey(__instance);
 
             // Prevent Original
             return false;

@@ -2,7 +2,6 @@
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
@@ -46,7 +45,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Holder
-            if (!CollectibleHolderSecurity.CanPlace(sender, holder, collectible))
+            if (!CollectibleSecurity.CanPlace(sender, holder, collectible))
                 return false;
 
             // Validate Free Slots
@@ -117,7 +116,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Holder
-            if (!CollectibleHolderSecurity.CanPlace(sender, holder, collectible))
+            if (!CollectibleSecurity.CanPlace(sender, holder, collectible))
                 return false;
 
             // Run Game Command

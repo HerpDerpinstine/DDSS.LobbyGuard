@@ -19,7 +19,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Fire Extinguisher Security
-            CollectibleHolderSecurity.SpawnFireEx(__instance);
+            CollectibleSecurity.SpawnFireEx(__instance);
 
             // Prevent Original
             return false;

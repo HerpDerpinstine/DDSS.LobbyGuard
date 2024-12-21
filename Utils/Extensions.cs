@@ -6,6 +6,7 @@ using Il2CppPlayer.Lobby;
 using Il2CppPlayer.StateMachineLogic;
 using Il2CppProps.Scripts;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -196,6 +197,22 @@ namespace DDSS_LobbyGuard.Utils
                     return player;
             }
             return null;
+        }
+
+        internal static void Shuffle<T>(this List<T> list)
+        {
+            int i = list.Count;
+            while (i > 1)
+            {
+                i--;
+                int num = Random.Range(0, i + 1);
+                int num2 = num;
+                int num3 = i;
+                T t = list[i];
+                T t2 = list[num];
+                list[num2] = t;
+                list[num3] = t2;
+            }
         }
     }
 }
