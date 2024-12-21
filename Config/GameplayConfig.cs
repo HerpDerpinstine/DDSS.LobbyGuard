@@ -24,7 +24,6 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
 
-
         internal MelonPreferences_Entry<bool> ProductivityFromTaskCompletion;
 
         internal MelonPreferences_Entry<bool> PlayerLeavesReduceTerminations;
@@ -107,7 +106,7 @@ namespace DDSS_LobbyGuard.Config
             AllowJanitorsToVote = CreatePref("AllowJanitorsToVote",
                 "Allow Janitors to Vote",
                 "Allows Janitors to Vote on Manager",
-                true);
+                false);
 
             AllowJanitorsToLockDoors = CreatePref("AllowJanitorsToLockDoors",
                 "Allow Janitors to Lock Doors",
@@ -146,7 +145,7 @@ namespace DDSS_LobbyGuard.Config
 
             HideSlackersFromClients = CreatePref("HideSlackersFromClients",
                 "Hide Slackers from Clients",
-                "Prevents Slackers and Slacker Count from being broadcasted to Clients",
+                "Prevents Slacker Count from being broadcasted to Clients",
                 false);
 
             GrabbingWhileEmoting = CreatePref("GrabbingWhileEmoting",

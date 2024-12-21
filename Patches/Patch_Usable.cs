@@ -10,6 +10,7 @@ using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Scripts;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -216,7 +217,11 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
+            Vector3 oldPos = usable.transform.position;
+            Quaternion oldRot = usable.transform.rotation;
             usable.UserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            usable.transform.position = oldPos;
+            usable.transform.rotation = oldRot;
 
             // Prevent Original
             return false;
