@@ -115,6 +115,7 @@ namespace DDSS_LobbyGuard.Security
                     string title = $"{System.Enum.GetName(shelf.shelfCategory)} {index}";
                     binder.SetBinder(title, index);
                     binder.Networklabel = title;
+                    binder.NetworkinteractableName = title;
 
                     int randomIndex = UnityEngine.Random.Range(0, Task.documents.Count);
                     string item = Task.documents[randomIndex].Item1;
