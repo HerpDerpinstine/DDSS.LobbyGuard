@@ -112,7 +112,6 @@ namespace DDSS_LobbyGuard.Security
                 OnBlacklistPlayer(player.NetworksteamID, player.NetworksteamUsername);
                 LobbyManager.instance.blacklist.Add(player.NetworksteamID);
                 MelonMain._logger.Msg($"Blacklisted Player: {player.NetworksteamUsername} - {player.Networkusername} - {player.NetworksteamID}");
-                ApplyKick(player, true);
             }
         }
     }

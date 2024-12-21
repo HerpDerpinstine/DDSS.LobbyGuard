@@ -180,9 +180,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, 
-                interact.transform.position,
-                InteractionSecurity.MAX_DISTANCE_PLAYER))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
                 return false;
 
             interact.UserCode_CmdRequestHandShake__NetworkIdentity(sender);
@@ -224,8 +222,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
-                InteractionSecurity.MAX_DISTANCE_PLAYER))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
                 return false;
 
             senderInteract.UserCode_CmdResetHandShake();
@@ -270,8 +267,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
-                InteractionSecurity.MAX_DISTANCE_PLAYER))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
                 return false;
 
             senderInteract.UserCode_CmdResetHandShakeRequest__NetworkIdentity(sender);
@@ -314,8 +310,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position,
-                InteractionSecurity.MAX_DISTANCE_PLAYER))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
                 return false;
 
             senderInteract.UserCode_CmdResetOutgoingHandShake();
