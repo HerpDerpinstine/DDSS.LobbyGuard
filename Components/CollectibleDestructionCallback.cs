@@ -38,7 +38,9 @@ namespace DDSS_LobbyGuard.Components
                 || (gameObject == null)
                 || gameObject.WasCollected
                 || !gameObject.scene.isLoaded
-                || !CollectibleSecurity._holderSpawnCache.TryGetValue(gameObject, out CollectibleHolder holder))
+                || !CollectibleSecurity._holderSpawnCache.TryGetValue(gameObject, out CollectibleHolder holder)
+                || (holder == null)
+                || holder.WasCollected)
                 return;
 
             CollectibleSecurity._holderSpawnCache.Remove(gameObject);
@@ -46,23 +48,38 @@ namespace DDSS_LobbyGuard.Components
             switch (collectibleType)
             {
                 case eCollectibleType.CD:
-                    CollectibleSecurity.SpawnCD(holder.TryCast<CDHolder>(), extraIndex);
+                    CDHolder cdholder = holder.TryCast<CDHolder>();
+                    if ((cdholder != null)
+                        && !cdholder.WasCollected)
+                        CollectibleSecurity.SpawnCD(cdholder, extraIndex);
                     break;
 
                 case eCollectibleType.KEYS:
-                    CollectibleSecurity.SpawnKey(holder.TryCast<KeyHolder>());
+                    KeyHolder keyholder = holder.TryCast<KeyHolder>();
+                    if ((keyholder != null)
+                        && !keyholder.WasCollected)
+                        CollectibleSecurity.SpawnKey(keyholder);
                     break;
 
                 case eCollectibleType.BINDER:
-                    CollectibleSecurity.SpawnBinder(holder.TryCast<OfficeShelf>(), extraIndex);
+                    OfficeShelf binderholder = holder.TryCast<OfficeShelf>();
+                    if ((binderholder != null)
+                        && !binderholder.WasCollected)
+                        CollectibleSecurity.SpawnBinder(binderholder, extraIndex);
                     break;
 
                 case eCollectibleType.FIRE_EX:
-                    CollectibleSecurity.SpawnFireEx(holder.TryCast<FireExHolder>());
+                    FireExHolder fireexholder = holder.TryCast<FireExHolder>();
+                    if ((fireexholder != null)
+                        && !fireexholder.WasCollected)
+                        CollectibleSecurity.SpawnFireEx(fireexholder);
                     break;
 
                 case eCollectibleType.STORAGE_BOX:
-                    CollectibleSecurity.SpawnStorageBox(holder.TryCast<ShelfController>(), extraIndex);
+                    ShelfController boxHolder = holder.TryCast<ShelfController>();
+                    if ((boxHolder != null)
+                        && !boxHolder.WasCollected)
+                        CollectibleSecurity.SpawnStorageBox(boxHolder, extraIndex);
                     break;
 
                 default:

@@ -112,10 +112,10 @@ namespace DDSS_LobbyGuard.Security
                 CollectibleDestructionCallback.eCollectibleType.BINDER,
                 (Binder binder) =>
                 {
-                    string title = $"{System.Enum.GetName(shelf.shelfCategory)} {index}";
-                    binder.SetBinder(title, index);
+                    string title = LocalizationManager.instance.GetLocalizedValue($"{System.Enum.GetName(shelf.shelfCategory)} {index}");
                     binder.Networklabel = title;
                     binder.NetworkinteractableName = title;
+                    binder.Networkcolor = binder.colors[UnityEngine.Random.Range(0, binder.colors.Count)];
 
                     int randomIndex = UnityEngine.Random.Range(0, Task.documents.Count);
                     string item = Task.documents[randomIndex].Item1;
@@ -142,39 +142,27 @@ namespace DDSS_LobbyGuard.Security
         private static void SpawnAndPlace<T, Z>(GameObject prefab, Z holder, CollectibleDestructionCallback.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
             where T : Collectible
             where Z : CollectibleHolder
-            => holder.StartCoroutine(SpawnAndPlaceCoroutine(prefab,
-                holder,
-                (T obj) =>
-                {
-                    if (type != CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK)
-                    {
-                        _holderSpawnCache[obj.gameObject] = holder;
-
-                        CollectibleDestructionCallback callback = obj.gameObject.AddComponent<CollectibleDestructionCallback>();
-                        callback.collectibleType = type;
-                        callback.extraIndex = extraIndex;
-                    }
-
-                    if (afterSpawn != null)
-                        afterSpawn(obj);
-                }));
-        private static IEnumerator SpawnAndPlaceCoroutine<T, Z>(GameObject prefab, Z holder, dSpawnAndPlace<T> afterSpawn)
-            where T : Collectible
-            where Z : CollectibleHolder
         {
-            GameObject gameObject = GameObject.Instantiate(prefab, holder.transform.position, holder.transform.rotation);
-            NetworkServer.Spawn(gameObject);
 
-            yield return new WaitForSeconds(0.1f);
+            GameObject gameObject = GameObject.Instantiate(prefab, holder.transform.position, holder.transform.rotation);
+            gameObject.transform.position = holder.transform.position;
+            gameObject.transform.rotation = holder.transform.rotation;
+            NetworkServer.Spawn(gameObject);
 
             T obj = gameObject.GetComponent<T>();
             holder.CmdPlaceCollectible(obj.netIdentity, obj.Networklabel);
 
-            yield return new WaitForSeconds(0.1f);
+            if (type != CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK)
+            {
+                _holderSpawnCache[obj.gameObject] = holder;
 
-            afterSpawn(obj);
+                CollectibleDestructionCallback callback = obj.gameObject.AddComponent<CollectibleDestructionCallback>();
+                callback.collectibleType = type;
+                callback.extraIndex = extraIndex;
+            }
 
-            yield break;
+            if (afterSpawn != null)
+                afterSpawn(obj);
         }
 
         private static Dictionary<Type, Dictionary<Type, bool>> _whitelist 
