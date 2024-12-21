@@ -106,7 +106,7 @@ namespace DDSS_LobbyGuard.Config
             AllowJanitorsToVote = CreatePref("AllowJanitorsToVote",
                 "Allow Janitors to Vote",
                 "Allows Janitors to Vote on Manager",
-                false);
+                true);
 
             AllowJanitorsToLockDoors = CreatePref("AllowJanitorsToLockDoors",
                 "Allow Janitors to Lock Doors",
@@ -151,7 +151,7 @@ namespace DDSS_LobbyGuard.Config
             GrabbingWhileEmoting = CreatePref("GrabbingWhileEmoting",
                 "Grabbing while Emoting",
                 "Allows the Grabbing of Usables while Emoting",
-                false);
+                true);
 
             DroppingWhileEmoting = CreatePref("DroppingWhileEmoting",
                 "Dropping while Emoting",
@@ -161,7 +161,7 @@ namespace DDSS_LobbyGuard.Config
             GrabbingWhilePointing = CreatePref("GrabbingWhilePointing",
                 "Grabbing while Pointing",
                 "Allows the Grabbing of Usables while Pointing",
-                false);
+                true);
 
             DroppingWhilePointing = CreatePref("DroppingWhilePointing",
                 "Dropping while Pointing",
