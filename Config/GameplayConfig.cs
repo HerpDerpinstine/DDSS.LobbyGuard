@@ -145,7 +145,7 @@ namespace DDSS_LobbyGuard.Config
 
             HideSlackersFromClients = CreatePref("HideSlackersFromClients",
                 "Hide Slackers from Clients",
-                "Prevents Slacker Count from being broadcasted to Clients",
+                "Prevents Slackers and Slacker Count from being broadcasted to Clients",
                 false);
 
             GrabbingWhileEmoting = CreatePref("GrabbingWhileEmoting",
