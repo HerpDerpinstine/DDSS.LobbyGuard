@@ -104,6 +104,8 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void SpawnBinderStart(OfficeShelf shelf)
         {
+            if (!BinderManager.instance.binders.ContainsKey(shelf.shelfCategory))
+                BinderManager.instance.binders[shelf.shelfCategory] = new();
             for (int i = 0; i < 10; i++)
                 SpawnBinder(shelf, i);
         }
@@ -113,6 +115,10 @@ namespace DDSS_LobbyGuard.Security
                 CollectibleDestructionCallback.eCollectibleType.BINDER,
                 (Binder binder) =>
                 {
+                    if (!BinderManager.instance.binders.ContainsKey(shelf.shelfCategory))
+                        BinderManager.instance.binders[shelf.shelfCategory] = new();
+                    BinderManager.instance.binders[shelf.shelfCategory].Add(binder);
+
                     string title = LocalizationManager.instance.GetLocalizedValue($"{System.Enum.GetName(shelf.shelfCategory)} {index}");
                     binder.Networklabel = title;
                     binder.NetworkinteractableName = title;
