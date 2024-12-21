@@ -4,6 +4,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
+using Il2CppPlayer.Tasks;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -35,6 +36,25 @@ namespace DDSS_LobbyGuard.Patches
             // Run Game Command
             drawer.UserCode_CmdOrganize__NetworkIdentity(sender);
             drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
+
+            // Manually Trigger Task Locally
+            if (sender.isLocalPlayer)
+            {
+                // Check if Every Drawer has been Organized
+                bool isAllOrganized = false;
+                foreach (DrawerController drawerController in drawer.filingCabinetController.drawers)
+                {
+                    if (!drawerController.NetworkisOrganized)
+                    {
+                        isAllOrganized = false;
+                        break;
+                    }
+                    else
+                        isAllOrganized = true;
+                }
+                if (isAllOrganized)
+                    TaskHook.TriggerTaskHookCommandStatic(new TaskHook(null, "Filing Cabinet", null, "Organized", drawer.filingCabinetController.roomTrigger.currentRoom.roomName, null));
+            }
 
             // Prevent Original
             return false;
@@ -91,7 +111,10 @@ namespace DDSS_LobbyGuard.Patches
                 {
                     drawer.filingCabinetController.UserCode_CmdSetUnorganized();
                     if (sender.isLocalPlayer)
+                    {
                         drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
+                        TaskHook.TriggerTaskHookCommandStatic(new TaskHook(null, "Filing Cabinet", null, "Organized", drawer.filingCabinetController.roomTrigger.currentRoom.roomName, null));
+                    }
                 }
             }
 
