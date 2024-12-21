@@ -106,7 +106,7 @@ namespace DDSS_LobbyGuard.Config
             AllowJanitorsToVote = CreatePref("AllowJanitorsToVote",
                 "Allow Janitors to Vote",
                 "Allows Janitors to Vote on Manager",
-                true);
+                false);
 
             AllowJanitorsToLockDoors = CreatePref("AllowJanitorsToLockDoors",
                 "Allow Janitors to Lock Doors",
