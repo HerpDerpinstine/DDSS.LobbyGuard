@@ -76,12 +76,9 @@ namespace DDSS_LobbyGuard.Patches
             int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
 
             // Validate Distance
-            if (!sender.isServer)
-            {
-                if (sender.IsGhost()
-                    || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
-                    return false;
-            }
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+                return false;
 
             // Run Game Command
             door.UserCode_CmdSetDoorState__Int32(stateIndex);

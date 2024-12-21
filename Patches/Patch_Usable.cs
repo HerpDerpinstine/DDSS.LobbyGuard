@@ -33,12 +33,9 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!sender.isServer)
-            {
-                if (sender.IsGhost()
-                    || InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
-                    return false;
-            }
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                return false;
 
             // Get Usable Type
             Il2CppSystem.Type usableType = usable.GetIl2CppType();
@@ -119,12 +116,9 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!sender.isServer)
-            {
-                if (sender.IsGhost()
-                    || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
-                    return false;
-            }
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                return false;
 
             // Get Usable Type
             Il2CppSystem.Type usableType = usable.GetIl2CppType();
@@ -205,23 +199,16 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!sender.isServer)
-            {
-                if (sender.IsGhost()
-                    || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
-                    return false;
-            }
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                return false;
 
             // Validate Drop
             if (!InteractionSecurity.CanStopUseUsable(sender, usable.TryCast<Chair>()))
                 return false;
 
             // Run Game Command
-            Vector3 oldPos = usable.transform.position;
-            Quaternion oldRot = usable.transform.rotation;
             usable.UserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
-            usable.transform.position = oldPos;
-            usable.transform.rotation = oldRot;
 
             // Prevent Original
             return false;
