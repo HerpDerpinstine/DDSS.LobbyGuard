@@ -5,7 +5,6 @@ using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
-using Il2CppPlayer.StateMachineLogic;
 using Il2CppTMPro;
 using Il2CppUI.Tabs.LobbyTab;
 using System.Collections.Generic;
@@ -19,8 +18,6 @@ namespace DDSS_LobbyGuard.Security
         private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
 
         internal const float MAX_DISTANCE_DEFAULT = 2f;
-
-        internal const float MAX_DISTANCE_PLAYER = 1f;
         internal const float MAX_DISTANCE_CCTV = 3f;
 
         internal const int MAX_DOCUMENTS_TRAY = 10;
