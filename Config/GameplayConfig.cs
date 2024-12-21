@@ -101,7 +101,7 @@ namespace DDSS_LobbyGuard.Config
             SpawnUnassignedDeskItems = CreatePref("SpawnUnassignedDeskItems",
                 "Spawn Unassigned Desk Items",
                 "Allows Spawning of Mugs and Mouses on Desks that haven't been Assigned",
-                true);
+                false);
 
             AllowJanitorsToVote = CreatePref("AllowJanitorsToVote",
                 "Allow Janitors to Vote",

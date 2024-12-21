@@ -1,6 +1,7 @@
 ﻿using DDSS_LobbyGuard.Components;
 using DDSS_LobbyGuard.Utils;
 using Il2Cpp;
+using Il2CppGameManagement;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppPlayer.Tasks;
@@ -142,27 +143,45 @@ namespace DDSS_LobbyGuard.Security
         private static void SpawnAndPlace<T, Z>(GameObject prefab, Z holder, CollectibleDestructionCallback.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
             where T : Collectible
             where Z : CollectibleHolder
+            => holder.StartCoroutine(SpawnAndPlaceCoroutine(prefab, holder, type, afterSpawn, extraIndex));
+
+        private static IEnumerator SpawnAndPlaceCoroutine<T, Z>(GameObject prefab, Z holder, CollectibleDestructionCallback.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
+            where T : Collectible
+            where Z : CollectibleHolder
         {
+            while (GameManager.instance.currentGameState < 1)
+                yield return null;
+
+            yield return new WaitForSeconds(0.2f);
 
             GameObject gameObject = GameObject.Instantiate(prefab, holder.transform.position, holder.transform.rotation);
             gameObject.transform.position = holder.transform.position;
             gameObject.transform.rotation = holder.transform.rotation;
-            NetworkServer.Spawn(gameObject);
 
-            T obj = gameObject.GetComponent<T>();
-            holder.CmdPlaceCollectible(obj.netIdentity, obj.Networklabel);
+            yield return new WaitForSeconds(0.2f);
+
+            NetworkServer.Spawn(gameObject);
 
             if (type != CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK)
             {
-                _holderSpawnCache[obj.gameObject] = holder;
+                _holderSpawnCache[gameObject] = holder;
 
-                CollectibleDestructionCallback callback = obj.gameObject.AddComponent<CollectibleDestructionCallback>();
+                CollectibleDestructionCallback callback = gameObject.AddComponent<CollectibleDestructionCallback>();
                 callback.collectibleType = type;
                 callback.extraIndex = extraIndex;
             }
 
+            yield return new WaitForSeconds(0.2f);
+
+            T obj = gameObject.GetComponent<T>();
+            holder.CmdPlaceCollectible(obj.netIdentity, obj.Networklabel);
+
+            yield return new WaitForSeconds(0.2f);
+
             if (afterSpawn != null)
                 afterSpawn(obj);
+
+            yield break;
         }
 
         private static Dictionary<Type, Dictionary<Type, bool>> _whitelist 
