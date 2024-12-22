@@ -158,14 +158,11 @@ namespace DDSS_LobbyGuard.Security
             while (GameManager.instance.currentGameState < 1)
                 yield return null;
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(1f);
 
             GameObject gameObject = GameObject.Instantiate(prefab, holder.transform.position, holder.transform.rotation);
             gameObject.transform.position = holder.transform.position;
             gameObject.transform.rotation = holder.transform.rotation;
-
-            yield return new WaitForSeconds(0.2f);
-
             NetworkServer.Spawn(gameObject);
 
             if (type != CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK)
@@ -177,7 +174,7 @@ namespace DDSS_LobbyGuard.Security
                 callback.extraIndex = extraIndex;
             }
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(1f);
 
             T obj = gameObject.GetComponent<T>();
             holder.CmdPlaceCollectible(obj.netIdentity, obj.Networklabel);
