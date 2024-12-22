@@ -6,6 +6,7 @@ using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using System.Collections;
@@ -217,15 +218,24 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            LobbyPlayer player = __2.GetLobbyPlayerFromConnection();
-            if ((player == null)
-                || player.WasCollected
-                || player.IsGhost()
-                || player.IsJanitor())
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
+
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost()
+                || lobbyPlayer.IsJanitor())
                 return false;
 
             // Run Game Command
-            manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, InteractionSecurity.IsSlacker(player) ? PlayerRole.Slacker : player.NetworkplayerRole));
+            manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, InteractionSecurity.IsSlacker(lobbyPlayer) ? PlayerRole.Slacker : lobbyPlayer.NetworkplayerRole));
 
             // Prevent Original
             return false;
