@@ -87,12 +87,39 @@ namespace DDSS_LobbyGuard
         {
             if (!ConfigHandler.General.PromptForInitializationError.Value
                 || !_errorOccured)
+            {
+                BlacklistErrorPrompt();
+                return;
+            }
+
+            try
+            {
+                ShowPrompt("ERROR",
+                    "LobbyGuard encountered Errors during Initialization!\nThis might cause instability and/or crashing.\nContinue?",
+                    "Play Game",
+                    "Quit",
+                    new Action(BlacklistErrorPrompt),
+                    new Action(Application.Quit),
+                    new Action(BlacklistErrorPrompt));
+            }
+            catch (Exception ex)
+            {
+                _errorOccured = true;
+                _logger.Error(ex);
+                BlacklistErrorPrompt();
+            }
+        }
+
+        internal static void BlacklistErrorPrompt()
+        {
+            if (!ConfigHandler.General.PromptForBlacklistError.Value
+                || !BlacklistSecurity._error)
                 return;
 
             try
             {
-                ShowPrompt("Error",
-                    "LobbyGuard encountered Errors during Initialization!\nThis might cause instability and/or crashing.\nContinue?",
+                ShowPrompt("ERROR",
+                    $"LobbyGuard encountered an Error while {(BlacklistSecurity._errorSave ? "Saving" : "Loading")} Blacklist.json\nDisabling Persistent Blacklist until Error is Resolved.\nContinue?",
                     "Play Game",
                     "Quit",
                     new Action(() => { }),

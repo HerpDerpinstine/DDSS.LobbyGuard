@@ -6,6 +6,7 @@ namespace DDSS_LobbyGuard.Config
     {
         internal MelonPreferences_Entry<bool> PromptForUpdateAvailable;
         internal MelonPreferences_Entry<bool> PromptForInitializationError;
+        internal MelonPreferences_Entry<bool> PromptForBlacklistError;
 
         internal override string GetName()
             => "General";
@@ -20,6 +21,11 @@ namespace DDSS_LobbyGuard.Config
             PromptForInitializationError = CreatePref("PromptForInitializationError",
                 "Prompt For Initialization Error",
                 "Shows a Prompt if an Initialization Error occurs",
+                true);
+
+            PromptForBlacklistError = CreatePref("PromptForBlacklistError",
+                "Prompt For Blacklist Error",
+                "Shows a Prompt if an Error occurs while Saving or Loading Blacklist.json",
                 true);
         }
     }

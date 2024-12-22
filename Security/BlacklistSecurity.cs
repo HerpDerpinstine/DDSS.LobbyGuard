@@ -22,6 +22,8 @@ namespace DDSS_LobbyGuard.Security
 
     internal static class BlacklistSecurity
     {
+        internal static bool _error;
+        internal static bool _errorSave;
         private static string _filePath;
         private static List<BlacklistedPlayer> _blacklist = new List<BlacklistedPlayer>();
 
@@ -34,12 +36,13 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void OnLobbyOpen(LobbyManager manager)
         {
-            if (!ConfigHandler.Moderation.PersistentBlacklist.Value)
+            if (_error
+                || !ConfigHandler.Moderation.PersistentBlacklist.Value)
                 return;
 
             LoadFile();
 
-            if (_blacklist.Count > 0)
+            if (!_error && (_blacklist.Count > 0))
                 foreach (BlacklistedPlayer player in _blacklist)
                     if ((player.SteamID != 0)
                         && !manager.blacklist.Contains(player.SteamID))
@@ -47,13 +50,47 @@ namespace DDSS_LobbyGuard.Security
         }
 
         internal static void SaveFile()
-            => File.WriteAllText(_filePath, JsonConvert.SerializeObject(_blacklist, Formatting.Indented));
+        {
+            if (_error
+                || !ConfigHandler.Moderation.PersistentBlacklist.Value)
+                return;
+
+            string fileContent = JsonConvert.SerializeObject(_blacklist, Formatting.Indented);
+            if (string.IsNullOrEmpty(fileContent)
+                || string.IsNullOrWhiteSpace(fileContent))
+                return;
+
+            try
+            {
+                File.WriteAllText(_filePath, fileContent);
+            }
+            catch (Exception ex)
+            {
+                _error = true;
+                _errorSave = true;
+                MelonMain._logger.Error($"Failed to Save Blacklist.json\n{ex}");
+            }
+        }
         private static void LoadFile()
         {
             if (!File.Exists(_filePath))
                 return;
 
-            _blacklist = JsonConvert.DeserializeObject<List<BlacklistedPlayer>>(File.ReadAllText(_filePath));
+            string fileContent = File.ReadAllText(_filePath);
+            if (string.IsNullOrEmpty(fileContent)
+                || string.IsNullOrWhiteSpace(fileContent))
+                return;
+
+            try
+            {
+                _blacklist = JsonConvert.DeserializeObject<List<BlacklistedPlayer>>(fileContent);
+            }
+            catch (Exception ex)
+            {
+                _error = true;
+                _errorSave = false;
+                MelonMain._logger.Error($"Failed to Load Blacklist.json\n{ex}");
+            }
         }
 
         internal static void RequestKick(LobbyPlayer player)
@@ -74,7 +111,8 @@ namespace DDSS_LobbyGuard.Security
 
         private static void OnBlacklistPlayer(ulong steamId, string name)
         {
-            if (!ConfigHandler.Moderation.PersistentBlacklist.Value)
+            if (_error
+                || !ConfigHandler.Moderation.PersistentBlacklist.Value)
                 return;
 
             _blacklist.Add(new()
