@@ -175,10 +175,6 @@ namespace DDSS_LobbyGuard.Patches
             if (sender.IsGhost())
                 return false;
 
-            // Validate Grab
-            if (!InteractionSecurity.CanUseUsable(sender, false))
-                return false;
-
             // Validate Count
             if (binder.documents.Count <= 0)
                 return false;
@@ -191,6 +187,10 @@ namespace DDSS_LobbyGuard.Patches
             Collectible collectible = binder.documentPrefab.GetComponent<Collectible>();
             if ((collectible == null)
                 || collectible.WasCollected)
+                return false;
+
+            // Validate Grab
+            if (!InteractionSecurity.CanUseUsable(sender, collectible))
                 return false;
 
             // Get Document Name

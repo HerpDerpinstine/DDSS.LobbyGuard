@@ -244,7 +244,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Grab
-            if (!InteractionSecurity.CanUseUsable(sender, false))
+            if (!InteractionSecurity.CanUseUsable(sender, prefabCig))
                 return false;
 
             // Run Game Command
@@ -307,7 +307,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Grab
-            if (!InteractionSecurity.CanUseUsable(sender, false))
+            if (!InteractionSecurity.CanUseUsable(sender, prefabUsb))
                 return false;
 
             // Run Game Command

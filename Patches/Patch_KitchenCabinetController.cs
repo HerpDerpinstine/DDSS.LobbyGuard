@@ -5,7 +5,6 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 using UnityEngine;
 
@@ -29,9 +28,6 @@ namespace DDSS_LobbyGuard.Patches
             if (sender.IsGhost())
                 return false;
 
-            // Validate Grab
-            if (!InteractionSecurity.CanUseUsable(sender, false))
-                return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, cabinet.transform.position))
@@ -49,6 +45,10 @@ namespace DDSS_LobbyGuard.Patches
             // Get Requested Collectible
             Collectible collectible = cabinet.items[itemIndex];
             if (collectible == null)
+                return false;
+
+            // Validate Grab
+            if (!InteractionSecurity.CanUseUsable(sender, collectible))
                 return false;
 
             // Get Collectible Interactable Name

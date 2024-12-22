@@ -2,9 +2,12 @@
 using DDSS_LobbyGuard.Utils;
 using Il2Cpp;
 using Il2CppGameManagement;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
+using Il2CppProps.Printer;
 using Il2CppTMPro;
 using Il2CppUI.Tabs.LobbyTab;
 using System.Collections.Generic;
@@ -14,6 +17,10 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class InteractionSecurity
     {
+        private static Il2CppSystem.Type DocumentType = Il2CppType.Of<Document>();
+        private static Il2CppSystem.Type ImageType = Il2CppType.Of<PrintedImage>();
+        private static Il2CppSystem.Type StorageBoxType = Il2CppType.Of<StorageBox>();
+
         private static Dictionary<LobbyPlayer, bool> _allSlackers = new();
         private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
 
@@ -182,13 +189,58 @@ namespace DDSS_LobbyGuard.Security
             return num;
         }
 
-        internal static bool CanUseUsable(NetworkIdentity player, bool isChair)
+        internal static bool CanUseUsable(NetworkIdentity player, Usable usable)
         {
+            if ((player == null)
+                || player.WasCollected)
+                return false;
+
             // Get PlayerController
             PlayerController controller = player.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
                 return false;
+
+            // Check Total Count
+            bool isChair = false;
+            if ((usable != null)
+                && !usable.WasCollected)
+            {
+                isChair = usable.TryCast<Chair>();
+                if (!isChair)
+                {
+                    var usableType = usable.GetIl2CppType();
+                    bool hasOtherType = false;
+                    foreach (var otherUsable in controller.currentUsables)
+                        if ((otherUsable != null)
+                            && !otherUsable.WasCollected)
+                        {
+                            Il2CppSystem.Type otherUsableType = otherUsable.GetIl2CppType();
+                            if (otherUsableType != usableType)
+                            {
+                                hasOtherType = true;
+                                break;
+                            }
+                        }
+                    if (hasOtherType)
+                        return false;
+
+                    int count = 0;
+                    if (controller.currentUsables != null)
+                        count = controller.currentUsables.Count;
+                    if (count < 0)
+                        count = 0;
+
+                    int maxAmount = 1;
+                    if ((usableType == DocumentType)
+                        || (usableType == ImageType)
+                        || (usableType == StorageBoxType))
+                        maxAmount = 2;
+
+                    if (count >= maxAmount)
+                        return false;
+                }
+            }
 
             // Check for Point or Hand Raise
             if (!isChair

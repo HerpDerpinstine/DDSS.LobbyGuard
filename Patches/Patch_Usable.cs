@@ -90,7 +90,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Validate Grab
-            if (!InteractionSecurity.CanUseUsable(sender, usable.TryCast<Chair>()))
+            if (!InteractionSecurity.CanUseUsable(sender, usable))
                 return false;
 
             // Run Game Command
@@ -173,7 +173,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Validate Grab
-            if (!InteractionSecurity.CanUseUsable(sender, usable.TryCast<Chair>()))
+            if (!InteractionSecurity.CanUseUsable(sender, usable))
                 return false;
 
             // Run Game Command

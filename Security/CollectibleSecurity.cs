@@ -113,6 +113,8 @@ namespace DDSS_LobbyGuard.Security
                 CollectibleDestructionCallback.eCollectibleType.BINDER,
                 (Binder binder) =>
                 {
+                    if (BinderManager.instance.binders == null)
+                        BinderManager.instance.binders = new();
                     if (!BinderManager.instance.binders.ContainsKey(shelf.shelfCategory))
                         BinderManager.instance.binders[shelf.shelfCategory] = new();
                     BinderManager.instance.binders[shelf.shelfCategory].Add(binder);
