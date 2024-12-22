@@ -177,10 +177,6 @@ namespace DDSS_LobbyGuard.Patches
         private static bool InvokeUserCode_CmdSetLocalPlayer__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
-            // Validate Server
-            if (__2.identity.isServer)
-                return true;
-
             // Validate Sender
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
             if ((sender == null)
@@ -203,8 +199,6 @@ namespace DDSS_LobbyGuard.Patches
             if ((__2.identity == null)
                 || __2.identity.WasCollected)
                 return false;
-            if (__2.identity.isServer)
-                return true;
 
             // Validate Sender
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
@@ -231,8 +225,6 @@ namespace DDSS_LobbyGuard.Patches
             if ((__2.identity == null)
                 || __2.identity.WasCollected)
                 return false;
-            if (__2.identity.isServer)
-                return true;
 
             // Validate Sender
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
@@ -256,10 +248,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get LobbyPlayer
             LobbyPlayer targetPlayer = __0.TryCast<LobbyPlayer>();
             if ((targetPlayer == null)
