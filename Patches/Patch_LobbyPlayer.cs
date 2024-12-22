@@ -286,12 +286,12 @@ namespace DDSS_LobbyGuard.Patches
                     // Reset Role
                     oldPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
                 }
+                LobbyPlayer localPlayer = LobbyManager.instance.GetLocalPlayer();
+                if ((localPlayer != null)
+                    && !localPlayer.WasCollected
+                    && (localPlayer.NetworksubRole != SubRole.None))
+                    localPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
             }
-            LobbyPlayer localPlayer = LobbyManager.instance.GetLocalPlayer();
-            if ((localPlayer != null)
-                && !localPlayer.WasCollected
-                && (localPlayer.NetworksubRole != SubRole.None))
-                localPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
 
             // Run Game Command
             targetPlayer.UserCode_CmdSetSubRole__SubRole(requestedRole);
