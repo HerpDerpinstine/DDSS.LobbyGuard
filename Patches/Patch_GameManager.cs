@@ -142,10 +142,6 @@ namespace DDSS_LobbyGuard.Patches
                 || player.IsGhost())
                 return false;
 
-            if (player.NetworkisFired
-                && (player.NetworkplayerRole != PlayerRole.Janitor))
-                return false;
-
             // Send Role
             if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
                 && __instance.revealRoleAfterFiring
