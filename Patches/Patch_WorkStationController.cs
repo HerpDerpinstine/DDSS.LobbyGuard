@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -9,6 +10,7 @@ using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using Il2CppProps.Scripts;
+using Il2CppProps.ServerRack;
 using Il2CppProps.WorkStation.InfectedUSB;
 using Il2CppProps.WorkStation.Mouse;
 using Il2CppProps.WorkStation.Scripts;
@@ -98,6 +100,11 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            // Check Server Status
+            if (!ConfigHandler.Gameplay.AllowVirusesWhileServerIsDown.Value
+                && !ServerController.connectionsEnabled)
+                return false;
+
             // Get WorkStationController
             WorkStationController station = __0.TryCast<WorkStationController>();
             if ((station == null)

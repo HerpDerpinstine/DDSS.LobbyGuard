@@ -23,6 +23,7 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> AllowJanitorsToVote;
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
+        internal MelonPreferences_Entry<bool> AllowVirusesWhileServerIsDown;
 
         internal MelonPreferences_Entry<bool> ProductivityFromTaskCompletion;
 
@@ -116,6 +117,11 @@ namespace DDSS_LobbyGuard.Config
             AllowJanitorsToUnlockDoors = CreatePref("AllowJanitorsToUnlockDoors",
                 "Allow Janitors to Unlock Doors",
                 "Allows Janitors to Unlock Doors",
+                true);
+
+            AllowVirusesWhileServerIsDown = CreatePref("AllowVirusesWhileServerIsDown",
+                "Allow Viruses while Server is Down",
+                "Allows WorkStations to get Viruses while the Server is Down",
                 true);
 
             ProductivityFromTaskCompletion = CreatePref("ProductivityFromTaskCompletion",
