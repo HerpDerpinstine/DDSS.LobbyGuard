@@ -2,6 +2,7 @@
 using DDSS_LobbyGuard.Utils;
 using Il2Cpp;
 using Il2CppGameManagement;
+using Il2CppGameManagement.StateMachine;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppPlayer.Tasks;
@@ -155,7 +156,7 @@ namespace DDSS_LobbyGuard.Security
             where T : Collectible
             where Z : CollectibleHolder
         {
-            while (GameManager.instance.currentGameState < 1)
+            while (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections)
                 yield return null;
 
             yield return new WaitForSeconds(1f);
@@ -163,6 +164,9 @@ namespace DDSS_LobbyGuard.Security
             GameObject gameObject = GameObject.Instantiate(prefab, holder.transform.position, holder.transform.rotation);
             gameObject.transform.position = holder.transform.position;
             gameObject.transform.rotation = holder.transform.rotation;
+
+            yield return new WaitForSeconds(1f);
+
             NetworkServer.Spawn(gameObject);
 
             if (type != CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK)
@@ -179,7 +183,7 @@ namespace DDSS_LobbyGuard.Security
             T obj = gameObject.GetComponent<T>();
             holder.CmdPlaceCollectible(obj.netIdentity, obj.Networklabel);
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(1f);
 
             if (afterSpawn != null)
                 afterSpawn(obj);
