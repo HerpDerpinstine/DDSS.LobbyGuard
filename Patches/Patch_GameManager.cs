@@ -137,8 +137,10 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get LobbyPlayer
             LobbyPlayer player = __0.GetComponent<LobbyPlayer>();
-            if (player == null)
-                return true;
+            if ((player == null)
+                || player.WasCollected
+                || player.IsGhost())
+                return false;
 
             if (player.NetworkisFired
                 && (player.NetworkplayerRole != PlayerRole.Janitor))
@@ -156,10 +158,16 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Janitor Count
             var janitorList = LobbyManager.instance.GetJanitorPlayers();
-            bool flag = !player.NetworkisFired
-                && (player.NetworkplayerRole != PlayerRole.Janitor)
+            bool flag = !player.IsJanitor()
                 && (__instance.NetworkjanitorAmount > 0)
                 && (janitorList.Count < __instance.NetworkjanitorAmount);
+
+            // Reset Termination Timer
+            __instance.RpcResetTerminationTimer(__instance.terminationMaxTime);
+
+            // End Meeting
+            if (!__1)
+                __instance.ServerFinnishMeeting();
 
             // Reset Workstation
             if (__2)
@@ -171,6 +179,8 @@ namespace DDSS_LobbyGuard.Patches
             // Assign Janitor Role
             if (flag)
                 player.ServerSetPlayerRole(PlayerRole.Janitor);
+            else
+                player.ServerSetPlayerRole(PlayerRole.None);
 
             // Apply Fired State
             player.NetworkisFired = true;
@@ -178,13 +188,6 @@ namespace DDSS_LobbyGuard.Patches
             // Reset Vote
             if (__instance.isServer)
                 VoteBoxController.instance.ServerResetVote();
-
-            // Reset Termination Timer
-            __instance.RpcResetTerminationTimer(__instance.terminationMaxTime);
-
-            // End Meeting
-            if (!__1)
-                __instance.ServerFinnishMeeting();
 
             // End Match if Winner is Found
             if (!__1

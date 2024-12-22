@@ -180,6 +180,9 @@ namespace DDSS_LobbyGuard.Security
 
             yield return new WaitForSeconds(1f);
 
+            gameObject.transform.position = holder.transform.position;
+            gameObject.transform.rotation = holder.transform.rotation;
+
             T obj = gameObject.GetComponent<T>();
             holder.CmdPlaceCollectible(obj.netIdentity, obj.Networklabel);
 
