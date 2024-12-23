@@ -3,6 +3,9 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
+using Il2CppObjects.Scripts;
+using Il2CppPlayer;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.WorkStation.Phone;
 
 namespace DDSS_LobbyGuard.Patches
@@ -23,20 +26,51 @@ namespace DDSS_LobbyGuard.Patches
                 || phone.WasCollected)
                 return false;
 
-            // Get New Caller
-            string caller = __1.SafeReadString();
+            // Get Sender
+            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
+                return false;
+
+            // Validate Chair
+            WorkStationController workStation = controller.NetworkcurrentChair.GetComponent<WorkStationController>();
+            if ((workStation == null)
+                || workStation.WasCollected
+                || (workStation.ownerLobbyPlayer == null)
+                || workStation.ownerLobbyPlayer.WasCollected)
+                return false;
+
+            lobbyPlayer = workStation.ownerLobbyPlayer.GetComponent<LobbyPlayer>();
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
+                return false;
+
+            // Enforce Receiver Number
+            string caller = phone.phoneNumber;
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller))
                 return false;
 
-            // Enforce Receiver Number
-            string receiver = phone.phoneNumber;
+            // Get New Caller
+            __1.SafeReadString();
+            string receiver = __1.SafeReadString();
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
                 return false;
 
+            // Prevent Calling Self
+            if (caller == receiver)
+                return false;
+
             // Run Security
-            PhoneSecurity.OnCallAnswer(PhoneManager.instance, caller, receiver);
+            PhoneManager.instance.ServerCall(caller, receiver);
 
             // Prevent Original
             return false;
