@@ -26,6 +26,12 @@ namespace DDSS_LobbyGuard.Patches
                 || phone.WasCollected)
                 return false;
 
+            // Get and Ignore User Input Caller
+            string caller = __1.SafeReadString();
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
+
             // Get Sender
             PlayerController controller = __2.identity.GetComponent<PlayerController>();
             if ((controller == null)
@@ -53,13 +59,12 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Enforce Receiver Number
-            string caller = phone.phoneNumber;
+            caller = phone.phoneNumber;
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller))
                 return false;
 
             // Get New Caller
-            __1.SafeReadString();
             string receiver = __1.SafeReadString();
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
