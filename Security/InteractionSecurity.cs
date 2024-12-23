@@ -20,6 +20,7 @@ namespace DDSS_LobbyGuard.Security
         private static Il2CppSystem.Type DocumentType = Il2CppType.Of<Document>();
         private static Il2CppSystem.Type ImageType = Il2CppType.Of<PrintedImage>();
         private static Il2CppSystem.Type StorageBoxType = Il2CppType.Of<StorageBox>();
+        private static Il2CppSystem.Type ToiletPaperType = Il2CppType.Of<ToiletPaper>();
 
         private static Dictionary<LobbyPlayer, bool> _allSlackers = new();
         private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
@@ -234,7 +235,8 @@ namespace DDSS_LobbyGuard.Security
                     int maxAmount = 1;
                     if ((usableType == DocumentType)
                         || (usableType == ImageType)
-                        || (usableType == StorageBoxType))
+                        || (usableType == StorageBoxType)
+                        || (usableType == ToiletPaperType))
                         maxAmount = 2;
 
                     if (count >= maxAmount)
