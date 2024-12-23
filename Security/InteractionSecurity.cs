@@ -8,6 +8,7 @@ using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Printer;
+using Il2CppProps.WorkStation.Mouse;
 using Il2CppTMPro;
 using Il2CppUI.Tabs.LobbyTab;
 using System.Collections.Generic;
@@ -17,8 +18,9 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class InteractionSecurity
     {
-        private static Il2CppSystem.Type DocumentType = Il2CppType.Of<Document>();
+        private static Il2CppSystem.Type MouseType = Il2CppType.Of<Mouse>();
         private static Il2CppSystem.Type ImageType = Il2CppType.Of<PrintedImage>();
+        private static Il2CppSystem.Type DocumentType = Il2CppType.Of<Document>();
         private static Il2CppSystem.Type StorageBoxType = Il2CppType.Of<StorageBox>();
         private static Il2CppSystem.Type ToiletPaperType = Il2CppType.Of<ToiletPaper>();
 
