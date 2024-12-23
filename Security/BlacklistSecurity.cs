@@ -2,7 +2,6 @@
 using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
-//using Il2CppUMUI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,7 +16,7 @@ namespace DDSS_LobbyGuard.Security
         public string Timestamp;
         public ulong SteamID;
         public string Name;
-        //public string Reason;
+        public string Reason;
     }
 
     internal static class BlacklistSecurity
