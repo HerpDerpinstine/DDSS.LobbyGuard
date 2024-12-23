@@ -17,19 +17,6 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_DoorController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(DoorController), nameof(DoorController.Start))]
-        private static void Start_Prefix(DoorController __instance)
-        {
-            if (!NetworkServer.activeHost
-                || (__instance == null)
-                || __instance.WasCollected)
-                return;
-
-            // Start Door
-            DoorSecurity.DoorStart(__instance);
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetDoorState__Int32))]
         private static bool UserCode_CmdSetDoorState__Int32_Prefix(
             DoorController __instance,

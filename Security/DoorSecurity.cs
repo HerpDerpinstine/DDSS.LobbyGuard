@@ -19,20 +19,14 @@ namespace DDSS_LobbyGuard.Security
             _applyStateCoroutines.Clear();
         }
 
-        internal static void DoorStart(DoorController door)
-        {
-            if ((door == null)
-                || door.WasCollected)
-                return;
-
-            FixColliderSize(door.playerDetectionVolumeForward);
-            FixColliderSize(door.playerDetectionVolumeBackward);
-        }
-
         internal static void ApplyState(DoorController door, int newState)
         {
             if (_applyStateCoroutines.ContainsKey(door))
                 return;
+
+            FixColliderSize(door.playerDetectionVolumeForward);
+            FixColliderSize(door.playerDetectionVolumeBackward);
+
             _applyStateCoroutines[door] = 
                 door.StartCoroutine(ApplyStateCoroutine(door, newState));
         }
