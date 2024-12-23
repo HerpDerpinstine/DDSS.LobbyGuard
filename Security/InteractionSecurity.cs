@@ -18,11 +18,11 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class InteractionSecurity
     {
-        private static Il2CppSystem.Type MouseType = Il2CppType.Of<Mouse>();
-        private static Il2CppSystem.Type ImageType = Il2CppType.Of<PrintedImage>();
         private static Il2CppSystem.Type DocumentType = Il2CppType.Of<Document>();
+        private static Il2CppSystem.Type ImageType = Il2CppType.Of<PrintedImage>();
         private static Il2CppSystem.Type StorageBoxType = Il2CppType.Of<StorageBox>();
         private static Il2CppSystem.Type ToiletPaperType = Il2CppType.Of<ToiletPaper>();
+        private static Il2CppSystem.Type MouseType = Il2CppType.Of<Mouse>();
 
         private static Dictionary<LobbyPlayer, bool> _allSlackers = new();
         private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
@@ -238,7 +238,8 @@ namespace DDSS_LobbyGuard.Security
                     if ((usableType == DocumentType)
                         || (usableType == ImageType)
                         || (usableType == StorageBoxType)
-                        || (usableType == ToiletPaperType))
+                        || (usableType == ToiletPaperType)
+                        || (usableType == MouseType))
                         maxAmount = 2;
 
                     if (count >= maxAmount)
