@@ -13,6 +13,8 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(PlayerDetectionVolume), nameof(PlayerDetectionVolume.OnTriggerEnter))]
         private static bool OnTriggerEnter_Prefix(PlayerDetectionVolume __instance, Collider __0)
         {
+            DoorSecurity.FixColliderSize(__instance);
+
             if (!NetworkServer.activeHost)
                 return true;
 

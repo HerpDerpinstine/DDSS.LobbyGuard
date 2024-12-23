@@ -19,6 +19,16 @@ namespace DDSS_LobbyGuard.Security
             _applyStateCoroutines.Clear();
         }
 
+        internal static void DoorStart(DoorController door)
+        {
+            if ((door == null)
+                || door.WasCollected)
+                return;
+
+            FixColliderSize(door.playerDetectionVolumeForward);
+            FixColliderSize(door.playerDetectionVolumeBackward);
+        }
+
         internal static void ApplyState(DoorController door, int newState)
         {
             if (_applyStateCoroutines.ContainsKey(door))
@@ -29,6 +39,27 @@ namespace DDSS_LobbyGuard.Security
 
             _applyStateCoroutines[door] = 
                 door.StartCoroutine(ApplyStateCoroutine(door, newState));
+        }
+
+        internal static void FixColliderSize(PlayerDetectionVolume volume)
+        {
+            if ((volume == null)
+                || volume.WasCollected)
+                return;
+
+            BoxCollider collider = volume.GetComponent<BoxCollider>();
+            if ((collider == null)
+                || collider.WasCollected)
+                return;
+
+            Vector3 size = collider.size;
+            if (size.x < 0.6f)
+                size.x = 0.6f;
+            if (size.y < 0.6f)
+                size.y = 0.6f;
+            if (size.z < 0.6f)
+                size.z = 0.6f;
+            collider.size = size;
         }
 
         private static bool IsDoorValid(DoorController door)
@@ -64,27 +95,6 @@ namespace DDSS_LobbyGuard.Security
                 return -1;
 
             return 0;
-        }
-
-        private static void FixColliderSize(PlayerDetectionVolume volume)
-        {
-            if ((volume == null)
-                && volume.WasCollected)
-                return;
-
-            BoxCollider collider = volume.GetComponent<BoxCollider>();
-            if ((collider == null)
-                || collider.WasCollected)
-                return;
-
-            Vector3 size = collider.size;
-            if (size.x < 0.6f)
-                size.x = 0.6f;
-            if (size.y < 0.6f)
-                size.y = 0.6f;
-            if (size.z < 0.6f)
-                size.z = 0.6f;
-            collider.size = size;
         }
 
         internal static IEnumerator ApplyStateCoroutine(DoorController door, int newState)
