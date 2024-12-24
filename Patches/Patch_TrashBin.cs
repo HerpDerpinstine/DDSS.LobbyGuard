@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.FireEx;
 using Il2CppProps.Scripts;
@@ -47,12 +48,23 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            if (sender.isServer)
-                return true;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
 
-            // Validate Distance
-            if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            // Get Player
+            LobbyPlayer player = controller.NetworklobbyPlayer;
+            if ((player == null)
+                || player.WasCollected
+                || player.IsGhost())
+                return false;
+
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
                 return false;
 
             // Get Values
@@ -61,12 +73,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate TrashBin
             if (trashcan.isOnFire == enabled)
-                return false;
-
-            // Get Player
-            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || player.WasCollected)
                 return false;
 
             // Check for Extinguishing
@@ -79,7 +85,7 @@ namespace DDSS_LobbyGuard.Patches
             else
             {
                 // Validate Placement
-                Collectible collectible = sender.GetCurrentCollectible();
+                Collectible collectible = controller.GetCurrentCollectible();
                 if ((collectible == null)
                     || (collectible.GetIl2CppType() != Il2CppType.Of<FireExController>()))
                     return false;
@@ -87,10 +93,6 @@ namespace DDSS_LobbyGuard.Patches
                 // Get FireExController
                 FireExController fireEx = collectible.TryCast<FireExController>();
                 if (fireEx == null)
-                    return false;
-
-                // Validate FireExController
-                if (!InteractionSecurity.IsWithinRange(fireEx.transform.position, trashcan.transform.position))
                     return false;
             }
 
