@@ -2,6 +2,7 @@
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
@@ -62,6 +63,9 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
                 return false;
 
+            // Get Last Assistant
+            LobbyPlayer lastAssistant = LobbyManager.instance.GetAssistantPlayer();
+
             // Run Game Command
             foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
             {
@@ -81,6 +85,12 @@ namespace DDSS_LobbyGuard.Patches
                 localPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
 
             targetPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.Assistant);
+
+            if ((lastAssistant != null)
+                && !lastAssistant.WasCollected)
+                GameManager.instance.RpcSetAssistant(lastAssistant.netIdentity, targetPlayer.netIdentity);
+            else
+                GameManager.instance.RpcSetAssistant(null, targetPlayer.netIdentity);
 
             // Prevent Original
             return false;
@@ -137,6 +147,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             targetPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
+            GameManager.instance.RpcSetAssistant(targetPlayer.netIdentity, null);
 
             // Prevent Original
             return false;

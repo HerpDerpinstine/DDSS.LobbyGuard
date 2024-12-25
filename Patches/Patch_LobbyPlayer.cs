@@ -272,6 +272,9 @@ namespace DDSS_LobbyGuard.Patches
             if (requestedRole == targetPlayer.NetworksubRole)
                 return false;
 
+            // Get Last Assistant
+            LobbyPlayer lastAssistant = LobbyManager.instance.GetAssistantPlayer();
+
             // Remove Assistant Role from All Others
             if (requestedRole == SubRole.Assistant)
             {
@@ -295,6 +298,12 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             targetPlayer.UserCode_CmdSetSubRole__SubRole(requestedRole);
+
+            if ((lastAssistant != null)
+                && !lastAssistant.WasCollected)
+                GameManager.instance.RpcSetAssistant(lastAssistant.netIdentity, targetPlayer.netIdentity);
+            else
+                GameManager.instance.RpcSetAssistant(null, targetPlayer.netIdentity);
 
             // Prevent Original
             return false;
