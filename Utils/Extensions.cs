@@ -104,7 +104,7 @@ namespace DDSS_LobbyGuard.Utils
                 || controller.WasCollected)
                 return null;
 
-            return player.GetCurrentCollectible();
+            return controller.GetCurrentCollectible();
         }
 
         internal static Collectible GetCurrentCollectible(this PlayerController player)
