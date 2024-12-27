@@ -16,10 +16,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get CollectibleHolder
             CollectibleHolder holder = __0.TryCast<CollectibleHolder>();
             if ((holder == null)
@@ -77,10 +73,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get CollectibleHolder
             CollectibleHolder holder = __0.TryCast<CollectibleHolder>();
             if ((holder == null)
@@ -133,10 +125,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get CollectibleHolder
             CollectibleHolder holder = __0.TryCast<CollectibleHolder>();
             if ((holder == null)
