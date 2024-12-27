@@ -48,8 +48,14 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(sender))
                 return false;
 
-            // Check for Server
-            if (!__2.identity.isServer)
+            // Validate Sender
+            string senderLower = sender.ToLower();
+            bool isSenderPlayer = ComputerSecurity._playerAddresses.ContainsKey(senderLower);
+            bool isSenderClient = Task.clientEmails.Contains(senderLower);
+            if (!isSenderPlayer && !isSenderClient)
+                return false;
+
+            if (isSenderPlayer)
             {
                 // Get Player
                 LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
@@ -73,14 +79,10 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Enforce Sender Address
                 sender = workStation.computerController.emailAddress;
+                if (string.IsNullOrEmpty(sender)
+                    || string.IsNullOrWhiteSpace(sender))
+                    return false;
             }
-
-            // Validate Sender
-            string senderLower = sender.ToLower();
-            bool isPlayer = ComputerSecurity._playerAddresses.ContainsKey(senderLower);
-            bool isClient = Task.clientEmails.Contains(senderLower);
-            if (!isPlayer && !isClient)
-                return false;
 
             // Get and Ignore User Input Receiver
             string receiver = __1.SafeReadString();
@@ -90,15 +92,41 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Receiver
             string recipientLower = receiver.ToLower();
-            isPlayer = ComputerSecurity._playerAddresses.ContainsKey(recipientLower);
-            isClient = Task.clientEmails.Contains(recipientLower);
-            if (!isPlayer && !isClient)
+            bool isReceiverPlayer = ComputerSecurity._playerAddresses.ContainsKey(recipientLower);
+            if (!isReceiverPlayer)
                 return false;
+
+            // Validate Subject
+            if (isSenderClient)
+            {
+                // Get Player
+                LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
+                if ((player == null)
+                    || player.WasCollected)
+                    return false;
+
+                // Validate Chair
+                WorkStationController workStation = player.NetworkworkStationController;
+                if ((workStation == null)
+                    || workStation.WasCollected)
+                    return false;
+
+                // Enforce Sender Address
+                receiver = workStation.computerController.emailAddress;
+                if (string.IsNullOrEmpty(receiver)
+                    || string.IsNullOrWhiteSpace(receiver))
+                    return false;
+            }
 
             // Get Subject
             string subject = __1.SafeReadString();
             if (string.IsNullOrEmpty(subject)
                 || string.IsNullOrWhiteSpace(subject))
+                return false;
+
+            // Validate Subject
+            if (isSenderClient
+                && !ComputerSecurity.EnforceClientEmailSubject(subject))
                 return false;
 
             // Get Message
