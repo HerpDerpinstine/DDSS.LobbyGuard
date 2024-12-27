@@ -3,6 +3,8 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard
@@ -16,10 +18,6 @@ namespace DDSS_LobbyGuard
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Consumable
             Consumable food = __0.TryCast<Consumable>();
             if (food == null)
@@ -28,8 +26,18 @@ namespace DDSS_LobbyGuard
             // Get Sender
             NetworkIdentity sender = __2.identity;
             if ((sender == null)
-                || sender.WasCollected
-                || sender.IsGhost())
+                || sender.WasCollected)
+                return false;
+
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return true;
+
+            LobbyPlayer player = controller.NetworklobbyPlayer;
+            if ((player == null)
+                || player.WasCollected
+                || player.IsGhost())
                 return false;
 
             // Validate Distance
@@ -38,8 +46,7 @@ namespace DDSS_LobbyGuard
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
-            if ((collectible == null)
-                || (collectible.GetIl2CppType() != Il2CppType.Of<Consumable>()))
+            if (collectible == null)
                 return false;
 
             // Get Consumable
