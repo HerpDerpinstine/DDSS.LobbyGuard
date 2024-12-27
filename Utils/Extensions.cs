@@ -104,13 +104,18 @@ namespace DDSS_LobbyGuard.Utils
                 || controller.WasCollected)
                 return null;
 
-            return controller.GetCurrentCollectible();
+            Usable usable = controller.GetCurrentUsable();
+            if ((usable == null)
+                || usable.WasCollected)
+                return null;
+
+            return usable.TryCast<Collectible>();
         }
 
         internal static Collectible GetCurrentCollectible(this PlayerController player)
         {
             Usable usable = player.GetCurrentUsable();
-            if ((usable == null)
+            if ((usable == null)    
                 || usable.WasCollected)
                 return null;
 
