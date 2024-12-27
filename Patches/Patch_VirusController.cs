@@ -11,11 +11,19 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_VirusController
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(VirusController), nameof(VirusController.Start))]
+        private static void Start_Prefix(VirusController __instance)
+        {
+            // Initial Match Start Delay of 2 Minutes / 120 Seconds
+            __instance.virusInfectionTimeLimit = 120f;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(VirusController), nameof(VirusController.PerformPotentialVirusActivity))]
         private static bool PerformPotentialVirusActivity_Prefix(VirusController __instance)
         {
             // Validate Server
-            if (!__instance.isServer)
+            if (!NetworkServer.activeHost)
                 return true;
 
             // Validate Workstation
@@ -46,10 +54,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -59,8 +63,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Player
-            if (sender.IsGhost()
-                || !ComputerSecurity.ValidatePlayer(controller.computerController, sender))
+            if (!ComputerSecurity.ValidatePlayer(controller.computerController, sender))
                 return false;
 
             // Get Value
