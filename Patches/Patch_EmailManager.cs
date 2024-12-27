@@ -129,9 +129,9 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Subject
-            //if (isSenderClient
-            //    && !ComputerSecurity.EnforceClientEmailSubject(subject))
-            //    return false;
+            if (isSenderClient
+                && !ComputerSecurity.EnforceClientEmailSubject(subject))
+                return false;
 
             // Get Message
             string msg = __1.SafeReadString();
