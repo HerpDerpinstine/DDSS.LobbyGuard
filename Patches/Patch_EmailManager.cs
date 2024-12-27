@@ -60,7 +60,8 @@ namespace DDSS_LobbyGuard.Patches
                 // Get Player
                 LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
                 if ((player == null)
-                    || player.WasCollected)
+                    || player.WasCollected
+                    || player.IsGhost())
                     return false;
 
                 // Validate Sender is on Workstation
@@ -102,7 +103,8 @@ namespace DDSS_LobbyGuard.Patches
                 // Get Player
                 LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
                 if ((player == null)
-                    || player.WasCollected)
+                    || player.WasCollected
+                    || player.IsGhost())
                     return false;
 
                 // Validate Chair
