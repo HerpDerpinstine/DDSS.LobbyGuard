@@ -1,5 +1,7 @@
-﻿using Il2CppComputer.Scripts.System;
+﻿using DDSS_LobbyGuard.Utils;
+using Il2CppComputer.Scripts.System;
 using Il2CppMirror;
+using Il2CppPlayer.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,11 +25,34 @@ namespace DDSS_LobbyGuard.Security
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(player.transform.position, computer.transform.position))
+            if (player.IsGhost()
+                || !InteractionSecurity.IsWithinRange(player.transform.position, computer.transform.position))
                 return false;
 
             // Player is Valid
             return true;
+        }
+
+        internal static bool EnforceClientEmailSubject(string subject)
+        {
+            if (subject.StartsWith("Re: "))
+            {
+                string[] split = subject.Split(' ', 2, System.StringSplitOptions.None);
+                
+                string documentName = split[1];
+                if (string.IsNullOrEmpty(documentName)
+                    || string.IsNullOrWhiteSpace(documentName))
+                    return false;
+
+                foreach (var doc in Task.documents)
+                    if (doc.Item1 == documentName)
+                        return true;
+
+                return false;
+            }
+
+            return ((subject == "Nice") 
+                || (subject == "I'm down for it!"));
         }
     }
 }
