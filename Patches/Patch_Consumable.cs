@@ -16,6 +16,10 @@ namespace DDSS_LobbyGuard
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
+            // Check for Server
+            if (__2.identity.isServer)
+                return true;
+
             // Get Consumable
             Consumable food = __0.TryCast<Consumable>();
             if (food == null)

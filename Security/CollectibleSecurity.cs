@@ -5,6 +5,7 @@ using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using Il2CppProps;
 using Il2CppProps.FireEx;
@@ -158,6 +159,20 @@ namespace DDSS_LobbyGuard.Security
         {
             while (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections)
                 yield return null;
+            
+            bool flag = false;
+            while (!flag)
+            {
+                flag = true;
+                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
+                    if (networkIdentity == null || networkIdentity.GetComponent<LobbyPlayer>().NetworkplayerController == null)
+                    {
+                        flag = false;
+                        break;
+                    }
+                if (!flag)
+                    yield return null;
+            }
 
             yield return new WaitForSeconds(1f);
 
