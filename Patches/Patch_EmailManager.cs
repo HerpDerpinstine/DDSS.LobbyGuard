@@ -32,7 +32,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check if Servers are Working
             if (!ServerController.connectionsEnabled)
                 return false;
 
@@ -55,20 +54,20 @@ namespace DDSS_LobbyGuard.Patches
             if (!isSenderPlayer && !isSenderClient)
                 return false;
 
+            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
+                return false;
+
             if (isSenderPlayer)
             {
-                // Get Player
-                LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
-                if ((player == null)
-                    || player.WasCollected
-                    || player.IsGhost())
-                    return false;
-
-                // Validate Sender is on Workstation
-                PlayerController controller = __2.identity.GetComponent<PlayerController>();
-                if ((controller == null)
-                    || controller.WasCollected
-                    || (controller.NetworkcurrentChair == null)
+                if ((controller.NetworkcurrentChair == null)
                     || controller.NetworkcurrentChair.WasCollected)
                     return false;
 
@@ -82,6 +81,12 @@ namespace DDSS_LobbyGuard.Patches
                 sender = workStation.computerController.emailAddress;
                 if (string.IsNullOrEmpty(sender)
                     || string.IsNullOrWhiteSpace(sender))
+                    return false;
+
+                senderLower = sender.ToLower();
+                isSenderPlayer = ComputerSecurity._playerAddresses.ContainsKey(senderLower);
+                isSenderClient = Task.clientEmails.Contains(senderLower);
+                if (!isSenderPlayer && !isSenderClient)
                     return false;
             }
 
@@ -97,26 +102,23 @@ namespace DDSS_LobbyGuard.Patches
             if (!isReceiverPlayer)
                 return false;
 
-            // Validate Subject
             if (isSenderClient)
             {
-                // Get Player
-                LobbyPlayer player = __2.identity.GetComponent<LobbyPlayer>();
-                if ((player == null)
-                    || player.WasCollected
-                    || player.IsGhost())
-                    return false;
-
                 // Validate Chair
-                WorkStationController workStation = player.NetworkworkStationController;
+                WorkStationController workStation = lobbyPlayer.NetworkworkStationController;
                 if ((workStation == null)
                     || workStation.WasCollected)
                     return false;
 
-                // Enforce Sender Address
+                // Enforce Receiver Address
                 receiver = workStation.computerController.emailAddress;
                 if (string.IsNullOrEmpty(receiver)
                     || string.IsNullOrWhiteSpace(receiver))
+                    return false;
+
+                recipientLower = receiver.ToLower();
+                isReceiverPlayer = ComputerSecurity._playerAddresses.ContainsKey(recipientLower);
+                if (!isReceiverPlayer)
                     return false;
             }
 
@@ -127,9 +129,9 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Subject
-            if (isSenderClient
-                && !ComputerSecurity.EnforceClientEmailSubject(subject))
-                return false;
+            //if (isSenderClient
+            //    && !ComputerSecurity.EnforceClientEmailSubject(subject))
+            //    return false;
 
             // Get Message
             string msg = __1.SafeReadString();
@@ -141,7 +143,7 @@ namespace DDSS_LobbyGuard.Patches
             string timeStamp = DateTime.Now.ToString("HH:mm");
 
             // Run Game Command
-            inbox.UserCode_CmdSendEmail__String__String__String__String__String(sender, receiver, subject, msg, timeStamp);
+            inbox.UserCode_CmdSendEmail__String__String__String__String__String(senderLower, recipientLower, subject, msg, timeStamp);
 
             // Prevent Original
             return false;
