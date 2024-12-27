@@ -54,13 +54,13 @@ namespace DDSS_LobbyGuard.Security
             // Get Collectible Type
             Type collectibleType = collectible.GetIl2CppType();
 
-            // Validate Collectible
-            if (allowedCollectibleTypes.ContainsKey(collectibleType))
-                return true;
-
             // Handle TrashBin Specifically
             if (holderType == _trashBinType)
                 return collectible.isTrashable;
+
+            // Validate Collectible
+            if (allowedCollectibleTypes.ContainsKey(collectibleType))
+                return true;
 
             // Return False
             return false;
@@ -212,6 +212,11 @@ namespace DDSS_LobbyGuard.Security
         private static Dictionary<Type, Dictionary<Type, bool>> _whitelist 
             = new Dictionary<Type, Dictionary<Type, bool>>()
             {
+                {
+                    _trashBinType,
+                    null
+                },
+
                 {
                     Il2CppType.Of<BulletinBoard>(),
                     new Dictionary<Type, bool>()
