@@ -3,7 +3,6 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard
@@ -17,10 +16,6 @@ namespace DDSS_LobbyGuard
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Consumable
             Consumable food = __0.TryCast<Consumable>();
             if (food == null)
