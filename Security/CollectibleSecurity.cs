@@ -121,9 +121,12 @@ namespace DDSS_LobbyGuard.Security
                         BinderManager.instance.binders[shelf.shelfCategory] = new();
                     BinderManager.instance.binders[shelf.shelfCategory].Add(binder);
 
-                    string title = LocalizationManager.instance.GetLocalizedValue($"{System.Enum.GetName(shelf.shelfCategory)} {index}");
-                    binder.Networklabel = title;
-                    binder.NetworkinteractableName = title;
+                    string catName = System.Enum.GetName(shelf.shelfCategory);
+                    string name = $"{catName} {index}";
+                    string localizedName = $"{LocalizationManager.instance.GetLocalizedValue(catName)} {index}";
+
+                    binder.Networklabel = localizedName;
+                    binder.NetworkinteractableName = name;
                     binder.Networkcolor = binder.colors[UnityEngine.Random.Range(0, binder.colors.Count)];
 
                     int randomIndex = UnityEngine.Random.Range(0, Task.documents.Count);
