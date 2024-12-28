@@ -160,9 +160,6 @@ namespace DDSS_LobbyGuard.Patches
                 || sender.WasCollected)
                 return false;
 
-            if (sender.isServer)
-                return true;
-
             // Validate Role
             LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
             if ((player == null)
@@ -213,9 +210,6 @@ namespace DDSS_LobbyGuard.Patches
             if ((sender == null)
                 || sender.WasCollected)
                 return false;
-
-            if (sender.isServer)
-                return true;
 
             // Validate Role
             LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
