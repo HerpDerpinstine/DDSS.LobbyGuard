@@ -23,7 +23,7 @@ namespace DDSS_LobbyGuard.Security
                 || string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller)
                 || string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver))
+                || string.IsNullOrWhiteSpace(receiver)
                 || (caller == receiver))
                 return false;
             return true;
