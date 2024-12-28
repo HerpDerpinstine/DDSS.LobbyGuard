@@ -5,6 +5,7 @@ using Il2CppComputer.Scripts.System;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer.Lobby;
+using Il2CppSystem.FileSystem;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
@@ -179,6 +180,11 @@ namespace DDSS_LobbyGuard.Patches
                 || controller.WasCollected)
                 return false;
 
+            FileSystemManager fileIO = controller.GetComponent<FileSystemManager>();
+            if ((fileIO == null)
+                || fileIO.WasCollected)
+                return false;
+
             // Override Path, Unused Anyways
             string path = "User/Desktop";
 
@@ -186,6 +192,11 @@ namespace DDSS_LobbyGuard.Patches
             string fileName = __1.SafeReadString();
             if (string.IsNullOrEmpty(fileName)
                 || string.IsNullOrWhiteSpace(fileName))
+                return false;
+
+            FsObject file = fileIO.FindFsObject($"{path}/{fileName}");
+            if ((file != null)
+                && !file.WasCollected)
                 return false;
 
             TextAsset textAsset = Resources.Load<TextAsset>("files/" + fileName);
@@ -230,6 +241,11 @@ namespace DDSS_LobbyGuard.Patches
                 || controller.WasCollected)
                 return false;
 
+            FileSystemManager fileIO = controller.GetComponent<FileSystemManager>();
+            if ((fileIO == null)
+                || fileIO.WasCollected)
+                return false;
+
             // Override Path, Unused Anyways
             string path = "User/Desktop";
 
@@ -237,6 +253,11 @@ namespace DDSS_LobbyGuard.Patches
             string fileName = __1.SafeReadString();
             if (string.IsNullOrEmpty(fileName)
                 || string.IsNullOrWhiteSpace(fileName))
+                return false;
+
+            FsObject file = fileIO.FindFsObject($"{path}/{fileName}");
+            if ((file == null)
+                || file.WasCollected)
                 return false;
 
             TextAsset textAsset = Resources.Load<TextAsset>("files/" + fileName);
