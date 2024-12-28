@@ -6,10 +6,12 @@ using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Scripts;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
+using Il2CppProps.WorkStation.Phone;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
@@ -198,10 +200,42 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
             // Validate Distance
             if (sender.IsGhost()
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
+
+            // Get Usable Type
+            Il2CppSystem.Type usableType = usable.GetIl2CppType();
+            if ((usableType == null)
+                || usableType.WasCollected)
+                return false;
+
+            if (usableType == Il2CppType.Of<WorkStationController>())
+            {
+                // Validate Chair
+                WorkStationController workStation = usable.TryCast<WorkStationController>();
+                if ((workStation != null)
+                    && !workStation.WasCollected)
+                {
+                    if (workStation.phoneController.isCallActive)
+                    {
+                        PhoneSecurity.OnCallEnd(PhoneManager.instance, workStation.phoneController.phoneNumber, workStation.phoneController.receivingCall);
+                        PhoneSecurity.OnCallEnd(PhoneManager.instance, workStation.phoneController.receivingCall, workStation.phoneController.phoneNumber);
+                    }
+
+                    if (workStation.phoneController.isDialing)
+                    {
+                        PhoneSecurity.OnCallCancel(PhoneManager.instance, workStation.phoneController.phoneNumber, workStation.phoneController.callingNumber);
+                        PhoneSecurity.OnCallCancel(PhoneManager.instance, workStation.phoneController.callingNumber, workStation.phoneController.phoneNumber);
+                    }
+                }
+            }
 
             // Validate Drop
             if (!InteractionSecurity.CanStopUseUsable(sender, usable.TryCast<Chair>()))

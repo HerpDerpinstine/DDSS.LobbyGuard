@@ -23,7 +23,7 @@ namespace DDSS_LobbyGuard.Security
                 || string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller)
                 || string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
                 || (caller == receiver))
                 return false;
             return true;
@@ -51,6 +51,9 @@ namespace DDSS_LobbyGuard.Security
 
             // Cache New Attempt
             _callSenderList[caller] = receiver;
+
+            // Attempt Call
+            phone.ServerCall(caller, receiver);
         }
 
         internal static void OnCallAnswer(PhoneManager phone,
