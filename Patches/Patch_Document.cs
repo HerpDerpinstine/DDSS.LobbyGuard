@@ -18,10 +18,6 @@ namespace DDSS_LobbyGuard
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Document
             Document document = __0.TryCast<Document>();
             if ((document == null)
