@@ -289,8 +289,6 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            if (sender.isServer)
-                return true;
 
             // Get PlayerInteractable
             PlayerInteractable interact = __0.TryCast<PlayerInteractable>();

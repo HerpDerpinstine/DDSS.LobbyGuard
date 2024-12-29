@@ -1,6 +1,8 @@
 ﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Utils;
 using Il2CppMirror;
 using Il2CppProps.ServerRack;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,34 +10,73 @@ namespace DDSS_LobbyGuard.Security
 {
     internal static class ServerSecurity
     {
+        private static Dictionary<ServerController, Coroutine> _randomCoroutines = new();
         private static Dictionary<ServerController, Coroutine> _setConnectionCoroutines = new();
 
         internal static void OnSceneLoad()
         {
-            // Clear Cached Coroutines
+            _randomCoroutines.Clear();
             _setConnectionCoroutines.Clear();
         }
 
-        internal static void OnSetConnectionEnd(ServerController controller)
+        internal static void OnStart(ServerController controller)
         {
-            // Clear Cached Coroutine
-            if (_setConnectionCoroutines.ContainsKey(controller))
-                _setConnectionCoroutines.Remove(controller);
+            _randomCoroutines[controller] =
+                controller.StartCoroutine(RandomOutageCoroutine(controller));
         }
 
-        internal static void OnSetConnectionBegin(
+        private static IEnumerator RandomOutageCoroutine(ServerController controller)
+        {
+            while (true)
+            {
+                if (!ServerController.connectionsEnabled)
+                    yield return null;
+                else
+                {
+                    yield return new WaitForSeconds(Random.Range(120, 600));
+                    ServerController.connectionsEnabled = false;
+                    controller.RpcSetConnectionEnabled(null, false);
+                    yield return null;
+                }
+            }
+
+            if (_randomCoroutines.ContainsKey(controller))
+                _randomCoroutines.Remove(controller);
+
+            yield break;
+        }
+
+        internal static void OnSetConnection(
             NetworkIdentity sender,
-            ServerController controller, 
+            ServerController controller,
             bool state)
         {
-            // Check for Already Running Coroutine
             if (_setConnectionCoroutines.ContainsKey(controller))
-                controller.StopCoroutine(_setConnectionCoroutines[controller]);
+                return;
+            
+            if (_randomCoroutines.ContainsKey(controller))
+            {
+                controller.StopCoroutine(_randomCoroutines[controller]);
+                _randomCoroutines.Remove(controller);
+            }
 
             // Cache New Coroutine
             _setConnectionCoroutines[controller] =
                 controller.StartCoroutine(
-                    controller.DelayedSetConnection(sender, state, state ? 0f : ConfigHandler.Gameplay.SlackerServerOutageDelay.Value));
+                    DelayedSetConnection(controller, sender, state, state ? 0f : ConfigHandler.Gameplay.SlackerServerOutageDelay.Value));
+        }
+
+        private static IEnumerator DelayedSetConnection(ServerController controller, NetworkIdentity arg0, bool state, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            ServerController.connectionsEnabled = state;
+            controller.RpcSetConnectionEnabled(arg0, state);
+
+            _setConnectionCoroutines.Remove(controller);
+            OnStart(controller);
+
+            yield break;
         }
     }
 }

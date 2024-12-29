@@ -2,6 +2,7 @@
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.ServerRack;
 
@@ -10,20 +11,13 @@ namespace DDSS_LobbyGuard.Patches
     [HarmonyPatch]
     internal class Patch_ServerController
     {
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(ServerController), nameof(ServerController.RpcSetConnectionEnabled))]
-        private static void RpcSetConnectionEnabled_Postfix(ServerController __instance)
-        {
-            // Server Security
-            ServerSecurity.OnSetConnectionEnd(__instance);
-        }
-
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ServerController), nameof(ServerController.UserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient))]
-        private static bool UserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(ServerController __instance, NetworkIdentity __0, bool __1)
+        [HarmonyPatch(typeof(ServerController), nameof(ServerController.Start))]
+        private static bool Start_Prefix(ServerController __instance)
         {
-            // Server Security
-            ServerSecurity.OnSetConnectionBegin(__0, __instance, __1);
+            ServerController.connectionsEnabled = true;
+            if (NetworkServer.activeHost)
+                ServerSecurity.OnStart(__instance);
 
             // Prevent Original
             return false;
@@ -42,27 +36,34 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Get Values
-            __1.SafeReadNetworkIdentity();
-            bool enabled = __1.SafeReadBool();
-
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, server.transform.position))
                 return false;
 
+            // Get Values
+            __1.SafeReadNetworkIdentity();
+            bool enabled = __1.SafeReadBool();
+
+            if (enabled == ServerController.connectionsEnabled)
+                return false;
+
             // Check for Disable
-            if (!enabled 
-                && !sender.isServer)
+            if (!enabled)
             {
-                // Validate Slacker Role
-                LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-                if ((player == null)
-                    || !InteractionSecurity.IsSlacker(player))
+                PlayerController controller = sender.GetComponent<PlayerController>();
+                if ((controller == null)
+                    || controller.WasCollected)
+                    return false;
+
+                LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+                if ((lobbyPlayer == null)
+                    || lobbyPlayer.WasCollected
+                    || !InteractionSecurity.IsSlacker(lobbyPlayer))
                     return false;
             }
 
             // Run Game Command
-            server.UserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, enabled, __2);
+            ServerSecurity.OnSetConnection(sender, server, enabled);
 
             // Prevent Original
             return false;

@@ -132,7 +132,7 @@ namespace DDSS_LobbyGuard.Security
                     int randomIndex = UnityEngine.Random.Range(0, Task.documents.Count);
                     string item = Task.documents[randomIndex].Item1;
                     string text = Resources.Load<TextAsset>("files/" + item).text;
-                    binder.CmdAddDocumentServer(item, text);
+                    binder.UserCode_CmdAddDocumentServer__String__String(item, text);
                 },
                 index);
 

@@ -18,8 +18,7 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
             if ((sender == null)
-                || sender.WasCollected
-                || !sender.isServer)
+                || sender.WasCollected)
                 return false;
 
             // Get CollectibleHolder

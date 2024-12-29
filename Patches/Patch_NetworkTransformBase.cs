@@ -8,26 +8,18 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(NetworkTransformBase), nameof(NetworkTransformBase.InvokeUserCode_CmdTeleport__Vector3))]
-        private static bool InvokeUserCode_CmdTeleport__Vector3_Prefix(NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdTeleport__Vector3_Prefix()
         {
-            // Check for Server
-            if (!__2.identity.isServer)
-                return false;
-
-            // Run Original
-            return true;
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(NetworkTransformBase), nameof(NetworkTransformBase.InvokeUserCode_CmdTeleport__Vector3__Quaternion))]
-        private static bool InvokeUserCode_CmdTeleport__Vector3__Quaternion_Prefix(NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdTeleport__Vector3__Quaternion_Prefix()
         {
-            // Check for Server
-            if (!__2.identity.isServer)
-                return false;
-
-            // Run Original
-            return true;
+            // Prevent Original
+            return false;
         }
     }
 }

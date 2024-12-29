@@ -149,8 +149,6 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            if (sender.isServer)
-                return true;
 
             // Check for Lobby
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "LobbyScene")

@@ -18,15 +18,13 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.Start))]
-        private static void Start_Prefix(DoorController __instance)
+        private static void Start_Prefix()
         {
-            if (!NetworkServer.activeHost
-                || (__instance == null)
-                || __instance.WasCollected)
+            if (!NetworkServer.activeHost)
                 return;
 
             // Start Door
-            DoorSecurity.DoorStart(__instance);
+            DoorSecurity.DoorStart();
         }
 
         [HarmonyPrefix]

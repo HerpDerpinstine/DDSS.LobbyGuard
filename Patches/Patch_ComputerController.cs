@@ -4,6 +4,7 @@ using HarmonyLib;
 using Il2CppComputer.Scripts.System;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppSystem.FileSystem;
 using UnityEngine;
@@ -161,15 +162,19 @@ namespace DDSS_LobbyGuard.Patches
                 || sender.WasCollected)
                 return false;
 
-            // Validate Role
-            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || player.WasCollected
-                || player.IsGhost())
+            PlayerController playercontroller = sender.GetComponent<PlayerController>();
+            if ((playercontroller == null)
+                || playercontroller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = playercontroller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
                 return false;
 
             // Get Workstation
-            WorkStationController workstation = player.workStationController;
+            WorkStationController workstation = lobbyPlayer.workStationController;
             if ((workstation == null)
                 || workstation.WasCollected)
                 return false;
@@ -222,15 +227,19 @@ namespace DDSS_LobbyGuard.Patches
                 || sender.WasCollected)
                 return false;
 
-            // Validate Role
-            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || player.WasCollected
-                || player.IsGhost())
+            PlayerController playercontroller = sender.GetComponent<PlayerController>();
+            if ((playercontroller == null)
+                || playercontroller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = playercontroller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
                 return false;
 
             // Get Workstation
-            WorkStationController workstation = player.workStationController;
+            WorkStationController workstation = lobbyPlayer.workStationController;
             if ((workstation == null)
                 || workstation.WasCollected)
                 return false;

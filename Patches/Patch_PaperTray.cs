@@ -3,8 +3,10 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Misc.PaperTray;
+using Il2CppProps.Printer;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
@@ -18,21 +20,22 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Check for Server
-            if (__2.identity.isServer)
-                return true;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Get Player
-            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || player.IsGhost())
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
                 return false;
 
             // Get Workstation
-            WorkStationController station = player.NetworkworkStationController;
+            WorkStationController station = lobbyPlayer.NetworkworkStationController;
             if (station == null)
                 return false;
 
@@ -62,8 +65,35 @@ namespace DDSS_LobbyGuard.Patches
                 || textAsset.WasCollected)
                 return false;
 
-            // Run Game Command
-            tray.UserCode_CmdSpawnDocument__String(document);
+            string documentContent = textAsset.text;
+            if (string.IsNullOrEmpty(documentContent)
+                || string.IsNullOrWhiteSpace(documentContent))
+                return false;
+
+            // Create New Document Copy
+            GameObject docObj = GameObject.Instantiate(tray.documentPrefab.gameObject,
+                tray.transform.position,
+                tray.transform.rotation);
+            if ((docObj == null)
+                || docObj.WasCollected)
+                return false;
+
+            // Get New Document
+            Document docCopy = docObj.GetComponent<Document>();
+            if ((docCopy == null)
+                || docCopy.WasCollected)
+                return false;
+
+            // Spawn the Object on the Server
+            NetworkServer.Spawn(docObj);
+
+            // Apply Label and Text
+            docCopy.SetLabel(document);
+            docCopy.SetText(documentContent);
+            docCopy.SetName(document);
+
+            // Place Document in Printer
+            tray.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, document);
 
             // Prevent Original
             return false;
