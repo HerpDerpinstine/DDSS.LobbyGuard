@@ -221,6 +221,14 @@ namespace DDSS_LobbyGuard.Security
                 },
 
                 {
+                    Il2CppType.Of<CDHolder>(),
+                    new Dictionary<Type, bool>()
+                    {
+                        { Il2CppType.Of<CDCase>(), true },
+                    }
+                },
+
+                {
                     Il2CppType.Of<BulletinBoard>(),
                     new Dictionary<Type, bool>()
                     {
