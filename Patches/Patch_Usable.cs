@@ -7,12 +7,9 @@ using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer;
-using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Scripts;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
-using Il2CppProps.WorkStation.Phone;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
