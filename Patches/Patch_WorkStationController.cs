@@ -64,7 +64,8 @@ namespace DDSS_LobbyGuard.Patches
             // Get WorkStationController
             WorkStationController station = __0.TryCast<WorkStationController>();
             if ((station == null)
-                || station.WasCollected)
+                || station.WasCollected
+                || !station.NetworkisEmpty)
                 return false;
 
             // Get Sender
@@ -88,7 +89,7 @@ namespace DDSS_LobbyGuard.Patches
                 || target.WasCollected)
                 return false;
 
-            station.UserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient(sender, target, __2);
+            station.UserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient(sender, target, __2); 
 
             // Prevent Original
             return false;

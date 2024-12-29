@@ -115,17 +115,29 @@ namespace DDSS_LobbyGuard.Patches
                 WorkStationController randomWorkstation = workstationList[i % workstationCount];
                 if (i == 0) // Manager
                 {
+                    VirusController component = manager.managerWorkStationController.computerController.GetComponent<VirusController>();
+                    component.UserCode_CmdSetFireWall__Boolean(true);
+                    component.ServerSetVirus(false);
+
                     lobbyPlayer.ServerSetPlayerRole(PlayerRole.Manager);
                     lobbyPlayer.ServerSetWorkStation(manager.managerWorkStationController, PlayerRole.Manager, true);
                 }
                 else if (slackerCount <= slackerAmount) // Slacker
                 {
+                    VirusController component = randomWorkstation.computerController.GetComponent<VirusController>();
+                    component.UserCode_CmdSetFireWall__Boolean(true);
+                    component.ServerSetVirus(false);
+
                     slackerCount++;
                     lobbyPlayer.ServerSetPlayerRole(PlayerRole.Slacker);
                     lobbyPlayer.ServerSetWorkStation(randomWorkstation, PlayerRole.Slacker, true);
                 }
                 else // Specialist
                 {
+                    VirusController component = randomWorkstation.computerController.GetComponent<VirusController>();
+                    component.UserCode_CmdSetFireWall__Boolean(true);
+                    component.ServerSetVirus(false);
+
                     specialistCount++;
                     lobbyPlayer.ServerSetPlayerRole(PlayerRole.Specialist);
                     lobbyPlayer.ServerSetWorkStation(randomWorkstation, PlayerRole.Specialist, true);
