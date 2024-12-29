@@ -31,32 +31,38 @@ namespace DDSS_LobbyGuard.Security
 
         private static IEnumerator RandomOutageCoroutine(ServerController controller)
         {
+            while (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections)
+                yield return null;
+
             while (true)
             {
-                if (!ServerController.connectionsEnabled
-                    || (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections))
-                    yield return null;
-                else
+                int userMin = ConfigHandler.Gameplay.RandomServerOutageDelayMin.Value;
+                int userMax = ConfigHandler.Gameplay.RandomServerOutageDelayMax.Value;
+                if (userMax < userMin)
                 {
-                    int secondsCount = 0;
-                    int delaySeconds = Random.Range(ConfigHandler.Gameplay.RandomServerOutageDelayMin.Value, ConfigHandler.Gameplay.RandomServerOutageDelayMax.Value);
-                    while (_randomCoroutines.ContainsKey(controller)
-                        && (secondsCount < delaySeconds)
-                        && (!ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value
-                            || ServerController.connectionsEnabled))
-                    {
-                        yield return new WaitForSeconds(1f);
-                        secondsCount++;
-                    }
-
-                    if (ServerController.connectionsEnabled)
-                    {
-                        ServerController.connectionsEnabled = false;
-                        controller.RpcSetConnectionEnabled(null, false);
-                    }
-
-                    yield return null;
+                    int origMin = userMin;
+                    userMin = userMax;
+                    userMax = origMin;
                 }
+
+                int secondsCount = 0;
+                int delaySeconds = Random.Range(userMin, userMax);
+                while (_randomCoroutines.ContainsKey(controller)
+                    && (secondsCount < delaySeconds)
+                    && (!ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value
+                        || ServerController.connectionsEnabled))
+                {
+                    yield return new WaitForSeconds(1f);
+                    secondsCount++;
+                }
+
+                if (ServerController.connectionsEnabled)
+                {
+                    ServerController.connectionsEnabled = false;
+                    controller.RpcSetConnectionEnabled(null, false);
+                }
+
+                yield return null;
             }
         }
 
@@ -68,7 +74,7 @@ namespace DDSS_LobbyGuard.Security
             if (_setConnectionCoroutines.ContainsKey(controller))
                 return;
             
-            if (ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value
+            if (ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value
                 && _randomCoroutines.ContainsKey(controller))
             {
                 controller.StopCoroutine(_randomCoroutines[controller]);
@@ -90,7 +96,7 @@ namespace DDSS_LobbyGuard.Security
 
             _setConnectionCoroutines.Remove(controller);
 
-            if (ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value)
+            if (ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value)
                 OnStart(controller);
 
             yield break;

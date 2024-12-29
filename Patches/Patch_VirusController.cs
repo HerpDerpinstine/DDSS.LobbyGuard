@@ -22,13 +22,11 @@ namespace DDSS_LobbyGuard.Patches
             __instance.virusObj.SetActive(false);
             __instance.time = 1f;
             __instance.virusScreen.color = Color.blue;
-
-            if (!NetworkServer.activeHost)
-                return false;
-            
-            __instance.NetworkisFirewallActive = true;
+            __instance.isFirewallActive = true;
+            __instance.isVirusActive = false;
             __instance.virusInfectionTime = 0f;
-            __instance.virusInfectionTimeLimit = 120f;
+            //__instance.virusInfectionTimeLimit = 120f;
+            __instance.virusInfectionTimeLimit = 10f;
 
             // Prevent Original
             return false;
@@ -56,22 +54,30 @@ namespace DDSS_LobbyGuard.Patches
             {
                 __instance.time = 1f;
                 __instance.virusScreen.color = Color.blue;
+            }
 
-                if (__instance.computerController.user != null)
+            if ((!ConfigHandler.Gameplay.WorkStationVirusResetsRandomVirusTimer.Value || !__instance.isVirusActive)
+                && NetworkServer.activeHost
+                && (GameManager.instance.currentGameState > (int)GameStates.WaitingForPlayerConnections)
+                && (__instance.computerController.user != null)
+                && !__instance.computerController.user.WasCollected)
+            {
+                __instance.virusInfectionTime += Time.deltaTime;
+
+                if (__instance.virusInfectionTime >= __instance.virusInfectionTimeLimit)
                 {
-                    if (!NetworkServer.activeHost
-                        || (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections))
-                        return false;
-
-                    __instance.virusInfectionTime += Time.deltaTime;
-
-                    if (__instance.virusInfectionTime >= __instance.virusInfectionTimeLimit)
+                    int userMin = ConfigHandler.Gameplay.RandomWorkStationVirusDelayMin.Value;
+                    int userMax = ConfigHandler.Gameplay.RandomWorkStationVirusDelayMax.Value;
+                    if (userMax < userMin)
                     {
-                        __instance.PerformPotentialVirusActivity();
-                        __instance.virusInfectionTime = 0f;
-                        __instance.virusInfectionTimeLimit = Random.Range(ConfigHandler.Gameplay.RandomWorkStationVirusDelayMin.Value, 
-                            ConfigHandler.Gameplay.RandomWorkStationVirusDelayMax.Value);
+                        int origMin = userMin;
+                        userMin = userMax;
+                        userMax = origMin;
                     }
+
+                    __instance.virusInfectionTime = 0f;
+                    __instance.virusInfectionTimeLimit = Random.Range(userMin, userMax);
+                    __instance.PerformPotentialVirusActivity();
                 }
             }
 
@@ -85,7 +91,8 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Validate Server
             if (!NetworkServer.activeHost
-                || (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections))
+                || (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections)
+                || __instance.isVirusActive)
                 return false;
 
             // Validate Workstation
@@ -94,8 +101,8 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Role
-            if (InteractionSecurity.IsSlacker(__instance.computerController.user)
-                || !__instance.NetworkisFirewallActive)
+            if (!__instance.NetworkisFirewallActive
+                || InteractionSecurity.IsSlacker(__instance.computerController.user))
             {
                 // Get Game Rule
                 float probability = GameManager.instance.virusProbability;

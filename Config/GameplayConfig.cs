@@ -33,11 +33,11 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<int> SlackerTrashBinFireDelay;
         internal MelonPreferences_Entry<int> SlackerServerOutageDelay;
 
-        internal MelonPreferences_Entry<bool> SlackerServerOutageResetsRandomOutage;
-
+        internal MelonPreferences_Entry<bool> ServerOutageResetsRandomOutageTimer;
         internal MelonPreferences_Entry<int> RandomServerOutageDelayMin;
         internal MelonPreferences_Entry<int> RandomServerOutageDelayMax;
 
+        internal MelonPreferences_Entry<bool> WorkStationVirusResetsRandomVirusTimer;
         internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMin;
         internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMax;
 
@@ -158,9 +158,9 @@ namespace DDSS_LobbyGuard.Config
                 "Seconds until Server Outage from Slacker Task",
                 6);
 
-            SlackerServerOutageResetsRandomOutage = CreatePref("SlackerServerOutageResetsRandomOutage",
-                "Slacker Server Outage resets Random Outage",
-                "Server Outages from Slacker Task will Reset the Random Outage Timer",
+            ServerOutageResetsRandomOutageTimer = CreatePref("ServerOutageResetsRandomOutageTimer",
+                "Server Outage resets Random Outage Timer",
+                "Server Outages will Reset the Random Outage Timer",
                 false);
 
             RandomServerOutageDelayMin = CreatePref("RandomServerOutageDelayMin",
@@ -172,6 +172,11 @@ namespace DDSS_LobbyGuard.Config
                 "Random Server Outage Delay Max",
                 "Max Delay in Seconds until the Server has a Random Outage",
                 600);
+
+            WorkStationVirusResetsRandomVirusTimer = CreatePref("WorkStationVirusResetsRandomVirusTimer",
+                "WorkStation Virus resets Random Virus Timer",
+                "WorkStation Viruses will Reset the Random Virus Timer",
+                true);
 
             RandomWorkStationVirusDelayMin = CreatePref("RandomWorkStationVirusDelayMin",
                 "Random WorkStation Virus Delay Min",
