@@ -32,13 +32,21 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            if (!ServerController.connectionsEnabled)
-                return false;
-
             // Get EmailManager
             EmailManager inbox = __0.TryCast<EmailManager>();
             if ((inbox == null)
                 || inbox.WasCollected)
+                return false;
+
+            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
                 return false;
 
             // Get and Ignore User Input Sender
@@ -54,18 +62,23 @@ namespace DDSS_LobbyGuard.Patches
             if (!isSenderPlayer && !isSenderClient)
                 return false;
 
-            PlayerController controller = __2.identity.GetComponent<PlayerController>();
-            if ((controller == null)
-                || controller.WasCollected)
+            // Get and Ignore User Input Receiver
+            string receiver = __1.SafeReadString();
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
                 return false;
 
-            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost())
+            // Validate Receiver
+            string recipientLower = receiver.ToLower();
+            bool isReceiverPlayer = ComputerSecurity._playerAddresses.ContainsKey(recipientLower);
+            bool isReceiverClient = Task.clientEmails.Contains(recipientLower);
+            if (!isReceiverPlayer && !isReceiverClient)
+                return false;
+            if (isReceiverClient && isSenderClient)
                 return false;
 
-            if (isSenderPlayer)
+            // Player -> Client
+            if (isSenderPlayer && isReceiverClient)
             {
                 if ((controller.NetworkcurrentChair == null)
                     || controller.NetworkcurrentChair.WasCollected)
@@ -84,25 +97,10 @@ namespace DDSS_LobbyGuard.Patches
                     return false;
 
                 senderLower = sender.ToLower();
-                isSenderPlayer = ComputerSecurity._playerAddresses.ContainsKey(senderLower);
-                isSenderClient = Task.clientEmails.Contains(senderLower);
-                if (!isSenderPlayer && !isSenderClient)
-                    return false;
             }
 
-            // Get and Ignore User Input Receiver
-            string receiver = __1.SafeReadString();
-            if (string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver))
-                return false;
-
-            // Validate Receiver
-            string recipientLower = receiver.ToLower();
-            bool isReceiverPlayer = ComputerSecurity._playerAddresses.ContainsKey(recipientLower);
-            if (!isReceiverPlayer)
-                return false;
-
-            if (isSenderClient)
+            // Client -> Player
+            if (isSenderClient && isReceiverPlayer)
             {
                 // Validate Chair
                 WorkStationController workStation = lobbyPlayer.NetworkworkStationController;
@@ -117,16 +115,18 @@ namespace DDSS_LobbyGuard.Patches
                     return false;
 
                 recipientLower = receiver.ToLower();
-                isReceiverPlayer = ComputerSecurity._playerAddresses.ContainsKey(recipientLower);
-                if (!isReceiverPlayer)
-                    return false;
             }
 
             // Get Subject
             string subject = __1.SafeReadString();
             if (string.IsNullOrEmpty(subject)
                 || string.IsNullOrWhiteSpace(subject))
-                return false;
+            {
+                if (isSenderClient
+                    || isReceiverPlayer)
+                    return false;
+                subject = string.Empty;
+            }
 
             // Validate Subject
             if (isSenderClient
@@ -137,7 +137,12 @@ namespace DDSS_LobbyGuard.Patches
             string msg = __1.SafeReadString();
             if (string.IsNullOrEmpty(msg)
                 || string.IsNullOrWhiteSpace(msg))
-                return false;
+            {
+                if (isSenderClient
+                    || isReceiverPlayer)
+                    return false;
+                msg = string.Empty;
+            }
 
             // Enforce Timestamp
             string timeStamp = DateTime.Now.ToString("HH:mm");
