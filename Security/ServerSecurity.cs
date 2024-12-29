@@ -45,8 +45,6 @@ namespace DDSS_LobbyGuard.Security
                     }
                 }
             }
-
-            yield break;
         }
 
         internal static void OnSetConnection(
