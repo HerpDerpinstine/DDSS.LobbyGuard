@@ -156,7 +156,7 @@ namespace DDSS_LobbyGuard.Config
 
             SlackerServerOutageResetsRandomOutage = CreatePref("SlackerServerOutageResetsRandomOutage",
                 "Slacker Server Outage resets Random Outage",
-                "Slacker Server Outages will Reset the Random Outage Timer",
+                "Server Outages from Slacker Task will Reset the Random Outage Timer",
                 false);
 
             RandomServerOutageDelayMin = CreatePref("RandomServerOutageDelayMin",
