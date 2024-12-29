@@ -64,7 +64,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get New Caller
-            __1.SafeReadString();
+            __1.SafeReadNetworkIdentity();
             string receiver = __1.SafeReadString();
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
