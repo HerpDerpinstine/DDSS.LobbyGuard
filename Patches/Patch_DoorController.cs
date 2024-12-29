@@ -20,9 +20,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.Start))]
         private static void Start_Prefix()
         {
-            if (!NetworkServer.activeHost)
-                return;
-
             // Start Door
             DoorSecurity.DoorStart();
         }
