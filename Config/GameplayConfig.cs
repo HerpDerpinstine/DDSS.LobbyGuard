@@ -37,6 +37,7 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<int> RandomServerOutageDelayMin;
         internal MelonPreferences_Entry<int> RandomServerOutageDelayMax;
 
+        internal MelonPreferences_Entry<bool> WorkStationVirusTurnsOffFirewall;
         internal MelonPreferences_Entry<bool> WorkStationVirusResetsRandomVirusTimer;
         internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMin;
         internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMax;
@@ -172,6 +173,11 @@ namespace DDSS_LobbyGuard.Config
                 "Random Server Outage Delay Max",
                 "Max Delay in Seconds until the Server has a Random Outage",
                 600);
+
+            WorkStationVirusTurnsOffFirewall = CreatePref("WorkStationVirusTurnsOffFirewall",
+                "WorkStation Virus turns off Firewall",
+                "WorkStation Viruses will Automatically Turn Off the Firewall",
+                false);
 
             WorkStationVirusResetsRandomVirusTimer = CreatePref("WorkStationVirusResetsRandomVirusTimer",
                 "WorkStation Virus resets Random Virus Timer",

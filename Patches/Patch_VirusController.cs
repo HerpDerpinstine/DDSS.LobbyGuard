@@ -14,6 +14,16 @@ namespace DDSS_LobbyGuard.Patches
     [HarmonyPatch]
     internal class Patch_VirusController
     {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(VirusController), nameof(VirusController.ServerSetVirus))]
+        private static void ServerSetVirus_Postfix(VirusController __instance, bool __0)
+        {
+            if (!__0)
+                return;
+            if (ConfigHandler.Gameplay.WorkStationVirusTurnsOffFirewall.Value)
+                __instance.UserCode_CmdSetFireWall__Boolean(false);
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(VirusController), nameof(VirusController.Start))]
         private static bool Start_Prefix(VirusController __instance)
