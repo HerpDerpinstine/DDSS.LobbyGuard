@@ -1,5 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using DDSS_LobbyGuard.Utils;
+using Il2CppGameManagement;
+using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppProps.ServerRack;
 using System.Collections;
@@ -31,18 +33,29 @@ namespace DDSS_LobbyGuard.Security
         {
             while (true)
             {
-                if (!ServerController.connectionsEnabled)
+                if (!ServerController.connectionsEnabled
+                    || (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections))
                     yield return null;
                 else
                 {
-                    yield return new WaitForSeconds(Random.Range(ConfigHandler.Gameplay.RandomServerOutageDelayMin.Value,
-                        ConfigHandler.Gameplay.RandomServerOutageDelayMax.Value));
+                    int secondsCount = 0;
+                    int delaySeconds = Random.Range(ConfigHandler.Gameplay.RandomServerOutageDelayMin.Value, ConfigHandler.Gameplay.RandomServerOutageDelayMax.Value);
+                    while (_randomCoroutines.ContainsKey(controller)
+                        && (secondsCount < delaySeconds)
+                        && (!ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value
+                            || ServerController.connectionsEnabled))
+                    {
+                        yield return new WaitForSeconds(1f);
+                        secondsCount++;
+                    }
 
                     if (ServerController.connectionsEnabled)
                     {
                         ServerController.connectionsEnabled = false;
                         controller.RpcSetConnectionEnabled(null, false);
                     }
+
+                    yield return null;
                 }
             }
         }
