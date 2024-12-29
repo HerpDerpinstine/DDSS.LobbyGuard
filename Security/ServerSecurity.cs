@@ -31,38 +31,40 @@ namespace DDSS_LobbyGuard.Security
 
         private static IEnumerator RandomOutageCoroutine(ServerController controller)
         {
-            while (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections)
-                yield return null;
-
             while (true)
             {
-                int userMin = ConfigHandler.Gameplay.RandomServerOutageDelayMin.Value;
-                int userMax = ConfigHandler.Gameplay.RandomServerOutageDelayMax.Value;
-                if (userMax < userMin)
-                {
-                    int origMin = userMin;
-                    userMin = userMax;
-                    userMax = origMin;
-                }
-
-                int secondsCount = 0;
-                int delaySeconds = Random.Range(userMin, userMax);
-                while (_randomCoroutines.ContainsKey(controller)
-                    && (secondsCount < delaySeconds)
+                if ((GameManager.instance.currentGameState > (int)GameStates.WaitingForPlayerConnections)
                     && (!ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value
                         || ServerController.connectionsEnabled))
                 {
-                    yield return new WaitForSeconds(1f);
-                    secondsCount++;
+                    int userMin = ConfigHandler.Gameplay.RandomServerOutageDelayMin.Value;
+                    int userMax = ConfigHandler.Gameplay.RandomServerOutageDelayMax.Value;
+                    if (userMax < userMin)
+                    {
+                        int origMin = userMin;
+                        userMin = userMax;
+                        userMax = origMin;
+                    }
+
+                    int secondsCount = 0;
+                    int delaySeconds = Random.Range(userMin, userMax);
+                    while (_randomCoroutines.ContainsKey(controller)
+                        && (secondsCount < delaySeconds)
+                        && (!ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value
+                            || ServerController.connectionsEnabled))
+                    {
+                        yield return new WaitForSeconds(1f);
+                        secondsCount++;
+                    }
+
+                    if (ServerController.connectionsEnabled)
+                    {
+                        ServerController.connectionsEnabled = false;
+                        controller.RpcSetConnectionEnabled(null, false);
+                    }
                 }
 
-                if (ServerController.connectionsEnabled)
-                {
-                    ServerController.connectionsEnabled = false;
-                    controller.RpcSetConnectionEnabled(null, false);
-                }
-
-                yield return null;
+			    yield return null;
             }
         }
 
