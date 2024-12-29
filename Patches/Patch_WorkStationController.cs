@@ -87,7 +87,8 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer target = targetIdentity.GetComponent<LobbyPlayer>();
             if ((target == null)
                 || target.WasCollected
-                || target.IsGhost())
+                || target.IsGhost()
+                || target.IsJanitor())
                 return false;
 
             station.UserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient(sender, target, __2); 
