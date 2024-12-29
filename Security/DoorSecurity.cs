@@ -33,7 +33,7 @@ namespace DDSS_LobbyGuard.Security
         internal static void ApplyState(DoorController door, int newState)
         {
             if (_applyStateCoroutines.ContainsKey(door))
-                return;
+                door.StopCoroutine(_applyStateCoroutines[door]);
 
             FixColliderSize(door.playerDetectionVolumeForward);
             FixColliderSize(door.playerDetectionVolumeBackward);
