@@ -82,7 +82,8 @@ namespace DDSS_LobbyGuard.Patches
         private static bool PerformPotentialVirusActivity_Prefix(VirusController __instance)
         {
             // Validate Server
-            if (!NetworkServer.activeHost)
+            if (!NetworkServer.activeHost
+                || (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections))
                 return false;
 
             // Validate Workstation
