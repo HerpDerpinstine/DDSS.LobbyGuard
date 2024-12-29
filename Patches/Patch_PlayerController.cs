@@ -18,8 +18,23 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdMovePlayer__Vector3))]
-        private static bool InvokeUserCode_CmdMovePlayer__Vector3_Prefix()
+        private static bool InvokeUserCode_CmdMovePlayer__Vector3_Prefix(NetworkReader __1, NetworkConnectionToClient __2)
         {
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
+
+            // Validate Sender
+            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            // Run Game Command
+            controller.UserCode_CmdMovePlayer__Vector3(__1.ReadVector3());
+
             // Prevent Original
             return false;
         }

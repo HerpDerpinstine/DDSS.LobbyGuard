@@ -27,16 +27,24 @@ namespace DDSS_LobbyGuard.Security
 
         private static IEnumerator RandomOutageCoroutine(ServerController controller)
         {
-            while (true)
+            while (_randomCoroutines.ContainsKey(controller))
             {
-                yield return new WaitForSeconds(Random.Range(ConfigHandler.Gameplay.RandomServerOutageDelayMin.Value, ConfigHandler.Gameplay.RandomServerOutageDelayMax.Value));
+                while (_randomCoroutines.ContainsKey(controller)
+                    && !ServerController.connectionsEnabled)
+                    yield return new WaitForSeconds(1);
+
+                yield return new WaitForSeconds(Random.Range(ConfigHandler.Gameplay.RandomServerOutageDelayMin.Value, 
+                    ConfigHandler.Gameplay.RandomServerOutageDelayMax.Value));
 
                 if (ServerController.connectionsEnabled)
                 {
                     ServerController.connectionsEnabled = false;
                     controller.RpcSetConnectionEnabled(null, false);
-                    yield return null;
                 }
+
+                while (_randomCoroutines.ContainsKey(controller)
+                    && !ServerController.connectionsEnabled)
+                    yield return new WaitForSeconds(1);
             }
 
             yield break;

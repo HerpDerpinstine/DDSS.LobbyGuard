@@ -135,10 +135,6 @@ namespace DDSS_LobbyGuard.Patches
                 || sender.IsGhost())
                 return false;
 
-            // Validate Count
-            if (holder.freePositions.Count >= holder.collectiblePositions.Count)
-                return false;
-
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
                 return false;

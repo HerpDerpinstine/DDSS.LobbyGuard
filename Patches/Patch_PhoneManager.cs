@@ -67,7 +67,7 @@ namespace DDSS_LobbyGuard.Patches
             string caller = __1.SafeReadString();
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller))
-                caller = receiver;
+                return false;
 
             // Run Security
             PhoneSecurity.OnCallAnswer(phone, caller, receiver);
@@ -131,7 +131,7 @@ namespace DDSS_LobbyGuard.Patches
             string receiver = __1.SafeReadString();
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
-                receiver = caller;
+                return false;
 
             // Run Security
             PhoneSecurity.OnCallCancel(phone, receiver, caller);
@@ -196,7 +196,7 @@ namespace DDSS_LobbyGuard.Patches
             string caller = __1.SafeReadString();
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller))
-                caller = receiver;
+                return false;
 
             // Run Security
             PhoneSecurity.OnCallEnd(phone, caller, receiver);
@@ -261,7 +261,7 @@ namespace DDSS_LobbyGuard.Patches
             string caller = __1.SafeReadString();
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller))
-                caller = receiver;
+                return false;
 
             // Run Security
             PhoneSecurity.OnCallDecline(phone, caller, receiver);

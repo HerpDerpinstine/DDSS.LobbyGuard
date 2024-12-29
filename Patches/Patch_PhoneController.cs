@@ -68,7 +68,7 @@ namespace DDSS_LobbyGuard.Patches
             string receiver = __1.SafeReadString();
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
-                receiver = caller;
+                return false;
 
             // Run Security
             PhoneSecurity.OnCallAttempt(PhoneManager.instance, caller, receiver);
