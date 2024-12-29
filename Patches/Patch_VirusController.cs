@@ -25,8 +25,7 @@ namespace DDSS_LobbyGuard.Patches
             __instance.isFirewallActive = true;
             __instance.isVirusActive = false;
             __instance.virusInfectionTime = 0f;
-            //__instance.virusInfectionTimeLimit = 120f;
-            __instance.virusInfectionTimeLimit = 10f;
+            __instance.virusInfectionTimeLimit = 120f;
 
             // Prevent Original
             return false;
