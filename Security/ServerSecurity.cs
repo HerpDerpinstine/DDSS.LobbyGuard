@@ -35,7 +35,7 @@ namespace DDSS_LobbyGuard.Security
                 else
                 {
                     int secondsCount = 0;
-                    int delaySeconds = Random.Range(120, 600);
+                    int delaySeconds = Random.Range(ConfigHandler.Gameplay.RandomServerOutageDelayMin.Value, ConfigHandler.Gameplay.RandomServerOutageDelayMax.Value);
                     while (_randomCoroutines.ContainsKey(controller)
                         && (secondsCount < delaySeconds)
                         && (!ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value 

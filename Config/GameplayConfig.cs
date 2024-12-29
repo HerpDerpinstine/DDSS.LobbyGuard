@@ -34,6 +34,9 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<int> SlackerServerOutageDelay;
         internal MelonPreferences_Entry<bool> SlackerServerOutageResetsRandomOutage;
 
+        internal MelonPreferences_Entry<int> RandomServerOutageDelayMin;
+        internal MelonPreferences_Entry<int> RandomServerOutageDelayMax;
+
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
 
@@ -155,6 +158,16 @@ namespace DDSS_LobbyGuard.Config
                 "Slacker Server Outage resets Random Outage",
                 "Slacker Server Outages will Reset the Random Outage Timer",
                 false);
+
+            RandomServerOutageDelayMin = CreatePref("RandomServerOutageDelayMin",
+                "Random Server Outage Delay Min",
+                "Min Delay in Seconds until the Server has a Random Outage",
+                120);
+
+            RandomServerOutageDelayMax = CreatePref("RandomServerOutageDelayMax",
+                "Random Server Outage Delay Max",
+                "Max Delay in Seconds until the Server has a Random Outage",
+                600);
 
             PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",
                 "Enforce Player Velocity",
