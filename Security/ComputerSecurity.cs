@@ -14,10 +14,6 @@ namespace DDSS_LobbyGuard.Security
         internal static bool ValidatePlayer(ComputerController computer,
             NetworkIdentity player)
         {
-            // Validate player
-            if (player.IsGhost())
-                return false;
-
             // Validate ComputerController
             if ((computer == null)
                 || (computer._workStationController == null)
@@ -26,6 +22,10 @@ namespace DDSS_LobbyGuard.Security
 
             // Check if Actually Sitting in Seat
             if (computer._workStationController.usingPlayer != player)
+                return false;
+
+            // Validate player
+            if (player.IsGhost())
                 return false;
 
             // Player is Valid
