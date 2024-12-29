@@ -2,6 +2,7 @@
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppComputer.Scripts.System;
 using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
@@ -61,12 +62,21 @@ namespace DDSS_LobbyGuard.Patches
             List<WorkStationController> workstationList = new();
             foreach (WorkStationController workStationController in manager.workStations)
             {
-                // Skip Manager Workstation
-                if (workStationController == manager.managerWorkStationController)
+                if (workStationController != manager.managerWorkStationController)
+                    workstationList.Add(workStationController);
+
+                ComputerController computer = workStationController.computerController;
+                if ((computer == null)
+                    || computer.WasCollected)
                     continue;
 
-                // Add Workstation to List
-                workstationList.Add(workStationController);
+                VirusController virus = computer.GetComponent<VirusController>();
+                if ((virus == null)
+                    | virus.WasCollected)
+                    continue;
+
+                virus.UserCode_CmdSetFireWall__Boolean(true);
+                virus.ServerSetVirus(false);
             }
 
             // Get List of Players
@@ -115,29 +125,17 @@ namespace DDSS_LobbyGuard.Patches
                 WorkStationController randomWorkstation = workstationList[i % workstationCount];
                 if (i == 0) // Manager
                 {
-                    VirusController component = manager.managerWorkStationController.computerController.GetComponent<VirusController>();
-                    component.UserCode_CmdSetFireWall__Boolean(true);
-                    component.ServerSetVirus(false);
-
                     lobbyPlayer.ServerSetPlayerRole(PlayerRole.Manager);
                     lobbyPlayer.ServerSetWorkStation(manager.managerWorkStationController, PlayerRole.Manager, true);
                 }
                 else if (slackerCount <= slackerAmount) // Slacker
                 {
-                    VirusController component = randomWorkstation.computerController.GetComponent<VirusController>();
-                    component.UserCode_CmdSetFireWall__Boolean(true);
-                    component.ServerSetVirus(false);
-
                     slackerCount++;
                     lobbyPlayer.ServerSetPlayerRole(PlayerRole.Slacker);
                     lobbyPlayer.ServerSetWorkStation(randomWorkstation, PlayerRole.Slacker, true);
                 }
                 else // Specialist
                 {
-                    VirusController component = randomWorkstation.computerController.GetComponent<VirusController>();
-                    component.UserCode_CmdSetFireWall__Boolean(true);
-                    component.ServerSetVirus(false);
-
                     specialistCount++;
                     lobbyPlayer.ServerSetPlayerRole(PlayerRole.Specialist);
                     lobbyPlayer.ServerSetWorkStation(randomWorkstation, PlayerRole.Specialist, true);
@@ -154,8 +152,9 @@ namespace DDSS_LobbyGuard.Patches
                 player.GetComponent<TaskController>().RpcClearTaskQueue();
 
                 // Move Player to Spawn
+                NetworkStartPosition randomPos = spawnList[i % spawnCount];
                 lobbyPlayer.NetworkplayerController.GetComponent<PlayerController>()
-                    .UserCode_CmdMovePlayer__Vector3(spawnList[i % spawnCount].transform.position);
+                    .UserCode_CmdMovePlayer__Vector3(randomPos.transform.position);
             }
 
             // Apply Win Condition
@@ -164,7 +163,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Spawn Desk Items for Unassigned Desks
             if (ConfigHandler.Gameplay.SpawnUnassignedDeskItems.Value)
-                foreach (var station in GameObject.FindObjectsByType<WorkStationController>(FindObjectsSortMode.None))
+                foreach (var station in workstationList)
                 {
                     NetworkIdentity owner = station.NetworkownerLobbyPlayer;
                     if ((owner != null)
