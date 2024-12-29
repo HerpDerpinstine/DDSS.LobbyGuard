@@ -49,6 +49,7 @@ namespace DDSS_LobbyGuard.Security
                     {
                         ServerController.connectionsEnabled = false;
                         controller.RpcSetConnectionEnabled(null, false);
+                        yield return null;
                     }
                 }
             }
