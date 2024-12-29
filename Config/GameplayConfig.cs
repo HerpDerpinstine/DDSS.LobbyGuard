@@ -33,13 +33,13 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<int> SlackerTrashBinFireDelay;
         internal MelonPreferences_Entry<int> SlackerServerOutageDelay;
 
-        internal MelonPreferences_Entry<int> SlackerRandomVirusDelayMin;
-        internal MelonPreferences_Entry<int> SlackerRandomVirusDelayMax;
-
         internal MelonPreferences_Entry<bool> SlackerServerOutageResetsRandomOutage;
 
         internal MelonPreferences_Entry<int> RandomServerOutageDelayMin;
         internal MelonPreferences_Entry<int> RandomServerOutageDelayMax;
+
+        internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMin;
+        internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMax;
 
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
@@ -158,16 +158,6 @@ namespace DDSS_LobbyGuard.Config
                 "Seconds until Server Outage from Slacker Task",
                 6);
 
-            SlackerRandomVirusDelayMin = CreatePref("SlackerRandomVirusDelayMin",
-                "Slacker Random Virus Delay Min",
-                "Min Delay in Seconds until a Slacker's WorkStation rolls the Dice on getting a Random Virus",
-                30);
-
-            SlackerRandomVirusDelayMax = CreatePref("SlackerRandomVirusDelayMax",
-                "Slacker Random Virus Delay Max",
-                "Max Delay in Seconds until a Slacker's WorkStation rolls the Dice on getting a Random Virus",
-                60);
-
             SlackerServerOutageResetsRandomOutage = CreatePref("SlackerServerOutageResetsRandomOutage",
                 "Slacker Server Outage resets Random Outage",
                 "Server Outages from Slacker Task will Reset the Random Outage Timer",
@@ -182,6 +172,16 @@ namespace DDSS_LobbyGuard.Config
                 "Random Server Outage Delay Max",
                 "Max Delay in Seconds until the Server has a Random Outage",
                 600);
+
+            RandomWorkStationVirusDelayMin = CreatePref("RandomWorkStationVirusDelayMin",
+                "Random WorkStation Virus Delay Min",
+                "Min Delay in Seconds until a WorkStation rolls the Dice on getting a Random Virus",
+                30);
+
+            RandomWorkStationVirusDelayMax = CreatePref("RandomWorkStationVirusDelayMax",
+                "Random WorkStation Virus Delay Max",
+                "Max Delay in Seconds until a WorkStation rolls the Dice on getting a Random Virus",
+                60);
 
             PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",
                 "Enforce Player Velocity",

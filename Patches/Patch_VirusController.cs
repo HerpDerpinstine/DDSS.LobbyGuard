@@ -69,7 +69,8 @@ namespace DDSS_LobbyGuard.Patches
                     {
                         __instance.PerformPotentialVirusActivity();
                         __instance.virusInfectionTime = 0f;
-                        __instance.virusInfectionTimeLimit = Random.Range(ConfigHandler.Gameplay.SlackerRandomVirusDelayMin.Value, ConfigHandler.Gameplay.SlackerRandomVirusDelayMax.Value);
+                        __instance.virusInfectionTimeLimit = Random.Range(ConfigHandler.Gameplay.RandomWorkStationVirusDelayMin.Value, 
+                            ConfigHandler.Gameplay.RandomWorkStationVirusDelayMax.Value);
                     }
                 }
             }
