@@ -31,20 +31,24 @@ namespace DDSS_LobbyGuard
                 || sender.IsGhost())
                 return false;
 
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, document.transform.position))
-                return false;
-
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
-            if ((collectible == null)
-                || (collectible.GetIl2CppType() != Il2CppType.Of<Document>()))
-                return false;
-
-            // Get Document
-            document = collectible.TryCast<Document>();
-            if ((document == null)
-                || document.signed)
+            if ((collectible != null)
+                && !collectible.WasCollected
+                && (collectible.GetIl2CppType() == Il2CppType.Of<Document>()))
+            {
+                if (collectible == document)
+                {
+                    // Get Document
+                    document = collectible.TryCast<Document>();
+                    if ((document == null)
+                        || document.signed)
+                        return false;
+                }
+                else if (!InteractionSecurity.IsWithinRange(sender.transform.position, document.transform.position))
+                    return false;
+            }
+            else if (!InteractionSecurity.IsWithinRange(sender.transform.position, document.transform.position))
                 return false;
 
             // Run Game Command
