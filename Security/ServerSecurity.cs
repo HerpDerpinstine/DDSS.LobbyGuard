@@ -85,11 +85,10 @@ namespace DDSS_LobbyGuard.Security
             ServerController.connectionsEnabled = state;
             controller.RpcSetConnectionEnabled(sender, state);
 
+            _setConnectionCoroutines.Remove(controller);
+
             if (ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value)
-            {
-                _setConnectionCoroutines.Remove(controller);
                 OnStart(controller);
-            }
 
             yield break;
         }
