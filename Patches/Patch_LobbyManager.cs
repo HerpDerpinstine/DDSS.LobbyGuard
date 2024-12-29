@@ -200,8 +200,6 @@ namespace DDSS_LobbyGuard.Patches
             // Get Message and Enforce Timestamp
             __1.SafeReadNetworkIdentity();
             string message = __1.SafeReadString();
-
-            // Validate Message Text
             if (string.IsNullOrEmpty(message)
                 || string.IsNullOrWhiteSpace(message))
                 return false;

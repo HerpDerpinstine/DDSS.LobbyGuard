@@ -14,7 +14,7 @@ namespace DDSS_LobbyGuard.Utils
 {
     internal static class Extensions
     {
-        private static Regex _rtRegex = new Regex("<.*?>", RegexOptions.Compiled);
+        private static Regex _rtRegex = new Regex("<[^>]*>");
 
         internal static string RemoveRichText(this string val)
             => _rtRegex.Replace(val, string.Empty);
