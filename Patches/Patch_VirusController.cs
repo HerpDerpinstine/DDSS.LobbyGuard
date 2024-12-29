@@ -37,11 +37,8 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(VirusController), nameof(VirusController.Update))]
         private static bool Update_Prefix(VirusController __instance)
         {
-            // Validate Server
-            if (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections)
-                return false;
-
             __instance.virusObj.SetActive(__instance.isVirusActive);
+
             if (__instance.isVirusActive)
             {
                 __instance.time += Time.deltaTime;
@@ -61,7 +58,8 @@ namespace DDSS_LobbyGuard.Patches
 
                 if (__instance.computerController.user != null)
                 {
-                    if (!NetworkServer.activeHost)
+                    if (!NetworkServer.activeHost
+                        || (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections))
                         return false;
 
                     __instance.virusInfectionTime += Time.deltaTime;
