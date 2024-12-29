@@ -74,12 +74,12 @@ namespace DDSS_LobbyGuard.Security
                     DelayedSetConnection(controller, sender, state, state ? 0f : ConfigHandler.Gameplay.SlackerServerOutageDelay.Value));
         }
 
-        private static IEnumerator DelayedSetConnection(ServerController controller, NetworkIdentity arg0, bool state, float delay)
+        private static IEnumerator DelayedSetConnection(ServerController controller, NetworkIdentity sender, bool state, float delay)
         {
             yield return new WaitForSeconds(delay);
 
             ServerController.connectionsEnabled = state;
-            controller.RpcSetConnectionEnabled(arg0, state);
+            controller.RpcSetConnectionEnabled(sender, state);
 
             _setConnectionCoroutines.Remove(controller);
             OnStart(controller);
