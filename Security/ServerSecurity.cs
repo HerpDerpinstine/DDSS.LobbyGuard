@@ -29,7 +29,8 @@ namespace DDSS_LobbyGuard.Security
         {
             while (_randomCoroutines.ContainsKey(controller))
             {
-                if (!ServerController.connectionsEnabled)
+                if (ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value
+                    && !ServerController.connectionsEnabled)
                     yield return null;
                 else
                 {
@@ -37,7 +38,8 @@ namespace DDSS_LobbyGuard.Security
                     int delaySeconds = Random.Range(120, 600);
                     while (_randomCoroutines.ContainsKey(controller)
                         && (secondsCount < delaySeconds)
-                        && ServerController.connectionsEnabled)
+                        && (!ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value 
+                            || ServerController.connectionsEnabled))
                     {
                         yield return new WaitForSeconds(1f);
                         secondsCount++;
@@ -62,7 +64,8 @@ namespace DDSS_LobbyGuard.Security
             if (_setConnectionCoroutines.ContainsKey(controller))
                 return;
             
-            if (_randomCoroutines.ContainsKey(controller))
+            if (ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value
+                && _randomCoroutines.ContainsKey(controller))
             {
                 controller.StopCoroutine(_randomCoroutines[controller]);
                 _randomCoroutines.Remove(controller);
@@ -81,8 +84,11 @@ namespace DDSS_LobbyGuard.Security
             ServerController.connectionsEnabled = state;
             controller.RpcSetConnectionEnabled(sender, state);
 
-            _setConnectionCoroutines.Remove(controller);
-            OnStart(controller);
+            if (ConfigHandler.Gameplay.SlackerServerOutageResetsRandomOutage.Value)
+            {
+                _setConnectionCoroutines.Remove(controller);
+                OnStart(controller);
+            }
 
             yield break;
         }
