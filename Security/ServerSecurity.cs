@@ -26,9 +26,6 @@ namespace DDSS_LobbyGuard.Security
             if (!controller.mainServer)
                 return;
 
-            if (_randomCoroutines.ContainsKey(controller))
-                controller.StopCoroutine(_randomCoroutines[controller]);
-
             _randomCoroutines[controller] =
                 controller.StartCoroutine(RandomOutageCoroutine(controller));
         }
@@ -77,6 +74,11 @@ namespace DDSS_LobbyGuard.Security
 			    yield return null;
             }
 
+            if ((controller != null)
+                && !controller.WasCollected
+                && _randomCoroutines.ContainsKey(controller))
+                _randomCoroutines.Remove(controller);
+
             yield break;
         }
 
@@ -111,17 +113,18 @@ namespace DDSS_LobbyGuard.Security
                 yield return new WaitForSeconds(1f);
                 secondsCount++;
             }
-
-            _setConnectionCoroutines.Remove(controller);
-
+            
             if ((controller != null)
                 && !controller.WasCollected)
             {
+                _setConnectionCoroutines.Remove(controller);
+
                 ServerController.connectionsEnabled = state;
                 controller.RpcSetConnectionEnabled(sender, state);
 
                 if (ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value)
-                    OnStart(controller);
+                    _randomCoroutines[controller] =
+                        controller.StartCoroutine(RandomOutageCoroutine(controller));
             }
 
             yield break;
