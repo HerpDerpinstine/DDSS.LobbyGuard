@@ -103,15 +103,26 @@ namespace DDSS_LobbyGuard.Security
 
         private static IEnumerator DelayedSetConnection(ServerController controller, NetworkIdentity sender, bool state, float delay)
         {
-            yield return new WaitForSeconds(delay);
-
-            ServerController.connectionsEnabled = state;
-            controller.RpcSetConnectionEnabled(sender, state);
+            int secondsCount = 0;
+            while ((controller != null)
+                && !controller.WasCollected
+                && (secondsCount < delay))
+            {
+                yield return new WaitForSeconds(1f);
+                secondsCount++;
+            }
 
             _setConnectionCoroutines.Remove(controller);
 
-            if (ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value)
-                OnStart(controller);
+            if ((controller != null)
+                && !controller.WasCollected)
+            {
+                ServerController.connectionsEnabled = state;
+                controller.RpcSetConnectionEnabled(sender, state);
+
+                if (ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value)
+                    OnStart(controller);
+            }
 
             yield break;
         }
