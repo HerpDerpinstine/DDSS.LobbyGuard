@@ -25,13 +25,19 @@ namespace DDSS_LobbyGuard.Security
         {
             if (!controller.mainServer)
                 return;
+
+            if (_randomCoroutines.ContainsKey(controller))
+                controller.StopCoroutine(_randomCoroutines[controller]);
+
             _randomCoroutines[controller] =
                 controller.StartCoroutine(RandomOutageCoroutine(controller));
         }
 
         private static IEnumerator RandomOutageCoroutine(ServerController controller)
         {
-            while (true)
+            while ((controller != null)
+                && !controller.WasCollected
+                && _randomCoroutines.ContainsKey(controller))
             {
                 if ((GameManager.instance.currentGameState > (int)GameStates.WaitingForPlayerConnections)
                     && (!ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value
@@ -48,7 +54,9 @@ namespace DDSS_LobbyGuard.Security
 
                     int secondsCount = 0;
                     int delaySeconds = Random.Range(userMin, userMax);
-                    while (_randomCoroutines.ContainsKey(controller)
+                    while ((controller != null)
+                        && !controller.WasCollected
+                        && _randomCoroutines.ContainsKey(controller)
                         && (secondsCount < delaySeconds)
                         && (!ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value
                             || ServerController.connectionsEnabled))
@@ -57,7 +65,9 @@ namespace DDSS_LobbyGuard.Security
                         secondsCount++;
                     }
 
-                    if (ServerController.connectionsEnabled)
+                    if ((controller != null)
+                        && !controller.WasCollected
+                        && ServerController.connectionsEnabled)
                     {
                         ServerController.connectionsEnabled = false;
                         controller.RpcSetConnectionEnabled(null, false);

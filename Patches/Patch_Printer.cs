@@ -7,7 +7,6 @@ using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.Printer;
 using Il2CppProps.Scripts;
 using UnityEngine;
@@ -72,14 +71,9 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(userName))
                 return false;
 
-            // Validate Free Slots
-            int freeSlots = printer.freePositions.Count;
-            if (!printer.allowStacking && (freeSlots <= 0))
-                return false;
-
             // Validate Used Slots
             int usedSlots = printer.collectibles.Count;
-            if (printer.allowStacking && (usedSlots >= printer.maxPapers))
+            if (usedSlots >= printer.maxPapers)
                 return false;
 
             // Validate Sender is on Workstation
@@ -186,14 +180,9 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(userName))
                 return false;
 
-            // Validate Free Slots
-            int freeSlots = printer.freePositions.Count;
-            if (!printer.allowStacking && (freeSlots <= 0))
-                return false;
-
             // Validate Used Slots
             int usedSlots = printer.collectibles.Count;
-            if (printer.allowStacking && (usedSlots >= printer.maxPapers))
+            if (usedSlots >= printer.maxPapers)
                 return false;
 
             // Validate Sender is on Workstation
@@ -265,14 +254,9 @@ namespace DDSS_LobbyGuard.Patches
             if (sender.IsGhost())
                 return false;
 
-            // Validate Free Slots
-            int freeSlots = printer.freePositions.Count;
-            if (!printer.allowStacking && (freeSlots <= 0))
-                return false;
-
             // Validate Used Slots
             int usedSlots = printer.collectibles.Count;
-            if (printer.allowStacking && (usedSlots >= printer.maxPapers))
+            if (usedSlots >= printer.maxPapers)
                 return false;
 
             // Validate Distance

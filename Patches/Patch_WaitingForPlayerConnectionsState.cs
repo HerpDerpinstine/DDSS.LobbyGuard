@@ -75,8 +75,8 @@ namespace DDSS_LobbyGuard.Patches
                     | virus.WasCollected)
                     continue;
 
-                virus.UserCode_CmdSetFireWall__Boolean(true);
-                virus.ServerSetVirus(false);
+                virus.NetworkisFirewallActive = true;
+                virus.isVirusActive = false;
             }
 
             // Get List of Players
