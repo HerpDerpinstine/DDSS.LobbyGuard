@@ -76,6 +76,8 @@ namespace DDSS_LobbyGuard.Security
 
 			    yield return null;
             }
+
+            yield break;
         }
 
         internal static void OnSetConnection(
