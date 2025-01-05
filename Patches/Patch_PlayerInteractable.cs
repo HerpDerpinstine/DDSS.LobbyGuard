@@ -7,7 +7,6 @@ using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Scripts;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -64,7 +63,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_CCTV))
                 return false;
 
             // Get Last Assistant
@@ -150,7 +149,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_CCTV))
                 return false;
 
             targetPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
