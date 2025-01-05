@@ -171,7 +171,7 @@ namespace DDSS_LobbyGuard.Utils
             return isAllOrganized;
         }
 
-        internal static bool CanShakeHand(this PlayerInteractable a)
+        internal static bool ServerCanShakeHand(this PlayerInteractable a)
             => a.playerController != null
                 && a.NetworkplayerRequestedHandshakeWithThisPlayer == null
                 && a.NetworkthisPlayerRequestedHandshakeWith == null;

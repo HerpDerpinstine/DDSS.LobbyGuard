@@ -194,7 +194,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_PLAYER)
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position)
                 || !senderInteract.HasPlayerRequestedHandShake(interact))
                 return false;
 
@@ -238,8 +238,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_PLAYER)
-                || !interact.CanShakeHand()
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position)
                 || interact.HasPlayerRequestedHandShake(senderInteract))
                 return false;
 

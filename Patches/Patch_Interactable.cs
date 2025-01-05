@@ -1,5 +1,4 @@
-﻿
-using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -19,15 +18,16 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Get Interactable
-            WhiteBoardController interact = __0.TryCast<WhiteBoardController>();
-            if ((interact == null)
-                || interact.WasCollected)
-                return false;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
             if (sender.GetPlayerRole() != PlayerRole.Manager)
+                return false;
+
+            // Get Interactable
+            WhiteBoardController interact = __0.TryCast<WhiteBoardController>();
+            if ((interact == null)
+                || interact.WasCollected
+                || (interact.interactionCoolDown > 0f))
                 return false;
 
             // Validate Distance

@@ -196,13 +196,13 @@ namespace DDSS_LobbyGuard.Security
                 callback.extraIndex = extraIndex;
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
 
             gameObject.transform.position = holder.transform.position;
             gameObject.transform.rotation = holder.transform.rotation;
 
             T obj = gameObject.GetComponent<T>();
-            holder.CmdPlaceCollectible(obj.netIdentity, obj.Networklabel);
+            holder.UserCode_CmdPlaceCollectible__NetworkIdentity__String(obj.netIdentity, obj.Networklabel);
 
             yield return new WaitForSeconds(1f);
 
