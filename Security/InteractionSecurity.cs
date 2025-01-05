@@ -29,6 +29,7 @@ namespace DDSS_LobbyGuard.Security
 
         internal const float MAX_DISTANCE_DEFAULT = 2f;
         internal const float MAX_DISTANCE_CCTV = 3f;
+        internal const float MAX_DISTANCE_PLAYER = 1f;
 
         internal const int MAX_DOCUMENTS_TRAY = 10;
         internal const int MAX_DOCUMENTS_BINDER = 10;
