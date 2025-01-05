@@ -3,6 +3,7 @@ using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
+using Il2CppPlayer.Scripts;
 using Il2CppPlayer.StateMachineLogic;
 using Il2CppProps.Scripts;
 using System.Collections;
@@ -169,6 +170,15 @@ namespace DDSS_LobbyGuard.Utils
             }
             return isAllOrganized;
         }
+
+        internal static bool CanShakeHand(this PlayerInteractable a)
+            => a.playerController != null
+                && a.NetworkplayerRequestedHandshakeWithThisPlayer == null
+                && a.NetworkthisPlayerRequestedHandshakeWith == null;
+
+        internal static bool HasPlayerRequestedHandShake(this PlayerInteractable a, PlayerInteractable b)
+            => a.playerController != null
+                && a.playerController.netIdentity == b.NetworkplayerRequestedHandshakeWithThisPlayer;
 
         internal static void CustomRpcSetPlayerRole(this LobbyPlayer player, PlayerRole playerRole, bool giveNewTasks, NetworkConnectionToClient receipient = null)
         {

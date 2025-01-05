@@ -160,19 +160,6 @@ namespace DDSS_LobbyGuard.Patches
             return false;
         }
 
-        private static bool CanShakeHand(PlayerInteractable a, NetworkIdentity b)
-		{
-			return a.playerController != null 
-                && a.NetworkplayerRequestedHandshakeWithThisPlayer == null 
-                && a.NetworkthisPlayerRequestedHandshakeWith == null;
-		}
-
-        private static bool HasPlayerRequestedHandShake(PlayerInteractable a, PlayerInteractable b)
-        {
-	        return a.playerController != null 
-                && a.playerController.netIdentity == b.NetworkplayerRequestedHandshakeWithThisPlayer;
-        }
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_AcceptHandShake__NetworkIdentity__NetworkConnectionToClient))]
         private static bool InvokeUserCode_AcceptHandShake__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
@@ -208,7 +195,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_PLAYER)
-                || !HasPlayerRequestedHandShake(senderInteract, interact))
+                || !senderInteract.HasPlayerRequestedHandShake(interact))
                 return false;
 
             interact.UserCode_AcceptHandShake__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -252,12 +239,11 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_PLAYER)
-                || !CanShakeHand(interact, sender)
-                || HasPlayerRequestedHandShake(interact, senderInteract))
+                || !interact.CanShakeHand()
+                || interact.HasPlayerRequestedHandShake(senderInteract))
                 return false;
 
-            interact.NetworkplayerRequestedHandshakeWithThisPlayer = sender;
-
+            // Reset Current Request
             if (senderInteract.NetworkthisPlayerRequestedHandshakeWith != null)
             {
                 PlayerController component2 = senderInteract.NetworkthisPlayerRequestedHandshakeWith.GetComponent<PlayerController>();
@@ -265,6 +251,8 @@ namespace DDSS_LobbyGuard.Patches
                     component2.playerInteractable.UserCode_CmdResetHandShakeRequest__NetworkIdentity(sender);
             }
 
+            // Apply New Request
+            interact.NetworkplayerRequestedHandshakeWithThisPlayer = sender;
             senderInteract.NetworkthisPlayerRequestedHandshakeWith = interact.playerController.netIdentity;
 
             // Prevent Original
@@ -300,13 +288,7 @@ namespace DDSS_LobbyGuard.Patches
             PlayerInteractable senderInteract = controller.playerInteractable;
             if ((senderInteract == null)
                 || senderInteract.WasCollected
-                || (senderInteract == interact))
-                return false;
-
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position)
-                || !CanShakeHand(interact, sender)
-                || HasPlayerRequestedHandShake(interact, senderInteract))
+                || (senderInteract != interact))
                 return false;
 
             senderInteract.UserCode_CmdResetHandShake();
@@ -348,6 +330,15 @@ namespace DDSS_LobbyGuard.Patches
                 || (senderInteract != interact))
                 return false;
 
+            // Reset Current Request
+            if (senderInteract.NetworkthisPlayerRequestedHandshakeWith != null)
+            {
+                PlayerController component2 = senderInteract.NetworkthisPlayerRequestedHandshakeWith.GetComponent<PlayerController>();
+                if (component2 != null)
+                    component2.playerInteractable.UserCode_CmdResetHandShakeRequest__NetworkIdentity(sender);
+            }
+
+            // Reset Current Request
             senderInteract.UserCode_CmdResetOutgoingHandShake();
 
             // Prevent Original
@@ -356,44 +347,8 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_CmdResetHandShakeRequest__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdResetHandShakeRequest__NetworkIdentity_Prefix(NetworkBehaviour __0,
-            NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdResetHandShakeRequest__NetworkIdentity_Prefix()
         {
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-
-            // Get PlayerInteractable
-            PlayerInteractable interact = __0.TryCast<PlayerInteractable>();
-            if ((interact == null)
-                || interact.WasCollected)
-                return false;
-
-            // Validate Sender
-            PlayerController controller = sender.GetComponent<PlayerController>();
-            if ((controller == null)
-                || controller.WasCollected)
-                return false;
-
-            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost())
-                return false;
-
-            // Validate Interactable
-            PlayerInteractable senderInteract = controller.playerInteractable;
-            if ((senderInteract == null)
-                || senderInteract.WasCollected
-                || (senderInteract == interact))
-                return false;
-
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_PLAYER)
-                || !HasPlayerRequestedHandShake(interact, senderInteract))
-                return false;
-
-            senderInteract.UserCode_CmdResetHandShakeRequest__NetworkIdentity(sender);
-
             // Prevent Original
             return false;
         }
