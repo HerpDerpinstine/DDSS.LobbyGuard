@@ -173,8 +173,7 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Manager Role
             LobbyPlayer target = netIdentity.GetComponent<LobbyPlayer>();
             if ((target == null)
-                || target.WasCollected
-                || (target.NetworkplayerRole == PlayerRole.Manager))
+                || target.WasCollected)
                 return false;
 
             // Invoke Game Method
