@@ -10,6 +10,15 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_CollectibleHolder
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.ServerDestroyAllCollectibles))]
+        private static bool ServerDestroyAllCollectibles_Prefix(CollectibleHolder __instance)
+        {
+            foreach (var item in __instance.collectibles)
+                item.Key.ServerDestroyCollectible();
+            return false;
+        } 
+        
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String))]
         private static bool InvokeUserCode_CmdPlaceCollectible__NetworkIdentity__String_Prefix(NetworkBehaviour __0,
             NetworkReader __1,
