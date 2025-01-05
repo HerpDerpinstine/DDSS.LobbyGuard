@@ -195,7 +195,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position)
-                || !senderInteract.HasPlayerRequestedHandShake(interact))
+                || !interact.HasPlayerRequestedHandShake(senderInteract))
                 return false;
 
             interact.UserCode_AcceptHandShake__NetworkIdentity__NetworkConnectionToClient(sender, __2);
