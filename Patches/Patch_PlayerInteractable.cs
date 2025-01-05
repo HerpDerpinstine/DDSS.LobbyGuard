@@ -18,6 +18,9 @@ namespace DDSS_LobbyGuard.Patches
         private static bool InvokeUserCode_PromoteToAssistant__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            if (!GameManager.instance.useAssistant)
+                return false;
+
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -101,6 +104,9 @@ namespace DDSS_LobbyGuard.Patches
         private static bool InvokeUserCode_DemoteFromAssistant__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            if (!GameManager.instance.useAssistant)
+                return false;
+
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
@@ -269,7 +275,7 @@ namespace DDSS_LobbyGuard.Patches
             PlayerInteractable senderInteract = controller.playerInteractable;
             if ((senderInteract == null)
                 || senderInteract.WasCollected
-                || (senderInteract != interact))
+                || (senderInteract == interact))
                 return false;
 
             // Validate Distance
@@ -312,7 +318,7 @@ namespace DDSS_LobbyGuard.Patches
             PlayerInteractable senderInteract = controller.playerInteractable;
             if ((senderInteract == null)
                 || senderInteract.WasCollected
-                || (senderInteract != interact))
+                || (senderInteract == interact))
                 return false;
 
             // Validate Distance
@@ -355,7 +361,7 @@ namespace DDSS_LobbyGuard.Patches
             PlayerInteractable senderInteract = controller.playerInteractable;
             if ((senderInteract == null)
                 || senderInteract.WasCollected
-                || (senderInteract != interact))
+                || (senderInteract == interact))
                 return false;
 
             // Validate Distance

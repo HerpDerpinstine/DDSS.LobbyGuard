@@ -202,7 +202,7 @@ namespace DDSS_LobbyGuard.Security
             gameObject.transform.rotation = holder.transform.rotation;
 
             T obj = gameObject.GetComponent<T>();
-            holder.UserCode_CmdPlaceCollectible__NetworkIdentity__String(obj.netIdentity, obj.Networklabel);
+            holder.CmdPlaceCollectible(obj.netIdentity, obj.Networklabel);
 
             yield return new WaitForSeconds(1f);
 

@@ -203,7 +203,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (sender.IsGhost()
+            if (controller.IsGhost()
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
