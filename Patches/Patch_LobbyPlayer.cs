@@ -327,24 +327,18 @@ namespace DDSS_LobbyGuard.Patches
 
             // Remove Assistant Role from All Others
             if (requestedRole == SubRole.Assistant)
-            {
-                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
+                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
                 {
                     // Get Old Player
                     LobbyPlayer oldPlayer = networkIdentity.GetComponent<LobbyPlayer>();
                     if ((oldPlayer == null)
+                        || (oldPlayer == targetPlayer)
                         || (oldPlayer.NetworksubRole != SubRole.Assistant))
                         continue;
 
                     // Reset Role
                     oldPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
                 }
-                LobbyPlayer localPlayer = LobbyManager.instance.GetLocalPlayer();
-                if ((localPlayer != null)
-                    && !localPlayer.WasCollected
-                    && (localPlayer.NetworksubRole != SubRole.None))
-                    localPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
-            }
 
             // Run Game Command
             targetPlayer.UserCode_CmdSetSubRole__SubRole(requestedRole);
