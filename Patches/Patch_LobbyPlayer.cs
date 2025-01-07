@@ -8,7 +8,6 @@ using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.WorkStation.Phone;
-using System.Collections;
 
 namespace DDSS_LobbyGuard.Patches
 {
