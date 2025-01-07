@@ -5,6 +5,7 @@ using Il2CppMirror;
 using UnityEngine;
 using Il2CppWindow;
 using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Utils;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -117,8 +118,7 @@ namespace DDSS_LobbyGuard.Patches
                 else
                 {
                     // Apply Changes Remotely
-                    computer.UserCode_CmdClick__Vector3__Int32(mousePos, 0);
-                    computer.UserCode_CmdSyncCursor__Vector3(newMousePos);
+                    computer.UserCode_CmdClick__Vector3__Int32(mouseStartPos, 0);
                     computer.UserCode_CmdCursorUp__Vector3(newMousePos);
                 }
             }

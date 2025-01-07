@@ -197,49 +197,6 @@ namespace DDSS_LobbyGuard.Utils
             NetworkWriterPool.Return(networkWriterPooled);
         }
 
-        internal static void CustomRpcClick(this ComputerController computer, Vector3 mousePos, int button, NetworkConnectionToClient receipient = null)
-        {
-            NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
-            networkWriterPooled.WriteVector3(mousePos);
-            networkWriterPooled.WriteInt(button);
-
-            var rpcInfo = RPCHelper.Get(RPCHelper.eType.ComputerController_RpcClick);
-            if (receipient == null)
-                computer.SendRPCInternal(rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0, true);
-            else
-                computer.SendTargetRPCInternal(receipient, rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0);
-
-            NetworkWriterPool.Return(networkWriterPooled);
-        }
-
-        internal static void CustomRpcSyncCursor(this ComputerController computer, Vector3 mousePos, NetworkConnectionToClient receipient = null)
-        {
-            NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
-            networkWriterPooled.WriteVector3(mousePos);
-
-            var rpcInfo = RPCHelper.Get(RPCHelper.eType.ComputerController_RpcSyncCursor);
-            if (receipient == null)
-                computer.SendRPCInternal(rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0, true);
-            else
-                computer.SendTargetRPCInternal(receipient, rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0);
-
-            NetworkWriterPool.Return(networkWriterPooled);
-        }
-
-        internal static void CustomRpcCursorUp(this ComputerController computer, Vector3 mousePos, NetworkConnectionToClient receipient = null)
-        {
-            NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
-            networkWriterPooled.WriteVector3(mousePos);
-
-            var rpcInfo = RPCHelper.Get(RPCHelper.eType.ComputerController_RpcCursorUp);
-            if (receipient == null)
-                computer.SendRPCInternal(rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0, true);
-            else
-                computer.SendTargetRPCInternal(receipient, rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0);
-
-            NetworkWriterPool.Return(networkWriterPooled);
-        }
-
         internal static LobbyPlayer GetLobbyPlayerFromConnection(this NetworkConnectionToClient connection)
         {
             if ((connection == null)
