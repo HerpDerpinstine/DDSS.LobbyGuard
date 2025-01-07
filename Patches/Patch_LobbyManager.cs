@@ -99,36 +99,40 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Validate Game State
-            if (__instance.gameStarted
-                && !ConfigHandler.Gameplay.PlayerLeavesReduceTerminations.Value)
+            if (__instance.gameStarted)
             {
-                // Adjust Termination Offset
-                PlayerRole playerRole = lobbyPlayer.NetworkplayerRole;
-                if ((playerRole != PlayerRole.Manager)
-                    && (playerRole != PlayerRole.Janitor)
-                    && (GameManager.instance != null)
-                    && !GameManager.instance.WasCollected)
+                lobbyPlayer.ServerSetWorkStation(null, PlayerRole.None);
+
+                if (!ConfigHandler.Gameplay.PlayerLeavesReduceTerminations.Value)
                 {
-                    // Get Original Count
-                    int slackerCount = GameManager.instance.NetworkstartSlackers;
-                    int specialistCount = GameManager.instance.NetworkstartSpecialists;
+                    // Adjust Termination Offset
+                    PlayerRole playerRole = lobbyPlayer.NetworkplayerRole;
+                    if ((playerRole != PlayerRole.Manager)
+                        && (playerRole != PlayerRole.Janitor)
+                        && (GameManager.instance != null)
+                        && !GameManager.instance.WasCollected)
+                    {
+                        // Get Original Count
+                        int slackerCount = GameManager.instance.NetworkstartSlackers;
+                        int specialistCount = GameManager.instance.NetworkstartSpecialists;
 
-                    // Get Player Role
-                    if (InteractionSecurity.IsSlacker(lobbyPlayer))
-                        slackerCount--;
-                    else if (playerRole == PlayerRole.Specialist)
-                        specialistCount--;
+                        // Get Player Role
+                        if (InteractionSecurity.IsSlacker(lobbyPlayer))
+                            slackerCount--;
+                        else if (playerRole == PlayerRole.Specialist)
+                            specialistCount--;
 
-                    // Clamp Count
-                    if (slackerCount < 0)
-                        slackerCount = 0;
-                    if (specialistCount < 0)
-                        specialistCount = 0;
+                        // Clamp Count
+                        if (slackerCount < 0)
+                            slackerCount = 0;
+                        if (specialistCount < 0)
+                            specialistCount = 0;
 
-                    // Apply New Counts
-                    //GameManager.instance.SetWinCondition(specialistCount, slackerCount);
-                    GameManager.instance.NetworkstartSlackers = slackerCount;
-                    GameManager.instance.NetworkstartSpecialists = specialistCount;
+                        // Apply New Counts
+                        //GameManager.instance.SetWinCondition(specialistCount, slackerCount);
+                        GameManager.instance.NetworkstartSlackers = slackerCount;
+                        GameManager.instance.NetworkstartSpecialists = specialistCount;
+                    }
                 }
             }
 
@@ -209,13 +213,24 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(message))
                 return false;
 
+            // Parse DateTime
+            string time = __1.SafeReadString();
+            if (string.IsNullOrEmpty(time)
+                || string.IsNullOrWhiteSpace(time)
+                || !DateTime.TryParse(time, out _))
+                time = DateTime.Now.ToString("HH:mm:ss");
+            else
+            {
+                time = time.RemoveRichText();
 
+                if (string.IsNullOrEmpty(time)
+                    || string.IsNullOrWhiteSpace(time)
+                    || !DateTime.TryParse(time, out _))
+                    time = DateTime.Now.ToString("HH:mm:ss");
+            }
 
             // Invoke Game Method
-            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String(
-                sender, 
-                message, 
-                DateTime.Now.ToString("HH:mm:ss"));
+            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String(sender, message, time);
 
             // Prevent Original
             return false;
