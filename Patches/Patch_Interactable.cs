@@ -6,6 +6,7 @@ using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -24,7 +25,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Interactable
-            WhiteBoardController interact = __0.TryCast<WhiteBoardController>();
+            Interactable interact = __0.TryCast<Interactable>();
             if ((interact == null)
                 || interact.WasCollected
                 || (interact.interactionCoolDown > 0f))
@@ -36,8 +37,11 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Cooldown
             float coolDown = __1.SafeReadFloat();
-            if (coolDown != GameManager.instance.NetworkmeetingCooldown)
-                return false;
+            if (__0.TryCast<WhiteBoardController>())
+                coolDown = GameManager.instance.NetworkmeetingCooldown;
+            else if ((coolDown <= 0f)
+                || (coolDown > InteractionSecurity.MAX_INTERACTION_COOLDOWN))
+                coolDown = InteractionSecurity.MAX_INTERACTION_COOLDOWN;
 
             // Run Game Command
             interact.UserCode_CmdSetInteractionCoolDown__Single(coolDown);
@@ -64,7 +68,10 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_CCTV))
+            float distance = Vector3.Distance(sender.transform.position, interact.transform.position);
+            if (distance < 0f)
+                distance *= -1f;
+            if (distance > InteractionSecurity.MAX_DISTANCE_CCTV)
                 return false;
 
             // Validate Cooldown
@@ -72,12 +79,19 @@ namespace DDSS_LobbyGuard.Patches
             bool initial = __1.ReadBool();
             if (initial)
             {
+                if (distance > InteractionSecurity.MAX_DISTANCE_DEFAULT)
+                    return false;
+
                 if ((coolDown <= 0f)
-                    || (coolDown > 600f))
-                    coolDown = 600f;
+                    || (coolDown > InteractionSecurity.MAX_INTERACTION_COOLDOWN))
+                    coolDown = InteractionSecurity.MAX_INTERACTION_COOLDOWN;
             }
             else
             {
+                if ((distance <= InteractionSecurity.MAX_DISTANCE_DEFAULT)
+                    || (interact.interactionTimeCounter <= 0f))
+                    return false;
+
                 if ((coolDown < 0f)
                     || (coolDown > 0f))
                     coolDown = 0f;

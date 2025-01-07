@@ -42,6 +42,8 @@ namespace DDSS_LobbyGuard.Security
 
         internal const int MAX_DOCUMENT_CHARS = 240;
 
+        internal const int MAX_INTERACTION_COOLDOWN = 30;
+
         internal static int MAX_CIGS { get; private set; }
         internal static int MAX_CIG_PACKS { get; private set; }
         internal static int MAX_INFECTED_USBS { get; private set; }
