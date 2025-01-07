@@ -35,15 +35,19 @@ namespace DDSS_LobbyGuard.Patches
             if (!ComputerSecurity.ValidatePlayer(controller, sender))
                 return false;
 
-            // Read Button
-            Vector3 clickpos = __1.SafeReadVector3();
+            // Validate Position
+            Vector3 mousePos = __1.SafeReadVector3();
+            mousePos.x = Mathf.Clamp(mousePos.x, -controller.canvas.sizeDelta.x / 2f, controller.canvas.sizeDelta.x / 2f);
+            mousePos.y = Mathf.Clamp(mousePos.y, -controller.canvas.sizeDelta.y / 2f, controller.canvas.sizeDelta.y / 2f);
+
+            // Validate Button
             int buttonId = __1.SafeReadInt();
             if ((buttonId < 0)
                 || (buttonId > 1))
                 return false;
 
             // Run Game Command
-            controller.UserCode_CmdClick__Vector3__Int32(clickpos, buttonId);
+            controller.UserCode_CmdClick__Vector3__Int32(mousePos, buttonId);
 
             // Prevent Original
             return false;
@@ -70,16 +74,51 @@ namespace DDSS_LobbyGuard.Patches
             if (!ComputerSecurity.ValidatePlayer(controller, sender))
                 return false;
 
-            // Read Button
-            Vector3 clickpos = __1.SafeReadVector3();
+            // Validate Position
+            Vector3 mousePos = __1.SafeReadVector3();
+            mousePos.x = Mathf.Clamp(mousePos.x, -controller.canvas.sizeDelta.x / 2f, controller.canvas.sizeDelta.x / 2f);
+            mousePos.y = Mathf.Clamp(mousePos.y, -controller.canvas.sizeDelta.y / 2f, controller.canvas.sizeDelta.y / 2f);
 
             // Run Game Command
-            controller.UserCode_CmdCursorUp__Vector3(clickpos);
+            controller.UserCode_CmdCursorUp__Vector3(mousePos);
 
             // Prevent Original
             return false;
         }
-        
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdSyncCursor__Vector3))]
+        private static bool InvokeUserCode_CmdSyncCursor__Vector3_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected
+                || sender.IsGhost())
+                return false;
+
+            // Get ComputerController
+            ComputerController controller = __0.TryCast<ComputerController>();
+
+            // Validate Player
+            if (!ComputerSecurity.ValidatePlayer(controller, sender))
+                return false;
+
+            // Validate Position
+            Vector3 mousePos = __1.SafeReadVector3();
+            mousePos.x = Mathf.Clamp(mousePos.x, -controller.canvas.sizeDelta.x / 2f, controller.canvas.sizeDelta.x / 2f);
+            mousePos.y = Mathf.Clamp(mousePos.y, -controller.canvas.sizeDelta.y / 2f, controller.canvas.sizeDelta.y / 2f);
+
+            // Run Game Command
+            controller.UserCode_CmdSyncCursor__Vector3(mousePos);
+
+            // Prevent Original
+            return false;
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdKeyPressed__String))]
         private static bool InvokeUserCode_CmdKeyPressed__String_Prefix(
@@ -114,37 +153,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             controller.UserCode_CmdKeyPressed__String(keyCodeStr);
-
-            // Prevent Original
-            return false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdSyncCursor__Vector3))]
-        private static bool InvokeUserCode_CmdSyncCursor__Vector3_Prefix(
-            NetworkBehaviour __0,
-            NetworkReader __1,
-            NetworkConnectionToClient __2)
-        {
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-            if ((sender == null)
-                || sender.WasCollected
-                || sender.IsGhost())
-                return false;
-
-            // Get ComputerController
-            ComputerController controller = __0.TryCast<ComputerController>();
-
-            // Validate Player
-            if (!ComputerSecurity.ValidatePlayer(controller, sender))
-                return false;
-
-            // Read Cursor Position
-            Vector3 cursorPos = __1.SafeReadVector3();
-
-            // Run Game Command
-            controller.UserCode_CmdSyncCursor__Vector3(cursorPos);
 
             // Prevent Original
             return false;
