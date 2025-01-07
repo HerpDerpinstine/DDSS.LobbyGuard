@@ -37,7 +37,7 @@ namespace DDSS_LobbyGuard.Security
             if (subject.StartsWith("Re: "))
             {
                 string[] split = subject.Split(' ', 2, System.StringSplitOptions.None);
-                
+
                 string documentName = split[1];
                 if (string.IsNullOrEmpty(documentName)
                     || string.IsNullOrWhiteSpace(documentName))
@@ -50,7 +50,7 @@ namespace DDSS_LobbyGuard.Security
                 return false;
             }
 
-            return ((subject == "Nice") 
+            return ((subject == "Nice")
                 || (subject == "I'm down for it!"));
         }
     }

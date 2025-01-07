@@ -42,6 +42,8 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMin;
         internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMax;
 
+        internal MelonPreferences_Entry<bool> EnforceComputerWindowBoundary;
+
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
 
@@ -193,6 +195,11 @@ namespace DDSS_LobbyGuard.Config
                 "Random WorkStation Virus Delay Max",
                 "Max Delay in Seconds until a WorkStation rolls the Dice on getting a Random Virus",
                 60);
+
+            EnforceComputerWindowBoundary = CreatePref("EnforceComputerWindowBoundary",
+                "Enforce Computer Window Boundary",
+                "Prevents Dragging Windows on WorkStation Computers outside of the Monitor's Boundaries",
+                true);
 
             PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",
                 "Enforce Player Velocity",
