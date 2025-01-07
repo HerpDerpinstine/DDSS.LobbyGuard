@@ -127,6 +127,19 @@ namespace DDSS_LobbyGuard.Patches
                     return false;
                 subject = string.Empty;
             }
+            else
+            {
+                subject = subject.RemoveRichText();
+
+                if (string.IsNullOrEmpty(subject)
+                    || string.IsNullOrWhiteSpace(subject))
+                {
+                    if (isSenderClient
+                        || isReceiverPlayer)
+                        return false;
+                    subject = string.Empty;
+                }
+            }
 
             // Validate Subject
             if (isSenderClient
@@ -143,12 +156,38 @@ namespace DDSS_LobbyGuard.Patches
                     return false;
                 msg = string.Empty;
             }
+            else
+            {
+                msg = msg.RemoveRichText();
 
-            // Enforce Timestamp
-            string timeStamp = DateTime.Now.ToString("HH:mm");
+                if (string.IsNullOrEmpty(msg)
+                    || string.IsNullOrWhiteSpace(msg))
+                {
+                    if (isSenderClient
+                        || isReceiverPlayer)
+                        return false;
+                    msg = string.Empty;
+                }
+            }
+
+            // Parse DateTime
+            string time = __1.SafeReadString();
+            if (string.IsNullOrEmpty(time)
+                || string.IsNullOrWhiteSpace(time)
+                || !DateTime.TryParse(time, out _))
+                time = DateTime.Now.ToString("HH:mm");
+            else
+            {
+                time = time.RemoveRichText();
+
+                if (string.IsNullOrEmpty(time)
+                    || string.IsNullOrWhiteSpace(time)
+                    || !DateTime.TryParse(time, out _))
+                    time = DateTime.Now.ToString("HH:mm");
+            }
 
             // Run Game Command
-            inbox.UserCode_CmdSendEmail__String__String__String__String__String(senderLower, recipientLower, subject, msg, timeStamp);
+            inbox.UserCode_CmdSendEmail__String__String__String__String__String(senderLower, recipientLower, subject, msg, time);
 
             // Prevent Original
             return false;
