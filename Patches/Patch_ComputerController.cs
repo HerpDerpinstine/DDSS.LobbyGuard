@@ -36,9 +36,14 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Position
+            Vector3 maxPosition = controller.canvas.sizeDelta / 2f;
+            Vector3 minPosition = -maxPosition;
             Vector3 mousePos = __1.SafeReadVector3();
-            mousePos.x = Mathf.Clamp(mousePos.x, -controller.canvas.sizeDelta.x / 2f, controller.canvas.sizeDelta.x / 2f);
-            mousePos.y = Mathf.Clamp(mousePos.y, -controller.canvas.sizeDelta.y / 2f, controller.canvas.sizeDelta.y / 2f);
+            if ((mousePos.x < minPosition.x)
+                || (mousePos.x > maxPosition.x)
+                || (mousePos.y < minPosition.y)
+                || (mousePos.y > maxPosition.y))
+                return false;
 
             // Validate Button
             int buttonId = __1.SafeReadInt();
@@ -75,9 +80,14 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Position
+            Vector3 maxPosition = controller.canvas.sizeDelta / 2f;
+            Vector3 minPosition = -maxPosition;
             Vector3 mousePos = __1.SafeReadVector3();
-            mousePos.x = Mathf.Clamp(mousePos.x, -controller.canvas.sizeDelta.x / 2f, controller.canvas.sizeDelta.x / 2f);
-            mousePos.y = Mathf.Clamp(mousePos.y, -controller.canvas.sizeDelta.y / 2f, controller.canvas.sizeDelta.y / 2f);
+            if ((mousePos.x < minPosition.x)
+                || (mousePos.x > maxPosition.x)
+                || (mousePos.y < minPosition.y)
+                || (mousePos.y > maxPosition.y))
+                return false;
 
             // Run Game Command
             controller.UserCode_CmdCursorUp__Vector3(mousePos);
@@ -108,9 +118,14 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Position
+            Vector3 maxPosition = controller.canvas.sizeDelta / 2f;
+            Vector3 minPosition = -maxPosition;
             Vector3 mousePos = __1.SafeReadVector3();
-            mousePos.x = Mathf.Clamp(mousePos.x, -controller.canvas.sizeDelta.x / 2f, controller.canvas.sizeDelta.x / 2f);
-            mousePos.y = Mathf.Clamp(mousePos.y, -controller.canvas.sizeDelta.y / 2f, controller.canvas.sizeDelta.y / 2f);
+            if ((mousePos.x < minPosition.x)
+                || (mousePos.x > maxPosition.x)
+                || (mousePos.y < minPosition.y)
+                || (mousePos.y > maxPosition.y))
+                return false;
 
             // Run Game Command
             controller.UserCode_CmdSyncCursor__Vector3(mousePos);
