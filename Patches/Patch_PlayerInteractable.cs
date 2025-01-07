@@ -75,6 +75,7 @@ namespace DDSS_LobbyGuard.Patches
                 // Get Old Player
                 LobbyPlayer oldPlayer = networkIdentity.GetComponent<LobbyPlayer>();
                 if ((oldPlayer == null)
+                    || (oldPlayer == targetPlayer)
                     || (oldPlayer.NetworksubRole != SubRole.Assistant))
                     continue;
 

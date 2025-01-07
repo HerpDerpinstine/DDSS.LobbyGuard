@@ -80,11 +80,11 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Get List of Players
-            List<NetworkIdentity> players = LobbyManager.instance.GetAllPlayers();
-            int playerCount = players.Count;
+            List<NetworkIdentity> allPlayers = LobbyManager.instance.GetAllPlayers();
+            int playerCount = allPlayers.Count;
             List<NetworkIdentity> playerList = new();
             NetworkIdentity playerManager = null;
-            foreach (NetworkIdentity player in players)
+            foreach (NetworkIdentity player in allPlayers)
             {
                 // Validate Lobby Player
                 LobbyPlayer lobbyPlayer = player.GetComponent<LobbyPlayer>();
