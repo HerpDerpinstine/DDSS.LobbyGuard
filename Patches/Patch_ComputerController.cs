@@ -42,6 +42,7 @@ namespace DDSS_LobbyGuard.Patches
             mousePos.x = Mathf.Clamp(mousePos.x, minPosition.x, maxPosition.x);
             mousePos.y = Mathf.Clamp(mousePos.y, minPosition.y, maxPosition.y);
             mousePos.z = 0f;
+            controller.cursor.transform.localPosition = mousePos;
 
             // Validate Button
             int buttonId = __1.SafeReadInt();
@@ -84,6 +85,7 @@ namespace DDSS_LobbyGuard.Patches
             mousePos.x = Mathf.Clamp(mousePos.x, minPosition.x, maxPosition.x);
             mousePos.y = Mathf.Clamp(mousePos.y, minPosition.y, maxPosition.y);
             mousePos.z = 0f;
+            controller.cursor.transform.localPosition = mousePos;
 
             // Run Game Command
             controller.UserCode_CmdCursorUp__Vector3(mousePos);
@@ -120,6 +122,7 @@ namespace DDSS_LobbyGuard.Patches
             mousePos.x = Mathf.Clamp(mousePos.x, minPosition.x, maxPosition.x);
             mousePos.y = Mathf.Clamp(mousePos.y, minPosition.y, maxPosition.y);
             mousePos.z = 0f;
+            controller.cursor.transform.localPosition = mousePos;
 
             // Run Game Command
             controller.UserCode_CmdSyncCursor__Vector3(mousePos);
