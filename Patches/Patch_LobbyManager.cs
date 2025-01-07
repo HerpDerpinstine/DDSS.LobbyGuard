@@ -150,8 +150,9 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Check for Lobby
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "LobbyScene")
+            // Get LobbyManager
+            LobbyManager manager = __0.TryCast<LobbyManager>();
+            if (manager.gameStarted)
                 return false;
 
             // Check Sender
@@ -160,9 +161,6 @@ namespace DDSS_LobbyGuard.Patches
                 || player.WasCollected
                 || !player.isHost)
                 return false;
-
-            // Get LobbyManager
-            LobbyManager manager = __0.TryCast<LobbyManager>();
 
             // Get Target
             NetworkIdentity netIdentity = __1.SafeReadNetworkIdentity();
@@ -210,6 +208,8 @@ namespace DDSS_LobbyGuard.Patches
             if (string.IsNullOrEmpty(message)
                 || string.IsNullOrWhiteSpace(message))
                 return false;
+
+
 
             // Invoke Game Method
             manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String(
