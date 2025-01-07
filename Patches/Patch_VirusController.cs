@@ -32,6 +32,7 @@ namespace DDSS_LobbyGuard.Patches
             __instance.virusObj.SetActive(false);
             __instance.time = 1f;
             __instance.virusScreen.color = Color.blue;
+            __instance.NetworkisFirewallActive = true;
             __instance.isFirewallActive = true;
             __instance.isVirusActive = false;
             __instance.virusInfectionTime = 0f;

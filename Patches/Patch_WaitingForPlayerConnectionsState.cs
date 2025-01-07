@@ -75,13 +75,13 @@ namespace DDSS_LobbyGuard.Patches
                     | virus.WasCollected)
                     continue;
 
-                virus.NetworkisFirewallActive = true;
-                virus.isVirusActive = false;
+                virus.Start();
             }
 
             // Get List of Players
             List<NetworkIdentity> allPlayers = LobbyManager.instance.GetAllPlayers();
             int playerCount = allPlayers.Count;
+
             List<NetworkIdentity> playerList = new();
             NetworkIdentity playerManager = null;
             foreach (NetworkIdentity player in allPlayers)

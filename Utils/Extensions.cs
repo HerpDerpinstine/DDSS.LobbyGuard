@@ -220,7 +220,6 @@ namespace DDSS_LobbyGuard.Utils
             return null;
         }
 
-
         internal static List<NetworkIdentity> GetAllPlayers(this LobbyManager manager)
         {
             if ((manager == null)
@@ -237,7 +236,8 @@ namespace DDSS_LobbyGuard.Utils
             foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
             {
                 if ((networkIdentity == null)
-                    || networkIdentity.WasCollected)
+                    || networkIdentity.WasCollected
+                    || players.Contains(networkIdentity))
                     continue;
 
                 players.Add(networkIdentity);
