@@ -3,8 +3,10 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
+using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
+using Il2CppProps.WorkStation.Phone;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -18,10 +20,13 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Get Phone
-            PhoneManager phone = __0.TryCast<PhoneManager>();
-
             NetworkIdentity sender = __2.identity;
+
+            // Get Phone
+            PhoneManager phoneManager = __0.TryCast<PhoneManager>();
+            if ((phoneManager == null)
+                || phoneManager.WasCollected)
+                return false;
 
             // Get Player
             PlayerController controller = sender.GetComponent<PlayerController>();
@@ -35,15 +40,35 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
+            NetworkIdentity chair = controller.NetworkcurrentChair;
+            if ((chair == null)
+                || chair.WasCollected)
+                return false;
+
+            WorkStationController station = chair.GetComponent<WorkStationController>();
+            if ((station == null)
+                || station.WasCollected)
+                return false;
+
+            PhoneController phone = station.phoneController;
+            if ((phone == null)
+                || phone.WasCollected)
+                return false;
+
             // Enforce Receiver Number
-            string receiver = phone.GetPhoneNumber(lobbyPlayer);
+            string receiver = phone.phoneNumber;
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return false;
 
             // Get New Caller
-            __1.SafeReadString();
-            string caller = __1.SafeReadString();
+            string caller = phone.NetworkreceivingCall;
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
 
             // Run Security
-            PhoneSecurity.OnCallAnswer(phone, caller, receiver);
+            PhoneSecurity.OnCallAnswer(phoneManager, caller, receiver);
 
             // Prevent Original
             return false;
@@ -56,10 +81,13 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Get Phone
-            PhoneManager phone = __0.TryCast<PhoneManager>();
-
             NetworkIdentity sender = __2.identity;
+            
+            // Get Phone
+            PhoneManager phoneManager = __0.TryCast<PhoneManager>();
+            if ((phoneManager == null)
+                || phoneManager.WasCollected)
+                return false;
 
             // Get Player
             PlayerController controller = sender.GetComponent<PlayerController>();
@@ -73,15 +101,35 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
+            NetworkIdentity chair = controller.NetworkcurrentChair;
+            if ((chair == null)
+                || chair.WasCollected)
+                return false;
+
+            WorkStationController station = chair.GetComponent<WorkStationController>();
+            if ((station == null)
+                || station.WasCollected)
+                return false;
+
+            PhoneController phone = station.phoneController;
+            if ((phone == null)
+                || phone.WasCollected)
+                return false;
+
             // Enforce Caller Number
-            string caller = phone.GetPhoneNumber(lobbyPlayer);
+            string caller = phone.phoneNumber;
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
 
             // Get New Receiver
-            __1.SafeReadString();
-            string receiver = __1.SafeReadString();
+            string receiver = phone.NetworkcallingNumber;
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return false;
 
             // Run Security
-            PhoneSecurity.OnCallCancel(phone, caller, receiver);
+            PhoneSecurity.OnCallCancel(phoneManager, caller, receiver);
 
             // Prevent Original
             return false;
@@ -94,10 +142,13 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Get Phone
-            PhoneManager phone = __0.TryCast<PhoneManager>();
-
             NetworkIdentity sender = __2.identity;
+
+            // Get Phone
+            PhoneManager phoneManager = __0.TryCast<PhoneManager>();
+            if ((phoneManager == null)
+                || phoneManager.WasCollected)
+                return false;
 
             // Get Player
             PlayerController controller = sender.GetComponent<PlayerController>();
@@ -111,15 +162,35 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
+            NetworkIdentity chair = controller.NetworkcurrentChair;
+            if ((chair == null)
+                || chair.WasCollected)
+                return false;
+
+            WorkStationController station = chair.GetComponent<WorkStationController>();
+            if ((station == null)
+                || station.WasCollected)
+                return false;
+
+            PhoneController phone = station.phoneController;
+            if ((phone == null)
+                || phone.WasCollected)
+                return false;
+
             // Enforce Receiver Number
-            string receiver = phone.GetPhoneNumber(lobbyPlayer);
+            string receiver = phone.NetworkcallingNumber;
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return false;
 
             // Get New Caller
-            __1.SafeReadString();
-            string caller = __1.SafeReadString();
+            string caller = phone.phoneNumber;
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
 
             // Run Security
-            PhoneSecurity.OnCallEnd(phone, caller, receiver);
+            PhoneSecurity.OnCallEnd(phoneManager, caller, receiver);
 
             // Prevent Original
             return false;
@@ -132,10 +203,13 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Get Phone
-            PhoneManager phone = __0.TryCast<PhoneManager>();
-
             NetworkIdentity sender = __2.identity;
+
+            // Get Phone
+            PhoneManager phoneManager = __0.TryCast<PhoneManager>();
+            if ((phoneManager == null)
+                || phoneManager.WasCollected)
+                return false;
 
             // Get Player
             PlayerController controller = sender.GetComponent<PlayerController>();
@@ -149,15 +223,35 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
+            NetworkIdentity chair = controller.NetworkcurrentChair;
+            if ((chair == null)
+                || chair.WasCollected)
+                return false;
+
+            WorkStationController station = chair.GetComponent<WorkStationController>();
+            if ((station == null)
+                || station.WasCollected)
+                return false;
+
+            PhoneController phone = station.phoneController;
+            if ((phone == null)
+                || phone.WasCollected)
+                return false;
+
             // Enforce Receiver Number
-            string receiver = phone.GetPhoneNumber(lobbyPlayer);
+            string receiver = phone.phoneNumber;
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return false;
 
             // Get New Caller
-            __1.SafeReadString();
-            string caller = __1.SafeReadString();
+            string caller = phone.NetworkreceivingCall;
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
 
             // Run Security
-            PhoneSecurity.OnCallDecline(phone, caller, receiver);
+            PhoneSecurity.OnCallDecline(phoneManager, caller, receiver);
 
             // Prevent Original
             return false;

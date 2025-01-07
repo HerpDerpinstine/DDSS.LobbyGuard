@@ -101,12 +101,18 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Game State
             if (__instance.gameStarted)
             {
+                // Reset WorkStation
                 lobbyPlayer.ServerSetWorkStation(null, PlayerRole.None);
 
+                // Replace Manager
+                PlayerRole playerRole = lobbyPlayer.NetworkplayerRole;
+                if (playerRole == PlayerRole.Manager)
+                    GameManager.instance.ReplaceManager();
+
+                // Check Setting
                 if (!ConfigHandler.Gameplay.PlayerLeavesReduceTerminations.Value)
                 {
                     // Adjust Termination Offset
-                    PlayerRole playerRole = lobbyPlayer.NetworkplayerRole;
                     if ((playerRole != PlayerRole.Manager)
                         && (playerRole != PlayerRole.Janitor)
                         && (GameManager.instance != null)

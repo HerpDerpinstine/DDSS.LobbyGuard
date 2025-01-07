@@ -1,4 +1,5 @@
 ﻿using Il2Cpp;
+using Il2CppProps.WorkStation.Phone;
 using System.Collections.Generic;
 
 namespace DDSS_LobbyGuard.Security
@@ -14,10 +15,27 @@ namespace DDSS_LobbyGuard.Security
             _callReceiverList.Clear();
         }
 
+        internal static void ForceCallToEnd(PhoneController phone)
+        {
+            if (phone.NetworkisCallActive)
+            {
+                OnCallEnd(PhoneManager.instance, phone.NetworkreceivingCall, phone.phoneNumber);
+                OnCallEnd(PhoneManager.instance, phone.phoneNumber, phone.NetworkreceivingCall);
+            }
+            if (phone.NetworkisDialing)
+                OnCallCancel(PhoneManager.instance, phone.phoneNumber, phone.NetworkcallingNumber);
+        }
+
         internal static void OnCallAttempt(PhoneManager phone,
             string caller,
             string receiver)
         {
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller)
+                || string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return;
+
             // Check if Calling Self
             //if (caller == receiver)
             //    return;
@@ -46,6 +64,12 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller)
+                || string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return;
+
             // Check if Calling Self
             //if (caller == receiver)
             //    return;
@@ -74,6 +98,12 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller)
+                || string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return;
+
             // Check if Calling Self
             //if (caller == receiver)
             //    return;
@@ -106,6 +136,12 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller)
+                || string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return;
+
             // Check if Calling Self
             //if (caller == receiver)
             //    return;
@@ -139,6 +175,12 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller)
+                || string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return;
+
             // Check if Calling Self
             //if (caller == receiver)
             //    return;

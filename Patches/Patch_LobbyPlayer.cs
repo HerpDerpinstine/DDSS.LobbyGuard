@@ -79,19 +79,7 @@ namespace DDSS_LobbyGuard.Patches
                 PhoneController phone = __0.phoneController;
                 if ((phone != null)
                     && !phone.WasCollected)
-                {
-                    if (phone.NetworkisCallActive)
-                    {
-                        PhoneSecurity.OnCallEnd(PhoneManager.instance, phone.phoneNumber, phone.receivingCall);
-                        PhoneSecurity.OnCallEnd(PhoneManager.instance, phone.receivingCall, phone.phoneNumber);
-                    }
-
-                    if (phone.NetworkisDialing)
-                    {
-                        PhoneSecurity.OnCallCancel(PhoneManager.instance, phone.phoneNumber, phone.callingNumber);
-                        PhoneSecurity.OnCallCancel(PhoneManager.instance, phone.callingNumber, phone.phoneNumber);
-                    }
-                }
+                    PhoneSecurity.ForceCallToEnd(phone);
             }
 
             if ((__instance.NetworkworkStationController != null)
@@ -100,19 +88,7 @@ namespace DDSS_LobbyGuard.Patches
                 PhoneController phone = __instance.NetworkworkStationController.phoneController;
                 if ((phone != null)
                     && !phone.WasCollected)
-                {
-                    if (phone.NetworkisCallActive)
-                    {
-                        PhoneSecurity.OnCallEnd(PhoneManager.instance, phone.phoneNumber, phone.receivingCall);
-                        PhoneSecurity.OnCallEnd(PhoneManager.instance, phone.receivingCall, phone.phoneNumber);
-                    }
-
-                    if (phone.NetworkisDialing)
-                    {
-                        PhoneSecurity.OnCallCancel(PhoneManager.instance, phone.phoneNumber, phone.callingNumber);
-                        PhoneSecurity.OnCallCancel(PhoneManager.instance, phone.callingNumber, phone.phoneNumber);
-                    }
-                }
+                    PhoneSecurity.ForceCallToEnd(phone);
             }
         }
 

@@ -10,6 +10,7 @@ using Il2CppPlayer;
 using Il2CppPlayer.Scripts;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
+using Il2CppProps.WorkStation.Phone;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -220,17 +221,10 @@ namespace DDSS_LobbyGuard.Patches
                 if ((workStation != null)
                     && !workStation.WasCollected)
                 {
-                    if (workStation.phoneController.NetworkisCallActive)
-                    {
-                        PhoneSecurity.OnCallEnd(PhoneManager.instance, workStation.phoneController.phoneNumber, workStation.phoneController.receivingCall);
-                        PhoneSecurity.OnCallEnd(PhoneManager.instance, workStation.phoneController.receivingCall, workStation.phoneController.phoneNumber);
-                    }
-
-                    if (workStation.phoneController.NetworkisDialing)
-                    {
-                        PhoneSecurity.OnCallCancel(PhoneManager.instance, workStation.phoneController.phoneNumber, workStation.phoneController.callingNumber);
-                        PhoneSecurity.OnCallCancel(PhoneManager.instance, workStation.phoneController.callingNumber, workStation.phoneController.phoneNumber);
-                    }
+                    PhoneController phone = workStation.phoneController;
+                    if ((phone != null)
+                        && !phone.WasCollected)
+                        PhoneSecurity.ForceCallToEnd(phone);
                 }
             }
 
