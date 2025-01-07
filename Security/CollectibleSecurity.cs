@@ -167,7 +167,7 @@ namespace DDSS_LobbyGuard.Security
             while (!flag)
             {
                 flag = true;
-                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
+                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
                     if (networkIdentity == null || networkIdentity.GetComponent<LobbyPlayer>().NetworkplayerController == null)
                     {
                         flag = false;

@@ -203,7 +203,7 @@ namespace DDSS_LobbyGuard.Utils
                 || connection.WasCollected)
                 return null;
 
-            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
+            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
             {
                 if ((networkIdentity == null)
                     || networkIdentity.WasCollected)
@@ -218,6 +218,32 @@ namespace DDSS_LobbyGuard.Utils
                     return player;
             }
             return null;
+        }
+
+
+        internal static List<NetworkIdentity> GetAllPlayers(this LobbyManager manager)
+        {
+            if ((manager == null)
+                || manager.WasCollected)
+                return null;
+
+            List<NetworkIdentity> players = new();
+
+            LobbyPlayer localPlayer = manager.GetLocalPlayer();
+            if ((localPlayer != null)
+                && !localPlayer.WasCollected)
+                players.Add(localPlayer.netIdentity);
+
+            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
+            {
+                if ((networkIdentity == null)
+                    || networkIdentity.WasCollected)
+                    continue;
+
+                players.Add(networkIdentity);
+            }
+
+            return players;
         }
 
         internal static void Shuffle<T>(this List<T> list)

@@ -43,7 +43,7 @@ namespace DDSS_LobbyGuard.Patches
             if (InteractionSecurity.GetWinner(__instance) == PlayerRole.None)
                 return false;
 
-            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
+            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
             {
                 LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
                 if (!player.isFired

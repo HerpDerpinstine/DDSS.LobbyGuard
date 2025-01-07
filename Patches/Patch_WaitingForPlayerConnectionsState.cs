@@ -34,7 +34,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             bool flag = true;
-            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.connectedLobbyPlayers)
+            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
                 if (networkIdentity == null || networkIdentity.GetComponent<LobbyPlayer>().NetworkplayerController == null)
                 {
                     flag = false;
@@ -80,10 +80,11 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Get List of Players
-            int playerCount = LobbyManager.instance.connectedLobbyPlayers.Count;
+            List<NetworkIdentity> players = LobbyManager.instance.GetAllPlayers();
+            int playerCount = players.Count;
             List<NetworkIdentity> playerList = new();
             NetworkIdentity playerManager = null;
-            foreach (NetworkIdentity player in LobbyManager.instance.connectedLobbyPlayers)
+            foreach (NetworkIdentity player in players)
             {
                 // Validate Lobby Player
                 LobbyPlayer lobbyPlayer = player.GetComponent<LobbyPlayer>();

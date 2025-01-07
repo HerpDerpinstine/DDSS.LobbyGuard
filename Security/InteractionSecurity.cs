@@ -165,7 +165,7 @@ namespace DDSS_LobbyGuard.Security
                 return manager.GetAmountOfUnfiredSlackers();
 
             int num = 0;
-            foreach (NetworkIdentity networkIdentity in manager.connectedLobbyPlayers)
+            foreach (NetworkIdentity networkIdentity in manager.GetAllPlayers())
             {
                 LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
                 if (IsSlacker(player)
@@ -181,7 +181,7 @@ namespace DDSS_LobbyGuard.Security
                 return manager.GetAmountOfUnfiredSpecialists();
 
             int num = 0;
-            foreach (NetworkIdentity networkIdentity in manager.connectedLobbyPlayers)
+            foreach (NetworkIdentity networkIdentity in manager.GetAllPlayers())
             {
                 LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
                 if ((player.NetworkplayerRole == PlayerRole.Specialist)
