@@ -5,7 +5,10 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
+using Il2CppObjects.Scripts;
 using Il2CppPlayer.Lobby;
+using Il2CppProps.WorkStation.Phone;
+using System.Collections;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -64,6 +67,53 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Original
             return true;
+        }
+        
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.ServerSetWorkStation))]
+        private static void ServerSetWorkStation_Prefix(LobbyPlayer __instance, WorkStationController __0)
+        {
+            if ((__0 != null)
+                && !__0.WasCollected)
+            {
+                PhoneController phone = __0.phoneController;
+                if ((phone != null)
+                    && !phone.WasCollected)
+                {
+                    if (phone.NetworkisCallActive)
+                    {
+                        PhoneSecurity.OnCallEnd(PhoneManager.instance, phone.phoneNumber, phone.receivingCall);
+                        PhoneSecurity.OnCallEnd(PhoneManager.instance, phone.receivingCall, phone.phoneNumber);
+                    }
+
+                    if (phone.NetworkisDialing)
+                    {
+                        PhoneSecurity.OnCallCancel(PhoneManager.instance, phone.phoneNumber, phone.callingNumber);
+                        PhoneSecurity.OnCallCancel(PhoneManager.instance, phone.callingNumber, phone.phoneNumber);
+                    }
+                }
+            }
+
+            if ((__instance.NetworkworkStationController != null)
+                && !__instance.NetworkworkStationController.WasCollected)
+            {
+                PhoneController phone = __instance.NetworkworkStationController.phoneController;
+                if ((phone != null)
+                    && !phone.WasCollected)
+                {
+                    if (phone.NetworkisCallActive)
+                    {
+                        PhoneSecurity.OnCallEnd(PhoneManager.instance, phone.phoneNumber, phone.receivingCall);
+                        PhoneSecurity.OnCallEnd(PhoneManager.instance, phone.receivingCall, phone.phoneNumber);
+                    }
+
+                    if (phone.NetworkisDialing)
+                    {
+                        PhoneSecurity.OnCallCancel(PhoneManager.instance, phone.phoneNumber, phone.callingNumber);
+                        PhoneSecurity.OnCallCancel(PhoneManager.instance, phone.callingNumber, phone.phoneNumber);
+                    }
+                }
+            }
         }
 
         [HarmonyPrefix]

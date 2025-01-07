@@ -3,7 +3,6 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
-using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 
@@ -21,12 +20,11 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Phone
             PhoneManager phone = __0.TryCast<PhoneManager>();
-            if ((phone == null)
-                || phone.WasCollected)
-                return false;
 
-            // Get Sender
-            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            NetworkIdentity sender = __2.identity;
+
+            // Get Player
+            PlayerController controller = sender.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
                 return false;
@@ -37,37 +35,12 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
-            NetworkIdentity chairIdentity = controller.NetworkcurrentChair;
-            if ((chairIdentity == null)
-                || chairIdentity.WasCollected)
-                return false;
-
-            // Validate Chair
-            WorkStationController workStation = chairIdentity.GetComponent<WorkStationController>();
-            if ((workStation == null)
-                || workStation.WasCollected
-                || (workStation.NetworkownerLobbyPlayer == null)
-                || workStation.NetworkownerLobbyPlayer.WasCollected)
-                return false;
-
-            lobbyPlayer = workStation.NetworkownerLobbyPlayer.GetComponent<LobbyPlayer>();
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost())
-                return false;
-
             // Enforce Receiver Number
             string receiver = phone.GetPhoneNumber(lobbyPlayer);
-            if (string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver))
-                return false;
 
             // Get New Caller
             __1.SafeReadString();
             string caller = __1.SafeReadString();
-            if (string.IsNullOrEmpty(caller)
-                || string.IsNullOrWhiteSpace(caller))
-                return false;
 
             // Run Security
             PhoneSecurity.OnCallAnswer(phone, caller, receiver);
@@ -85,12 +58,11 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Phone
             PhoneManager phone = __0.TryCast<PhoneManager>();
-            if ((phone == null)
-                || phone.WasCollected)
-                return false;
 
-            // Get Sender
-            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            NetworkIdentity sender = __2.identity;
+
+            // Get Player
+            PlayerController controller = sender.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
                 return false;
@@ -101,40 +73,14 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
-            NetworkIdentity chairIdentity = controller.NetworkcurrentChair;
-            if ((chairIdentity == null)
-                || chairIdentity.WasCollected)
-                return false;
-
-            // Validate Chair
-            WorkStationController workStation = chairIdentity.GetComponent<WorkStationController>();
-            if ((workStation == null)
-                || workStation.WasCollected
-                || (workStation.NetworkownerLobbyPlayer == null)
-                || workStation.NetworkownerLobbyPlayer.WasCollected)
-                return false;
-
-            lobbyPlayer = workStation.NetworkownerLobbyPlayer.GetComponent<LobbyPlayer>();
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost())
-                return false;
-
             // Enforce Caller Number
             string caller = phone.GetPhoneNumber(lobbyPlayer);
-            if (string.IsNullOrEmpty(caller)
-                || string.IsNullOrWhiteSpace(caller))
-                return false;
 
             // Get New Receiver
             __1.SafeReadString();
             string receiver = __1.SafeReadString();
-            if (string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver))
-                return false;
 
             // Run Security
-            PhoneSecurity.OnCallCancel(phone, receiver, caller);
             PhoneSecurity.OnCallCancel(phone, caller, receiver);
 
             // Prevent Original
@@ -150,12 +96,11 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Phone
             PhoneManager phone = __0.TryCast<PhoneManager>();
-            if ((phone == null)
-                || phone.WasCollected)
-                return false;
 
-            // Get Sender
-            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            NetworkIdentity sender = __2.identity;
+
+            // Get Player
+            PlayerController controller = sender.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
                 return false;
@@ -166,41 +111,15 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
-            NetworkIdentity chairIdentity = controller.NetworkcurrentChair;
-            if ((chairIdentity == null)
-                || chairIdentity.WasCollected)
-                return false;
-
-            // Validate Chair
-            WorkStationController workStation = chairIdentity.GetComponent<WorkStationController>();
-            if ((workStation == null)
-                || workStation.WasCollected
-                || (workStation.NetworkownerLobbyPlayer == null)
-                || workStation.NetworkownerLobbyPlayer.WasCollected)
-                return false;
-
-            lobbyPlayer = workStation.NetworkownerLobbyPlayer.GetComponent<LobbyPlayer>();
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost())
-                return false;
-
             // Enforce Receiver Number
             string receiver = phone.GetPhoneNumber(lobbyPlayer);
-            if (string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver))
-                return false;
 
             // Get New Caller
             __1.SafeReadString();
             string caller = __1.SafeReadString();
-            if (string.IsNullOrEmpty(caller)
-                || string.IsNullOrWhiteSpace(caller))
-                return false;
 
             // Run Security
             PhoneSecurity.OnCallEnd(phone, caller, receiver);
-            PhoneSecurity.OnCallEnd(phone, receiver, caller);
 
             // Prevent Original
             return false;
@@ -215,12 +134,11 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Phone
             PhoneManager phone = __0.TryCast<PhoneManager>();
-            if ((phone == null)
-                || phone.WasCollected)
-                return false;
 
-            // Get Sender
-            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            NetworkIdentity sender = __2.identity;
+
+            // Get Player
+            PlayerController controller = sender.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
                 return false;
@@ -231,41 +149,15 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
-            NetworkIdentity chairIdentity = controller.NetworkcurrentChair;
-            if ((chairIdentity == null)
-                || chairIdentity.WasCollected)
-                return false;
-
-            // Validate Chair
-            WorkStationController workStation = chairIdentity.GetComponent<WorkStationController>();
-            if ((workStation == null)
-                || workStation.WasCollected
-                || (workStation.NetworkownerLobbyPlayer == null)
-                || workStation.NetworkownerLobbyPlayer.WasCollected)
-                return false;
-
-            lobbyPlayer = workStation.NetworkownerLobbyPlayer.GetComponent<LobbyPlayer>();
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost())
-                return false;
-
             // Enforce Receiver Number
             string receiver = phone.GetPhoneNumber(lobbyPlayer);
-            if (string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver))
-                return false;
 
             // Get New Caller
             __1.SafeReadString();
             string caller = __1.SafeReadString();
-            if (string.IsNullOrEmpty(caller)
-                || string.IsNullOrWhiteSpace(caller))
-                return false;
 
             // Run Security
             PhoneSecurity.OnCallDecline(phone, caller, receiver);
-            PhoneSecurity.OnCallDecline(phone, receiver, caller);
 
             // Prevent Original
             return false;

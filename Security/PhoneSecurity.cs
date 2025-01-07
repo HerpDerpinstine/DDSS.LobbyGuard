@@ -14,27 +14,13 @@ namespace DDSS_LobbyGuard.Security
             _callReceiverList.Clear();
         }
 
-        private static bool Validate(PhoneManager phone,
-            string caller,
-            string receiver)
-        {
-            if ((phone == null)
-                || phone.WasCollected
-                || string.IsNullOrEmpty(caller)
-                || string.IsNullOrWhiteSpace(caller)
-                || string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver)
-                || (caller == receiver))
-                return false;
-            return true;
-        }
-
         internal static void OnCallAttempt(PhoneManager phone,
             string caller,
             string receiver)
         {
-            if (!Validate(phone, caller, receiver))
-                return;
+            // Check if Calling Self
+            //if (caller == receiver)
+            //    return;
 
             // Check if already has Ongoing Call
             if (_callSenderList.ContainsKey(caller))
@@ -52,7 +38,7 @@ namespace DDSS_LobbyGuard.Security
             // Cache New Attempt
             _callSenderList[caller] = receiver;
 
-            // Attempt Call
+            // Allow Call Attempt
             phone.ServerCall(caller, receiver);
         }
 
@@ -60,8 +46,9 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
-            if (!Validate(phone, caller, receiver))
-                return;
+            // Check if Calling Self
+            //if (caller == receiver)
+            //    return;
 
             // Check if already has Ongoing Call
             if (_callReceiverList.ContainsKey(receiver))
@@ -87,8 +74,9 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
-            if (!Validate(phone, caller, receiver))
-                return;
+            // Check if Calling Self
+            //if (caller == receiver)
+            //    return;
 
             // Check if there is an Ongoing Call Attempt
             if (!_callSenderList.ContainsKey(caller))
@@ -118,8 +106,9 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
-            if (!Validate(phone, caller, receiver))
-                return;
+            // Check if Calling Self
+            //if (caller == receiver)
+            //    return;
 
             // Check if there is an Ongoing Call Attempt
             if (!_callSenderList.ContainsKey(caller))
@@ -150,8 +139,9 @@ namespace DDSS_LobbyGuard.Security
             string caller,
             string receiver)
         {
-            if (!Validate(phone, caller, receiver))
-                return;
+            // Check if Calling Self
+            //if (caller == receiver)
+            //    return;
 
             // Check if already has Ongoing Call
             if (!_callSenderList.ContainsKey(caller))
