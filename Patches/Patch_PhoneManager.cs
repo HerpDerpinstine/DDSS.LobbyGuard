@@ -178,7 +178,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Enforce Receiver Number
-            string receiver = phone.NetworkcallingNumber;
+            string receiver = phone.NetworkreceivingCall;
             if (string.IsNullOrEmpty(receiver)
                 || string.IsNullOrWhiteSpace(receiver))
                 return false;
@@ -191,6 +191,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Security
             PhoneSecurity.OnCallEnd(phoneManager, caller, receiver);
+            PhoneSecurity.OnCallEnd(phoneManager, receiver, caller);
 
             // Prevent Original
             return false;
