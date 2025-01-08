@@ -3,6 +3,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
 using Il2CppProps.Scripts;
+using System.Collections.Generic;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -13,8 +14,30 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(CollectibleHolder), nameof(CollectibleHolder.ServerDestroyAllCollectibles))]
         private static bool ServerDestroyAllCollectibles_Prefix(CollectibleHolder __instance)
         {
+            if ((__instance == null)
+                || __instance.WasCollected
+                || (__instance.collectibles == null)
+                || __instance.collectibles.WasCollected
+                || (__instance.collectibles.Count <= 0))
+                return false;
+
+            List<Collectible> list = new();
             foreach (var item in __instance.collectibles)
-                item.Key.ServerDestroyCollectible();
+            {
+                if ((item == null)
+                    || item.WasCollected)
+                    continue;
+
+                Collectible collectible = item.Key;
+                if ((collectible == null)
+                    || collectible.WasCollected)
+                    continue;
+
+                list.Add(collectible);
+            }
+            foreach (var item in list)
+                item.ServerDestroyCollectible();
+
             return false;
         } 
         
