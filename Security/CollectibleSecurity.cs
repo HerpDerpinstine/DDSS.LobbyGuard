@@ -125,9 +125,9 @@ namespace DDSS_LobbyGuard.Security
                     string name = $"{catName} {index}";
                     string localizedName = $"{LocalizationManager.instance.GetLocalizedValue(catName)} {index}";
 
-                    binder.Networklabel = localizedName;
-                    binder.NetworkinteractableName = name;
-                    binder.Networkcolor = binder.colors[UnityEngine.Random.Range(0, binder.colors.Count)];
+                    binder.Networklabel = binder.label = localizedName;
+                    binder.NetworkinteractableName = binder.interactableName = name;
+                    binder.Networkcolor = binder.color = binder.colors[UnityEngine.Random.Range(0, binder.colors.Count)];
 
                     int randomIndex = UnityEngine.Random.Range(0, Task.documents.Count);
                     string item = Task.documents[randomIndex].Item1;

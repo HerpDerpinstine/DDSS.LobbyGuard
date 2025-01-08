@@ -10,6 +10,7 @@ using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
@@ -57,6 +58,46 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Original
             return true;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.FindNewManager))]
+        private static bool FindNewManager_Prefix(GameManager __instance, ref LobbyPlayer __result)
+        {
+            // Get All Players
+            List<NetworkIdentity> list = LobbyManager.instance.GetAllPlayers();
+
+            // Get List of Specialists
+            List<LobbyPlayer> validPlayers = new();
+            foreach (NetworkIdentity networkIdentity in list)
+            {
+                if ((networkIdentity == null)
+                    || networkIdentity.WasCollected)
+                    continue;
+
+                LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
+                if ((player == null)
+                    || player.WasCollected
+                    || player.IsGhost()
+                    || player.IsJanitor()
+                    || (player.NetworkplayerRole != PlayerRole.Specialist)
+                    || InteractionSecurity.IsSlacker(player))
+                    continue;
+
+                validPlayers.Add(player);
+            }
+
+            // Validate Player Count
+            int playerCount = validPlayers.Count;
+            if (playerCount <= 0)
+                return false;
+
+            // Shuffle List
+            validPlayers.Shuffle();
+            __result = validPlayers[0];
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]
