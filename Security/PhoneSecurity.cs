@@ -1,4 +1,5 @@
 ﻿using Il2Cpp;
+using Il2CppMirror;
 using Il2CppProps.WorkStation.Phone;
 using System.Collections.Generic;
 
@@ -26,9 +27,10 @@ namespace DDSS_LobbyGuard.Security
                 OnCallCancel(PhoneManager.instance, phone.phoneNumber, phone.NetworkcallingNumber);
         }
 
-        internal static void OnCallAttempt(PhoneManager phone,
+        internal static void OnCallAttempt(PhoneController phone,
             string caller,
-            string receiver)
+            string receiver,
+            NetworkIdentity sender)
         {
             if (string.IsNullOrEmpty(caller)
                 || string.IsNullOrWhiteSpace(caller)
@@ -48,16 +50,16 @@ namespace DDSS_LobbyGuard.Security
 
                 // Check if Call has gone through or not
                 if (_callReceiverList.ContainsKey(oldReceiver))
-                    phone.UserCode_CmdEndCall__String__String(oldReceiver, caller);
+                    PhoneManager.instance.UserCode_CmdEndCall__String__String(oldReceiver, caller);
                 else
-                    phone.UserCode_CmdCancelCall__String__String(caller, oldReceiver);
+                    PhoneManager.instance.UserCode_CmdCancelCall__String__String(caller, oldReceiver);
             }
 
             // Cache New Attempt
             _callSenderList[caller] = receiver;
 
             // Allow Call Attempt
-            phone.ServerCall(caller, receiver);
+            phone.UserCode_CmdCall__NetworkIdentity__String__NetworkConnectionToClient(sender, receiver, sender.connectionToClient);
         }
 
         internal static void OnCallAnswer(PhoneManager phone,

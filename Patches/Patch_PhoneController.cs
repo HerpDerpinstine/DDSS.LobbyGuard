@@ -65,7 +65,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Security
-            PhoneSecurity.OnCallAttempt(PhoneManager.instance, caller, receiver);
+            PhoneSecurity.OnCallAttempt(phone, caller, receiver, sender);
 
             // Prevent Original
             return false;
