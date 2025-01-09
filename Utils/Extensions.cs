@@ -188,13 +188,49 @@ namespace DDSS_LobbyGuard.Utils
             networkWriterPooled.WriteInt((int)playerRole);
             networkWriterPooled.WriteBool(giveNewTasks);
 
-            var rpcInfo = RPCHelper.Get(RPCHelper.eType.LobbyPlayer_RpcSetPlayerRole);
-            if (receipient == null)
-                player.SendRPCInternal(rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0, true);
-            else
-                player.SendTargetRPCInternal(receipient, rpcInfo.Item1, rpcInfo.Item2, networkWriterPooled, 0);
+            networkWriterPooled.SendCustomRPC(player,
+                RPCHelper.eType.LobbyPlayer_RpcSetPlayerRole,
+                receipient);
 
             NetworkWriterPool.Return(networkWriterPooled);
+        }
+
+        internal static void CustomRpcClick(this ComputerController computer, Vector3 localCursorPos, int button, NetworkConnectionToClient receipient = null)
+        {
+            NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
+
+            networkWriterPooled.WriteVector3(localCursorPos);
+            networkWriterPooled.WriteInt(button);
+
+            networkWriterPooled.SendCustomRPC(computer,
+                RPCHelper.eType.ComputerController_RpcClick,
+                receipient);
+            NetworkWriterPool.Return(networkWriterPooled);
+        }
+
+        internal static void CustomRpcCursorUp(this ComputerController computer, Vector3 localCursorPos, NetworkConnectionToClient receipient = null)
+        {
+            NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
+
+            networkWriterPooled.WriteVector3(localCursorPos);
+
+            networkWriterPooled.SendCustomRPC(computer,
+                RPCHelper.eType.ComputerController_RpcCursorUp,
+                receipient);
+            NetworkWriterPool.Return(networkWriterPooled);
+        }
+
+        internal static void SendCustomRPC<T>(this NetworkWriterPooled writer,
+            T obj,
+            RPCHelper.eType type,
+            NetworkConnectionToClient receipient = null)
+            where T : NetworkBehaviour
+        {
+            var rpcInfo = RPCHelper.Get(type);
+            if (receipient == null)
+                obj.SendRPCInternal(rpcInfo.Item1, rpcInfo.Item2, writer, 0, true);
+            else
+                obj.SendTargetRPCInternal(receipient, rpcInfo.Item1, rpcInfo.Item2, writer, 0);
         }
 
         internal static LobbyPlayer GetLobbyPlayerFromConnection(this NetworkConnectionToClient connection)

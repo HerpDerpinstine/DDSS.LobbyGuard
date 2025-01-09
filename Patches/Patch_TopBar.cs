@@ -6,6 +6,7 @@ using UnityEngine;
 using Il2CppWindow;
 using DDSS_LobbyGuard.Config;
 using DDSS_LobbyGuard.Utils;
+using Il2CppObjects.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -117,9 +118,23 @@ namespace DDSS_LobbyGuard.Patches
                 }
                 else
                 {
-                    // Apply Changes Remotely
-                    computer.UserCode_CmdClick__Vector3__Int32(mouseStartPos, 0);
-                    computer.UserCode_CmdCursorUp__Vector3(newMousePos);
+                    // Get WorkStationController
+                    WorkStationController station = computer._workStationController;
+
+                    // Get Using Player
+                    NetworkIdentity usingPlayer = station.NetworkusingPlayer;
+
+                    // Regrab the Window
+                    //computer.CustomRpcClick(mousePos, 0, usingPlayer.connectionToClient);
+                    foreach (var player in LobbyManager.instance.GetAllPlayers())
+                    {
+                        if (player == usingPlayer)
+                            continue;
+                        computer.CustomRpcClick(mouseStartPos, 0, player.connectionToClient);
+                    }
+                    
+                    // Move and Drop the Window
+                    computer.RpcCursorUp(newMousePos);
                 }
             }
 
