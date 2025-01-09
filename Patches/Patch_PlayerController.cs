@@ -18,32 +18,15 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdMovePlayer__Vector3))]
-        private static bool InvokeUserCode_CmdMovePlayer__Vector3_Prefix(NetworkReader __1, NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdMovePlayer__Vector3_Prefix()
         {
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-            if ((sender == null)
-                || sender.WasCollected)
-                return false;
-
-            // Validate Sender
-            PlayerController controller = __2.identity.GetComponent<PlayerController>();
-            if ((controller == null)
-                || controller.WasCollected)
-                return false;
-
-            Vector3 pos = __1.SafeReadVector3();
-
-            // Run Game Command
-            controller.UserCode_CmdMovePlayer__Vector3(pos);
-
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdSpank__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdSpank__NetworkIdentity_Prefix(NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdSpank__NetworkIdentity_Prefix(NetworkBehaviour __0, NetworkConnectionToClient __2)
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
@@ -61,6 +44,12 @@ namespace DDSS_LobbyGuard.Patches
             if ((lobbyPlayer == null)
                 || lobbyPlayer.WasCollected
                 || lobbyPlayer.IsGhost())
+                return false;
+
+            PlayerController target = __0.TryCast<PlayerController>();
+            if ((target == null)
+                || target.WasCollected
+                || target != controller)
                 return false;
 
             // Run Game Command
