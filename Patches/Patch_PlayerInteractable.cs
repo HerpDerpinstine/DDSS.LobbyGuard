@@ -63,7 +63,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_CCTV))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
                 return false;
 
             // Get Last Assistant
@@ -145,7 +145,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_CCTV))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
                 return false;
 
             targetPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
@@ -189,7 +189,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position)
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position)
                 || !interact.HasPlayerRequestedHandShake(senderInteract))
                 return false;
 
@@ -233,7 +233,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position)
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position)
                 || interact.HasPlayerRequestedHandShake(senderInteract))
                 return false;
 
@@ -272,6 +272,7 @@ namespace DDSS_LobbyGuard.Patches
             if ((controller == null)
                 || controller.WasCollected)
                 return false;
+
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
             if ((lobbyPlayer == null)
                 || lobbyPlayer.WasCollected

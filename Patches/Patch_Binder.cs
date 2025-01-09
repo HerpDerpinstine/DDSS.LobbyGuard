@@ -62,10 +62,6 @@ namespace DDSS_LobbyGuard.Patches
                 || doc.WasCollected)
                 return false;
 
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(binder.transform.position, doc.transform.position))
-                return false;
-
             // Run Game Command
             binder.UserCode_CmdAddDocument__Document__NetworkIdentity__NetworkConnectionToClient(doc, sender, __2);
 

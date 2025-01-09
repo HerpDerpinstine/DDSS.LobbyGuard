@@ -87,7 +87,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(collectible.transform.position, holder.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
                 return false;
 
             // Run Game Command

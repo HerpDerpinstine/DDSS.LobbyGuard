@@ -111,10 +111,6 @@ namespace DDSS_LobbyGuard.Patches
             if (cd == null)
                 return false;
 
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(cd.transform.position, stereo.transform.position))
-                return false;
-
             // Validate Song Index
             int songId = cd.songIndex;
             if ((songId < 0)

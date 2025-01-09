@@ -29,7 +29,13 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Collectible
             Collectible collectible = box.objectPrefab.GetComponent<Collectible>();
-            if (collectible == null)
+            if ((collectible == null)
+                || collectible.WasCollected
+                || !InteractionSecurity.CanUseUsable(sender, collectible))
+                return false;
+
+            // Validate Count
+            if (!InteractionSecurity.CanSpawnItem(collectible.NetworkinteractableName, box.maxItemCount))
                 return false;
 
             // Run Game Command

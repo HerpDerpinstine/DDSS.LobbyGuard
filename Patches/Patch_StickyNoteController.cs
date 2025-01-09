@@ -22,15 +22,12 @@ namespace DDSS_LobbyGuard
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
+            if (sender.IsGhost())
+                return false;
 
             // Get StickyNoteController
             StickyNoteController __instance = __0.TryCast<StickyNoteController>();
             if (__instance == null)
-                return false;
-
-            // Validate Distance
-            if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, __instance.transform.position))
                 return false;
 
             // Validate Placement
