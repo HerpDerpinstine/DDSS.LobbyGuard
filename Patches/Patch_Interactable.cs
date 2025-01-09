@@ -24,24 +24,19 @@ namespace DDSS_LobbyGuard.Patches
             if (sender.GetPlayerRole() != PlayerRole.Manager)
                 return false;
 
-            // Get Interactable
-            Interactable interact = __0.TryCast<Interactable>();
+            // Get WhiteBoardController
+            WhiteBoardController interact = __0.TryCast<WhiteBoardController>();
             if ((interact == null)
                 || interact.WasCollected
                 || (interact.interactionCoolDown > 0f))
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position, InteractionSecurity.MAX_DISTANCE_CCTV))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
                 return false;
 
-            // Validate Cooldown
-            float coolDown = __1.SafeReadFloat();
-            if (__0.TryCast<WhiteBoardController>())
-                coolDown = GameManager.instance.NetworkmeetingCooldown;
-            else if ((coolDown <= 0f)
-                || (coolDown > InteractionSecurity.MAX_INTERACTION_COOLDOWN))
-                coolDown = InteractionSecurity.MAX_INTERACTION_COOLDOWN;
+            // Enforce Cooldown
+            float coolDown = GameManager.instance.NetworkmeetingCooldown;
 
             // Run Game Command
             interact.UserCode_CmdSetInteractionCoolDown__Single(coolDown);
