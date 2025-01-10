@@ -20,7 +20,8 @@ namespace DDSS_LobbyGuard.Patches
             // Get WhiteBoardController
             WhiteBoardController whiteBoard = __0.TryCast<WhiteBoardController>();
             if ((whiteBoard == null)
-                || whiteBoard.WasCollected)
+                || whiteBoard.WasCollected
+                || !whiteBoard.IsMeetingActive())
                 return false;
 
             // Get Sender
@@ -52,7 +53,8 @@ namespace DDSS_LobbyGuard.Patches
             // Get WhiteBoardController
             WhiteBoardController whiteBoard = __0.TryCast<WhiteBoardController>();
             if ((whiteBoard == null)
-                || whiteBoard.WasCollected)
+                || whiteBoard.WasCollected
+                || whiteBoard.IsMeetingActive())
                 return false;
 
             // Get Sender
@@ -79,7 +81,8 @@ namespace DDSS_LobbyGuard.Patches
             // Get WhiteBoardController
             WhiteBoardController whiteBoard = __0.TryCast<WhiteBoardController>();
             if ((whiteBoard == null)
-                || whiteBoard.WasCollected)
+                || whiteBoard.WasCollected
+                || !whiteBoard.IsMeetingActive())
                 return false;
 
             // Get Sender

@@ -121,7 +121,7 @@ namespace DDSS_LobbyGuard.Patches
                 if (flag)
                 {
                     // Fire Old Manager
-                    __instance.ServerFirePlayer(oldManager.netIdentity, true, false);
+                    __instance.ServerFirePlayer(oldManager.netIdentity, true, true);
                     oldManager.NetworkisFired = true;
                 }
                 else
@@ -131,10 +131,9 @@ namespace DDSS_LobbyGuard.Patches
                         oldManager.ServerSetPlayerRole(PlayerRole.Slacker);
                     else
                         oldManager.ServerSetPlayerRole(newManager.playerRole);
-                }
 
-                // Assign Old Manager Workstation
-                oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, oldManager.playerRole, false);
+                    oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, newManager.playerRole, false);
+                }
 
                 // Reset Old Manager Tasks
                 TaskController managerComponent = oldManager.GetComponent<TaskController>();
