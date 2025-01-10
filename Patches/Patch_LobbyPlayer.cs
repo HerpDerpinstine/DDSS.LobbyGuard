@@ -205,7 +205,8 @@ namespace DDSS_LobbyGuard.Patches
             // Validate Sender
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
             if ((sender == null)
-                || sender.WasCollected)
+                || sender.WasCollected
+                || LobbyManager.instance.gameStarted)
                 return false;
 
             // Run Game Command
@@ -222,14 +223,14 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Validate Server
             if ((__2.identity == null)
-                || __2.identity.WasCollected)
+                || __2.identity.WasCollected
+                || !LobbyManager.instance.gameStarted)
                 return false;
 
             // Validate Sender
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
             if ((sender == null)
                 || sender.WasCollected
-                || sender.isFired
                 || ((sender.NetworkplayerController != null)
                     && !sender.NetworkplayerController.WasCollected))
                 return false;
@@ -248,14 +249,14 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Validate Server
             if ((__2.identity == null)
-                || __2.identity.WasCollected)
+                || __2.identity.WasCollected
+                || !LobbyManager.instance.gameStarted)
                 return false;
 
             // Validate Sender
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
             if ((sender == null)
                 || sender.WasCollected
-                || !sender.isFired
                 || (sender.NetworkplayerRole != PlayerRole.None))
                 return false;
 
