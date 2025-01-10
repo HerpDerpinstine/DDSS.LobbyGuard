@@ -117,6 +117,7 @@ namespace DDSS_LobbyGuard.Patches
                 trans.enabled = false;
 
             __instance.transform.position = pos;
+            __instance.UserCode_CmdMovePlayer__Vector3(pos);
             __instance.SetDirty();
 
             if (trans != null)
