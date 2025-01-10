@@ -224,24 +224,19 @@ namespace DDSS_LobbyGuard.Patches
                 || usableType.WasCollected)
                 return false;
 
-            bool isChair = usableType == Il2CppType.Of<Chair>();
-            bool isWorkstation = usableType == Il2CppType.Of<WorkStationController>();
-            if (isWorkstation)
+            // Validate Chair
+            WorkStationController workStation = usable.TryCast<WorkStationController>();
+            if ((workStation != null)
+                && !workStation.WasCollected)
             {
-                // Validate Chair
-                WorkStationController workStation = usable.TryCast<WorkStationController>();
-                if ((workStation != null)
-                    && !workStation.WasCollected)
-                {
-                    PhoneController phone = workStation.phoneController;
-                    if ((phone != null)
-                        && !phone.WasCollected)
-                        PhoneSecurity.ForceCallToEnd(phone);
-                }
+                PhoneController phone = workStation.phoneController;
+                if ((phone != null)
+                    && !phone.WasCollected)
+                    PhoneSecurity.ForceCallToEnd(phone);
             }
 
             // Validate Drop
-            if (!InteractionSecurity.CanStopUseUsable(sender, isChair || isWorkstation))
+            if (!InteractionSecurity.CanStopUseUsable(sender, usable.TryCast<Chair>()))
                 return false;
 
             // Run Game Command
