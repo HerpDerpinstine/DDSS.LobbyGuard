@@ -171,8 +171,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdCreateFile__String__String))]
-        private static bool InvokeUserCode_CmdCreateFile__String__String_Prefix(
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdCreateFile__String__String__String))]
+        private static bool InvokeUserCode_CmdCreateFile__String__String__String_Prefix(
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
@@ -229,15 +229,21 @@ namespace DDSS_LobbyGuard.Patches
                 || textAsset.WasCollected)
                 return false;
 
-            controller.UserCode_CmdCreateFile__String__String(fileName, path);
+            __1.SafeReadString();
+            string ending = __1.SafeReadString();
+            if (string.IsNullOrEmpty(ending)
+                || string.IsNullOrWhiteSpace(ending))
+                return false;
+
+            controller.UserCode_CmdCreateFile__String__String__String(fileName, path, ending);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdRemoveFile__String__String))]
-        private static bool InvokeUserCode_CmdRemoveFile__String__String_Prefix(
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdRemoveFile__String__String__String))]
+        private static bool InvokeUserCode_CmdRemoveFile__String__String__String_Prefix(
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
@@ -294,7 +300,13 @@ namespace DDSS_LobbyGuard.Patches
                 || textAsset.WasCollected)
                 return false;
 
-            controller.UserCode_CmdRemoveFile__String__String(fileName, path);
+            __1.SafeReadString();
+            string ending = __1.SafeReadString();
+            if (string.IsNullOrEmpty(ending)
+                || string.IsNullOrWhiteSpace(ending))
+                return false;
+
+            controller.UserCode_CmdRemoveFile__String__String__String(fileName, path, ending);
 
             // Prevent Original
             return false;

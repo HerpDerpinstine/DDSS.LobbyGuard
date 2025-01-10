@@ -155,7 +155,7 @@ namespace DDSS_LobbyGuard.Patches
                 // Move Player to Spawn
                 NetworkStartPosition randomPos = spawnList[i % spawnCount];
                 lobbyPlayer.NetworkplayerController.GetComponent<PlayerController>()
-                    .UserCode_CmdMovePlayer__Vector3(randomPos.transform.position);
+                    .ServerMovePlayer(randomPos.transform.position);
             }
 
             // Apply Win Condition

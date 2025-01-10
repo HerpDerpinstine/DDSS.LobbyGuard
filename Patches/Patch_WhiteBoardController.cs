@@ -2,6 +2,8 @@
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppGameManagement;
+using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 
@@ -17,11 +19,15 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
+            if ((GameManager.instance == null)
+                || GameManager.instance.WasCollected
+                || (GameManager.instance.NetworktargetGameState != (int)GameStates.Meeting))
+                return false;
+
             // Get WhiteBoardController
             WhiteBoardController whiteBoard = __0.TryCast<WhiteBoardController>();
             if ((whiteBoard == null)
-                || whiteBoard.WasCollected
-                || !whiteBoard.IsMeetingActive())
+                || whiteBoard.WasCollected)
                 return false;
 
             // Get Sender
@@ -50,11 +56,16 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            if ((GameManager.instance == null)
+                || GameManager.instance.WasCollected
+                || ((GameManager.instance.NetworktargetGameState != (int)GameStates.InGame)
+                    && (GameManager.instance.NetworktargetGameState != (int)GameStates.Tutorial)))
+                return false;
+
             // Get WhiteBoardController
             WhiteBoardController whiteBoard = __0.TryCast<WhiteBoardController>();
             if ((whiteBoard == null)
-                || whiteBoard.WasCollected
-                || whiteBoard.IsMeetingActive())
+                || whiteBoard.WasCollected)
                 return false;
 
             // Get Sender
@@ -78,11 +89,15 @@ namespace DDSS_LobbyGuard.Patches
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
+            if ((GameManager.instance == null)
+                || GameManager.instance.WasCollected
+                || (GameManager.instance.NetworktargetGameState != (int)GameStates.Meeting))
+                return false;
+
             // Get WhiteBoardController
             WhiteBoardController whiteBoard = __0.TryCast<WhiteBoardController>();
             if ((whiteBoard == null)
-                || whiteBoard.WasCollected
-                || !whiteBoard.IsMeetingActive())
+                || whiteBoard.WasCollected)
                 return false;
 
             // Get Sender

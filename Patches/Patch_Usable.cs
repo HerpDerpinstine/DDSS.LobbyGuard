@@ -32,8 +32,13 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
             // Validate Distance
-            if (sender.IsGhost()
+            if (controller.IsGhost()
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
@@ -115,8 +120,13 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
             // Validate Distance
-            if (sender.IsGhost()
+            if (controller.IsGhost()
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
@@ -214,7 +224,9 @@ namespace DDSS_LobbyGuard.Patches
                 || usableType.WasCollected)
                 return false;
 
-            if (usableType == Il2CppType.Of<WorkStationController>())
+            bool isChair = usableType == Il2CppType.Of<Chair>();
+            bool isWorkstation = usableType == Il2CppType.Of<WorkStationController>();
+            if (isWorkstation)
             {
                 // Validate Chair
                 WorkStationController workStation = usable.TryCast<WorkStationController>();
@@ -229,7 +241,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Validate Drop
-            if (!InteractionSecurity.CanStopUseUsable(sender, usable.TryCast<Chair>()))
+            if (!InteractionSecurity.CanStopUseUsable(sender, isChair || isWorkstation))
                 return false;
 
             // Run Game Command

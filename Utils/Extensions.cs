@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Components;
+using DDSS_LobbyGuard.Security;
 using Il2Cpp;
 using Il2CppComputer.Scripts.System;
 using Il2CppMirror;
@@ -43,7 +44,7 @@ namespace DDSS_LobbyGuard.Utils
         }
 
         internal static bool IsGhost(this LobbyPlayer player)
-            => (player.NetworkplayerRole == PlayerRole.None) || (player.NetworkisFired && (player.NetworkplayerRole != PlayerRole.Janitor));
+            => (player.NetworkplayerRole == PlayerRole.None);
         internal static bool IsGhost(this PlayerController controller)
         {
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
@@ -60,11 +61,11 @@ namespace DDSS_LobbyGuard.Utils
                 || controller.WasCollected)
                 return true;
 
-            return controller.IsGhost();
+            return false;
         }
 
         internal static bool IsJanitor(this LobbyPlayer player)
-            => player.NetworkisFired && (player.NetworkplayerRole == PlayerRole.Janitor);
+            => (player.NetworkplayerRole == PlayerRole.Janitor);
         internal static bool IsJanitor(this PlayerController controller)
         {
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
@@ -191,7 +192,6 @@ namespace DDSS_LobbyGuard.Utils
             networkWriterPooled.SendCustomRPC(player,
                 RPCHelper.eType.LobbyPlayer_RpcSetPlayerRole,
                 receipient);
-
             NetworkWriterPool.Return(networkWriterPooled);
         }
 

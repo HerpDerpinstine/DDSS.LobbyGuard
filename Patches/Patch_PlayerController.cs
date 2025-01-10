@@ -17,11 +17,31 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_PlayerController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdMovePlayer__Vector3))]
-        private static bool InvokeUserCode_CmdMovePlayer__Vector3_Prefix()
+        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.DeserializeSyncVars))]
+        private static void DeserializeSyncVars_Prefix(PlayerController __instance)
+            => EnforcePlayerValues(__instance);
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.DeserializeSyncVars))]
+        private static void DeserializeSyncVars_Postfix(PlayerController __instance)
+            => EnforcePlayerValues(__instance);
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.SerializeSyncVars))]
+        private static void SerializeSyncVars_Prefix(PlayerController __instance)
+            => EnforcePlayerValues(__instance);
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.SerializeSyncVars))]
+        private static void SerializeSyncVars_Postfix(PlayerController __instance)
+            => EnforcePlayerValues(__instance);
+
+        private static void EnforcePlayerValues(PlayerController __instance)
         {
-            // Prevent Original
-            return false;
+            if (!NetworkServer.activeHost
+                || (GameManager.instance == null)
+                || GameManager.instance.WasCollected)
+                return;
+
+            // Enforce Server-Sided Player Values
+            PlayerValueSecurity.Apply(__instance);
         }
 
         [HarmonyPrefix]
@@ -117,12 +137,11 @@ namespace DDSS_LobbyGuard.Patches
                 trans.enabled = false;
 
             __instance.transform.position = pos;
-            __instance.UserCode_CmdMovePlayer__Vector3(pos);
+            __instance.ServerMovePlayer(pos);
             __instance.SetDirty();
 
             if (trans != null)
             {
-                trans.UserCode_CmdTeleport__Vector3(pos);
                 trans.SetPosition(pos);
                 trans.SetDirty();
                 trans.enabled = true;

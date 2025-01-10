@@ -24,6 +24,7 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUpdateCCTV;
+        internal MelonPreferences_Entry<bool> AllowJanitorsToKeepWorkStation;
         internal MelonPreferences_Entry<bool> AllowVirusesWhileServerIsDown;
 
         internal MelonPreferences_Entry<bool> ProductivityFromTaskCompletion;
@@ -138,6 +139,11 @@ namespace DDSS_LobbyGuard.Config
                 "Allow Janitors to Update CCTV",
                 "Allows Janitors to Update Firmware on CCTV Cameras",
                 true);
+            
+            AllowJanitorsToKeepWorkStation = CreatePref("AllowJanitorsToKeepWorkStation",
+                "Allow Janitors to Keep WorkStation",
+                "Allows Janitors to Keep their Assigned WorkStation",
+                false);
 
             AllowVirusesWhileServerIsDown = CreatePref("AllowVirusesWhileServerIsDown",
                 "Allow Viruses while Server is Down",

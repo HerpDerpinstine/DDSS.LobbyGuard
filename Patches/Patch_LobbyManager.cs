@@ -83,6 +83,27 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.RegisterPlayer))]
+        private static void RegisterPlayer_Prefix(LobbyManager __instance,
+            NetworkIdentity __0)
+        {
+            // Validate Server
+            if (!__instance.isServer
+                || !NetworkServer.activeHost)
+                return;
+
+            // Get Lobby Player
+            LobbyPlayer lobbyPlayer = __0.GetComponent<LobbyPlayer>();
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
+                return;
+
+            int index = __instance.connectedLobbyPlayers.Count;
+            PlayerValueSecurity.SetColorIndex(lobbyPlayer, index);
+            lobbyPlayer.NetworkplayerColorIndex = index;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.UnRegisterPlayer))]
         private static void UnRegisterPlayer_Prefix(LobbyManager __instance,
             NetworkIdentity __0)

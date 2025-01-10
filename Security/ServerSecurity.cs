@@ -36,7 +36,7 @@ namespace DDSS_LobbyGuard.Security
                 && !controller.WasCollected
                 && _randomCoroutines.ContainsKey(controller))
             {
-                if ((GameManager.instance.currentGameState > (int)GameStates.WaitingForPlayerConnections)
+                if ((GameManager.instance.currentGameState > (int)GameStates.StartGame)
                     && (!ConfigHandler.Gameplay.ServerOutageResetsRandomOutageTimer.Value
                         || ServerController.connectionsEnabled))
                 {

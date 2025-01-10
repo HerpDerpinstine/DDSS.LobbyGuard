@@ -12,15 +12,16 @@
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+  <PropertyGroup>
+		<Il2CppAssemblies>C:\Program Files (x86)\Steam\steamapps\common\Dale%26Dawson\MelonLoader\Il2CppAssemblies</Il2CppAssemblies>
+		<MelonLoaderNET6>C:\Program Files (x86)\Steam\steamapps\common\Dale%26Dawson\MelonLoader\net6</MelonLoaderNET6>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Docs\**" />
-    <Compile Remove="Libs\**" />
     <Compile Remove="Output\**" />
     <EmbeddedResource Remove="Docs\**" />
-    <EmbeddedResource Remove="Libs\**" />
     <EmbeddedResource Remove="Output\**" />
     <None Remove="Docs\**" />
-    <None Remove="Libs\**" />
     <None Remove="Output\**" />
   </ItemGroup>
   <ItemGroup>
@@ -44,67 +45,67 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>Libs\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2Cppcom.rlabrecque.steamworks.net">
-      <HintPath>Libs\Il2Cppcom.rlabrecque.steamworks.net.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\Il2Cppcom.rlabrecque.steamworks.net.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2CppFizzySteamworks">
-      <HintPath>Libs\Il2CppFizzySteamworks.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\Il2CppFizzySteamworks.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2CppMirror">
-      <HintPath>Libs\Il2CppMirror.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\Il2CppMirror.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2CppMirror.Components">
-      <HintPath>Libs\Il2CppMirror.Components.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\Il2CppMirror.Components.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>Libs\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\Il2Cppmscorlib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2CppSystem">
-      <HintPath>Libs\Il2CppSystem.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\Il2CppSystem.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2CppSystem.Core">
-      <HintPath>Libs\Il2CppSystem.Core.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\Il2CppSystem.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>Libs\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>Libs\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.AnimationModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.Il2CppImageConversionManager">
-      <HintPath>Libs\UnityEngine.Il2CppImageConversionManager.dll</HintPath>
+      <HintPath>$(MelonLoaderNET6)\UnityEngine.Il2CppImageConversionManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>Libs\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>Libs\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.PhysicsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>Libs\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>Libs\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

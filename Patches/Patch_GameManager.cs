@@ -47,8 +47,7 @@ namespace DDSS_LobbyGuard.Patches
             foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
             {
                 LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
-                if (!player.isFired
-                    && InteractionSecurity.IsSlacker(player))
+                if (InteractionSecurity.IsSlacker(player))
                 {
                     player.NetworkplayerRole = PlayerRole.Slacker;
                     player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
@@ -118,11 +117,11 @@ namespace DDSS_LobbyGuard.Patches
             if ((oldManager != null)
                 && !oldManager.WasCollected)
             {
+                bool janitorsKeepWorkstation = ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value;
                 if (flag)
                 {
                     // Fire Old Manager
-                    __instance.ServerFirePlayer(oldManager.netIdentity, true, true);
-                    oldManager.NetworkisFired = true;
+                    __instance.ServerFirePlayer(oldManager.netIdentity, true, !janitorsKeepWorkstation);
                 }
                 else
                 {
@@ -131,9 +130,10 @@ namespace DDSS_LobbyGuard.Patches
                         oldManager.ServerSetPlayerRole(PlayerRole.Slacker);
                     else
                         oldManager.ServerSetPlayerRole(newManager.playerRole);
-
-                    oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, newManager.playerRole, false);
                 }
+
+                if (!flag || janitorsKeepWorkstation)
+                    oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, oldManager.playerRole, false);
 
                 // Reset Old Manager Tasks
                 TaskController managerComponent = oldManager.GetComponent<TaskController>();
@@ -206,8 +206,15 @@ namespace DDSS_LobbyGuard.Patches
                 __instance.ServerFinnishMeeting();
 
             // Reset Workstation
-            if (__2)
+            bool janitorsKeepWorkstation = ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value;
+            if (__2
+                && (!flag || !janitorsKeepWorkstation))
                 player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
+
+            // Apply Fired State
+            player.isFired = !flag || !janitorsKeepWorkstation;
+            player.NetworkisFired = !flag || !janitorsKeepWorkstation;
+            PlayerValueSecurity.SetIsFired(player, true);
 
             // Fire Player
             player.RpcFirePlayer(true, !flag, player.NetworkplayerRole);
@@ -218,12 +225,8 @@ namespace DDSS_LobbyGuard.Patches
             else
                 player.ServerSetPlayerRole(PlayerRole.None);
 
-            // Apply Fired State
-            player.NetworkisFired = true;
-
             // Reset Vote
-            if (__instance.isServer)
-                VoteBoxController.instance.ServerResetVote();
+            VoteBoxController.instance.ServerResetVote();
 
             // End Match if Winner is Found
             if (!__1

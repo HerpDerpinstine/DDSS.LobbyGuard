@@ -14,38 +14,6 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_Interactable
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Interactable), nameof(Interactable.InvokeUserCode_CmdSetInteractionCoolDown__Single))]
-        private static bool InvokeUserCode_CmdSetInteractionCoolDown__Single_Prefix(NetworkBehaviour __0,
-            NetworkReader __1,
-            NetworkConnectionToClient __2)
-        {
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-            if (sender.GetPlayerRole() != PlayerRole.Manager)
-                return false;
-
-            // Get WhiteBoardController
-            WhiteBoardController interact = __0.TryCast<WhiteBoardController>();
-            if ((interact == null)
-                || interact.WasCollected
-                || (interact.interactionCoolDown > 0f))
-                return false;
-
-            // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, interact.transform.position))
-                return false;
-
-            // Enforce Cooldown
-            float coolDown = GameManager.instance.NetworkmeetingCooldown;
-
-            // Run Game Command
-            interact.UserCode_CmdSetInteractionCoolDown__Single(coolDown);
-
-            // Prevent Original
-            return false;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(Interactable), nameof(Interactable.InvokeUserCode_CmdSetInteractionTimeCounter__Single__Boolean))]
         private static bool InvokeUserCode_CmdSetInteractionTimeCounter__Single__Boolean_Prefix(NetworkBehaviour __0,
             NetworkReader __1,

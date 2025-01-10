@@ -6,6 +6,7 @@ using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
+using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.WorkStation.Phone;
 
@@ -72,6 +73,8 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.ServerSetWorkStation))]
         private static void ServerSetWorkStation_Prefix(LobbyPlayer __instance, WorkStationController __0)
         {
+            PlayerValueSecurity.SetWorkStationController(__instance, __0);
+
             if ((__0 != null)
                 && !__0.WasCollected)
             {
@@ -92,45 +95,76 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.DeserializeSyncVars))]
-        private static void DeserializeSyncVars_Prefix(LobbyPlayer __instance)
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.ServerSetPlayerRole))]
+        private static void ServerSetPlayerRole_Prefix(LobbyPlayer __instance, PlayerRole __0)
         {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+            PlayerRole originalRole = PlayerValueSecurity.GetRole(__instance);
+            if (originalRole == PlayerRole.Janitor)
                 return;
-            if (!NetworkServer.activeHost)
-                return;
-            if (__instance.NetworkisFired)
-                return;
-            if (GameManager.instance == null)
-                return;
-            if (InteractionSecurity.GetWinner(GameManager.instance) != PlayerRole.None)
-                return;
-            
-            if (__instance.NetworkplayerRole == PlayerRole.Slacker)
-                __instance.NetworkplayerRole = PlayerRole.Specialist;
-            if (__instance.NetworkoriginalPlayerRole == PlayerRole.Slacker)
-                __instance.NetworkoriginalPlayerRole = PlayerRole.Specialist;
+
+            PlayerValueSecurity.SetRole(__instance, __0);
+            PlayerValueSecurity.SetOriginalRole(__instance, originalRole);
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.UserCode_CmdSetSubRole__SubRole))]
+        private static void UserCode_CmdSetSubRole__SubRole_Prefix(LobbyPlayer __instance, SubRole __0)
+            => PlayerValueSecurity.SetSubRole(__instance, __0);
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.SetLobbyPlayerToPlayerRpc))]
+        private static void SetLobbyPlayerToPlayerRpc_Prefix(LobbyPlayer __instance, NetworkIdentity __0)
+        {
+            PlayerValueSecurity.SetPlayerController(__instance, __0);
+
+            PlayerController controller = __0.GetComponent<PlayerController>();
+            PlayerValueSecurity.SetLobbyPlayer(controller, __instance);
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.DeserializeSyncVars))]
+        private static void DeserializeSyncVars_Prefix(LobbyPlayer __instance)
+            => EnforcePlayerValues(__instance);
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.DeserializeSyncVars))]
+        private static void DeserializeSyncVars_Postfix(LobbyPlayer __instance)
+            => EnforcePlayerValues(__instance);
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.SerializeSyncVars))]
         private static void SerializeSyncVars_Prefix(LobbyPlayer __instance)
+            => EnforcePlayerValues(__instance);
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.SerializeSyncVars))]
+        private static void SerializeSyncVars_Postfix(LobbyPlayer __instance)
+            => EnforcePlayerValues(__instance);
+
+        private static void EnforcePlayerValues(LobbyPlayer __instance)
         {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return;
-            if (!NetworkServer.activeHost)
-                return;
-            if (GameManager.instance == null)
-                return;
-            if (__instance.NetworkisFired)
-                return;
-            if (InteractionSecurity.GetWinner(GameManager.instance) != PlayerRole.None)
+            if (!NetworkServer.activeHost
+                || (GameManager.instance == null)
+                || GameManager.instance.WasCollected)
                 return;
 
-            if (__instance.NetworkplayerRole == PlayerRole.Slacker)
-                __instance.NetworkplayerRole = PlayerRole.Specialist;
-            if (__instance.NetworkoriginalPlayerRole == PlayerRole.Slacker)
-                __instance.NetworkoriginalPlayerRole = PlayerRole.Specialist;
+            // Enforce Server-Sided Player Values
+            PlayerValueSecurity.Apply(__instance);
+
+            // Check if Win Screen is Hidden
+            if (InteractionSecurity.GetWinner(GameManager.instance) == PlayerRole.None)
+            {
+                // Force NetworkisFired to false for Janitors to be Reassignable
+                if (ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value
+                    && __instance.IsJanitor())
+                    __instance.NetworkisFired = false;
+
+                // Spoof Role to Hide Slackers
+                if (ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                {
+                    if (__instance.NetworkplayerRole == PlayerRole.Slacker)
+                        __instance.NetworkplayerRole = PlayerRole.Specialist;
+                    if (__instance.NetworkoriginalPlayerRole == PlayerRole.Slacker)
+                        __instance.NetworkoriginalPlayerRole = PlayerRole.Specialist;
+                }
+            }
         }
 
         [HarmonyPrefix]
@@ -231,7 +265,6 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
             if ((sender == null)
                 || sender.WasCollected
-                || sender.NetworkisFired
                 || ((sender.NetworkplayerController != null)
                     && !sender.NetworkplayerController.WasCollected))
                 return false;
@@ -258,7 +291,6 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
             if ((sender == null)
                 || sender.WasCollected
-                || !sender.NetworkisFired
                 || (sender.NetworkplayerRole == PlayerRole.None))
                 return false;
 

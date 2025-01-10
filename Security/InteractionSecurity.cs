@@ -171,8 +171,7 @@ namespace DDSS_LobbyGuard.Security
             foreach (NetworkIdentity networkIdentity in manager.GetAllPlayers())
             {
                 LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
-                if (IsSlacker(player)
-                    && !player.isFired)
+                if (IsSlacker(player))
                     num++;
             }
             return num;
@@ -188,8 +187,7 @@ namespace DDSS_LobbyGuard.Security
             {
                 LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
                 if ((player.NetworkplayerRole == PlayerRole.Specialist)
-                    && !IsSlacker(player)
-                    && !player.isFired)
+                    && !IsSlacker(player))
                     num++;
             }
             return num;
