@@ -106,9 +106,9 @@ namespace DDSS_LobbyGuard.Patches
             if (InteractionSecurity.GetWinner(GameManager.instance) != PlayerRole.None)
                 return;
             
-            if (__instance.playerRole == PlayerRole.Slacker)
+            if (__instance.NetworkplayerRole == PlayerRole.Slacker)
                 __instance.NetworkplayerRole = PlayerRole.Specialist;
-            if (__instance.originalPlayerRole == PlayerRole.Slacker)
+            if (__instance.NetworkoriginalPlayerRole == PlayerRole.Slacker)
                 __instance.NetworkoriginalPlayerRole = PlayerRole.Specialist;
         }
 
@@ -127,9 +127,9 @@ namespace DDSS_LobbyGuard.Patches
             if (InteractionSecurity.GetWinner(GameManager.instance) != PlayerRole.None)
                 return;
 
-            if (__instance.playerRole == PlayerRole.Slacker)
+            if (__instance.NetworkplayerRole == PlayerRole.Slacker)
                 __instance.NetworkplayerRole = PlayerRole.Specialist;
-            if (__instance.originalPlayerRole == PlayerRole.Slacker)
+            if (__instance.NetworkoriginalPlayerRole == PlayerRole.Slacker)
                 __instance.NetworkoriginalPlayerRole = PlayerRole.Specialist;
         }
 
