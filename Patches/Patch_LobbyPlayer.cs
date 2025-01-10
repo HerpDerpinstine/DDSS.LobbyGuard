@@ -231,6 +231,7 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
             if ((sender == null)
                 || sender.WasCollected
+                || sender.isFired
                 || ((sender.NetworkplayerController != null)
                     && !sender.NetworkplayerController.WasCollected))
                 return false;
@@ -257,7 +258,8 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
             if ((sender == null)
                 || sender.WasCollected
-                || (sender.NetworkplayerRole != PlayerRole.None))
+                || !sender.isFired
+                || (sender.NetworkplayerRole == PlayerRole.None))
                 return false;
 
             // Run Game Command
