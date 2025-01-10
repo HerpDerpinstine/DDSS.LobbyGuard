@@ -44,6 +44,9 @@ namespace DDSS_LobbyGuard.Config
 
         internal MelonPreferences_Entry<bool> EnforceComputerWindowBoundary;
 
+        internal MelonPreferences_Entry<bool> UseServerTimeStampForEmails;
+        internal MelonPreferences_Entry<bool> UseServerTimeStampForChatMessages;
+
         internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
 
@@ -210,6 +213,16 @@ namespace DDSS_LobbyGuard.Config
                 "Hide Slackers from Clients",
                 "Prevents Slackers and Slacker Count from being broadcasted to Clients",
                 false);
+
+            UseServerTimeStampForEmails = CreatePref("UseServerTimeStampForEmails",
+                "Use Server TimeStamp for Emails",
+                "Displays a Unified TimeStamp from the Server on Received Emails",
+                true);
+            
+            UseServerTimeStampForChatMessages = CreatePref("UseServerTimeStampForChatMessages",
+                "Use Server TimeStamp for Chat Messages",
+                "Displays a Unified TimeStamp from the Server on Received Chat Messages",
+                true);
 
             GrabbingWhileEmoting = CreatePref("GrabbingWhileEmoting",
                 "Grabbing while Emoting",

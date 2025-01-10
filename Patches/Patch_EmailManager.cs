@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -159,7 +160,6 @@ namespace DDSS_LobbyGuard.Patches
             else
             {
                 msg = msg.RemoveRichText();
-
                 if (string.IsNullOrEmpty(msg)
                     || string.IsNullOrWhiteSpace(msg))
                 {
@@ -171,19 +171,22 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Parse DateTime
-            string time = __1.SafeReadString();
-            if (string.IsNullOrEmpty(time)
-                || string.IsNullOrWhiteSpace(time)
-                || !DateTime.TryParse(time, out _))
+            string time = null;
+            if (ConfigHandler.Gameplay.UseServerTimeStampForEmails.Value)
                 time = DateTime.Now.ToString("HH:mm");
             else
             {
-                time = time.RemoveRichText();
-
+                time = __1.SafeReadString();
                 if (string.IsNullOrEmpty(time)
                     || string.IsNullOrWhiteSpace(time)
                     || !DateTime.TryParse(time, out _))
-                    time = DateTime.Now.ToString("HH:mm");
+                    return false;
+
+                time = time.RemoveRichText();
+                if (string.IsNullOrEmpty(time)
+                    || string.IsNullOrWhiteSpace(time)
+                    || !DateTime.TryParse(time, out _))
+                    return false;
             }
 
             // Run Game Command

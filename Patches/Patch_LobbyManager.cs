@@ -99,42 +99,40 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Validate Game State
-            if (__instance.gameStarted)
+            if (__instance.gameStarted
+                && !lobbyPlayer.IsGhost()
+                && !lobbyPlayer.IsJanitor())
             {
                 // Reset WorkStation
                 PlayerRole playerRole = lobbyPlayer.NetworkplayerRole;
                 lobbyPlayer.ServerSetWorkStation(null, playerRole, true);
 
                 // Check Setting
-                if (!ConfigHandler.Gameplay.PlayerLeavesReduceTerminations.Value)
+                if (!ConfigHandler.Gameplay.PlayerLeavesReduceTerminations.Value
+                    && (playerRole != PlayerRole.Manager)
+                    && (GameManager.instance != null)
+                    && !GameManager.instance.WasCollected)
                 {
-                    // Adjust Termination Offset
-                    if ((playerRole != PlayerRole.Manager)
-                        && (playerRole != PlayerRole.Janitor)
-                        && (GameManager.instance != null)
-                        && !GameManager.instance.WasCollected)
-                    {
-                        // Get Original Count
-                        int slackerCount = GameManager.instance.NetworkstartSlackers;
-                        int specialistCount = GameManager.instance.NetworkstartSpecialists;
+                    // Get Original Count
+                    int slackerCount = GameManager.instance.NetworkstartSlackers;
+                    int specialistCount = GameManager.instance.NetworkstartSpecialists;
 
-                        // Get Player Role
-                        if (InteractionSecurity.IsSlacker(lobbyPlayer))
-                            slackerCount--;
-                        else if (playerRole == PlayerRole.Specialist)
-                            specialistCount--;
+                    // Get Player Role
+                    if (InteractionSecurity.IsSlacker(lobbyPlayer))
+                        slackerCount--;
+                    else if (playerRole == PlayerRole.Specialist)
+                        specialistCount--;
 
-                        // Clamp Count
-                        if (slackerCount < 0)
-                            slackerCount = 0;
-                        if (specialistCount < 0)
-                            specialistCount = 0;
+                    // Clamp Count
+                    if (slackerCount < 0)
+                        slackerCount = 0;
+                    if (specialistCount < 0)
+                        specialistCount = 0;
 
-                        // Apply New Counts
-                        //GameManager.instance.SetWinCondition(specialistCount, slackerCount);
-                        GameManager.instance.NetworkstartSlackers = slackerCount;
-                        GameManager.instance.NetworkstartSpecialists = specialistCount;
-                    }
+                    // Apply New Counts
+                    //GameManager.instance.SetWinCondition(specialistCount, slackerCount);
+                    GameManager.instance.NetworkstartSlackers = slackerCount;
+                    GameManager.instance.NetworkstartSpecialists = specialistCount;
                 }
             }
 
@@ -216,19 +214,22 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Parse DateTime
-            string time = __1.SafeReadString();
-            if (string.IsNullOrEmpty(time)
-                || string.IsNullOrWhiteSpace(time)
-                || !DateTime.TryParse(time, out _))
+            string time = null;
+            if (ConfigHandler.Gameplay.UseServerTimeStampForChatMessages.Value)
                 time = DateTime.Now.ToString("HH:mm:ss");
             else
             {
-                time = time.RemoveRichText();
-
+                time = __1.SafeReadString();
                 if (string.IsNullOrEmpty(time)
                     || string.IsNullOrWhiteSpace(time)
                     || !DateTime.TryParse(time, out _))
-                    time = DateTime.Now.ToString("HH:mm:ss");
+                    return false;
+
+                time = time.RemoveRichText();
+                if (string.IsNullOrEmpty(time)
+                    || string.IsNullOrWhiteSpace(time)
+                    || !DateTime.TryParse(time, out _))
+                    return false;
             }
 
             // Invoke Game Method
