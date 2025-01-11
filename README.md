@@ -11,10 +11,11 @@ Serverside Anti-Cheat and Security for [Dale & Dawson Stationery Supplies](https
 - Fixes Disruptive Gameplay issues
 - Serverside Authoritative, Only the Lobby Host needs to have it installed
 - Seamless Integration with Gameplay
+- Persistent Blacklist with Json File Saving
 - Extended Invite Codes to avoid Generation Conflicts
-- Persistent Blacklist
+- Extended Gameplay Settings
 
-* Settings are found in the In-Game Menu
+* Settings Menu can be found either on the Main Menu or while in a Lobby
 * Persistent Blacklist Database is found in ``UserData/LobbyGuard/Blacklist.json``
 
 * Discord: https://discord.gg/JDw423Wskf
