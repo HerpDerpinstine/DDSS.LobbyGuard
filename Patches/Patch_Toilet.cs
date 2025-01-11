@@ -11,8 +11,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_Toilet
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Toilet), nameof(Toilet.InvokeUserCode_CmdShit__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdShit__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(Toilet), nameof(Toilet.InvokeUserCode_CmdShit__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdShit__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -32,7 +32,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            toilet.UserCode_CmdShit__NetworkIdentity(sender);
+            toilet.UserCode_CmdShit__NetworkIdentity__NetworkConnectionToClient(sender, sender.connectionToClient);
 
             // Prevent Original
             return false;
