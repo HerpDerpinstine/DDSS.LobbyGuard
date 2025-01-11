@@ -3,7 +3,6 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
-using Il2CppPlayer.Lobby;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -19,10 +18,6 @@ namespace DDSS_LobbyGuard.Patches
             // Get CoffeeMachine
             CoffeeMachine machine = __0.TryCast<CoffeeMachine>();
 
-            // Validate Mug
-            if (!machine.CanFillMug())
-                return false;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
             if (sender.IsGhost())
@@ -30,6 +25,22 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, machine.transform.position))
+                return false;
+
+            if (machine.collectibles.Count <= 0)
+                return false;
+
+            Mug mug = null;
+            foreach (var m in machine.collectibles.Keys)
+            {
+                mug = m.TryCast<Mug>();
+                if (mug != null)
+                    break;
+            }
+            if (mug == null)
+                return false;
+
+            if (mug.NetworkcoffeeAmount >= 1f)
                 return false;
 
             // Run Game Command

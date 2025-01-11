@@ -41,6 +41,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             mug.UserCode_CmdDrinkCoffee__NetworkIdentity(sender);
+            mug.UserCode_CmdSetCoffeeAmount__Single(0f);
 
             // Prevent Original
             return false;
@@ -58,7 +59,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Mug
             Mug mug = __0.TryCast<Mug>();
-            if (mug == null)
+            if ((mug == null)
+                || (mug.NetworkcoffeeAmount == amount))
                 return false;
 
             // Get Sender
@@ -71,13 +73,11 @@ namespace DDSS_LobbyGuard.Patches
             // Check if should Fill or Drink
             if (amount == 1f)
             {
-                if (!InteractionSecurity.IsWithinRange(sender.transform.position, mug.transform.position))
-                    return false;
-
                 // Validate Placement
                 CollectibleHolder holder = mug.currentHolder;
                 if ((holder == null)
-                    || (holder.GetIl2CppType() != Il2CppType.Of<CoffeeMachine>()))
+                    || (holder.GetIl2CppType() != Il2CppType.Of<CoffeeMachine>())
+                    || !InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
                     return false;
             }
             else if (amount == 0f)

@@ -39,6 +39,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             mug.UserCode_CmdDrinkWater__NetworkIdentity(sender);
+            mug.UserCode_CmdSetWaterAmount__Single(0f);
 
             // Prevent Original
             return false;
@@ -46,47 +47,8 @@ namespace DDSS_LobbyGuard.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(WaterCupController), nameof(WaterCupController.InvokeUserCode_CmdSetWaterAmount__Single))]
-        private static bool InvokeUserCode_CmdSetWaterAmount__Single_Prefix(
-           NetworkBehaviour __0,
-           NetworkReader __1,
-           NetworkConnectionToClient __2)
+        private static bool InvokeUserCode_CmdSetWaterAmount__Single_Prefix()
         {
-            // Get Value
-            float amount = __1.SafeReadFloat();
-
-            // Get Mug
-            WaterCupController mug = __0.TryCast<WaterCupController>();
-            if (mug == null)
-                return false;
-
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-
-            // Validate Distance
-            if (sender.IsGhost())
-                return false;
-
-            // Check if should Fill or Drink
-            if ((amount == 1f)
-                || (amount == 0f))
-            {
-                // Validate Placement
-                Collectible collectible = sender.GetCurrentCollectible();
-                if ((collectible == null)
-                    || (collectible.GetIl2CppType() != Il2CppType.Of<WaterCupController>()))
-                    return false;
-
-                // Get Mug
-                mug = collectible.TryCast<WaterCupController>();
-                if (mug == null)
-                    return false;
-            }
-            else
-                return false;
-
-            // Run Game Command
-            mug.UserCode_CmdSetWaterAmount__Single(amount);
-
             // Prevent Original
             return false;
         }
