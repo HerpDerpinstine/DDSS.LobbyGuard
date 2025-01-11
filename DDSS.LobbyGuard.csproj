@@ -11,10 +11,12 @@
         <Platforms>AnyCPU</Platforms>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<GameFolder>C:\Program Files (x86)\Steam\steamapps\common\Dale%26Dawson</GameFolder>
 	</PropertyGroup>
   <PropertyGroup>
-		<Il2CppAssemblies>C:\Program Files (x86)\Steam\steamapps\common\Dale%26Dawson\MelonLoader\Il2CppAssemblies</Il2CppAssemblies>
-		<MelonLoaderNET6>C:\Program Files (x86)\Steam\steamapps\common\Dale%26Dawson\MelonLoader\net6</MelonLoaderNET6>
+		<MelonLoaderInstall>$(GameFolder)\MelonLoader</MelonLoaderInstall>
+		<Il2CppAssemblies>$(MelonLoaderInstall)\Il2CppAssemblies</Il2CppAssemblies>
+		<MelonLoaderNET6>$(MelonLoaderInstall)\net6</MelonLoaderNET6>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Docs\**" />
