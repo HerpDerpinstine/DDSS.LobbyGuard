@@ -37,26 +37,28 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.EndGameIfFinished))]
         private static bool EndGameIfFinished_Prefix(GameManager __instance)
         {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return true;
             if (!NetworkServer.activeHost)
-                return true;
+                return false;
             if (InteractionSecurity.GetWinner(__instance) == PlayerRole.None)
                 return false;
 
-            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
-            {
-                LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
-                if (InteractionSecurity.IsSlacker(player))
+            if (ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
                 {
-                    player.NetworkplayerRole = PlayerRole.Slacker;
-                    player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
-                    player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
+                    LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
+                    if (InteractionSecurity.IsSlacker(player))
+                    {
+                        player.NetworkplayerRole = PlayerRole.Slacker;
+                        player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
+                        player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
+                    }
                 }
-            }
 
-            // Run Original
-            return true;
+            // Change Game States
+            __instance.gameStateMachine.CurrentState.ChangeState(GameStates.GameFinished);
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]
