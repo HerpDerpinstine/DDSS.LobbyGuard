@@ -20,7 +20,7 @@ namespace DDSS_LobbyGuard.Patches
         {
             if (!__0)
                 return;
-            if (ConfigHandler.Gameplay.WorkStationVirusTurnsOffFirewall.Value)
+            else if (ConfigHandler.Gameplay.WorkStationVirusTurnsOffFirewall.Value)
                 __instance.UserCode_CmdSetFireWall__NetworkIdentity__Boolean(__instance.netIdentity, false);
         }
 
@@ -37,6 +37,8 @@ namespace DDSS_LobbyGuard.Patches
             __instance.isVirusActive = false;
             __instance.virusInfectionTime = 0f;
             __instance.virusInfectionTimeLimit = 120f;
+
+            VirusSecurity.OnStart(__instance);
 
             // Prevent Original
             return false;
@@ -66,31 +68,6 @@ namespace DDSS_LobbyGuard.Patches
                 __instance.virusScreen.color = Color.blue;
             }
 
-            if ((!ConfigHandler.Gameplay.WorkStationVirusResetsRandomVirusTimer.Value || !__instance.isVirusActive)
-                && NetworkServer.activeHost
-                && (GameManager.instance.currentGameState > (int)GameStates.WaitingForPlayerConnections)
-                && (__instance.computerController.user != null)
-                && !__instance.computerController.user.WasCollected)
-            {
-                __instance.virusInfectionTime += Time.deltaTime;
-
-                if (__instance.virusInfectionTime >= __instance.virusInfectionTimeLimit)
-                {
-                    int userMin = ConfigHandler.Gameplay.RandomWorkStationVirusDelayMin.Value;
-                    int userMax = ConfigHandler.Gameplay.RandomWorkStationVirusDelayMax.Value;
-                    if (userMax < userMin)
-                    {
-                        int origMin = userMin;
-                        userMin = userMax;
-                        userMax = origMin;
-                    }
-
-                    __instance.virusInfectionTime = 0f;
-                    __instance.virusInfectionTimeLimit = Random.Range(userMin, userMax);
-                    __instance.PerformPotentialVirusActivity();
-                }
-            }
-
             // Prevent Original
             return false;
         }
@@ -99,29 +76,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(VirusController), nameof(VirusController.PerformPotentialVirusActivity))]
         private static bool PerformPotentialVirusActivity_Prefix(VirusController __instance)
         {
-            // Validate Server
-            if (!NetworkServer.activeHost
-                || (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections)
-                || __instance.isVirusActive)
-                return false;
-
-            // Validate Workstation
-            if ((__instance.computerController == null)
-                || (__instance.computerController.user == null))
-                return false;
-
-            // Validate Role
-            if (!__instance.NetworkisFirewallActive
-                || InteractionSecurity.IsSlacker(__instance.computerController.user))
-            {
-                // Get Game Rule
-                float probability = GameManager.instance.virusProbability;
-
-                // RandomGen
-                if (Random.Range(0f, 100f) < (probability * 100f))
-                    __instance.ServerSetVirus(true);
-            }
-
             // Prevent Original
             return false;
         }

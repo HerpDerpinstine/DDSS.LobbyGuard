@@ -59,21 +59,22 @@ namespace DDSS_LobbyGuard
             if ((sceneName == "MainMenuScene")
                 || (sceneName == "LobbyScene"))
             {
-                InteractionSecurity.UpdateSettings();
+                DoorSecurity.OnSceneLoad();
+                VirusSecurity.OnSceneLoad();
                 ServerSecurity.OnSceneLoad();
                 TrashBinSecurity.OnSceneLoad();
+                PlayerValueSecurity.OnSceneLoad();
                 CollectibleSecurity.OnSceneLoad();
                 InteractionSecurity.OnSceneLoad();
                 PlayerTriggerSecurity.OnSceneLoad();
-                DoorSecurity.OnSceneLoad();
+                InteractionSecurity.UpdateSettings();
                 ComputerSecurity._playerAddresses.Clear();
-                PlayerValueSecurity.OnSceneLoad();
             }
 
             if (sceneName == "MainMenuScene") // Main Menu
             {
-                MainMenuPanelBuilder.MainMenuInit();
                 LobbySecurity.OnSceneLoad();
+                MainMenuPanelBuilder.MainMenuInit();
 
                 if (_firstMenuLoad)
                 {
