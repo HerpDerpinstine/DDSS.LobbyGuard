@@ -1,13 +1,14 @@
 ﻿using DDSS_LobbyGuard.Components;
-using DDSS_LobbyGuard.Security;
 using Il2Cpp;
 using Il2CppComputer.Scripts.System;
 using Il2CppMirror;
+using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Scripts;
 using Il2CppPlayer.StateMachineLogic;
 using Il2CppProps.Scripts;
+using Il2CppProps.WorkStation.Phone;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -280,6 +281,37 @@ namespace DDSS_LobbyGuard.Utils
             }
 
             return players;
+        }
+
+        internal static PhoneController GetPhoneController(this NetworkIdentity player)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return null;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
+                return null;
+
+            NetworkIdentity chair = controller.NetworkcurrentChair;
+            if ((chair == null)
+                || chair.WasCollected)
+                return null;
+
+            WorkStationController station = chair.GetComponent<WorkStationController>();
+            if ((station == null)
+                || station.WasCollected)
+                return null;
+
+            PhoneController phone = station.phoneController;
+            if ((phone == null)
+                || phone.WasCollected)
+                return null;
+
+            return phone;
         }
 
         internal static void Shuffle<T>(this List<T> list)
