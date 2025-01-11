@@ -7,6 +7,7 @@ using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppSystem.FileSystem;
+using System.IO;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
@@ -229,8 +230,7 @@ namespace DDSS_LobbyGuard.Patches
                 || textAsset.WasCollected)
                 return false;
 
-            __1.SafeReadString();
-            string ending = __1.SafeReadString();
+            string ending = Path.GetExtension(fileName);
             if (string.IsNullOrEmpty(ending)
                 || string.IsNullOrWhiteSpace(ending))
                 return false;
@@ -300,8 +300,7 @@ namespace DDSS_LobbyGuard.Patches
                 || textAsset.WasCollected)
                 return false;
 
-            __1.SafeReadString();
-            string ending = __1.SafeReadString();
+            string ending = Path.GetExtension(fileName);
             if (string.IsNullOrEmpty(ending)
                 || string.IsNullOrWhiteSpace(ending))
                 return false;
