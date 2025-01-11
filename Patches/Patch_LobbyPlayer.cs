@@ -81,7 +81,7 @@ namespace DDSS_LobbyGuard.Patches
                 PhoneController phone = __0.phoneController;
                 if ((phone != null)
                     && !phone.WasCollected)
-                    PhoneSecurity.ForceCallToEnd(phone);
+                    phone.ForceCallToEnd();
             }
 
             if ((__instance.NetworkworkStationController != null)
@@ -90,7 +90,7 @@ namespace DDSS_LobbyGuard.Patches
                 PhoneController phone = __instance.NetworkworkStationController.phoneController;
                 if ((phone != null)
                     && !phone.WasCollected)
-                    PhoneSecurity.ForceCallToEnd(phone);
+                    phone.ForceCallToEnd();
             }
         }
 

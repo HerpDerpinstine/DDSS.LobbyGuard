@@ -232,7 +232,7 @@ namespace DDSS_LobbyGuard.Patches
                 PhoneController phone = workStation.phoneController;
                 if ((phone != null)
                     && !phone.WasCollected)
-                    PhoneSecurity.ForceCallToEnd(phone);
+                    phone.ForceCallToEnd();
             }
 
             // Validate Drop

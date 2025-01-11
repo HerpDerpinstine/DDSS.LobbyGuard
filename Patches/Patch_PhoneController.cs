@@ -1,6 +1,7 @@
 ﻿using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
+using Il2Cpp;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer;
@@ -63,8 +64,9 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(receiver))
                 return false;
 
-            // Run Security
-            PhoneSecurity.OnCallAttempt(phone, caller, receiver, sender);
+            // Run Game Command
+            phone.ForceCallToEnd();
+            phone.UserCode_CmdCall__NetworkIdentity__String__NetworkConnectionToClient(sender, receiver, sender.connectionToClient);
 
             // Prevent Original
             return false;

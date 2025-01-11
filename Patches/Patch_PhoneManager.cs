@@ -1,5 +1,4 @@
-﻿using DDSS_LobbyGuard.Security;
-using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
@@ -67,8 +66,9 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(caller))
                 return false;
 
-            // Run Security
-            PhoneSecurity.OnCallAnswer(phoneManager, caller, receiver);
+            // Run Game Command
+            phone.ForceCallToEnd();
+            phoneManager.UserCode_CmdAnswerCall__String__String(receiver, caller);
 
             // Prevent Original
             return false;
@@ -116,20 +116,8 @@ namespace DDSS_LobbyGuard.Patches
                 || phone.WasCollected)
                 return false;
 
-            // Enforce Caller Number
-            string caller = phone.phoneNumber;
-            if (string.IsNullOrEmpty(caller)
-                || string.IsNullOrWhiteSpace(caller))
-                return false;
-
-            // Get New Receiver
-            string receiver = phone.NetworkcallingNumber;
-            if (string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver))
-                return false;
-
-            // Run Security
-            PhoneSecurity.OnCallCancel(phoneManager, caller, receiver);
+            // Run Game Command
+            phone.ForceCallToEnd();
 
             // Prevent Original
             return false;
@@ -177,21 +165,8 @@ namespace DDSS_LobbyGuard.Patches
                 || phone.WasCollected)
                 return false;
 
-            // Enforce Receiver Number
-            string receiver = phone.NetworkreceivingCall;
-            if (string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver))
-                return false;
-
-            // Get New Caller
-            string caller = phone.phoneNumber;
-            if (string.IsNullOrEmpty(caller)
-                || string.IsNullOrWhiteSpace(caller))
-                return false;
-
-            // Run Security
-            PhoneSecurity.OnCallEnd(phoneManager, caller, receiver);
-            PhoneSecurity.OnCallEnd(phoneManager, receiver, caller);
+            // Run Game Command
+            phone.ForceCallToEnd();
 
             // Prevent Original
             return false;
@@ -251,8 +226,8 @@ namespace DDSS_LobbyGuard.Patches
                 || string.IsNullOrWhiteSpace(caller))
                 return false;
 
-            // Run Security
-            PhoneSecurity.OnCallDecline(phoneManager, caller, receiver);
+            // Run Game Command
+            phoneManager.UserCode_CmdDeclineCall__String__String(caller, receiver);
 
             // Prevent Original
             return false;

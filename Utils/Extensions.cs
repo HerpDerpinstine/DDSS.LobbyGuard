@@ -283,35 +283,15 @@ namespace DDSS_LobbyGuard.Utils
             return players;
         }
 
-        internal static PhoneController GetPhoneController(this NetworkIdentity player)
+        internal static void ForceCallToEnd(this PhoneController phone)
         {
-            PlayerController controller = player.GetComponent<PlayerController>();
-            if ((controller == null)
-                || controller.WasCollected)
-                return null;
-
-            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost())
-                return null;
-
-            NetworkIdentity chair = controller.NetworkcurrentChair;
-            if ((chair == null)
-                || chair.WasCollected)
-                return null;
-
-            WorkStationController station = chair.GetComponent<WorkStationController>();
-            if ((station == null)
-                || station.WasCollected)
-                return null;
-
-            PhoneController phone = station.phoneController;
-            if ((phone == null)
-                || phone.WasCollected)
-                return null;
-
-            return phone;
+            if (phone.NetworkisCallActive)
+            {
+                PhoneManager.instance.UserCode_CmdEndCall__String__String(phone.NetworkreceivingCall, phone.phoneNumber);
+                PhoneManager.instance.UserCode_CmdEndCall__String__String(phone.phoneNumber, phone.NetworkreceivingCall);
+            }
+            if (phone.NetworkisDialing)
+                PhoneManager.instance.UserCode_CmdCancelCall__String__String(phone.phoneNumber, phone.NetworkcallingNumber);
         }
 
         internal static void Shuffle<T>(this List<T> list)

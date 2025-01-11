@@ -59,7 +59,6 @@ namespace DDSS_LobbyGuard
             if ((sceneName == "MainMenuScene")
                 || (sceneName == "LobbyScene"))
             {
-                PhoneSecurity.OnSceneLoad();
                 InteractionSecurity.UpdateSettings();
                 ServerSecurity.OnSceneLoad();
                 TrashBinSecurity.OnSceneLoad();
