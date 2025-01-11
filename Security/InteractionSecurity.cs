@@ -70,7 +70,7 @@ namespace DDSS_LobbyGuard.Security
             // Adjust Limits
             MAX_CIG_PACKS = MAX_PLAYERS;
             MAX_INFECTED_USBS = MAX_PLAYERS;
-            MAX_WATERCUPS = MAX_PLAYERS;
+            MAX_WATERCUPS = MAX_PLAYERS * 2;
             MAX_CIGS = MAX_PLAYERS * 3;
         }
 

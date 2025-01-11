@@ -69,22 +69,15 @@ namespace DDSS_LobbyGuard.Patches
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, cooler.transform.position))
                 return false;
 
-            // Check if should Fill or Drink
-            if ((amount == 1f)
-                || (amount == 0f))
-            {
-                // Validate Placement
-                Collectible collectible = sender.GetCurrentCollectible();
-                if ((collectible == null)
-                    || (collectible.GetIl2CppType() != Il2CppType.Of<WaterCupController>()))
-                    return false;
+            // Validate Placement
+            Collectible collectible = sender.GetCurrentCollectible();
+            if ((collectible == null)
+                || (collectible.GetIl2CppType() != Il2CppType.Of<WaterCupController>()))
+                return false;
 
-                // Get Mug
-                WaterCupController mug = collectible.TryCast<WaterCupController>();
-                if (mug == null)
-                    return false;
-            }
-            else
+            // Get Mug
+            WaterCupController mug = collectible.TryCast<WaterCupController>();
+            if (mug == null)
                 return false;
 
             // Run Game Command
