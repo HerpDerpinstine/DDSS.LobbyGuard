@@ -33,6 +33,7 @@ namespace DDSS_LobbyGuard.Security
                 && _randomCoroutines.ContainsKey(controller))
             {
                 if ((GameManager.instance.currentGameState > (int)GameStates.StartGame)
+                    && (controller.computerController.user != null)
                     && (!ConfigHandler.Gameplay.WorkStationVirusResetsRandomVirusTimer.Value
                         || !controller.isVirusActive))
                 {
@@ -66,12 +67,16 @@ namespace DDSS_LobbyGuard.Security
                         controller.virusInfectionTime = 0f;
                         controller.virusInfectionTimeLimit = Random.Range(userMin, userMax);
 
-                        // Get Game Rule
-                        float probability = GameManager.instance.virusProbability;
+                        if (!controller.NetworkisFirewallActive 
+                            || InteractionSecurity.IsSlacker(controller.computerController.user))
+                        {
+                            // Get Game Rule
+                            float probability = GameManager.instance.virusProbability;
 
-                        // RandomGen
-                        if (Random.Range(0f, 100f) < (probability * 100f))
-                            controller.ServerSetVirus(true);
+                            // RandomGen
+                            if (Random.Range(0f, 100f) < (probability * 100f))
+                                controller.ServerSetVirus(true);
+                        }
                     }
                 }
 
