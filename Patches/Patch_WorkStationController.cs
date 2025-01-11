@@ -88,7 +88,7 @@ namespace DDSS_LobbyGuard.Patches
             if ((target == null)
                 || target.WasCollected
                 || target.IsGhost()
-                || target.IsJanitor())
+                || (target.IsJanitor() && !ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value))
                 return false;
 
             station.UserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient(sender, target, __2); 

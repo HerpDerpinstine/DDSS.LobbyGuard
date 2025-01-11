@@ -63,7 +63,6 @@ namespace DDSS_LobbyGuard
                 VirusSecurity.OnSceneLoad();
                 ServerSecurity.OnSceneLoad();
                 TrashBinSecurity.OnSceneLoad();
-                PlayerValueSecurity.OnSceneLoad();
                 CollectibleSecurity.OnSceneLoad();
                 InteractionSecurity.OnSceneLoad();
                 PlayerTriggerSecurity.OnSceneLoad();

@@ -134,8 +134,7 @@ namespace DDSS_LobbyGuard.Patches
                         oldManager.ServerSetPlayerRole(newManager.playerRole);
                 }
 
-                if (!flag || janitorsKeepWorkstation)
-                    oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, oldManager.playerRole, false);
+                oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, oldManager.playerRole);
 
                 // Reset Old Manager Tasks
                 TaskController managerComponent = oldManager.GetComponent<TaskController>();
@@ -145,7 +144,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Set New Manager
             newManager.ServerSetPlayerRole(PlayerRole.Manager);
-            newManager.ServerSetWorkStation(__instance.managerWorkStationController, PlayerRole.Manager, flag);
+            newManager.ServerSetWorkStation(__instance.managerWorkStationController, PlayerRole.Manager);
 
             // Reset Termination Timer
             __instance.RpcResetTerminationTimer(__instance.terminationMaxTime);
@@ -214,9 +213,8 @@ namespace DDSS_LobbyGuard.Patches
                 player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
 
             // Apply Fired State
-            player.isFired = !flag || !janitorsKeepWorkstation;
-            player.NetworkisFired = !flag || !janitorsKeepWorkstation;
-            PlayerValueSecurity.SetIsFired(player, true);
+            player.isFired = janitorsKeepWorkstation && flag || !flag;
+            player.NetworkisFired = janitorsKeepWorkstation && flag || !flag;
 
             // Fire Player
             player.RpcFirePlayer(true, !flag, player.NetworkplayerRole);

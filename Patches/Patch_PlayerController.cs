@@ -17,34 +17,6 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_PlayerController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.DeserializeSyncVars))]
-        private static void DeserializeSyncVars_Prefix(PlayerController __instance)
-            => EnforcePlayerValues(__instance);
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.DeserializeSyncVars))]
-        private static void DeserializeSyncVars_Postfix(PlayerController __instance)
-            => EnforcePlayerValues(__instance);
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.SerializeSyncVars))]
-        private static void SerializeSyncVars_Prefix(PlayerController __instance)
-            => EnforcePlayerValues(__instance);
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.SerializeSyncVars))]
-        private static void SerializeSyncVars_Postfix(PlayerController __instance)
-            => EnforcePlayerValues(__instance);
-
-        private static void EnforcePlayerValues(PlayerController __instance)
-        {
-            if (!NetworkServer.activeHost
-                || (GameManager.instance == null)
-                || GameManager.instance.WasCollected)
-                return;
-
-            // Enforce Server-Sided Player Values
-            PlayerValueSecurity.Apply(__instance);
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdSpank__NetworkIdentity))]
         private static bool InvokeUserCode_CmdSpank__NetworkIdentity_Prefix(NetworkBehaviour __0, NetworkConnectionToClient __2)
         {

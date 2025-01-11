@@ -7,7 +7,6 @@ using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppSystem.FileSystem;
-using System.IO;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches

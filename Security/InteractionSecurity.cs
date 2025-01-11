@@ -48,6 +48,7 @@ namespace DDSS_LobbyGuard.Security
         internal static int MAX_CIGS { get; private set; }
         internal static int MAX_CIG_PACKS { get; private set; }
         internal static int MAX_INFECTED_USBS { get; private set; }
+        internal static int MAX_WATERCUPS { get; private set; }
 
         internal static int MAX_PLAYERS { get; private set; }
 
@@ -69,6 +70,7 @@ namespace DDSS_LobbyGuard.Security
             // Adjust Limits
             MAX_CIG_PACKS = MAX_PLAYERS;
             MAX_INFECTED_USBS = MAX_PLAYERS;
+            MAX_WATERCUPS = MAX_PLAYERS;
             MAX_CIGS = MAX_PLAYERS * 3;
         }
 

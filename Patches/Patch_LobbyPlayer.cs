@@ -31,8 +31,8 @@ namespace DDSS_LobbyGuard.Patches
             __0 = __0.RemoveRichText();
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
         private static void NetworksteamID_Prefix(LobbyPlayer __instance, ulong __0)
         {
             // Check for Host
@@ -73,8 +73,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.ServerSetWorkStation))]
         private static void ServerSetWorkStation_Prefix(LobbyPlayer __instance, WorkStationController __0)
         {
-            PlayerValueSecurity.SetWorkStationController(__instance, __0);
-
             if ((__0 != null)
                 && !__0.WasCollected)
             {
@@ -92,33 +90,6 @@ namespace DDSS_LobbyGuard.Patches
                     && !phone.WasCollected)
                     phone.ForceCallToEnd();
             }
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.ServerSetPlayerRole))]
-        private static void ServerSetPlayerRole_Prefix(LobbyPlayer __instance, PlayerRole __0)
-        {
-            PlayerRole originalRole = PlayerValueSecurity.GetRole(__instance);
-            if (originalRole == PlayerRole.Janitor)
-                return;
-
-            PlayerValueSecurity.SetRole(__instance, __0);
-            PlayerValueSecurity.SetOriginalRole(__instance, originalRole);
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.UserCode_CmdSetSubRole__SubRole))]
-        private static void UserCode_CmdSetSubRole__SubRole_Prefix(LobbyPlayer __instance, SubRole __0)
-            => PlayerValueSecurity.SetSubRole(__instance, __0);
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.SetLobbyPlayerToPlayerRpc))]
-        private static void SetLobbyPlayerToPlayerRpc_Prefix(LobbyPlayer __instance, NetworkIdentity __0)
-        {
-            PlayerValueSecurity.SetPlayerController(__instance, __0);
-
-            PlayerController controller = __0.GetComponent<PlayerController>();
-            PlayerValueSecurity.SetLobbyPlayer(controller, __instance);
         }
 
         [HarmonyPrefix]
@@ -145,16 +116,16 @@ namespace DDSS_LobbyGuard.Patches
                 || GameManager.instance.WasCollected)
                 return;
 
-            // Enforce Server-Sided Player Values
-            PlayerValueSecurity.Apply(__instance);
-
             // Check if Win Screen is Hidden
             if (InteractionSecurity.GetWinner(GameManager.instance) == PlayerRole.None)
             {
                 // Force NetworkisFired to false for Janitors to be Reassignable
                 if (ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value
                     && __instance.IsJanitor())
+                {
                     __instance.NetworkisFired = false;
+                    __instance.isFired = false;
+                }
 
                 // Spoof Role to Hide Slackers
                 if (ConfigHandler.Gameplay.HideSlackersFromClients.Value)
@@ -291,7 +262,8 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
             if ((sender == null)
                 || sender.WasCollected
-                || (sender.NetworkplayerRole == PlayerRole.None))
+                || (sender.NetworkplayerController == null)
+                || sender.NetworkplayerController.WasCollected)
                 return false;
 
             // Run Game Command

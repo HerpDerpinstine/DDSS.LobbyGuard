@@ -12,7 +12,7 @@ namespace DDSS_LobbyGuard.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(WaterCupController), nameof(WaterCupController.InvokeUserCode_CmdDrinkWater__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdDrinkCoffee__NetworkIdentity_Prefix(
+        private static bool InvokeUserCode_CmdDrinkWater__NetworkIdentity_Prefix(
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
@@ -45,8 +45,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(WaterCupController), nameof(WaterCupController.UserCode_CmdSetWaterAmount__Single))]
-        private static bool InvokeUserCode_CmdSetCoffeeAmount__Single_Prefix(
+        [HarmonyPatch(typeof(WaterCupController), nameof(WaterCupController.InvokeUserCode_CmdSetWaterAmount__Single))]
+        private static bool InvokeUserCode_CmdSetWaterAmount__Single_Prefix(
            NetworkBehaviour __0,
            NetworkReader __1,
            NetworkConnectionToClient __2)
