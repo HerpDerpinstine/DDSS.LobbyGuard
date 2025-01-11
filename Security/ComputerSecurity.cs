@@ -34,6 +34,10 @@ namespace DDSS_LobbyGuard.Security
 
         internal static bool EnforceClientEmailSubject(string subject)
         {
+            if (string.IsNullOrEmpty(subject)
+                || string.IsNullOrWhiteSpace(subject)) 
+                return false;
+
             if (subject.StartsWith("Re: "))
             {
                 string[] split = subject.Split(' ', 2, System.StringSplitOptions.None);

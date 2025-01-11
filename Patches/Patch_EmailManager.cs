@@ -8,7 +8,6 @@ using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
-using Il2CppProps.ServerRack;
 using System;
 using UnityEngine;
 
@@ -50,147 +49,101 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
-            // Get and Ignore User Input Sender
             string sender = __1.SafeReadString();
             if (string.IsNullOrEmpty(sender)
                 || string.IsNullOrWhiteSpace(sender))
                 return false;
 
-            // Validate Sender
             string senderLower = sender.ToLower();
-            bool isSenderPlayer = ComputerSecurity._playerAddresses.ContainsKey(senderLower);
             bool isSenderClient = Task.clientEmails.Contains(senderLower);
+            bool isSenderPlayer = !isSenderClient && ComputerSecurity._playerAddresses.ContainsKey(senderLower);
             if (!isSenderPlayer && !isSenderClient)
                 return false;
 
-            // Get and Ignore User Input Receiver
             string receiver = __1.SafeReadString();
-            if (string.IsNullOrEmpty(receiver)
-                || string.IsNullOrWhiteSpace(receiver))
+            if (string.IsNullOrEmpty(sender)
+                || string.IsNullOrWhiteSpace(sender))
                 return false;
 
-            // Validate Receiver
-            string recipientLower = receiver.ToLower();
-            bool isReceiverPlayer = ComputerSecurity._playerAddresses.ContainsKey(recipientLower);
-            bool isReceiverClient = Task.clientEmails.Contains(recipientLower);
+            string receiverLower = receiver.ToLower();
+            bool isReceiverClient = Task.clientEmails.Contains(receiverLower);
+            bool isReceiverPlayer = !isReceiverClient && ComputerSecurity._playerAddresses.ContainsKey(receiverLower);
             if (!isReceiverPlayer && !isReceiverClient)
                 return false;
-            if (isReceiverClient && isSenderClient)
+
+            string subject = __1.SafeReadString();
+            string msg = __1.SafeReadString();
+
+            string time = null;
+            if (ConfigHandler.Gameplay.UseServerTimeStampForEmails.Value)
+                time = DateTime.Now.ToString("HH:mm");
+            else
+                time = __1.SafeReadString();
+            if (string.IsNullOrEmpty(time)
+                || string.IsNullOrWhiteSpace(time)
+                || !DateTime.TryParse(time, out _))
                 return false;
 
-            // Player -> Client
-            if (isSenderPlayer && isReceiverClient)
+            if (isSenderClient)
             {
+                // Client -> ???
+
+                if (isReceiverPlayer)
+                {
+                    // Client -> Player
+
+                    if (!ComputerSecurity.EnforceClientEmailSubject(subject))
+                        return false;
+
+                    WorkStationController workStation = lobbyPlayer.NetworkworkStationController;
+                    if ((workStation == null)
+                        || workStation.WasCollected)
+                        return false;
+
+                    receiver = workStation.computerController.emailAddress;
+                    receiverLower = receiver.ToLower();
+                }
+                else
+                {
+                    // Client -> Client
+                    return false; // Do Nothing because Trasmission isn't Needed
+                }
+            }
+            else
+            {
+                // Player -> ???
+
                 if ((controller.NetworkcurrentChair == null)
                     || controller.NetworkcurrentChair.WasCollected)
                     return false;
 
-                // Validate Chair
                 WorkStationController workStation = controller.NetworkcurrentChair.GetComponent<WorkStationController>();
                 if ((workStation == null)
                     || workStation.WasCollected)
                     return false;
 
-                // Enforce Sender Address
                 sender = workStation.computerController.emailAddress;
-                if (string.IsNullOrEmpty(sender)
-                    || string.IsNullOrWhiteSpace(sender))
-                    return false;
-
                 senderLower = sender.ToLower();
-            }
 
-            // Client -> Player
-            if (isSenderClient && isReceiverPlayer)
-            {
-                // Validate Chair
-                WorkStationController workStation = lobbyPlayer.NetworkworkStationController;
-                if ((workStation == null)
-                    || workStation.WasCollected)
-                    return false;
-
-                // Enforce Receiver Address
-                receiver = workStation.computerController.emailAddress;
-                if (string.IsNullOrEmpty(receiver)
-                    || string.IsNullOrWhiteSpace(receiver))
-                    return false;
-
-                recipientLower = receiver.ToLower();
-            }
-
-            // Get Subject
-            string subject = __1.SafeReadString();
-            if (string.IsNullOrEmpty(subject)
-                || string.IsNullOrWhiteSpace(subject))
-            {
-                if (isSenderClient
-                    || isReceiverPlayer)
-                    return false;
-                subject = string.Empty;
-            }
-            else
-            {
-                subject = subject.RemoveRichText();
-
-                if (string.IsNullOrEmpty(subject)
-                    || string.IsNullOrWhiteSpace(subject))
+                if (isReceiverPlayer)
                 {
-                    if (isSenderClient
-                        || isReceiverPlayer)
+                    // Player -> Player
+
+                    if (string.IsNullOrEmpty(subject)
+                        || string.IsNullOrWhiteSpace(subject)
+                        || string.IsNullOrEmpty(msg)
+                        || string.IsNullOrWhiteSpace(msg))
                         return false;
-                    subject = string.Empty;
                 }
-            }
-
-            // Validate Subject
-            if (isSenderClient
-                && !ComputerSecurity.EnforceClientEmailSubject(subject))
-                return false;
-
-            // Get Message
-            string msg = __1.SafeReadString();
-            if (string.IsNullOrEmpty(msg)
-                || string.IsNullOrWhiteSpace(msg))
-            {
-                if (isSenderClient
-                    || isReceiverPlayer)
-                    return false;
-                msg = string.Empty;
-            }
-            else
-            {
-                msg = msg.RemoveRichText();
-                if (string.IsNullOrEmpty(msg)
-                    || string.IsNullOrWhiteSpace(msg))
+                else
                 {
-                    if (isSenderClient
-                        || isReceiverPlayer)
-                        return false;
-                    msg = string.Empty;
+                    // Player -> Client
+                    return false; // Do Nothing because Trasmission isn't Needed
                 }
-            }
-
-            // Parse DateTime
-            string time = null;
-            if (ConfigHandler.Gameplay.UseServerTimeStampForEmails.Value)
-                time = DateTime.Now.ToString("HH:mm");
-            else
-            {
-                time = __1.SafeReadString();
-                if (string.IsNullOrEmpty(time)
-                    || string.IsNullOrWhiteSpace(time)
-                    || !DateTime.TryParse(time, out _))
-                    return false;
-
-                time = time.RemoveRichText();
-                if (string.IsNullOrEmpty(time)
-                    || string.IsNullOrWhiteSpace(time)
-                    || !DateTime.TryParse(time, out _))
-                    return false;
             }
 
             // Run Game Command
-            inbox.UserCode_CmdSendEmail__String__String__String__String__String(senderLower, recipientLower, subject, msg, time);
+            inbox.UserCode_CmdSendEmail__String__String__String__String__String(senderLower, receiverLower, subject, msg, time);
 
             // Prevent Original
             return false;
