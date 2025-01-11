@@ -48,7 +48,7 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> UseServerTimeStampForEmails;
         internal MelonPreferences_Entry<bool> UseServerTimeStampForChatMessages;
 
-        internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
+        //internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
 
         internal MelonPreferences_Entry<bool> GrabbingWhileEmoting;
@@ -210,10 +210,10 @@ namespace DDSS_LobbyGuard.Config
                 "Prevents Dragging Windows on WorkStation Computers outside of the Monitor's Boundaries",
                 true);
 
-            PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",
-                "Enforce Player Velocity",
-                "Prevents Speedhacking using Context-Based Velocity Clamping",
-                false);
+            //PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",
+            //    "Enforce Player Velocity",
+            //    "Prevents Speedhacking using Context-Based Velocity Clamping",
+            //    false);
 
             HideSlackersFromClients = CreatePref("HideSlackersFromClients",
                 "Hide Slackers from Clients",

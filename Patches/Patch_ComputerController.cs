@@ -230,9 +230,11 @@ namespace DDSS_LobbyGuard.Patches
                 || textAsset.WasCollected)
                 return false;
 
-            string ending = Path.GetExtension(fileName);
+            __1.SafeReadString();
+            string ending = __1.SafeReadString();
             if (string.IsNullOrEmpty(ending)
-                || string.IsNullOrWhiteSpace(ending))
+                || string.IsNullOrWhiteSpace(ending)
+                || ((ending != ".txt") && (ending != ".csv")))
                 return false;
 
             controller.UserCode_CmdCreateFile__String__String__String(fileName, path, ending);
@@ -300,9 +302,11 @@ namespace DDSS_LobbyGuard.Patches
                 || textAsset.WasCollected)
                 return false;
 
-            string ending = Path.GetExtension(fileName);
+            __1.SafeReadString();
+            string ending = __1.SafeReadString();
             if (string.IsNullOrEmpty(ending)
-                || string.IsNullOrWhiteSpace(ending))
+                || string.IsNullOrWhiteSpace(ending)
+                || ((ending != ".txt") && (ending != ".csv")))
                 return false;
 
             controller.UserCode_CmdRemoveFile__String__String__String(fileName, path, ending);

@@ -157,7 +157,6 @@ namespace DDSS_LobbyGuard.Patches
             return false;
         }
 
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdUpdate__NetworkIdentity__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdUpdate__NetworkIdentity__NetworkConnectionToClient_Prefix(
@@ -200,12 +199,22 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get FloppyDiskController
+            bool isVirus = false;
             FloppyDiskController usb = collectible.TryCast<FloppyDiskController>();
             if (usb == null)
-                return false;
+            {
+                InfectedUsb usb2 = collectible.TryCast<InfectedUsb>();
+                if (usb2 == null)
+                    return false;
+            }
+            else
+                isVirus = usb.NetworkisInfected;
 
             // Run Game Command
-            station.UserCode_CmdUpdate__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            if (isVirus)
+                station.UserCode_CmdSetVirus__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            else
+                station.UserCode_CmdUpdate__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
@@ -352,25 +361,36 @@ namespace DDSS_LobbyGuard.Patches
                 station.transform.position))
                 return false;
 
-            // Get InfectedUsb from Prefab
-            InfectedUsb prefabUsb = station.infectedUsbPrefab.GetComponentInChildren<InfectedUsb>();
-            if (prefabUsb == null)
-                return false;
+            bool useNormalSpawn = true;
+            Usable usable = controller.GetCurrentUsable();
+            if (usable != null)
+            {
+                FloppyDiskController floppy = usable.TryCast<FloppyDiskController>();
+                if (floppy != null)
+                    useNormalSpawn = false;
+            }
+            if (useNormalSpawn)
+            {
+                // Get InfectedUsb from Prefab
+                InfectedUsb prefabUsb = station.infectedUsbPrefab.GetComponentInChildren<InfectedUsb>();
+                if (prefabUsb == null)
+                    return false;
 
-            // Get InfectedUsb Interactable Name
-            string interactableName = prefabUsb.interactableName;
-            if (string.IsNullOrEmpty(interactableName)
-                || string.IsNullOrWhiteSpace(interactableName))
-                return false;
+                // Get InfectedUsb Interactable Name
+                string interactableName = prefabUsb.interactableName;
+                if (string.IsNullOrEmpty(interactableName)
+                    || string.IsNullOrWhiteSpace(interactableName))
+                    return false;
 
-            // Validate Count
-            if (!InteractionSecurity.CanSpawnItem(interactableName,
-                InteractionSecurity.MAX_INFECTED_USBS))
-                return false;
+                // Validate Count
+                if (!InteractionSecurity.CanSpawnItem(interactableName,
+                    InteractionSecurity.MAX_INFECTED_USBS))
+                    return false;
 
-            // Validate Grab
-            if (!InteractionSecurity.CanUseUsable(sender, prefabUsb))
-                return false;
+                // Validate Grab
+                if (!InteractionSecurity.CanUseUsable(sender, prefabUsb))
+                    return false;
+            }
 
             // Run Game Command
             station.UserCode_CmdPickUpInfectedUsb__NetworkIdentity__NetworkConnectionToClient(sender, __2);

@@ -100,6 +100,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Value
+            __1.ReadNetworkIdentity();
             bool state = __1.SafeReadBool();
             if (controller.NetworkisFirewallActive == state)
                 return false;

@@ -20,16 +20,12 @@ namespace DDSS_LobbyGuard.Patches
         {
             // Get Mug
             Mug mug = __0.TryCast<Mug>();
-            if ((mug == null)
-                || (mug.coffeeAmount <= 0f))
+            if (mug == null)
                 return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
-
-            // Validate Distance
-            if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, mug.transform.position))
+            if (sender.IsGhost())
                 return false;
 
             // Validate Placement
@@ -40,8 +36,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Mug
             mug = collectible.TryCast<Mug>();
-            if ((mug == null)
-                || (mug.coffeeAmount == 0f))
+            if (mug == null)
                 return false;
 
             // Run Game Command
@@ -63,21 +58,22 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Mug
             Mug mug = __0.TryCast<Mug>();
-            if ((mug == null)
-                || (mug.coffeeAmount == amount))
+            if (mug == null)
                 return false;
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, mug.transform.position))
+            if (sender.IsGhost())
                 return false;
 
             // Check if should Fill or Drink
             if (amount == 1f)
             {
+                if (!InteractionSecurity.IsWithinRange(sender.transform.position, mug.transform.position))
+                    return false;
+
                 // Validate Placement
                 CollectibleHolder holder = mug.currentHolder;
                 if ((holder == null)
@@ -94,8 +90,7 @@ namespace DDSS_LobbyGuard.Patches
 
                 // Get Mug
                 mug = collectible.TryCast<Mug>();
-                if ((mug == null)
-                    || (mug.coffeeAmount == amount))
+                if (mug == null)
                     return false;
             }
             else

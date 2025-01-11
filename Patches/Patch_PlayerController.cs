@@ -1,15 +1,15 @@
-﻿using DDSS_LobbyGuard.Config;
+﻿//using DDSS_LobbyGuard.Config;
 using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppGameManagement;
-using Il2CppGameManagement.StateMachine;
+//using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
-using Il2CppPlayer.PlayerEffects;
-using Il2CppPlayer.StateMachineLogic;
-using UnityEngine;
+//using Il2CppPlayer.PlayerEffects;
+//using Il2CppPlayer.StateMachineLogic;
+//using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -79,6 +79,7 @@ namespace DDSS_LobbyGuard.Patches
             return false;
         }
 
+        /*
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.SetLocalVelocity))]
         private static void SetLocalVelocity_Prefix(PlayerController __instance)
@@ -142,6 +143,7 @@ namespace DDSS_LobbyGuard.Patches
 
             if (trans != null)
             {
+                trans.RpcTeleport(pos);
                 trans.SetPosition(pos);
                 trans.SetDirty();
                 trans.enabled = true;
@@ -156,5 +158,6 @@ namespace DDSS_LobbyGuard.Patches
             if (__instance.NetworktargetState == (int)States.Idle)
                 __instance.NetworktargetState = (int)States.Movement;
         }
+        */
     }
 }
