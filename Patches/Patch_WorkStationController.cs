@@ -143,10 +143,69 @@ namespace DDSS_LobbyGuard.Patches
             // Get InfectedUsb
             InfectedUsb usb = collectible.TryCast<InfectedUsb>();
             if (usb == null)
+            {
+                FloppyDiskController usb2 = collectible.TryCast<FloppyDiskController>();
+                if ((usb2 == null)
+                    || !usb2.NetworkisInfected)
                 return false;
+            }
 
             // Run Game Command
             station.UserCode_CmdSetVirus__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Prevent Original
+            return false;
+        }
+
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdUpdate__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdUpdate__NetworkIdentity__NetworkConnectionToClient_Prefix(
+            NetworkBehaviour __0,
+            NetworkConnectionToClient __2)
+        {
+            // Check Server Status
+            if (!ServerController.connectionsEnabled)
+                return false;
+
+            // Get WorkStationController
+            WorkStationController station = __0.TryCast<WorkStationController>();
+            if ((station == null)
+                || station.WasCollected)
+                return false;
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (!InteractionSecurity.IsWithinRange(
+                sender.transform.position,
+                station.transform.position))
+                return false;
+
+            // Validate Sender
+            PlayerController controller = __2.identity.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
+                return false;
+
+            // Validate Placement
+            Collectible collectible = sender.GetCurrentCollectible();
+            if (collectible == null)
+                return false;
+
+            // Get FloppyDiskController
+            FloppyDiskController usb = collectible.TryCast<FloppyDiskController>();
+            if (usb == null)
+                return false;
+
+            // Run Game Command
+            station.UserCode_CmdUpdate__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
