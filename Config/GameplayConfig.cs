@@ -208,7 +208,7 @@ namespace DDSS_LobbyGuard.Config
             EnforceComputerWindowBoundary = CreatePref("EnforceComputerWindowBoundary",
                 "Enforce Computer Window Boundary",
                 "Prevents Dragging Windows on WorkStation Computers outside of the Monitor's Boundaries",
-                true);
+                false);
 
             //PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",
             //    "Enforce Player Velocity",
