@@ -53,9 +53,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Get Value
-            float amount = __1.SafeReadFloat();
-
             // Get WaterCooler
             WaterCooler cooler = __0.TryCast<WaterCooler>();
             if (cooler == null)
