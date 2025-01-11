@@ -51,6 +51,40 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdFillInk__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdFillInk__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkIdentity __0,
+            NetworkConnectionToClient __2)
+        {
+            // Get Printer
+            Printer printer = __0.TryCast<Printer>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, printer.transform.position))
+                return false;
+
+            // Validate Placement
+            Collectible collectible = sender.GetCurrentCollectible();
+            if ((collectible == null)
+                || collectible.WasCollected)
+                return false;
+
+            // Validate InkCartridge
+            InkCartridge ink = collectible.TryCast<InkCartridge>();
+            if ((ink == null)
+                || ink.WasCollected)
+                return false;
+
+            printer.UserCode_CmdFillInk__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdPrintDocument__String__String))]
         private static bool InvokeUserCode_CmdPrintDocument__String__String_Prefix(
             NetworkBehaviour __0,
