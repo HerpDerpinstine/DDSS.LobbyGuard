@@ -24,6 +24,9 @@ namespace DDSS_LobbyGuard.Patches
 
             // Validate Distance
             if (sender.IsGhost()
+                || !door.enabled
+                || !door.NetworkcanOpenDoor
+                || door.isDoorOpen
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
 
