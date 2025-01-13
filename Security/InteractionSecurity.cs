@@ -240,9 +240,7 @@ namespace DDSS_LobbyGuard.Security
                     int maxAmount = 1;
                     if ((usableType == DocumentType)
                         || (usableType == ImageType)
-                        || (usableType == StorageBoxType)
-                        || (usableType == ToiletPaperType)
-                        || (usableType == MouseType))
+                        || (usableType == ToiletPaperType))
                         maxAmount = 2;
 
                     if (count >= maxAmount)
