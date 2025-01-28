@@ -30,6 +30,7 @@ namespace DDSS_LobbyGuard.Patches
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, elevator.transform.position))
                 return false;
 
+            __1.SafeReadNetworkIdentity();
             int targetLevel = __1.SafeReadInt();
             if (targetLevel < 0)
                 targetLevel = 0;

@@ -28,7 +28,6 @@ namespace DDSS_LobbyGuard.Patches
             if (sender.IsGhost())
                 return false;
 
-
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, cabinet.transform.position))
                 return false;

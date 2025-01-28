@@ -61,6 +61,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Read Value
+            __1.SafeReadNetworkIdentity();
             float timer = __1.SafeReadFloat();
             bool initial = __1.SafeReadBool();
 

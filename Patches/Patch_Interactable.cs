@@ -38,6 +38,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Cooldown
+            __1.SafeReadNetworkIdentity();
             float coolDown = __1.ReadFloat();
             bool initial = __1.ReadBool();
             if (initial)

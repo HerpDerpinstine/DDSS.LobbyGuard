@@ -214,6 +214,7 @@ namespace DDSS_LobbyGuard.Patches
             string path = "User/Desktop";
 
             // Get FileName
+            __1.SafeReadNetworkIdentity();
             string fileName = __1.SafeReadString();
             if (string.IsNullOrEmpty(fileName)
                 || string.IsNullOrWhiteSpace(fileName))

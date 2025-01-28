@@ -30,6 +30,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Interactible Name
+            __1.SafeReadNetworkIdentity();
             string interactibleName = __1.SafeReadString();
             if (string.IsNullOrEmpty(interactibleName)
                 || string.IsNullOrWhiteSpace(interactibleName)) 

@@ -50,7 +50,6 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(WaterCooler), nameof(WaterCooler.InvokeUserCode_CmdFillCup__NetworkIdentity__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdFillCup__NetworkIdentity__NetworkConnectionToClient(
             NetworkBehaviour __0,
-            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Get WaterCooler
