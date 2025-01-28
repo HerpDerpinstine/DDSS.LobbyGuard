@@ -35,7 +35,9 @@ namespace DDSS_LobbyGuard.Security
         internal const int MAX_STICKYNOTES_DOOR = 10;
         internal const int MAX_COLLECTIBLES_HOLDER = 10;
 
-        internal const int MAX_CHAT_CHARS = 50;
+        internal const int MAX_LOBBY_CHAT_CHARS = 50;
+        internal const int MAX_INGAME_CHAT_CHARS = 100;
+
         internal const int MAX_STICKYNOTE_CHARS = 100;
 
         internal const int MAX_DOCUMENT_CHARS = 240;

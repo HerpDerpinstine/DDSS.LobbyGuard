@@ -164,8 +164,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Remove Rich Text
             message = message.RemoveRichText();
-            if (message.Length > InteractionSecurity.MAX_CHAT_CHARS)
-                message = message.Substring(0, InteractionSecurity.MAX_CHAT_CHARS);
+            if (message.Length > InteractionSecurity.MAX_LOBBY_CHAT_CHARS)
+                message = message.Substring(0, InteractionSecurity.MAX_LOBBY_CHAT_CHARS);
             if (string.IsNullOrEmpty(message)
                 || string.IsNullOrWhiteSpace(message))
                 return false;
