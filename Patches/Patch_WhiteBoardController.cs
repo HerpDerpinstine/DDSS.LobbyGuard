@@ -142,6 +142,7 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position))
                 return false;
 
+            __1.SafeReadNetworkIdentity();
             NetworkIdentity target = __1.SafeReadNetworkIdentity();
             if ((target == null)
                 || target.WasCollected)
@@ -180,6 +181,7 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position))
                 return false;
 
+            __1.SafeReadNetworkIdentity();
             NetworkIdentity target = __1.SafeReadNetworkIdentity();
             if ((target == null)
                 || target.WasCollected)
