@@ -135,14 +135,14 @@ namespace DDSS_LobbyGuard.Security
             if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
                 return manager.GetWinner();
 
-            if (manager.onlyWinFromScore)
-                return PlayerRole.None;
-
             if (manager.finalProductivityMeter >= 1f)
                 return PlayerRole.Specialist;
 
             if (manager.finalProductivityMeter <= 0f)
                 return PlayerRole.Slacker;
+
+            if (manager.onlyWinFromScore)
+                return PlayerRole.None;
 
             int numberOfFiredEmployees = manager.GetNumberOfFiredEmployees();
             int amountOfUnfiredSlackers = GetAmountOfUnfiredSlackers(LobbyManager.instance);
