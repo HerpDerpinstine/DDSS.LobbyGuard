@@ -9,8 +9,7 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<eConfigHostType> UsernamesOnStickyNotes;
 
         internal MelonPreferences_Entry<bool> StickyNotesOnPlayers;
-        internal MelonPreferences_Entry<bool> StickyNotesOnOpenDoors;
-        internal MelonPreferences_Entry<bool> StickyNotesOnClosedDoors;
+        internal MelonPreferences_Entry<bool> StickyNotesOnDoors;
 
         internal MelonPreferences_Entry<bool> PrinterCopiesWithSignature;
 
@@ -21,10 +20,15 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> SpawnUnassignedDeskItems;
 
         internal MelonPreferences_Entry<bool> AllowJanitorsToVote;
+        internal MelonPreferences_Entry<bool> AllowJanitorsToPourInk;
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUpdateCCTV;
+        internal MelonPreferences_Entry<bool> AllowJanitorsToUpdateComputers;
         internal MelonPreferences_Entry<bool> AllowJanitorsToKeepWorkStation;
+
+        internal MelonPreferences_Entry<bool> AllowSpecialistsToPourInk;
+
         internal MelonPreferences_Entry<bool> AllowVirusesWhileServerIsDown;
 
         internal MelonPreferences_Entry<bool> ProductivityFromTaskCompletion;
@@ -47,15 +51,6 @@ namespace DDSS_LobbyGuard.Config
 
         //internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
         internal MelonPreferences_Entry<bool> HideSlackersFromClients;
-
-        internal MelonPreferences_Entry<bool> GrabbingWhileEmoting;
-        internal MelonPreferences_Entry<bool> DroppingWhileEmoting;
-
-        internal MelonPreferences_Entry<bool> GrabbingWhilePointing;
-        internal MelonPreferences_Entry<bool> DroppingWhilePointing;
-
-        internal MelonPreferences_Entry<bool> GrabbingWhileHandshaking;
-        internal MelonPreferences_Entry<bool> DroppingWhileHandshaking;
 
         internal override string GetName()
             => "Gameplay";
@@ -82,14 +77,9 @@ namespace DDSS_LobbyGuard.Config
                 "Allows the Grabbing and Placing of Sticky Notes on Players",
                 true);
 
-            StickyNotesOnOpenDoors = CreatePref("StickyNotesOnOpenDoors",
-                "Sticky Notes on Open Doors",
-                "Allows the Grabbing and Placing of Sticky Notes on Doors while they are Open",
-                false);
-
-            StickyNotesOnClosedDoors = CreatePref("StickyNotesOnClosedDoors",
-                "Sticky Notes on Closed Doors",
-                "Allows the Grabbing and Placing of Sticky Notes on Doors while they are Closed",
+            StickyNotesOnDoors = CreatePref("StickyNotesOnOpenDoors",
+                "Sticky Notes on Doors",
+                "Allows the Grabbing and Placing of Sticky Notes on Doors",
                 true);
 
             PrinterCopiesWithSignature = CreatePref("PrinterCopiesWithSignature",
@@ -122,6 +112,11 @@ namespace DDSS_LobbyGuard.Config
                 "Allows Janitors to Vote on Manager",
                 false);
 
+            AllowJanitorsToPourInk = CreatePref("AllowJanitorsToPourInk",
+                "Allow Janitors to Pour Ink",
+                "Allows Janitors to Pour Ink in the Fish Tank",
+                true);
+
             AllowJanitorsToLockDoors = CreatePref("AllowJanitorsToLockDoors",
                 "Allow Janitors to Lock Doors",
                 "Allows Janitors to Lock Doors",
@@ -136,11 +131,21 @@ namespace DDSS_LobbyGuard.Config
                 "Allow Janitors to Update CCTV",
                 "Allows Janitors to Update Firmware on CCTV Cameras",
                 true);
-            
+
+            AllowJanitorsToUpdateComputers = CreatePref("AllowJanitorsToUpdateComputers",
+                "Allow Janitors to Update Computers",
+                "Allows Janitors to do Software Updates on Computers",
+                true);
+
             AllowJanitorsToKeepWorkStation = CreatePref("AllowJanitorsToKeepWorkStation",
                 "Allow Janitors to Keep WorkStation",
                 "Allows Janitors to Keep their Assigned WorkStation",
                 false);
+
+            AllowSpecialistsToPourInk = CreatePref("AllowSpecialistsToPourInk",
+                "Allow Specialists to Pour Ink",
+                "Allows Specialists to Pour Ink in the Fish Tank",
+                true);
 
             AllowVirusesWhileServerIsDown = CreatePref("AllowVirusesWhileServerIsDown",
                 "Allow Viruses while Server is Down",
@@ -215,36 +220,6 @@ namespace DDSS_LobbyGuard.Config
             HideSlackersFromClients = CreatePref("HideSlackersFromClients",
                 "Hide Slackers from Clients",
                 "Prevents Slackers and Slacker Count from being broadcasted to Clients",
-                false);
-
-            GrabbingWhileEmoting = CreatePref("GrabbingWhileEmoting",
-                "Grabbing while Emoting",
-                "Allows the Grabbing of Usables while Emoting",
-                true);
-
-            DroppingWhileEmoting = CreatePref("DroppingWhileEmoting",
-                "Dropping while Emoting",
-                "Allows the Dropping of Usables while Emoting",
-                false);
-
-            GrabbingWhilePointing = CreatePref("GrabbingWhilePointing",
-                "Grabbing while Pointing",
-                "Allows the Grabbing of Usables while Pointing",
-                true);
-
-            DroppingWhilePointing = CreatePref("DroppingWhilePointing",
-                "Dropping while Pointing",
-                "Allows the Dropping of Usables while Pointing",
-                false);
-
-            GrabbingWhileHandshaking = CreatePref("GrabbingWhileHandshaking",
-                "Grabbing while Handshaking",
-                "Allows the Grabbing of Usables while Handshaking",
-                false);
-
-            DroppingWhileHandshaking = CreatePref("DroppingWhileHandshaking",
-                "Dropping while Handshaking",
-                "Allows the Dropping of Usables while Handshaking",
                 false);
         }
     }

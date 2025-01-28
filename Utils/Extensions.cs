@@ -86,6 +86,27 @@ namespace DDSS_LobbyGuard.Utils
             return controller.IsJanitor();
         }
 
+        internal static bool IsSpecialist(this LobbyPlayer player)
+            => (player.NetworkplayerRole == PlayerRole.Specialist);
+        internal static bool IsSpecialist(this PlayerController controller)
+        {
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
+                return false;
+
+            return lobbyPlayer.IsSpecialist();
+        }
+        internal static bool IsSpecialist(this NetworkIdentity player)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            return controller.IsSpecialist();
+        }
+
         internal static PlayerRole GetPlayerRole(this NetworkIdentity player)
         {
             PlayerController controller = player.GetComponent<PlayerController>();
@@ -99,17 +120,6 @@ namespace DDSS_LobbyGuard.Utils
                 return PlayerRole.None;
 
             return lobbyPlayer.NetworkplayerRole;
-        }
-
-
-        internal static LobbyPlayer GetLobbyPlayer(this NetworkIdentity player)
-        {
-            PlayerController controller = player.GetComponent<PlayerController>();
-            if ((controller == null)
-                || controller.WasCollected)
-                return null;
-
-            return controller.NetworklobbyPlayer;
         }
 
         internal static SubRole GetPlayerSubRole(this NetworkIdentity player)

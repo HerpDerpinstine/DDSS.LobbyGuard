@@ -245,23 +245,6 @@ namespace DDSS_LobbyGuard.Security
                 }
             }
 
-            // Check for Point or Hand Raise
-            if (!isChair
-                && !ConfigHandler.Gameplay.GrabbingWhilePointing.Value
-                && (controller.IsPointing() || controller.IsRaisingHand()))
-                return false;
-
-            // Check for Handshake
-            if ((isChair || !ConfigHandler.Gameplay.GrabbingWhileHandshaking.Value)
-                && controller.IsHandShaking())
-                return false;
-
-            // Check for Emotes
-            if (controller.IsEmoting()
-                && ((isChair && !controller.IsClapping() && !controller.IsWaving() && !controller.IsFacePalming())
-                    || (!isChair && !ConfigHandler.Gameplay.GrabbingWhileEmoting.Value)))
-                return false;
-
             // Allow Grab
             return true;
         }
@@ -272,23 +255,6 @@ namespace DDSS_LobbyGuard.Security
             PlayerController controller = player.GetComponent<PlayerController>();
             if ((controller == null)
                 || controller.WasCollected)
-                return false;
-
-            // Check for Point or Hand Raise
-            if (!isChair
-                && !ConfigHandler.Gameplay.DroppingWhilePointing.Value
-                && (controller.IsPointing() || controller.IsRaisingHand()))
-                return false;
-
-            // Check for Handshake
-            if ((isChair || !ConfigHandler.Gameplay.DroppingWhileHandshaking.Value)
-                && controller.IsHandShaking())
-                return false;
-
-            // Check for Emotes
-            if (controller.IsEmoting()
-                && ((isChair && !controller.IsClapping() && !controller.IsWaving() && !controller.IsFacePalming())
-                    || (!isChair && !ConfigHandler.Gameplay.DroppingWhileEmoting.Value)))
                 return false;
 
             // Allow Drop

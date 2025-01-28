@@ -138,14 +138,24 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void SpawnCDStart(CDHolder holder)
         {
-            for (int i = 0; i < 2; i++)
+            if (StereoController.instance == null)
+                return;
+            for (int i = 0; i < StereoController.instance.songs.Count; i++)
                 SpawnCD(holder, i);
         }
         internal static void SpawnCD(CDHolder holder, int index)
             => SpawnAndPlace(holder.cdCasePrefab,
                 holder,
                 CollectibleDestructionCallback.eCollectibleType.CD,
-                (CDCase cd) => cd.NetworksongIndex = index,
+                (CDCase cd) =>
+                {
+                    cd.NetworksongIndex = index;
+
+                    string cdName = StereoController.instance.songs[index].songName;
+                    string localizedName = LocalizationManager.instance.GetLocalizedValue(cdName);
+                    cd.NetworkinteractableName = cd.Networklabel = localizedName;
+                    cd.interactableName = cd.label = localizedName;
+                },
                 index);
 
 
@@ -198,16 +208,10 @@ namespace DDSS_LobbyGuard.Security
 
             yield return new WaitForSeconds(3f);
 
-            gameObject.transform.position = holder.transform.position;
-            gameObject.transform.rotation = holder.transform.rotation;
-
             T obj = gameObject.GetComponent<T>();
-            holder.ServerPlaceCollectible(obj.netIdentity, obj.Networklabel);
-
-            yield return new WaitForSeconds(1f);
-
             if (afterSpawn != null)
                 afterSpawn(obj);
+            holder.ServerPlaceCollectible(obj.netIdentity, obj.Networklabel);
 
             yield break;
         }

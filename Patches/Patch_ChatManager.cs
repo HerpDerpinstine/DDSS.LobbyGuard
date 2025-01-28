@@ -4,6 +4,7 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
+using Il2CppPlayer.Lobby;
 using System;
 
 namespace DDSS_LobbyGuard.Patches
@@ -59,7 +60,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Invoke Game Method
-            manager.UserCode_CmdSendChatMessage__LobbyPlayer__String__String__NetworkConnectionToClient(sender.GetLobbyPlayer(), message, time, __2);
+            manager.UserCode_CmdSendChatMessage__LobbyPlayer__String__String__NetworkConnectionToClient(sender.gameObject.GetComponent<LobbyPlayer>(), message, time, __2);
 
             // Prevent Original
             return false;

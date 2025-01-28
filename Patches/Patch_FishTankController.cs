@@ -1,8 +1,11 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
+using Il2CppPlayer;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard.Patches
@@ -21,9 +24,24 @@ namespace DDSS_LobbyGuard.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Validate Distance
-            if (sender.IsGhost()
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost()
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, tank.transform.position))
+                return false;
+
+            if (!ConfigHandler.Gameplay.AllowJanitorsToPourInk.Value
+                && lobbyPlayer.IsJanitor())
+                return false;
+
+            if (!ConfigHandler.Gameplay.AllowSpecialistsToPourInk.Value
+                && lobbyPlayer.IsSpecialist())
                 return false;
 
             // Validate Placement

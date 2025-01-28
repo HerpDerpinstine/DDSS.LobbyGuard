@@ -141,14 +141,10 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get InfectedUsb
-            InfectedUsb usb = collectible.TryCast<InfectedUsb>();
-            if (usb == null)
-            {
-                FloppyDiskController usb2 = collectible.TryCast<FloppyDiskController>();
-                if ((usb2 == null)
-                    || !usb2.NetworkisInfected)
+            FloppyDiskController usb = collectible.TryCast<FloppyDiskController>();
+            if ((usb == null)
+                || !usb.NetworkisInfected)
                 return false;
-            }
 
             // Run Game Command
             station.UserCode_CmdSetVirus__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -190,7 +186,12 @@ namespace DDSS_LobbyGuard.Patches
 
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
             if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost())
+                return false;
+
+            if (!ConfigHandler.Gameplay.AllowJanitorsToUpdateComputers.Value
+                && lobbyPlayer.IsJanitor())
                 return false;
 
             // Validate Placement
@@ -199,18 +200,12 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get FloppyDiskController
-            bool isVirus = false;
             FloppyDiskController usb = collectible.TryCast<FloppyDiskController>();
             if (usb == null)
-            {
-                InfectedUsb usb2 = collectible.TryCast<InfectedUsb>();
-                if (usb2 == null)
-                    return false;
-            }
-            else
-                isVirus = usb.NetworkisInfected;
+                return false;
 
             // Run Game Command
+            bool isVirus = usb.NetworkisInfected;
             if (isVirus)
                 station.UserCode_CmdSetVirus__NetworkIdentity__NetworkConnectionToClient(sender, __2);
             else
