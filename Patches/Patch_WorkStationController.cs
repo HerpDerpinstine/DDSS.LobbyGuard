@@ -132,7 +132,7 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
             if ((lobbyPlayer == null)
                 || lobbyPlayer.WasCollected
-                || !InteractionSecurity.IsSlacker(lobbyPlayer))
+                || lobbyPlayer.IsGhost())
                 return false;
 
             // Validate Placement

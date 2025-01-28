@@ -121,17 +121,11 @@ namespace DDSS_LobbyGuard.Patches
                     int slackerCount = GameManager.instance.NetworkstartSlackers;
                     int specialistCount = GameManager.instance.NetworkstartSpecialists;
 
-                    // Get Player Role
+                    // Increment Count
                     if (InteractionSecurity.IsSlacker(lobbyPlayer))
-                        slackerCount--;
+                        slackerCount++;
                     else if (playerRole == PlayerRole.Specialist)
-                        specialistCount--;
-
-                    // Clamp Count
-                    if (slackerCount < 0)
-                        slackerCount = 0;
-                    if (specialistCount < 0)
-                        specialistCount = 0;
+                        specialistCount++;
 
                     // Apply New Counts
                     //GameManager.instance.SetWinCondition(specialistCount, slackerCount);
