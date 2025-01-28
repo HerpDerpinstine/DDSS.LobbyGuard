@@ -18,8 +18,8 @@ namespace DDSS_LobbyGuard.Patches
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
-            // Get LobbyManager
-            LobbyManager manager = __0.TryCast<LobbyManager>();
+            // Get ChatManager
+            ChatManager manager = __0.TryCast<ChatManager>();
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
@@ -41,7 +41,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Parse DateTime
             string time = null;
-            if (ConfigHandler.Gameplay.UseServerTimeStampForChatMessages.Value)
+            if (ConfigHandler.General.UseServerTimeStampForChatMessages.Value)
                 time = DateTime.Now.ToString("HH:mm:ss");
             else
             {
@@ -59,7 +59,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Invoke Game Method
-            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String__NetworkConnectionToClient(sender, message, time, __2);
+            manager.UserCode_CmdSendChatMessage__LobbyPlayer__String__String__NetworkConnectionToClient(sender.GetLobbyPlayer(), message, time, __2);
 
             // Prevent Original
             return false;

@@ -1,5 +1,6 @@
 ﻿using DDSS_LobbyGuard.Security;
 using HarmonyLib;
+using Il2Cpp;
 using Il2CppMirror;
 using Il2CppProps.Door;
 using UnityEngine;
@@ -21,7 +22,12 @@ namespace DDSS_LobbyGuard.Patches
             if (!PlayerTriggerSecurity.IsColliderValid(__0))
                 return false;
 
-            PlayerTriggerSecurity.OnEnter(__instance, __0);
+            DoorController door = __instance.doorController;
+            if (door == null)
+                return false;
+
+            // Apply State
+            PlayerTriggerSecurity.OnEnter(__instance, __0, door);
 
             // Prevent Original
             return false;

@@ -75,7 +75,7 @@ namespace DDSS_LobbyGuard.Patches
             string msg = __1.SafeReadString();
 
             string time = null;
-            if (ConfigHandler.Gameplay.UseServerTimeStampForEmails.Value)
+            if (ConfigHandler.General.UseServerTimeStampForEmails.Value)
                 time = DateTime.Now.ToString("HH:mm");
             else
                 time = __1.SafeReadString();

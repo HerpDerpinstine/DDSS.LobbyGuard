@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Utils;
+using Il2Cpp;
 using Il2CppProps.Door;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,14 +20,14 @@ namespace DDSS_LobbyGuard.Security
                 && (other.gameObject.layer != 11)
                 && (other.gameObject.layer != 13));
 
-        internal static void OnEnter(PlayerDetectionVolume trigger, Collider other)
+        internal static void OnEnter(PlayerDetectionVolume trigger, Collider other, DoorController door)
         {
             if ((trigger == null)
                 || trigger.WasCollected
                 || (other == null)
                 || other.WasCollected)
                 return;
-            
+
             int count = 0;
             _playerCounts.TryGetValue(trigger, out count);
 
@@ -35,10 +36,13 @@ namespace DDSS_LobbyGuard.Security
 
             _playerCounts[trigger] = count++;
             trigger.isPlayerInside = true;
-            trigger.StartCoroutine(ColliderCheckCoroutine(trigger, other));
+            trigger.StartCoroutine(ColliderCheckCoroutine(trigger, other, door));
+
+            if (count == 1)
+                door.UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient(trigger.doorValue, null, null);
         }
 
-        private static IEnumerator ColliderCheckCoroutine(PlayerDetectionVolume trigger, Collider other)
+        private static IEnumerator ColliderCheckCoroutine(PlayerDetectionVolume trigger, Collider other, DoorController door)
         {
             if ((trigger == null)
                 || trigger.WasCollected

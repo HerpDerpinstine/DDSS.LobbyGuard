@@ -178,7 +178,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Parse DateTime
             string time = null;
-            if (ConfigHandler.Gameplay.UseServerTimeStampForChatMessages.Value)
+            if (ConfigHandler.General.UseServerTimeStampForChatMessages.Value)
                 time = DateTime.Now.ToString("HH:mm:ss");
             else
             {

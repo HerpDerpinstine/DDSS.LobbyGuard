@@ -2,6 +2,7 @@
 {
     internal static class ConfigHandler
     {
+        internal static UIConfig UI;
         internal static GeneralConfig General;
         internal static ModerationConfig Moderation;
         internal static LobbyConfig Lobby;
@@ -9,6 +10,8 @@
 
         internal static void Setup()
         {
+            if (UI == null)
+                UI = new();
             if (General == null)
                 General = new();
             if (Moderation == null)

@@ -1,5 +1,4 @@
-﻿using DDSS_LobbyGuard.GUI;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Il2CppUMUI;
 
 namespace DDSS_LobbyGuard.GUI.Patches
@@ -17,6 +16,11 @@ namespace DDSS_LobbyGuard.GUI.Patches
                 ModSettingsManager.CancelRebind();
                 return false;
             }
+
+            // Validate Name
+            if (string.IsNullOrEmpty(__0)
+                || string.IsNullOrWhiteSpace(__0))
+                return false;
 
             // Run Original
             return true;
