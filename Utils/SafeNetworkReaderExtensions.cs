@@ -73,6 +73,8 @@ namespace DDSS_LobbyGuard.Utils
             => TryRunRead(reader.ReadVector3Int);
         internal static Vector4 SafeReadVector4(this NetworkReader reader)
             => TryRunRead(reader.ReadVector4);
+        internal static Quaternion SafeReadQuaternion(this NetworkReader reader)
+            => TryRunRead(reader.ReadQuaternion);
         internal static Color SafeReadColor(this NetworkReader reader)
             => TryRunRead(reader.ReadColor);
         internal static Color32 SafeReadColor32(this NetworkReader reader)
@@ -118,6 +120,8 @@ namespace DDSS_LobbyGuard.Utils
             => TryRunRead(reader.ReadVector3IntNullable);
         internal static Nullable<Vector4> SafeReadVector4Nullable(this NetworkReader reader)
             => TryRunRead(reader.ReadVector4Nullable);
+        internal static Nullable<Quaternion> SafeReadQuaternionNullable(this NetworkReader reader)
+            => TryRunRead(reader.ReadQuaternionNullable);
         internal static Nullable<Color> SafeReadColorNullable(this NetworkReader reader)
             => TryRunRead(reader.ReadColorNullable);
         internal static Nullable<Color32> SafeReadColor32Nullable(this NetworkReader reader)
