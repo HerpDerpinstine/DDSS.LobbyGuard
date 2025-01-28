@@ -110,6 +110,12 @@ namespace DDSS_LobbyGuard.Patches
                     || ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value)
                     lobbyPlayer.ServerSetWorkStation(null, playerRole, true);
 
+                if (isJanitor)
+                {
+                    lobbyPlayer.NetworkisFired = true;
+                    lobbyPlayer.isFired = true;
+                }
+
                 // Check Setting
                 if (!ConfigHandler.Gameplay.PlayerLeavesReduceTerminations.Value
                     && !isJanitor
@@ -121,11 +127,17 @@ namespace DDSS_LobbyGuard.Patches
                     int slackerCount = GameManager.instance.NetworkstartSlackers;
                     int specialistCount = GameManager.instance.NetworkstartSpecialists;
 
-                    // Increment Count
+                    // Get Player Role
                     if (InteractionSecurity.IsSlacker(lobbyPlayer))
-                        slackerCount++;
+                        slackerCount--;
                     else if (playerRole == PlayerRole.Specialist)
-                        specialistCount++;
+                        specialistCount--;
+
+                    // Clamp Count
+                    if (slackerCount < 0)
+                        slackerCount = 0;
+                    if (specialistCount < 0)
+                        specialistCount = 0;
 
                     // Apply New Counts
                     //GameManager.instance.SetWinCondition(specialistCount, slackerCount);

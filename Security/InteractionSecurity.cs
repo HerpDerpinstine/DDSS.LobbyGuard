@@ -134,9 +134,6 @@ namespace DDSS_LobbyGuard.Security
 
         internal static PlayerRole GetWinner(GameManager manager)
         {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return manager.GetWinner();
-
             if (manager.finalProductivityMeter >= 1f)
                 return PlayerRole.Specialist;
 
@@ -146,28 +143,23 @@ namespace DDSS_LobbyGuard.Security
             if (manager.onlyWinFromScore)
                 return PlayerRole.None;
 
-            int numberOfFiredEmployees = manager.GetNumberOfFiredEmployees();
             int amountOfUnfiredSlackers = GetAmountOfUnfiredSlackers(LobbyManager.instance);
-            int amountOfUnfiredSpecialists = GetAmountOfUnfiredSpecialists(LobbyManager.instance);
-
             if (amountOfUnfiredSlackers <= 0)
                 return PlayerRole.Specialist;
 
+            int amountOfUnfiredSpecialists = GetAmountOfUnfiredSpecialists(LobbyManager.instance);
             if (amountOfUnfiredSpecialists <= 0)
                 return PlayerRole.Slacker;
 
+            int numberOfFiredEmployees = manager.GetNumberOfFiredEmployees();
             if (numberOfFiredEmployees >= manager.fireLimit)
                 return PlayerRole.Slacker;
 
             return PlayerRole.None;
-
         }
 
         internal static int GetAmountOfUnfiredSlackers(LobbyManager manager)
         {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return manager.GetAmountOfUnfiredSlackers();
-
             int num = 0;
             foreach (NetworkIdentity networkIdentity in manager.GetAllPlayers())
             {
@@ -180,9 +172,6 @@ namespace DDSS_LobbyGuard.Security
 
         internal static int GetAmountOfUnfiredSpecialists(LobbyManager manager)
         {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return manager.GetAmountOfUnfiredSpecialists();
-
             int num = 0;
             foreach (NetworkIdentity networkIdentity in manager.GetAllPlayers())
             {

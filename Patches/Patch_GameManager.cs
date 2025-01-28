@@ -213,8 +213,16 @@ namespace DDSS_LobbyGuard.Patches
                 player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
 
             // Apply Fired State
-            player.isFired = janitorsKeepWorkstation && flag || !flag;
-            player.NetworkisFired = janitorsKeepWorkstation && flag || !flag;
+            if (player.IsJanitor())
+            {
+                player.NetworkisFired = true;
+                player.isFired = true;
+            }
+            else
+            {
+                player.isFired = janitorsKeepWorkstation && flag || !flag;
+                player.NetworkisFired = janitorsKeepWorkstation && flag || !flag;
+            }
 
             // Fire Player
             player.RpcFirePlayer(true, player.NetworkplayerRole, !flag);
@@ -275,37 +283,14 @@ namespace DDSS_LobbyGuard.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
-
-
             // Run Game Command
-            //manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, InteractionSecurity.IsSlacker(lobbyPlayer) ? PlayerRole.Slacker : lobbyPlayer.NetworkplayerRole));
+            manager.UserCode_CmdAddProductivityFromTaskCompletion__PlayerRole__NetworkIdentity__NetworkConnectionToClient(
+                InteractionSecurity.IsSlacker(lobbyPlayer) ? PlayerRole.Slacker : lobbyPlayer.NetworkplayerRole,
+                sender,
+                __2);
 
             // Prevent Original
             return false;
-        }
-
-        private static IEnumerator CoroutineAddProductivityFromTaskCompletion(GameManager manager, PlayerRole role)
-        {
-            if (manager.NetworkdelayedScoreOnSlackerTasks)
-                yield return new WaitForSeconds(Random.Range(0f, 30f));
-
-            if ((manager != null)
-                && !manager.WasCollected
-                && (LobbyManager.instance != null)
-                && !LobbyManager.instance.WasCollected)
-            {
-                float num = 0f;
-                if (role == PlayerRole.Slacker)
-                    num = manager.NetworkproductivityPerSlackerTask / InteractionSecurity.GetAmountOfUnfiredSlackers(LobbyManager.instance);
-                else if (role == PlayerRole.Specialist)
-                    num = manager.NetworkproductivityPerSpecialistTask / InteractionSecurity.GetAmountOfUnfiredSpecialists(LobbyManager.instance);
-                else if (role == PlayerRole.Manager)
-                    num = manager.NetworkproductivityPerManagerTask;
-
-                manager.productivity += num;
-            }
-
-            yield break;
         }
     }
 }
