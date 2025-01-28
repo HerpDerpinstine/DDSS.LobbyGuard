@@ -11,8 +11,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_WaterCupController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(WaterCupController), nameof(WaterCupController.InvokeUserCode_CmdDrinkWater__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdDrinkWater__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(WaterCupController), nameof(WaterCupController.InvokeUserCode_CmdDrinkWater__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdDrinkWater__NetworkIdentity__NetworkConnectionToClient_Prefix(
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
@@ -38,17 +38,9 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            mug.UserCode_CmdDrinkWater__NetworkIdentity(sender);
-            mug.UserCode_CmdSetWaterAmount__Single(0f);
+            mug.UserCode_CmdDrinkWater__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            mug.ServerSetWaterAmount(0f);
 
-            // Prevent Original
-            return false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(WaterCupController), nameof(WaterCupController.InvokeUserCode_CmdSetWaterAmount__Single))]
-        private static bool InvokeUserCode_CmdSetWaterAmount__Single_Prefix()
-        {
             // Prevent Original
             return false;
         }

@@ -11,8 +11,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_PaperShredder
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PaperShredder), nameof(PaperShredder.InvokeUserCode_CmdStartInteraction__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdStartInteraction__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(PaperShredder), nameof(PaperShredder.InvokeUserCode_CmdStartInteraction__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdStartInteraction__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -32,15 +32,15 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            shredder.UserCode_CmdStartInteraction__NetworkIdentity(sender);
+            shredder.UserCode_CmdStartInteraction__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PaperShredder), nameof(PaperShredder.InvokeUserCode_TimerCallback__Single))]
-        private static bool InvokeUserCode_TimerCallback__Single_Prefix(
+        [HarmonyPatch(typeof(PaperShredder), nameof(PaperShredder.InvokeUserCode_CmdSetInteractionTimeCounter__NetworkIdentity__Single__Boolean__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSetInteractionTimeCounter__NetworkIdentity__Single__Boolean__NetworkConnectionToClient_Prefix(
            NetworkBehaviour __0,
            NetworkReader __1,
            NetworkConnectionToClient __2)
@@ -62,9 +62,10 @@ namespace DDSS_LobbyGuard.Patches
 
             // Read Value
             float timer = __1.SafeReadFloat();
+            bool initial = __1.SafeReadBool();
 
             // Run Game Command
-            shredder.UserCode_TimerCallback__Single(timer);
+            shredder.UserCode_CmdSetInteractionTimeCounter__NetworkIdentity__Single__Boolean__NetworkConnectionToClient(sender, timer, initial, __2);
 
             // Prevent Original
             return false;

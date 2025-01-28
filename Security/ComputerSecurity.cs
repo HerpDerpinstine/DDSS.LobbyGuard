@@ -17,11 +17,11 @@ namespace DDSS_LobbyGuard.Security
             // Validate ComputerController
             if ((computer == null)
                 || (computer._workStationController == null)
-                || (computer._workStationController.usingPlayer == null))
+                || (computer._workStationController.usingPlayerController == null))
                 return false;
 
             // Check if Actually Sitting in Seat
-            if (computer._workStationController.usingPlayer != player)
+            if (computer._workStationController.usingPlayerController != player)
                 return false;
 
             // Validate player

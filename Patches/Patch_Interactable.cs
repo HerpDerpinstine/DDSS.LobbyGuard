@@ -14,8 +14,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_Interactable
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Interactable), nameof(Interactable.InvokeUserCode_CmdSetInteractionTimeCounter__Single__Boolean))]
-        private static bool InvokeUserCode_CmdSetInteractionTimeCounter__Single__Boolean_Prefix(NetworkBehaviour __0,
+        [HarmonyPatch(typeof(Interactable), nameof(Interactable.InvokeUserCode_CmdSetInteractionTimeCounter__NetworkIdentity__Single__Boolean__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSetInteractionTimeCounter__NetworkIdentity__Single__Boolean__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
@@ -61,7 +61,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Run Game Command
-            interact.UserCode_CmdSetInteractionTimeCounter__Single__Boolean(coolDown, initial);
+            interact.UserCode_CmdSetInteractionTimeCounter__NetworkIdentity__Single__Boolean__NetworkConnectionToClient(sender, coolDown, initial, __2);
 
             // Prevent Original
             return false;

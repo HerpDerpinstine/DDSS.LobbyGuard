@@ -21,7 +21,6 @@ namespace DDSS_LobbyGuard.Patches
             if (!PlayerTriggerSecurity.IsColliderValid(__0))
                 return false;
 
-            __instance.OnPlayerEnter.Invoke();
             PlayerTriggerSecurity.OnEnter(__instance, __0);
 
             // Prevent Original

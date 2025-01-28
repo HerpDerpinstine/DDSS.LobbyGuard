@@ -1,7 +1,6 @@
 ﻿using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror.RemoteCalls;
-using System;
 
 namespace DDSS_LobbyGuard.Patches
 {

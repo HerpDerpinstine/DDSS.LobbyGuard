@@ -15,8 +15,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_PaperTray
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PaperTray), nameof(PaperTray.InvokeUserCode_CmdSpawnDocument__String))]
-        private static bool InvokeUserCode_CmdSpawnDocument__String_Prefix(
+        [HarmonyPatch(typeof(PaperTray), nameof(PaperTray.InvokeUserCode_CmdSpawnDocument__String__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSpawnDocument__String__NetworkConnectionToClient_Prefix(
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
@@ -93,7 +93,7 @@ namespace DDSS_LobbyGuard.Patches
             docCopy.SetName(document);
 
             // Place Document in Printer
-            tray.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, document);
+            tray.ServerPlaceCollectible(docCopy.netIdentity, document);
 
             // Prevent Original
             return false;

@@ -4,7 +4,6 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 
 namespace DDSS_LobbyGuard

@@ -19,7 +19,7 @@ namespace DDSS_LobbyGuard.Patches
             if (!__0)
                 return;
             else if (ConfigHandler.Gameplay.WorkStationVirusTurnsOffFirewall.Value)
-                __instance.UserCode_CmdSetFireWall__NetworkIdentity__Boolean(__instance.netIdentity, false);
+                __instance.UserCode_CmdSetFireWall__NetworkIdentity__Boolean__NetworkConnectionToClient(__instance.netIdentity, false, __instance.netIdentity.connectionToClient);
         }
 
         [HarmonyPrefix]
@@ -79,8 +79,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(VirusController), nameof(VirusController.InvokeUserCode_CmdSetFireWall__NetworkIdentity__Boolean))]
-        private static bool InvokeUserCode_CmdSetFireWall__NetworkIdentity__Boolean_Prefix(
+        [HarmonyPatch(typeof(VirusController), nameof(VirusController.InvokeUserCode_CmdSetFireWall__NetworkIdentity__Boolean__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSetFireWall__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -104,7 +104,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            controller.UserCode_CmdSetFireWall__NetworkIdentity__Boolean(sender, state);
+            controller.UserCode_CmdSetFireWall__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, state, __2);
 
             // Prevent Original
             return false;

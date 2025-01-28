@@ -33,8 +33,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(OfficeShelf), nameof(OfficeShelf.InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32))]
-        private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32_Prefix(NetworkReader __1, NetworkConnectionToClient __2)
+        [HarmonyPatch(typeof(OfficeShelf), nameof(OfficeShelf.InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32__NetworkConnectionToClient_Prefix(NetworkReader __1, NetworkConnectionToClient __2)
         {
             // Get Document
             string document = __1.SafeReadString();
@@ -94,7 +94,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            binderObj.UserCode_CmdAddDocumentServer__String__String(document, documentContent);
+            binderObj.ServerAddDocument(document, documentContent);
 
             // Prevent Original
             return false;

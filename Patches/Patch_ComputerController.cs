@@ -15,8 +15,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_ComputerController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdClick__Vector3__Int32))]
-        private static bool InvokeUserCode_CmdClick__Vector3__Int32_Prefix(
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdClick__Vector3__Int32__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdClick__Vector3__Int32__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -51,15 +51,15 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            controller.UserCode_CmdClick__Vector3__Int32(mousePos, buttonId);
+            controller.UserCode_CmdClick__Vector3__Int32__NetworkConnectionToClient(mousePos, buttonId, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdCursorUp__Vector3))]
-        private static bool InvokeUserCode_CmdCursorUp__Vector3_Prefix(
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdCursorUp__Vector3__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdCursorUp__Vector3__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -88,14 +88,14 @@ namespace DDSS_LobbyGuard.Patches
             controller.cursor.transform.localPosition = mousePos;
 
             // Run Game Command
-            controller.UserCode_CmdCursorUp__Vector3(mousePos);
+            controller.UserCode_CmdCursorUp__Vector3__NetworkConnectionToClient(mousePos, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdSyncCursor__Vector3))]
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdSyncCursor__Vector3__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdSyncCursor__Vector3_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
@@ -125,14 +125,14 @@ namespace DDSS_LobbyGuard.Patches
             controller.cursor.transform.localPosition = mousePos;
 
             // Run Game Command
-            controller.UserCode_CmdSyncCursor__Vector3(mousePos);
+            controller.UserCode_CmdSyncCursor__Vector3__NetworkConnectionToClient(mousePos, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdKeyPressed__String))]
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdKeyPressed__String__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdKeyPressed__String_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
@@ -164,15 +164,15 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            controller.UserCode_CmdKeyPressed__String(keyCodeStr);
+            controller.UserCode_CmdKeyPressed__String__NetworkConnectionToClient(keyCodeStr, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdCreateFile__String__String__String))]
-        private static bool InvokeUserCode_CmdCreateFile__String__String__String_Prefix(
+        [HarmonyPatch(typeof(ComputerController), nameof(ComputerController.InvokeUserCode_CmdCreateFile__NetworkIdentity__String__String__String__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdCreateFile__NetworkIdentity__String__String__String__NetworkConnectionToClient_Prefix(
             NetworkReader __1,
             NetworkConnectionToClient __2)
         {
@@ -236,7 +236,7 @@ namespace DDSS_LobbyGuard.Patches
                 || ((ending != ".txt") && (ending != ".csv")))
                 return false;
 
-            controller.UserCode_CmdCreateFile__String__String__String(fileName, path, ending);
+            controller.UserCode_CmdCreateFile__NetworkIdentity__String__String__String__NetworkConnectionToClient(sender, fileName, path, ending, __2);
 
             // Prevent Original
             return false;

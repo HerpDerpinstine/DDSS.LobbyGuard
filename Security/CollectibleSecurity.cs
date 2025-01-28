@@ -132,7 +132,7 @@ namespace DDSS_LobbyGuard.Security
                     int randomIndex = UnityEngine.Random.Range(0, Task.documents.Count);
                     string item = Task.documents[randomIndex].Item1;
                     string text = Resources.Load<TextAsset>("files/" + item).text;
-                    binder.UserCode_CmdAddDocumentServer__String__String(item, text);
+                    binder.ServerAddDocument(item, text);
                 },
                 index);
 
@@ -202,7 +202,7 @@ namespace DDSS_LobbyGuard.Security
             gameObject.transform.rotation = holder.transform.rotation;
 
             T obj = gameObject.GetComponent<T>();
-            holder.UserCode_CmdPlaceCollectible__NetworkIdentity__String(obj.netIdentity, obj.Networklabel);
+            holder.ServerPlaceCollectible(obj.netIdentity, obj.Networklabel);
 
             yield return new WaitForSeconds(1f);
 

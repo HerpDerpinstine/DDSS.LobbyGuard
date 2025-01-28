@@ -15,14 +15,6 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_Binder
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocumentServer__String__String))]
-        private static bool InvokeUserCode_CmdAddDocumentServer__String__String_Prefix()
-        {
-            // Prevent Original
-            return false;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(Binder), nameof(Binder.InvokeUserCode_CmdAddDocument__Document__NetworkIdentity__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdAddDocument__Document__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,

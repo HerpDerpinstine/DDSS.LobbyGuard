@@ -14,8 +14,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_Fax
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Fax), nameof(Fax.InvokeUserCode_CmdFax__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdFax__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(Fax), nameof(Fax.InvokeUserCode_CmdFax__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdFax__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -43,7 +43,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            fax.UserCode_CmdFax__NetworkIdentity(sender);
+            fax.UserCode_CmdFax__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

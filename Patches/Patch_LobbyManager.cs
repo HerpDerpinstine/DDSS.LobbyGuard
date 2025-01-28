@@ -38,8 +38,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.KickPlayer))]
-        private static bool KickPlayer_Prefix(LobbyManager __instance, 
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.ServerKickPlayer))]
+        private static bool ServerKickPlayer_Prefix(LobbyManager __instance, 
             NetworkIdentity __0)
         {
             // Check for Host
@@ -149,49 +149,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.InvokeUserCode_CmdForceManagerRole__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdForceManagerRole__NetworkIdentity_Prefix(
-            NetworkBehaviour __0,
-            NetworkReader __1,
-            NetworkConnectionToClient __2)
-        {
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-
-            // Get LobbyManager
-            LobbyManager manager = __0.TryCast<LobbyManager>();
-            if (manager.gameStarted)
-                return false;
-
-            // Check Sender
-            LobbyPlayer player = sender.GetComponent<LobbyPlayer>();
-            if ((player == null)
-                || player.WasCollected
-                || !player.isHost)
-                return false;
-
-            // Get Target
-            NetworkIdentity netIdentity = __1.SafeReadNetworkIdentity();
-            if ((netIdentity == null)
-                || netIdentity.WasCollected)
-                return false;
-
-            // Validate Manager Role
-            LobbyPlayer target = netIdentity.GetComponent<LobbyPlayer>();
-            if ((target == null)
-                || target.WasCollected)
-                return false;
-
-            // Invoke Game Method
-            manager.UserCode_CmdForceManagerRole__NetworkIdentity(netIdentity);
-
-            // Prevent Original
-            return false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.InvokeUserCode_CmdSendChatMessage__NetworkIdentity__String__String))]
-        private static bool InvokeUserCode_CmdSendChatMessage__NetworkIdentity__String__String_Prefix(
+        [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.InvokeUserCode_CmdSendChatMessage__NetworkIdentity__String__String__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSendChatMessage__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0, 
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -237,7 +196,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Invoke Game Method
-            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String(sender, message, time);
+            manager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String__NetworkConnectionToClient(sender, message, time, __2);
 
             // Prevent Original
             return false;

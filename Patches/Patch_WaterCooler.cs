@@ -80,7 +80,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             cooler.UserCode_CmdFillCup__NetworkIdentity__NetworkConnectionToClient(sender, __2);
-            mug.UserCode_CmdSetWaterAmount__Single(1f);
+            mug.ServerSetWaterAmount(1f);
 
             // Prevent Original
             return false;

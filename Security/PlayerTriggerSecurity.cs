@@ -64,8 +64,6 @@ namespace DDSS_LobbyGuard.Security
                     yield break;
                 else
                 {
-                    trigger.OnPlayerExit.Invoke();
-
                     int count = 0;
                     _playerCounts.TryGetValue(trigger, out count);
                     _playerCounts[trigger] = count--;

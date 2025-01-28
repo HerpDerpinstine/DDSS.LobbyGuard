@@ -122,7 +122,7 @@ namespace DDSS_LobbyGuard.Patches
                     WorkStationController station = computer._workStationController;
 
                     // Get Using Player
-                    NetworkIdentity usingPlayer = station.NetworkusingPlayer;
+                    NetworkIdentity usingPlayer = station.NetworkusingPlayerController;
 
                     // Regrab the Window
                     //computer.CustomRpcClick(mousePos, 0, usingPlayer.connectionToClient);

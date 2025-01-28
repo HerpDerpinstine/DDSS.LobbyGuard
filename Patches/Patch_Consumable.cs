@@ -13,8 +13,8 @@ namespace DDSS_LobbyGuard
     internal class Patch_Consumable
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Consumable), nameof(Consumable.InvokeUserCode_CmdConsume__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdConsume__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(Consumable), nameof(Consumable.InvokeUserCode_CmdConsume__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdConsume__NetworkIdentity__NetworkConnectionToClient_Prefix(
            NetworkBehaviour __0,
            NetworkConnectionToClient __2)
         {
@@ -55,7 +55,7 @@ namespace DDSS_LobbyGuard
                 return false;
 
             // Run Game Command
-            food.UserCode_CmdConsume__NetworkIdentity(sender);
+            food.UserCode_CmdConsume__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

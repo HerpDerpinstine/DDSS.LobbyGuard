@@ -23,7 +23,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Seat
-            if (toilet.NetworkusingPlayer != sender)
+            if (toilet.NetworkusingPlayerController != sender)
                 return false;
 
             // Validate Distance

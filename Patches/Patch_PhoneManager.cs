@@ -13,8 +13,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_PhoneManager
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdAnswerCall__String__String))]
-        private static bool InvokeUserCode_CmdAnswerCall__String__String_Prefix(
+        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdAnswerCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdAnswerCall__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -67,16 +67,16 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            phone.ForceCallToEnd();
-            phoneManager.UserCode_CmdAnswerCall__String__String(receiver, caller);
+            phone.ForceCallToEnd(sender, __2);
+            phoneManager.UserCode_CmdAnswerCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, receiver, caller, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdCancelCall__String__String))]
-        private static bool InvokeUserCode_CmdCancelCall__String__String_Prefix(
+        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -117,15 +117,15 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            phone.ForceCallToEnd();
+            phone.ForceCallToEnd(sender, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdEndCall__String__String))]
-        private static bool InvokeUserCode_CmdEndCall__String__String_Prefix(
+        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -166,15 +166,15 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            phone.ForceCallToEnd();
+            phone.ForceCallToEnd(sender, __2);
 
             // Prevent Original
             return false;
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdDeclineCall__String__String))]
-        private static bool InvokeUserCode_CmdDeclineCall__String__String_Prefix(
+        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdDeclineCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdDeclineCall__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -227,7 +227,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            phoneManager.UserCode_CmdDeclineCall__String__String(caller, receiver);
+            phoneManager.UserCode_CmdDeclineCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, caller, receiver, __2);
 
             // Prevent Original
             return false;

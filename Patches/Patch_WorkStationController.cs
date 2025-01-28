@@ -221,8 +221,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdEnableJelly__NetworkIdentity__Boolean))]
-        private static bool InvokeUserCode_CmdEnableJelly__NetworkIdentity__Boolean_Prefix(
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdEnableJelly__NetworkIdentity__Boolean__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdEnableJelly__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -326,8 +326,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdPickUpInfectedUsb__NetworkIdentity__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_CmdPickUpInfectedUsb__NetworkIdentity__NetworkConnectionToClient_Prefix(
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdCreateInfectedFloppyDisk__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdCreateInfectedFloppyDisk__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -361,39 +361,16 @@ namespace DDSS_LobbyGuard.Patches
                 station.transform.position))
                 return false;
 
-            bool useNormalSpawn = true;
             Usable usable = controller.GetCurrentUsable();
-            if (usable != null)
-            {
-                FloppyDiskController floppy = usable.TryCast<FloppyDiskController>();
-                if (floppy != null)
-                    useNormalSpawn = false;
-            }
-            if (useNormalSpawn)
-            {
-                // Get InfectedUsb from Prefab
-                InfectedUsb prefabUsb = station.infectedUsbPrefab.GetComponentInChildren<InfectedUsb>();
-                if (prefabUsb == null)
-                    return false;
+            if (usable == null)
+                return false;
 
-                // Get InfectedUsb Interactable Name
-                string interactableName = prefabUsb.interactableName;
-                if (string.IsNullOrEmpty(interactableName)
-                    || string.IsNullOrWhiteSpace(interactableName))
-                    return false;
-
-                // Validate Count
-                if (!InteractionSecurity.CanSpawnItem(interactableName,
-                    InteractionSecurity.MAX_INFECTED_USBS))
-                    return false;
-
-                // Validate Grab
-                if (!InteractionSecurity.CanUseUsable(sender, prefabUsb))
-                    return false;
-            }
+            FloppyDiskController floppy = usable.TryCast<FloppyDiskController>();
+            if (floppy == null)
+                return false;
 
             // Run Game Command
-            station.UserCode_CmdPickUpInfectedUsb__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            station.UserCode_CmdCreateInfectedFloppyDisk__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

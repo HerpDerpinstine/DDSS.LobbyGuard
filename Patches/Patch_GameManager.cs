@@ -217,7 +217,7 @@ namespace DDSS_LobbyGuard.Patches
             player.NetworkisFired = janitorsKeepWorkstation && flag || !flag;
 
             // Fire Player
-            player.RpcFirePlayer(true, !flag, player.NetworkplayerRole);
+            player.RpcFirePlayer(true, player.NetworkplayerRole, !flag);
 
             // Assign Janitor Role
             if (flag)
@@ -238,7 +238,7 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameManager), nameof(GameManager.InvokeUserCode_CmdAddProductivityFromTaskCompletion__PlayerRole))]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.InvokeUserCode_CmdAddProductivityFromTaskCompletion__PlayerRole__NetworkIdentity__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdAddProductivityFromTaskCompletion__PlayerRole_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
@@ -272,12 +272,13 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
             if ((lobbyPlayer == null)
                 || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost()
-                || lobbyPlayer.IsJanitor())
+                || lobbyPlayer.IsGhost())
                 return false;
 
+
+
             // Run Game Command
-            manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, InteractionSecurity.IsSlacker(lobbyPlayer) ? PlayerRole.Slacker : lobbyPlayer.NetworkplayerRole));
+            //manager.StartCoroutine(CoroutineAddProductivityFromTaskCompletion(manager, InteractionSecurity.IsSlacker(lobbyPlayer) ? PlayerRole.Slacker : lobbyPlayer.NetworkplayerRole));
 
             // Prevent Original
             return false;

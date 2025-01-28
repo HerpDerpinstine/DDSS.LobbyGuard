@@ -12,8 +12,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_DrawerController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(DrawerController), nameof(DrawerController.InvokeUserCode_CmdOrganize__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdOrganize__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(DrawerController), nameof(DrawerController.InvokeUserCode_CmdOrganize__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdOrganize__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -34,9 +34,10 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            drawer.UserCode_CmdOrganize__NetworkIdentity(sender);
-            drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
+            drawer.UserCode_CmdOrganize__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            //drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
 
+            /*
             // Manually Trigger Task Locally
             if (sender.isLocalPlayer)
             {
@@ -55,6 +56,7 @@ namespace DDSS_LobbyGuard.Patches
                 if (isAllOrganized)
                     TaskHook.TriggerTaskHookCommandStatic(new TaskHook(null, "Filing Cabinet", null, "Organized", drawer.filingCabinetController.roomTrigger.currentRoom.roomName, null));
             }
+            */
 
             // Prevent Original
             return false;
@@ -84,6 +86,7 @@ namespace DDSS_LobbyGuard.Patches
             if (drawer.NetworkisOpen == requestedState)
                 return false;
 
+            /*
             // Apply State
             drawer.NetworkisOpen = requestedState;
             drawer.RpcSetDrawerState(sender, requestedState);
@@ -109,7 +112,7 @@ namespace DDSS_LobbyGuard.Patches
                 // Unorganize Drawers
                 if (isAllOrganized)
                 {
-                    drawer.filingCabinetController.UserCode_CmdSetUnorganized();
+                    drawer.filingCabinetController.UserCode_CmdSetUnorganized__NetworkConnectionToClient(__2);
                     if (sender.isLocalPlayer)
                     {
                         drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
@@ -117,6 +120,10 @@ namespace DDSS_LobbyGuard.Patches
                     }
                 }
             }
+            */
+
+            // Run Game Command
+            drawer.UserCode_CmdSetDrawerState__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, requestedState, __2);
 
             // Prevent Original
             return false;

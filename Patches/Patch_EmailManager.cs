@@ -106,7 +106,7 @@ namespace DDSS_LobbyGuard.Patches
                 else
                 {
                     // Client -> Client
-                    return false; // Do Nothing because Trasmission isn't Needed
+                    return false; // Do Nothing because Transmission isn't Needed
                 }
             }
             else

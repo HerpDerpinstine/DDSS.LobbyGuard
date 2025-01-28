@@ -12,9 +12,10 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_VendingMachine
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(VendingMachine), nameof(VendingMachine.InvokeUserCode_CmdPlayAudioClip__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdPlayAudioClip__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(VendingMachine), nameof(VendingMachine.InvokeUserCode_CmdPlayAudioClip__NetworkIdentity__String__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdPlayAudioClip__NetworkIdentity__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
+            NetworkReader __1,
             NetworkConnectionToClient __2)
         {
             // Get VendingMachine
@@ -28,8 +29,14 @@ namespace DDSS_LobbyGuard.Patches
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, machine.transform.position))
                 return false;
 
+            // Get Interactible Name
+            string interactibleName = __1.SafeReadString();
+            if (string.IsNullOrEmpty(interactibleName)
+                || string.IsNullOrWhiteSpace(interactibleName)) 
+                return false;
+
             // Run Game Command
-            machine.UserCode_CmdPlayAudioClip__NetworkIdentity(sender);
+            machine.UserCode_CmdPlayAudioClip__NetworkIdentity__String__NetworkConnectionToClient(sender, interactibleName, __2);
 
             // Prevent Original
             return false;

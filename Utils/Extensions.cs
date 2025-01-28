@@ -283,15 +283,15 @@ namespace DDSS_LobbyGuard.Utils
             return players;
         }
 
-        internal static void ForceCallToEnd(this PhoneController phone)
+        internal static void ForceCallToEnd(this PhoneController phone, NetworkIdentity sender, NetworkConnectionToClient clientConnection)
         {
             if (phone.NetworkisCallActive)
             {
-                PhoneManager.instance.UserCode_CmdEndCall__String__String(phone.NetworkreceivingCall, phone.phoneNumber);
-                PhoneManager.instance.UserCode_CmdEndCall__String__String(phone.phoneNumber, phone.NetworkreceivingCall);
+                PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.NetworkreceivingCall, phone.phoneNumber, clientConnection);
+                PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.NetworkreceivingCall, clientConnection);
             }
             if (phone.NetworkisDialing)
-                PhoneManager.instance.UserCode_CmdCancelCall__String__String(phone.phoneNumber, phone.NetworkcallingNumber);
+                PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.NetworkcallingNumber, clientConnection);
         }
 
         internal static void Shuffle<T>(this List<T> list)

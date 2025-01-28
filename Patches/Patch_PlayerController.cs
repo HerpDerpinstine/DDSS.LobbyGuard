@@ -17,8 +17,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_PlayerController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdSpank__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdSpank__NetworkIdentity_Prefix(NetworkBehaviour __0, NetworkConnectionToClient __2)
+        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.InvokeUserCode_CmdSpank__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSpank__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkBehaviour __0, NetworkConnectionToClient __2)
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
@@ -45,7 +45,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            controller.UserCode_CmdSpank__NetworkIdentity(sender);
+            controller.UserCode_CmdSpank__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

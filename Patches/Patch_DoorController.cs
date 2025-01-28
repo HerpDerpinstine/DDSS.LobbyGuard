@@ -25,8 +25,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetDoorState__Int32))]
-        private static bool UserCode_CmdSetDoorState__Int32_Prefix(
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient))]
+        private static bool UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient_Prefix(
             DoorController __instance,
             int __0)
         {
@@ -49,8 +49,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetDoorState__Int32))]
-        private static bool InvokeUserCode_CmdSetDoorState__Int32_Prefix(
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient_Prefix(
              NetworkBehaviour __0,
              NetworkReader __1,
              NetworkConnectionToClient __2)
@@ -76,10 +76,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            door.UserCode_CmdSetDoorState__Int32(stateIndex);
-
-            // Prevent Original
-            return false;
+            return UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient_Prefix(door, stateIndex);
         }
 
         [HarmonyPrefix]

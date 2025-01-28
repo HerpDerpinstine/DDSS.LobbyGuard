@@ -80,10 +80,10 @@ namespace DDSS_LobbyGuard.Patches
                     continue;
 
                 // Reset Role
-                oldPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
+                oldPlayer.ServerSetSubRole(SubRole.None);
             }
 
-            targetPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.Assistant);
+            targetPlayer.ServerSetSubRole(SubRole.Assistant);
 
             if ((lastAssistant != null)
                 && !lastAssistant.WasCollected)
@@ -96,8 +96,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_DemoteFromAssistant__NetworkIdentity__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_DemoteFromAssistant__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
+        [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_CmdDemoteFromAssistant__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdDemoteFromAssistant__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
             if (!GameManager.instance.useAssistant)
@@ -148,7 +148,7 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
                 return false;
 
-            targetPlayer.UserCode_CmdSetSubRole__SubRole(SubRole.None);
+            targetPlayer.ServerSetSubRole(SubRole.None);
             GameManager.instance.RpcSetAssistant(targetPlayer.netIdentity, null);
 
             // Prevent Original
@@ -200,8 +200,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_CmdRequestHandShake__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdRequestHandShake__NetworkIdentity_Prefix(NetworkBehaviour __0,
+        [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_CmdRequestHandShake__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdRequestHandShake__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
             // Get PlayerInteractable
@@ -242,7 +242,7 @@ namespace DDSS_LobbyGuard.Patches
             {
                 PlayerController component2 = senderInteract.NetworkthisPlayerRequestedHandshakeWith.GetComponent<PlayerController>();
                 if (component2 != null)
-                    component2.playerInteractable.UserCode_CmdResetHandShakeRequest__NetworkIdentity(sender);
+                    component2.playerInteractable.UserCode_CmdResetHandShakeRequest__NetworkIdentity__NetworkConnectionToClient(sender, __2);
             }
 
             // Apply New Request
@@ -254,8 +254,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_CmdResetHandShake))]
-        private static bool InvokeUserCode_CmdResetHandShake_Prefix(NetworkBehaviour __0,
+        [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_CmdResetHandShake__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdResetHandShake__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
             // Get PlayerInteractable
@@ -286,7 +286,7 @@ namespace DDSS_LobbyGuard.Patches
                 || (senderInteract != interact))
                 return false;
 
-            senderInteract.UserCode_CmdResetHandShake();
+            senderInteract.UserCode_CmdResetHandShake__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
@@ -330,7 +330,7 @@ namespace DDSS_LobbyGuard.Patches
             {
                 PlayerController component2 = senderInteract.NetworkthisPlayerRequestedHandshakeWith.GetComponent<PlayerController>();
                 if (component2 != null)
-                    component2.playerInteractable.UserCode_CmdResetHandShakeRequest__NetworkIdentity(sender);
+                    component2.playerInteractable.UserCode_CmdResetHandShakeRequest__NetworkIdentity__NetworkConnectionToClient(sender, __2);
             }
 
             // Reset Current Request
@@ -341,7 +341,7 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_CmdResetHandShakeRequest__NetworkIdentity))]
+        [HarmonyPatch(typeof(PlayerInteractable), nameof(PlayerInteractable.InvokeUserCode_CmdResetHandShakeRequest__NetworkIdentity__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdResetHandShakeRequest__NetworkIdentity_Prefix()
         {
             // Prevent Original

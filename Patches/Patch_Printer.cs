@@ -85,8 +85,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdPrintDocument__String__String))]
-        private static bool InvokeUserCode_CmdPrintDocument__String__String_Prefix(
+        [HarmonyPatch(typeof(Printer), nameof(Printer.InvokeUserCode_CmdPrintDocument__String__String__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdPrintDocument__String__String__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -186,7 +186,7 @@ namespace DDSS_LobbyGuard.Patches
             docCopy.SetName(setLabel ? newLabel : fileName);
 
             // Place Document in Printer
-            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, newLabel);
+            printer.ServerPlaceCollectible(docCopy.netIdentity, newLabel);
 
             // Prevent Original
             return false;
@@ -268,7 +268,7 @@ namespace DDSS_LobbyGuard.Patches
             printer.RpcSetImage(imgCopy.netIdentity, imageData);
 
             // Place Image in Printer
-            printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(imgCopy.netIdentity, newLabel);
+            printer.ServerPlaceCollectible(imgCopy.netIdentity, newLabel);
 
             // Prevent Original
             return false;
@@ -355,7 +355,7 @@ namespace DDSS_LobbyGuard.Patches
                 }
 
                 // Place Image in Printer
-                printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(imgCopy.netIdentity, img.label);
+                printer.ServerPlaceCollectible(imgCopy.netIdentity, img.label);
             }
             else if (collectibleType == Il2CppType.Of<Document>())
             {
@@ -404,7 +404,7 @@ namespace DDSS_LobbyGuard.Patches
                 }
 
                 // Place Image in Printer
-                printer.UserCode_CmdPlaceCollectible__NetworkIdentity__String(docCopy.netIdentity, doc.label);
+                printer.ServerPlaceCollectible(docCopy.netIdentity, doc.label);
             }
 
             // Prevent Original

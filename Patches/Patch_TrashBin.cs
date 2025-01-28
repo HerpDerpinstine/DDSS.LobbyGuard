@@ -104,8 +104,8 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.InvokeUserCode_CmdEmptyBin__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdEmptyBin__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(TrashBin), nameof(TrashBin.InvokeUserCode_CmdEmptyBin__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdEmptyBin__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -121,7 +121,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            trashcan.UserCode_CmdEmptyBin__NetworkIdentity(sender);
+            trashcan.UserCode_CmdEmptyBin__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;

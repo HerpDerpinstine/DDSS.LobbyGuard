@@ -10,8 +10,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_CoffeeMachine
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(CoffeeMachine), nameof(CoffeeMachine.InvokeUserCode_CmdMakeCoffee__NetworkIdentity))]
-        private static bool InvokeUserCode_CmdMakeCoffee__NetworkIdentity_Prefix(
+        [HarmonyPatch(typeof(CoffeeMachine), nameof(CoffeeMachine.InvokeUserCode_CmdMakeCoffee__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdMakeCoffee__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
         {
@@ -44,7 +44,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            machine.UserCode_CmdMakeCoffee__NetworkIdentity(sender);
+            machine.UserCode_CmdMakeCoffee__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
