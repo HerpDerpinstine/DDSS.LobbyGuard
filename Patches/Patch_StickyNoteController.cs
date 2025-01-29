@@ -53,8 +53,13 @@ namespace DDSS_LobbyGuard
 
             // Remove Rich Text
             text = text.RemoveRichText();
-            if (text.Length > InteractionSecurity.MAX_STICKYNOTE_CHARS)
-                text = text.Substring(0, InteractionSecurity.MAX_STICKYNOTE_CHARS);
+            if (string.IsNullOrEmpty(text)
+                || string.IsNullOrWhiteSpace(text))
+                return false;
+
+            int maxCharacters = ConfigHandler.Gameplay.MaxCharactersOnStickyNotes.Value;
+            if (text.Length > maxCharacters)
+                text = text.Substring(0, maxCharacters);
             if (string.IsNullOrEmpty(text)
                 || string.IsNullOrWhiteSpace(text))
                 return false;

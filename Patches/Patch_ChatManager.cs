@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -38,8 +39,13 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             message = message.RemoveRichText();
-            if (message.Length > InteractionSecurity.MAX_INGAME_CHAT_CHARS)
-                message = message.Substring(0, InteractionSecurity.MAX_INGAME_CHAT_CHARS);
+            if (string.IsNullOrEmpty(message)
+                || string.IsNullOrWhiteSpace(message))
+                return false;
+
+            int maxCharacters = ConfigHandler.Gameplay.MaxCharactersOnChatMessages.Value;
+            if (message.Length > maxCharacters)
+                message = message.Substring(0, maxCharacters);
             if (string.IsNullOrEmpty(message)
                 || string.IsNullOrWhiteSpace(message))
                 return false;

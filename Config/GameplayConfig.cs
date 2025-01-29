@@ -8,6 +8,10 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> UsernamesOnPrintedImages;
         internal MelonPreferences_Entry<eConfigHostType> UsernamesOnStickyNotes;
 
+        internal MelonPreferences_Entry<int> MaxCharactersOnDocuments;
+        internal MelonPreferences_Entry<int> MaxCharactersOnStickyNotes;
+        internal MelonPreferences_Entry<int> MaxCharactersOnChatMessages;
+
         internal MelonPreferences_Entry<bool> StickyNotesOnPlayers;
         internal MelonPreferences_Entry<bool> StickyNotesOnDoors;
 
@@ -72,12 +76,27 @@ namespace DDSS_LobbyGuard.Config
                 "Puts the Player's Username in the Name of their Custom Sticky Note   [ ALL | HOST_ONLY | DISABLED ]",
                 eConfigHostType.HOST_ONLY);
 
+            MaxCharactersOnDocuments = CreatePref("MaxCharactersOnDocuments",
+                "Max Characters on Documents",
+                "Max Characters allowed on Documents",
+                240);
+
+            MaxCharactersOnStickyNotes = CreatePref("MaxCharactersOnStickyNotes",
+                "Max Characters on Sticky Notes",
+                "Max Characters allowed on Sticky Notes",
+                100);
+
+            MaxCharactersOnChatMessages = CreatePref("MaxCharactersOnChatMessages",
+                "Max Characters on Chat Messages",
+                "Max Characters allowed on Chat Messages",
+                180);
+
             StickyNotesOnPlayers = CreatePref("StickyNotesOnPlayers",
                 "Sticky Notes on Players",
                 "Allows the Grabbing and Placing of Sticky Notes on Players",
                 true);
 
-            StickyNotesOnDoors = CreatePref("StickyNotesOnOpenDoors",
+            StickyNotesOnDoors = CreatePref("StickyNotesOnDoors",
                 "Sticky Notes on Doors",
                 "Allows the Grabbing and Placing of Sticky Notes on Doors",
                 true);

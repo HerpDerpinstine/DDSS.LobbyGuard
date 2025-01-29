@@ -149,8 +149,9 @@ namespace DDSS_LobbyGuard.Patches
 
             if (setLabel)
             {
-                if (documentContent.Length > InteractionSecurity.MAX_DOCUMENT_CHARS)
-                    documentContent = documentContent.Substring(0, InteractionSecurity.MAX_DOCUMENT_CHARS);
+                int maxCharacters = ConfigHandler.Gameplay.MaxCharactersOnDocuments.Value;
+                if (documentContent.Length > maxCharacters)
+                    documentContent = documentContent.Substring(0, maxCharacters);
                 if (string.IsNullOrEmpty(documentContent)
                     || string.IsNullOrWhiteSpace(documentContent))
                     return false;
