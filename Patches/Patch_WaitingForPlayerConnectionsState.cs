@@ -82,6 +82,7 @@ namespace DDSS_LobbyGuard.Patches
 
             List<NetworkIdentity> playerList = new();
             NetworkIdentity playerManager = null;
+            NetworkIdentity playerHRRep = null;
             foreach (NetworkIdentity player in allPlayers)
             {
                 // Validate Lobby Player
@@ -97,11 +98,16 @@ namespace DDSS_LobbyGuard.Patches
                     continue;
                 }
 
+                // Check for HR Rep
+                if (lobbyPlayer.subRole == SubRole.HrRep)
+                    playerHRRep = player;
+
                 // Add to List
                 playerList.Add(player);
             }
 
             // Randomize Lists
+            playerList.Shuffle();
             workstationList.Shuffle();
             spawnList.Shuffle();
 
@@ -140,9 +146,6 @@ namespace DDSS_LobbyGuard.Patches
                 }
             }
 
-            if (GameManager.instance.NetworkuseHrRep)
-                GameManager.instance.SelectNewHrRep();
-
             for (int i = 0; i < playerCount; i++)
             {
                 // Get Player
@@ -173,6 +176,11 @@ namespace DDSS_LobbyGuard.Patches
 
                     station.SpawnDeskItems(PlayerRole.None);
                 }
+
+            // Assign HR Rep
+            if (GameManager.instance.NetworkuseHrRep
+                && (playerHRRep == null))
+                GameManager.instance.SelectNewHrRep();
 
             if ((TutorialManager.instance != null)
                 && !TutorialManager.instance.WasCollected

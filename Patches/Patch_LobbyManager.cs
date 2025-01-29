@@ -110,14 +110,10 @@ namespace DDSS_LobbyGuard.Patches
                     || ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value)
                     lobbyPlayer.ServerSetWorkStation(null, playerRole, true);
 
-                if (isJanitor)
-                {
-                    lobbyPlayer.NetworkisFired = true;
-                    lobbyPlayer.isFired = true;
-                }
+                lobbyPlayer.NetworkisFired = true;
+                lobbyPlayer.isFired = true;
 
                 bool wasHR = (lobbyPlayer.NetworksubRole == SubRole.HrRep);
-                lobbyPlayer.ServerSetSubRole(SubRole.None);
                 if (GameManager.instance.NetworkuseHrRep
                     && GameManager.instance.NetworkselectNewHrRepWhenFired
                     && wasHR)

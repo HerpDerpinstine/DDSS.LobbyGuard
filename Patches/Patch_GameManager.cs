@@ -234,7 +234,6 @@ namespace DDSS_LobbyGuard.Patches
                 player.ServerSetPlayerRole(PlayerRole.None);
 
             bool wasHR = (player.NetworksubRole == SubRole.HrRep);
-            player.ServerSetSubRole(SubRole.None);
             if (GameManager.instance.NetworkuseHrRep 
                 && GameManager.instance.NetworkselectNewHrRepWhenFired 
                 && wasHR)
