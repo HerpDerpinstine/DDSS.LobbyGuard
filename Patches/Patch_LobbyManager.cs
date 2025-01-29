@@ -116,6 +116,13 @@ namespace DDSS_LobbyGuard.Patches
                     lobbyPlayer.isFired = true;
                 }
 
+                bool wasHR = (lobbyPlayer.NetworksubRole == SubRole.HrRep);
+                lobbyPlayer.ServerSetSubRole(SubRole.None);
+                if (GameManager.instance.NetworkuseHrRep
+                    && GameManager.instance.NetworkselectNewHrRepWhenFired
+                    && wasHR)
+                    GameManager.instance.SelectNewHrRep();
+
                 // Check Setting
                 if (!ConfigHandler.Gameplay.PlayerLeavesReduceTerminations.Value
                     && !isJanitor

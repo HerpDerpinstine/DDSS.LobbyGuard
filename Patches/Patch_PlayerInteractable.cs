@@ -83,7 +83,10 @@ namespace DDSS_LobbyGuard.Patches
                 oldPlayer.ServerSetSubRole(SubRole.None);
             }
 
+            bool wasHR = (targetPlayer.NetworksubRole == SubRole.HrRep);
             targetPlayer.ServerSetSubRole(SubRole.Assistant);
+            if (GameManager.instance.NetworkuseHrRep && wasHR)
+                GameManager.instance.SelectNewHrRep();
 
             if ((lastAssistant != null)
                 && !lastAssistant.WasCollected)

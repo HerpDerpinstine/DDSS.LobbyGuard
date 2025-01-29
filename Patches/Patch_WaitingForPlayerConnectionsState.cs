@@ -52,9 +52,7 @@ namespace DDSS_LobbyGuard.Patches
         private static IEnumerator FixedEnterCoroutine(WaitingForPlayerConnectionsState __instance, GameManager manager)
         {
             // Get List of Spawn Points
-            List<NetworkStartPosition> spawnList = new();
-            foreach (NetworkStartPosition spawn in GameObject.FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.None))
-                spawnList.Add(spawn);
+            List<NetworkStartPosition> spawnList = [.. GameObject.FindObjectsByType<NetworkStartPosition>(FindObjectsSortMode.None)];
             int spawnCount = spawnList.Count;
 
             // Get List of Workstations
@@ -105,7 +103,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Randomize Lists
             workstationList.Shuffle();
-            playerList.Shuffle();
             spawnList.Shuffle();
 
             // Re-Add Manager Player to First in Player List
@@ -142,6 +139,9 @@ namespace DDSS_LobbyGuard.Patches
                     lobbyPlayer.ServerSetWorkStation(randomWorkstation, PlayerRole.Specialist, true);
                 }
             }
+
+            if (GameManager.instance.NetworkuseHrRep)
+                GameManager.instance.SelectNewHrRep();
 
             for (int i = 0; i < playerCount; i++)
             {

@@ -95,5 +95,35 @@ namespace DDSS_LobbyGuard.Patches
             // Prevent Original
             return false;
         }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(FishTankController), nameof(FishTankController.InvokeUserCode_CmdTapGlass__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdTapGlass__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkIdentity __0,
+            NetworkConnectionToClient __2)
+        {
+            // Get FishTankController
+            FishTankController tank = __0.TryCast<FishTankController>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            PlayerController controller = sender.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected
+                || lobbyPlayer.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, tank.transform.position))
+                return false;
+
+            // Run Game Command
+            tank.UserCode_CmdTapGlass__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Prevent Original
+            return false;
+        }
     }
 }
