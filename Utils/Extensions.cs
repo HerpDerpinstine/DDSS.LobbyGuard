@@ -333,11 +333,38 @@ namespace DDSS_LobbyGuard.Utils
         {
             if (phone.NetworkisCallActive)
             {
-                PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.NetworkreceivingCall, phone.phoneNumber, clientConnection);
-                PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.NetworkreceivingCall, clientConnection);
+                string reciever = phone.NetworkreceivingCall;
+                if (!string.IsNullOrEmpty(reciever)
+                    && !string.IsNullOrWhiteSpace(reciever))
+                {
+                    string caller = phone.phoneNumber;
+                    if (!string.IsNullOrEmpty(caller)
+                        && !string.IsNullOrWhiteSpace(caller))
+                    {
+                        if (!PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(phone.NetworkreceivingCall))
+                            PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.NetworkreceivingCall, phone.phoneNumber, clientConnection);
+                        PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.NetworkreceivingCall, clientConnection);
+                    }
+                }
             }
+
             if (phone.NetworkisDialing)
-                PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.NetworkcallingNumber, clientConnection);
+            {
+                string reciever = phone.phoneNumber;
+                if (!string.IsNullOrEmpty(reciever)
+                    && !string.IsNullOrWhiteSpace(reciever))
+                {
+                    string caller = phone.NetworkcallingNumber;
+                    if (!string.IsNullOrEmpty(caller)
+                        && !string.IsNullOrWhiteSpace(caller))
+                    {
+                        if (PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(phone.NetworkcallingNumber))
+                            PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.phoneNumber, clientConnection);
+                        else
+                            PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.NetworkcallingNumber, clientConnection);
+                    }
+                }
+            }
         }
 
         internal static void Shuffle<T>(this List<T> list)

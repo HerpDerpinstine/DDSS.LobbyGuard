@@ -1,9 +1,8 @@
-﻿using DDSS_LobbyGuard.Security;
+﻿﻿using DDSS_LobbyGuard.Security;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
-using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 
 namespace DDSS_LobbyGuard.Patches
@@ -35,9 +34,8 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             drawer.UserCode_CmdOrganize__NetworkIdentity__NetworkConnectionToClient(sender, __2);
-            //drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
+            drawer.filingCabinetController.RpcCalculateIsOrganized(sender);
 
-            /*
             // Manually Trigger Task Locally
             if (sender.isLocalPlayer)
             {
@@ -56,7 +54,6 @@ namespace DDSS_LobbyGuard.Patches
                 if (isAllOrganized)
                     TaskHook.TriggerTaskHookCommandStatic(new TaskHook(null, "Filing Cabinet", null, "Organized", drawer.filingCabinetController.roomTrigger.currentRoom.roomName, null));
             }
-            */
 
             // Prevent Original
             return false;
@@ -86,7 +83,6 @@ namespace DDSS_LobbyGuard.Patches
             if (drawer.NetworkisOpen == requestedState)
                 return false;
 
-            /*
             // Apply State
             drawer.NetworkisOpen = requestedState;
             drawer.RpcSetDrawerState(sender, requestedState);
@@ -120,10 +116,6 @@ namespace DDSS_LobbyGuard.Patches
                     }
                 }
             }
-            */
-
-            // Run Game Command
-            drawer.UserCode_CmdSetDrawerState__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, requestedState, __2);
 
             // Prevent Original
             return false;
