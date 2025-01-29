@@ -341,9 +341,9 @@ namespace DDSS_LobbyGuard.Utils
                     if (!string.IsNullOrEmpty(caller)
                         && !string.IsNullOrWhiteSpace(caller))
                     {
-                        if (!PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(phone.NetworkreceivingCall))
-                            PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.NetworkreceivingCall, phone.phoneNumber, clientConnection);
-                        PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.NetworkreceivingCall, clientConnection);
+                        if (!PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(reciever))
+                            PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, reciever, caller, clientConnection);
+                        PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, caller, reciever, clientConnection);
                     }
                 }
             }
@@ -358,10 +358,10 @@ namespace DDSS_LobbyGuard.Utils
                     if (!string.IsNullOrEmpty(caller)
                         && !string.IsNullOrWhiteSpace(caller))
                     {
-                        if (PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(phone.NetworkcallingNumber))
-                            PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.phoneNumber, clientConnection);
+                        if (PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(caller))
+                            PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, reciever, reciever, clientConnection);
                         else
-                            PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, phone.phoneNumber, phone.NetworkcallingNumber, clientConnection);
+                            PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, reciever, caller, clientConnection);
                     }
                 }
             }
