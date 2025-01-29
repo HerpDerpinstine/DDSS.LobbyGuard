@@ -1,4 +1,4 @@
-﻿using DDSS_LobbyGuard.Config;
+﻿﻿using DDSS_LobbyGuard.Config;
 using DDSS_LobbyGuard.Utils;
 using Il2Cpp;
 using Il2CppGameManagement;
@@ -134,6 +134,9 @@ namespace DDSS_LobbyGuard.Security
 
         internal static PlayerRole GetWinner(GameManager manager)
         {
+            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                return manager.GetWinner();
+
             if (manager.finalProductivityMeter >= 1f)
                 return PlayerRole.Specialist;
 
@@ -156,10 +159,14 @@ namespace DDSS_LobbyGuard.Security
                 return PlayerRole.Slacker;
 
             return PlayerRole.None;
+
         }
 
         internal static int GetAmountOfUnfiredSlackers(LobbyManager manager)
         {
+            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                return manager.GetAmountOfUnfiredSlackers();
+
             int num = 0;
             foreach (NetworkIdentity networkIdentity in manager.GetAllPlayers())
             {
@@ -172,6 +179,9 @@ namespace DDSS_LobbyGuard.Security
 
         internal static int GetAmountOfUnfiredSpecialists(LobbyManager manager)
         {
+            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
+                return manager.GetAmountOfUnfiredSpecialists();
+
             int num = 0;
             foreach (NetworkIdentity networkIdentity in manager.GetAllPlayers())
             {
