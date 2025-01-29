@@ -64,8 +64,10 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             cigarettePack.UserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
             GameObject gameObject = GameObject.Instantiate(cigarettePack.cigarettePrefab, cigarettePack.transform.position, cigarettePack.transform.rotation);
             NetworkServer.Spawn(gameObject, sender.connectionToClient);
+
             Usable usable = gameObject.GetComponent<Usable>();
             usable.ServerUseNoTypeVerification(sender);
 

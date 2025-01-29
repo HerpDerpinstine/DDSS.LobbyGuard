@@ -208,6 +208,11 @@ namespace DDSS_LobbyGuard.Security
 
             yield return new WaitForSeconds(3f);
 
+            gameObject.transform.position = holder.transform.position;
+            gameObject.transform.rotation = holder.transform.rotation;
+
+            yield return new WaitForSeconds(1f);
+
             T obj = gameObject.GetComponent<T>();
             if (afterSpawn != null)
                 afterSpawn(obj);

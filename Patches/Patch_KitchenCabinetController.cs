@@ -5,6 +5,8 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppPlayer;
+using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 using UnityEngine;
 
@@ -64,8 +66,9 @@ namespace DDSS_LobbyGuard.Patches
             // Spawn a new Collectible
             GameObject gameObject = GameObject.Instantiate(collectible.gameObject, cabinet.transform.position, cabinet.transform.rotation);
             NetworkServer.Spawn(gameObject, __2);
+
             collectible = gameObject.GetComponent<Collectible>();
-            collectible.UserCode_CmdUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            collectible.ServerUseNoTypeVerification(sender);
 
             // Get StickyNoteController
             eConfigHostType configValue = ConfigHandler.Gameplay.UsernamesOnStickyNotes.Value;
