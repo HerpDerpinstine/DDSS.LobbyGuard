@@ -9,9 +9,7 @@ using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
