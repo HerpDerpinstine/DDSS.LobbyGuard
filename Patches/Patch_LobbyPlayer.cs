@@ -31,8 +31,9 @@ namespace DDSS_LobbyGuard.Patches
             __0 = __0.RemoveRichText();
         }
 
-        //[HarmonyPrefix]
-        //[HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
+#if RELEASE
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
         private static void NetworksteamID_Prefix(LobbyPlayer __instance, ulong __0)
         {
             // Check for Host
@@ -56,6 +57,7 @@ namespace DDSS_LobbyGuard.Patches
             LobbySecurity.RemoveValidSteamID(__instance.steamID);
             LobbySecurity.AddValidSteamID(__0);
         }
+#endif
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.VerifySteamId))]

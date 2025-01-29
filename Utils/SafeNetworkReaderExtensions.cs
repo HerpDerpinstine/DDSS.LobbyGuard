@@ -81,6 +81,11 @@ namespace DDSS_LobbyGuard.Utils
             => TryRunRead(reader.ReadColor32);
         internal static NetworkIdentity SafeReadNetworkIdentity(this NetworkReader reader)
             => TryRunRead(reader.ReadNetworkIdentity);
+        internal static NetworkBehaviour SafeReadNetworkBehaviour(this NetworkReader reader)
+            => TryRunRead(reader.ReadNetworkBehaviour);
+        internal static T SafeReadNetworkBehaviour<T>(this NetworkReader reader)
+            where T : NetworkBehaviour
+            => TryRunRead(reader.ReadNetworkBehaviour<T>);
         internal static GameObject SafeReadGameObject(this NetworkReader reader)
             => TryRunRead(reader.ReadGameObject);
 
