@@ -162,6 +162,12 @@ namespace DDSS_LobbyGuard.Patches
             else
                 __instance.RpcDisplayNewRoles(newManager.netIdentity, null);
 
+            if ((newManager.NetworksubRole == SubRole.HrRep)
+                && __instance.NetworkuseHrRep
+                && __instance.NetworkselectNewHrRepWhenFired)
+                __instance.SelectNewHrRep();
+            newManager.ServerSetSubRole(SubRole.None);
+
             // Prevent Original
             return false;
         }
@@ -232,10 +238,10 @@ namespace DDSS_LobbyGuard.Patches
                 player.ServerSetPlayerRole(PlayerRole.None);
 
             bool wasHR = (player.NetworksubRole == SubRole.HrRep);
-            if (GameManager.instance.NetworkuseHrRep 
-                && GameManager.instance.NetworkselectNewHrRepWhenFired 
+            if (__instance.NetworkuseHrRep 
+                && __instance.NetworkselectNewHrRepWhenFired 
                 && wasHR)
-                GameManager.instance.SelectNewHrRep();
+                __instance.SelectNewHrRep();
 
             // Reset Vote
             VoteBoxController.instance.ServerResetVote();
@@ -244,6 +250,57 @@ namespace DDSS_LobbyGuard.Patches
             if (!__1
                 && (InteractionSecurity.GetWinner(__instance) != PlayerRole.None))
                 __instance.EndGameIfFinished();
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.SelectNewHrRep))]
+        private static bool SelectNewHrRep_Prefix(GameManager __instance)
+        {
+            // Get All Players
+            List<NetworkIdentity> list = LobbyManager.instance.GetAllPlayers();
+
+            // Get List of Specialists
+            List<NetworkIdentity> validPlayers = new();
+            foreach (NetworkIdentity networkIdentity in list)
+            {
+                if ((networkIdentity == null)
+                    || networkIdentity.WasCollected)
+                    continue;
+
+                LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
+                if ((player == null)
+                    || player.WasCollected)
+                    continue;
+
+                // Reset any Current HR
+                if (player.NetworksubRole == SubRole.HrRep)
+                {
+                    player.ServerSetSubRole(SubRole.None);
+                    continue;
+                }
+
+                // Skip Ghosts, Janitors, and Manager
+                if (player.IsGhost()
+                    || player.IsJanitor()
+                    || (player.NetworkplayerRole == PlayerRole.Manager)
+                    || (player.NetworksubRole != SubRole.None))
+                    continue;
+
+                // Add Player to List
+                validPlayers.Add(networkIdentity);
+            }
+
+            // Validate Player Count
+            int playerCount = validPlayers.Count;
+            if (playerCount <= 0)
+                return false;
+
+            // Shuffle List
+            validPlayers.Shuffle();
+            __instance.ServerSetHrRep(validPlayers[0]);
 
             // Prevent Original
             return false;
