@@ -67,16 +67,28 @@ namespace DDSS_LobbyGuard.Patches
                 || door.WasCollected)
                 return false;
 
-            // Get Requested Lock State
-            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
-
             // Validate Distance
             if (sender.IsGhost()
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
 
-            // Run Game Command
-            return UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient_Prefix(door, stateIndex);
+            // Get Requested Lock State
+            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
+
+            // Check for Lock
+            if ((stateIndex == 0)
+                || door.NetworkisLocked)
+                return false;
+
+            // Check if already Open
+            if (door.Networkstate != 0)
+                return false;
+
+            // Apply State
+            DoorSecurity.ApplyState(door, stateIndex);
+
+            // Prevent Original
+            return false;
         }
 
         [HarmonyPrefix]
