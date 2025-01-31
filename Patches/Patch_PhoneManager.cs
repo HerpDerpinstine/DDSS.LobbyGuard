@@ -66,7 +66,6 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            phone.ForceCallToEnd(sender, __2);
             phoneManager.UserCode_CmdAnswerCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, receiver, caller, __2);
 
             // Prevent Original
@@ -114,8 +113,23 @@ namespace DDSS_LobbyGuard.Patches
                 || phone.WasCollected)
                 return false;
 
+            // Enforce Receiver Number
+            string caller = phone.phoneNumber;
+            if (string.IsNullOrEmpty(caller)
+                || string.IsNullOrWhiteSpace(caller))
+                return false;
+
+            // Get New Caller
+            string receiver = phone.NetworkcallingNumber;
+            if (string.IsNullOrEmpty(receiver)
+                || string.IsNullOrWhiteSpace(receiver))
+                return false;
+
             // Run Game Command
-            phone.ForceCallToEnd(sender, __2);
+            if (PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(receiver))
+                PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, caller, caller, __2);
+            else
+                PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, caller, receiver, __2);
 
             // Prevent Original
             return false;
@@ -162,8 +176,20 @@ namespace DDSS_LobbyGuard.Patches
                 || phone.WasCollected)
                 return false;
 
+            // Get Self
+            string self = phone.phoneNumber;
+            if (string.IsNullOrEmpty(self)
+                || string.IsNullOrWhiteSpace(self))
+                return false;
+
+            // Get Other
+            string other = phone.NetworkcallingNumber;
+            if (string.IsNullOrEmpty(other)
+                || string.IsNullOrWhiteSpace(other))
+                return false;
+
             // Run Game Command
-            phone.ForceCallToEnd(sender, __2);
+            phoneManager.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, self, other, __2);
 
             // Prevent Original
             return false;
@@ -223,7 +249,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            phoneManager.UserCode_CmdDeclineCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, caller, receiver, __2);
+            phoneManager.UserCode_CmdDeclineCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, receiver, caller, __2);
 
             // Prevent Original
             return false;

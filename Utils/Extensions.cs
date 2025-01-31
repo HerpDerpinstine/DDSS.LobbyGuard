@@ -333,17 +333,15 @@ namespace DDSS_LobbyGuard.Utils
         {
             if (phone.NetworkisCallActive)
             {
-                string reciever = phone.NetworkreceivingCall;
-                if (!string.IsNullOrEmpty(reciever)
-                    && !string.IsNullOrWhiteSpace(reciever))
+                string other = phone.NetworkcallingNumber;
+                if (!string.IsNullOrEmpty(other)
+                    && !string.IsNullOrWhiteSpace(other))
                 {
-                    string caller = phone.phoneNumber;
-                    if (!string.IsNullOrEmpty(caller)
-                        && !string.IsNullOrWhiteSpace(caller))
+                    string self = phone.phoneNumber;
+                    if (!string.IsNullOrEmpty(self)
+                        && !string.IsNullOrWhiteSpace(self))
                     {
-                        if (!PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(reciever))
-                            PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, reciever, caller, clientConnection);
-                        PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, caller, reciever, clientConnection);
+                        PhoneManager.instance.UserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, self, other, clientConnection);
                     }
                 }
             }
@@ -359,9 +357,20 @@ namespace DDSS_LobbyGuard.Utils
                         && !string.IsNullOrWhiteSpace(caller))
                     {
                         if (PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(caller))
-                            PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, reciever, reciever, clientConnection);
+                        {
+                            if (!PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(reciever))
+                                PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, reciever, reciever, clientConnection);
+                        }
                         else
-                            PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, reciever, caller, clientConnection);
+                        {
+                            if (PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(reciever))
+                            {
+                                if (!PhoneManager.instance.allNpcPhoneNumbers.ContainsKey(caller))
+                                    PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, caller, caller, clientConnection);
+                            }
+                            else
+                                PhoneManager.instance.UserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient(sender, reciever, caller, clientConnection);
+                        }
                     }
                 }
             }

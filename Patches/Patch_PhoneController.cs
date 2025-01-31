@@ -65,7 +65,6 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            phone.ForceCallToEnd(sender, __2);
             phone.UserCode_CmdCall__NetworkIdentity__String__NetworkConnectionToClient(sender, receiver, sender.connectionToClient);
 
             // Prevent Original
