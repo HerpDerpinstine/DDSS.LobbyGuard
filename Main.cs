@@ -60,8 +60,6 @@ namespace DDSS_LobbyGuard
                 || (sceneName == "LobbyScene"))
             {
                 DoorSecurity.OnSceneLoad();
-                VirusSecurity.OnSceneLoad();
-                ServerSecurity.OnSceneLoad();
                 TrashBinSecurity.OnSceneLoad();
                 CollectibleSecurity.OnSceneLoad();
                 InteractionSecurity.OnSceneLoad();

@@ -16,10 +16,14 @@ namespace DDSS_LobbyGuard.Patches
         [HarmonyPatch(typeof(VirusController), nameof(VirusController.ServerSetVirus))]
         private static void ServerSetVirus_Postfix(VirusController __instance, bool __0)
         {
-            if (!__0)
+            if (!ConfigHandler.Gameplay.WorkStationVirusTurnsOffFirewall.Value 
+                || !__0)
                 return;
-            else if (ConfigHandler.Gameplay.WorkStationVirusTurnsOffFirewall.Value)
-                __instance.UserCode_CmdSetFireWall__NetworkIdentity__Boolean__NetworkConnectionToClient(__instance.netIdentity, false, __instance.netIdentity.connectionToClient);
+
+            __instance.UserCode_CmdSetFireWall__NetworkIdentity__Boolean__NetworkConnectionToClient(
+                __instance.netIdentity,
+                false,
+                __instance.netIdentity.connectionToClient);
         }
 
         [HarmonyPrefix]
@@ -34,9 +38,7 @@ namespace DDSS_LobbyGuard.Patches
             __instance.isFirewallActive = true;
             __instance.isVirusActive = false;
             __instance.virusInfectionTime = 0f;
-            __instance.virusInfectionTimeLimit = 120f;
-
-            VirusSecurity.OnStart(__instance);
+            __instance.virusInfectionTimeLimit = 120f + Random.Range(30, 45);
 
             // Prevent Original
             return false;
@@ -66,14 +68,19 @@ namespace DDSS_LobbyGuard.Patches
                 __instance.virusScreen.color = Color.blue;
             }
 
-            // Prevent Original
-            return false;
-        }
+            if (NetworkServer.activeHost)
+            {
+                __instance.virusInfectionTime += Time.deltaTime;
+                if (__instance.virusInfectionTime > __instance.virusInfectionTimeLimit)
+                {
+                    __instance.virusInfectionTime = 0f;
+                    __instance.virusInfectionTimeLimit = Random.Range(30, 45);
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(VirusController), nameof(VirusController.PerformPotentialVirusActivity))]
-        private static bool PerformPotentialVirusActivity_Prefix(VirusController __instance)
-        {
+                    if (__instance.computerController.user != null)
+                        __instance.PerformPotentialVirusActivity();
+                }
+            }
+
             // Prevent Original
             return false;
         }

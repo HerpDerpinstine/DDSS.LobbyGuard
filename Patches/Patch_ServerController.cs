@@ -12,18 +12,6 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_ServerController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ServerController), nameof(ServerController.Start))]
-        private static bool Start_Prefix(ServerController __instance)
-        {
-            ServerController.connectionsEnabled = true;
-            if (NetworkServer.activeHost)
-                ServerSecurity.OnStart(__instance);
-
-            // Prevent Original
-            return false;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(ServerController), nameof(ServerController.InvokeUserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
@@ -63,7 +51,7 @@ namespace DDSS_LobbyGuard.Patches
             }
 
             // Run Game Command
-            ServerSecurity.OnSetConnection(sender, server, enabled);
+            server.UserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, enabled, __2);
 
             // Prevent Original
             return false;

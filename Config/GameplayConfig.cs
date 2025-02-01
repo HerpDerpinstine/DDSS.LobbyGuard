@@ -42,14 +42,7 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<int> SlackerTrashBinFireDelay;
         internal MelonPreferences_Entry<int> SlackerServerOutageDelay;
 
-        internal MelonPreferences_Entry<bool> ServerOutageResetsRandomOutageTimer;
-        internal MelonPreferences_Entry<int> RandomServerOutageDelayMin;
-        internal MelonPreferences_Entry<int> RandomServerOutageDelayMax;
-
         internal MelonPreferences_Entry<bool> WorkStationVirusTurnsOffFirewall;
-        internal MelonPreferences_Entry<bool> WorkStationVirusResetsRandomVirusTimer;
-        internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMin;
-        internal MelonPreferences_Entry<int> RandomWorkStationVirusDelayMax;
 
         internal MelonPreferences_Entry<bool> EnforceComputerWindowBoundary;
 
@@ -188,40 +181,10 @@ namespace DDSS_LobbyGuard.Config
                 "Seconds until Server Outage from Slacker Task",
                 6);
 
-            ServerOutageResetsRandomOutageTimer = CreatePref("ServerOutageResetsRandomOutageTimer",
-                "Server Outage resets Random Outage Timer",
-                "Server Outages will Reset the Random Outage Timer",
-                false);
-
-            RandomServerOutageDelayMin = CreatePref("RandomServerOutageDelayMin",
-                "Random Server Outage Delay Min",
-                "Min Delay in Seconds until the Server has a Random Outage",
-                120);
-
-            RandomServerOutageDelayMax = CreatePref("RandomServerOutageDelayMax",
-                "Random Server Outage Delay Max",
-                "Max Delay in Seconds until the Server has a Random Outage",
-                600);
-
             WorkStationVirusTurnsOffFirewall = CreatePref("WorkStationVirusTurnsOffFirewall",
                 "WorkStation Virus turns off Firewall",
                 "WorkStation Viruses will Automatically Turn Off the Firewall",
                 false);
-
-            WorkStationVirusResetsRandomVirusTimer = CreatePref("WorkStationVirusResetsRandomVirusTimer",
-                "WorkStation Virus resets Random Virus Timer",
-                "WorkStation Viruses will Reset the Random Virus Timer",
-                true);
-
-            RandomWorkStationVirusDelayMin = CreatePref("RandomWorkStationVirusDelayMin",
-                "Random WorkStation Virus Delay Min",
-                "Min Delay in Seconds until a WorkStation rolls the Dice on getting a Random Virus",
-                30);
-
-            RandomWorkStationVirusDelayMax = CreatePref("RandomWorkStationVirusDelayMax",
-                "Random WorkStation Virus Delay Max",
-                "Max Delay in Seconds until a WorkStation rolls the Dice on getting a Random Virus",
-                60);
 
             EnforceComputerWindowBoundary = CreatePref("EnforceComputerWindowBoundary",
                 "Enforce Computer Window Boundary",
