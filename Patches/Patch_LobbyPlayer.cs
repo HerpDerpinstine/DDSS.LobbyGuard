@@ -69,6 +69,40 @@ namespace DDSS_LobbyGuard.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.DeserializeSyncVars))]
+        private static void DeserializeSyncVars_Prefix(LobbyPlayer __instance)
+            => EnforcePlayerValues(__instance);
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.DeserializeSyncVars))]
+        private static void DeserializeSyncVars_Postfix(LobbyPlayer __instance)
+            => EnforcePlayerValues(__instance);
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.SerializeSyncVars))]
+        private static void SerializeSyncVars_Prefix(LobbyPlayer __instance)
+            => EnforcePlayerValues(__instance);
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.SerializeSyncVars))]
+        private static void SerializeSyncVars_Postfix(LobbyPlayer __instance)
+            => EnforcePlayerValues(__instance);
+
+        private static void EnforcePlayerValues(LobbyPlayer __instance)
+        {
+            if (!NetworkServer.activeHost
+                || (GameManager.instance == null)
+                || GameManager.instance.WasCollected)
+                return;
+
+            // Check if Win Screen is Hidden
+            if (GameManager.instance.GetWinner() == PlayerRole.None)
+            {
+                // Force NetworkisFired to false for Janitors to be Reassignable
+                if (ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value
+                    && __instance.IsJanitor())
+                    __instance.isFired = false;
+            }
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.InvokeUserCode_CmdReplacePlayer__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdReplacePlayer__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
             NetworkConnectionToClient __2)

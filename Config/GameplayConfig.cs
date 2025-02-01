@@ -29,6 +29,7 @@ namespace DDSS_LobbyGuard.Config
         internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUpdateCCTV;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUpdateComputers;
+        internal MelonPreferences_Entry<bool> AllowJanitorsToKeepWorkStation;
 
         internal MelonPreferences_Entry<bool> AllowSpecialistsToPourInk;
 
@@ -151,6 +152,11 @@ namespace DDSS_LobbyGuard.Config
                 "Allow Janitors to Update Computers",
                 "Allows Janitors to do Software Updates on Computers",
                 true);
+
+            AllowJanitorsToKeepWorkStation = CreatePref("AllowJanitorsToKeepWorkStation",
+                "Allow Janitors to Keep WorkStation",
+                "Allows Janitors to Keep their Assigned WorkStation",
+                false);
 
             AllowSpecialistsToPourInk = CreatePref("AllowSpecialistsToPourInk",
                 "Allow Specialists to Pour Ink",

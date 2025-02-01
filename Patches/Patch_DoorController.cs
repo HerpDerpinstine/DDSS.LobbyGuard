@@ -73,7 +73,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Get Requested Lock State
-            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
+            int stateIndex = Mathf.Clamp((__1.SafeReadByte() / 2), -1, 1);
 
             // Check for Lock
             if ((stateIndex == 0)

@@ -106,7 +106,8 @@ namespace DDSS_LobbyGuard.Patches
                 PlayerRole playerRole = lobbyPlayer.playerRole;
 
                 // Reset WorkStation
-                if (!isJanitor)
+                if (!isJanitor 
+                    || ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value)
                     lobbyPlayer.ServerSetWorkStation(null, playerRole, true);
 
                 lobbyPlayer.isFired = true;

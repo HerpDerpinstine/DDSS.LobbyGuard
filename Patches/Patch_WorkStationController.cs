@@ -11,6 +11,7 @@ using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using Il2CppProps.Scripts;
 using Il2CppProps.ServerRack;
+using Il2CppProps.WorkStation.InfectedUSB;
 using Il2CppProps.WorkStation.Mouse;
 using Il2CppProps.WorkStation.Scripts;
 
@@ -87,7 +88,7 @@ namespace DDSS_LobbyGuard.Patches
             if ((target == null)
                 || target.WasCollected
                 || target.IsGhost()
-                || target.IsJanitor())
+                || (target.IsJanitor() && !ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value))
                 return false;
 
             station.UserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient(sender, target, __2); 

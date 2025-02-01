@@ -73,10 +73,11 @@ namespace DDSS_LobbyGuard.Patches
             if ((oldManager != null)
                 && !oldManager.WasCollected)
             {
+                bool janitorsKeepWorkstation = ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value;
                 if (flag)
                 {
                     // Fire Old Manager
-                    __instance.ServerFirePlayer(oldManager.netIdentity, true, false);
+                    __instance.ServerFirePlayer(oldManager.netIdentity, true, !janitorsKeepWorkstation);
                     oldManager.isFired = true;
                 }
                 else
@@ -85,7 +86,7 @@ namespace DDSS_LobbyGuard.Patches
                 }
 
                 // Assign Old Manager Workstation
-                oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, oldManager.playerRole, false);
+                oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, oldManager.playerRole);
 
                 // Reset Old Manager Tasks
                 TaskController managerComponent = oldManager.GetComponent<TaskController>();
@@ -95,7 +96,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Set New Manager
             newManager.ServerSetPlayerRole(PlayerRole.Manager);
-            newManager.ServerSetWorkStation(__instance.managerWorkStationController, PlayerRole.Manager, flag);
+            newManager.ServerSetWorkStation(__instance.managerWorkStationController, PlayerRole.Manager);
 
             // Reset Termination Timer
             __instance.RpcResetTerminationTimer(__instance.terminationMaxTime);
@@ -154,20 +155,24 @@ namespace DDSS_LobbyGuard.Patches
                 __instance.ServerFinnishMeeting();
 
             // Reset Workstation
-            if (__2)
+            bool janitorsKeepWorkstation = ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value;
+            if (__2
+                && (!flag || !janitorsKeepWorkstation))
                 player.ServerSetWorkStation(null, player.playerRole, true);
 
             // Fire Player
-            player.RpcFirePlayer(true, player.playerRole, player.playerRole, !flag);
+
+            player.RpcFirePlayer(true, flag ? player.playerRole : player.originalPlayerRole, player.playerRole, !flag);
 
             // Assign Janitor Role
+            player.originalPlayerRole = player.playerRole;
             if (flag)
                 player.ServerSetPlayerRole(PlayerRole.Janitor);
             else
                 player.ServerSetPlayerRole(PlayerRole.None);
 
             // Apply Fired State
-            player.isFired = true;
+            player.isFired = (!janitorsKeepWorkstation || !flag);
 
             if (!flag)
                 player.ServerReplacePlayerWithSpectator(__0.connectionToClient);
@@ -179,8 +184,7 @@ namespace DDSS_LobbyGuard.Patches
                 __instance.SelectNewHrRep();
 
             // Reset Vote
-            if (__instance.isServer)
-                VoteBoxController.instance.ServerResetVote();
+            VoteBoxController.instance.ServerResetVote();
 
             // End Match if Winner is Found
             if (!__1
