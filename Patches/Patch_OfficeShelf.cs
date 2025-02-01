@@ -19,14 +19,9 @@ namespace DDSS_LobbyGuard.Patches
             if (!BinderManager.instance.shelves.ContainsKey(__instance.shelfCategory))
                 BinderManager.instance.shelves.Add(__instance.shelfCategory, __instance);
 
-            // Check for Server
-            if (!__instance.isServer)
-                return false;
-            if (!NetworkServer.activeHost)
-                return false;
-
             // Spawn Binders
-            CollectibleSecurity.SpawnBinderStart(__instance);
+            if (NetworkServer.activeHost)
+                CollectibleSecurity.SpawnBinderStart(__instance);
 
             // Prevent Original
             return false;
@@ -64,7 +59,7 @@ namespace DDSS_LobbyGuard.Patches
             var binderCat = BinderManager.instance.binders[documentCategory];
             int binderCount = binderCat.Count - 1;
 
-            int binder = __1.SafeReadInt();
+            int binder = __1.SafeReadByte();
             if (binder < 0)
                 binder = 0;
             if (binder > binderCount)

@@ -115,24 +115,27 @@ namespace DDSS_LobbyGuard.Security
                 CollectibleDestructionCallback.eCollectibleType.BINDER,
                 (Binder binder) =>
                 {
-                    if (BinderManager.instance.binders == null)
-                        BinderManager.instance.binders = new();
-                    if (!BinderManager.instance.binders.ContainsKey(shelf.shelfCategory))
-                        BinderManager.instance.binders[shelf.shelfCategory] = new();
-                    BinderManager.instance.binders[shelf.shelfCategory].Add(binder);
-
                     string catName = System.Enum.GetName(shelf.shelfCategory);
                     string name = $"{catName} {index}";
                     string localizedName = $"{LocalizationManager.instance.GetLocalizedValue(catName)} {index}";
+                    Color color = binder.colors[UnityEngine.Random.Range(0, binder.colors.Count)];
 
                     binder.Networklabel = localizedName;
                     binder.NetworkinteractableName = name;
-                    binder.Networkcolor = binder.colors[UnityEngine.Random.Range(0, binder.colors.Count)];
+                    binder.Networkcolor = color;
+
+                    Material[] materials = binder.renderer.materials;
+                    binder.renderer.materials[1].color = color;
+                    binder.text.text = localizedName;
 
                     int randomIndex = UnityEngine.Random.Range(0, Task.documents.Count);
                     string item = Task.documents[randomIndex].Item1;
                     string text = Resources.Load<TextAsset>("files/" + item).text;
                     binder.ServerAddDocument(item, text);
+
+                    if (!BinderManager.instance.binders.ContainsKey(shelf.shelfCategory))
+                        BinderManager.instance.binders.Add(shelf.shelfCategory, new Il2CppSystem.Collections.Generic.List<Binder>());
+                    BinderManager.instance.binders[shelf.shelfCategory].Add(binder);
                 },
                 index);
 
