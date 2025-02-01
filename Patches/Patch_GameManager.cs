@@ -169,7 +169,7 @@ namespace DDSS_LobbyGuard.Patches
             // Apply Fired State
             player.isFired = true;
 
-            if (flag)
+            if (!flag)
                 player.ServerReplacePlayerWithSpectator(__0.connectionToClient);
 
             bool wasHR = (player.subRole == SubRole.HrRep);
