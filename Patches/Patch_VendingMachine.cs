@@ -2,7 +2,6 @@
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 using Il2CppProps.VendingMachine;
 
@@ -63,7 +62,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Index
             __1.SafeReadNetworkIdentity();
-            int itemIndex = __1.SafeReadInt();
+            int itemIndex = __1.ReadByte() / 2;
 
             // Validate Index
             if ((itemIndex < 0)

@@ -5,8 +5,6 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
-using Il2CppPlayer;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 using UnityEngine;
 
@@ -36,7 +34,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Get Index
             __1.SafeReadNetworkIdentity();
-            int itemIndex = __1.SafeReadInt();
+            int itemIndex = __1.ReadByte() / 2;
 
             // Validate Index
             if ((itemIndex < 0)

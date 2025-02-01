@@ -86,6 +86,10 @@
       <HintPath>$(Il2CppAssemblies)\UnityEngine.AnimationModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.AudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(Il2CppAssemblies)\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
