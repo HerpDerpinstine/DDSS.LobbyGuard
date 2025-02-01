@@ -153,7 +153,7 @@ namespace DDSS_LobbyGuard.Patches
                 LobbyPlayer lobbyPlayer = player.GetComponent<LobbyPlayer>();
 
                 // Clear Tasks for Player
-                player.GetComponent<TaskController>().RpcClearTaskQueue();
+                player.GetComponent<TaskController>().ServerClearTaskQueue();
 
                 // Move Player to Spawn
                 NetworkStartPosition randomPos = spawnList[i % spawnCount];

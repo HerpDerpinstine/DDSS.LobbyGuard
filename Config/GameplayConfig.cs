@@ -53,9 +53,6 @@ namespace DDSS_LobbyGuard.Config
 
         internal MelonPreferences_Entry<bool> EnforceComputerWindowBoundary;
 
-        //internal MelonPreferences_Entry<bool> PlayerVelocityEnforcement;
-        internal MelonPreferences_Entry<bool> HideSlackersFromClients;
-
         internal override string GetName()
             => "Gameplay";
 
@@ -229,16 +226,6 @@ namespace DDSS_LobbyGuard.Config
             EnforceComputerWindowBoundary = CreatePref("EnforceComputerWindowBoundary",
                 "Enforce Computer Window Boundary",
                 "Prevents Dragging Windows on WorkStation Computers outside of the Monitor's Boundaries",
-                false);
-
-            //PlayerVelocityEnforcement = CreatePref("EnforcePlayerVelocity",
-            //    "Enforce Player Velocity",
-            //    "Prevents Speedhacking using Context-Based Velocity Clamping",
-            //    false);
-
-            HideSlackersFromClients = CreatePref("HideSlackersFromClients",
-                "Hide Slackers from Clients",
-                "Prevents Slackers and Slacker Count from being broadcasted to Clients",
                 false);
         }
     }

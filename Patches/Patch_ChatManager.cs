@@ -12,8 +12,8 @@ namespace DDSS_LobbyGuard.Patches
     internal class Patch_ChatManager
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ChatManager), nameof(ChatManager.InvokeUserCode_CmdSendChatMessage__LobbyPlayer__String__String__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_CmdSendChatMessage__LobbyPlayer__String__String__NetworkConnectionToClient_Prefix(
+        [HarmonyPatch(typeof(ChatManager), nameof(ChatManager.InvokeUserCode_CmdSendChatMessage__LobbyPlayer__String__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSendChatMessage__LobbyPlayer__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0, 
             NetworkReader __1,
             NetworkConnectionToClient __2)
@@ -22,16 +22,6 @@ namespace DDSS_LobbyGuard.Patches
             NetworkIdentity sender = __2.identity;
 
             __1.SafeReadNetworkBehaviour<LobbyPlayer>();
-
-            string room = __1.SafeReadString();
-            if (string.IsNullOrEmpty(room)
-                || string.IsNullOrWhiteSpace(room))
-                return false;
-
-            room = room.RemoveRichText();
-            if (string.IsNullOrEmpty(room)
-                || string.IsNullOrWhiteSpace(room))
-                return false;
 
             string message = __1.SafeReadString();
             if (string.IsNullOrEmpty(message)
@@ -55,7 +45,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Invoke Game Method
-            manager.UserCode_CmdSendChatMessage__LobbyPlayer__String__String__NetworkConnectionToClient(player, room, message, __2);
+            manager.UserCode_CmdSendChatMessage__LobbyPlayer__String__NetworkConnectionToClient(player, message, __2);
 
             // Prevent Original
             return false;

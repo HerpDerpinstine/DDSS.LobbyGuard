@@ -103,17 +103,16 @@ namespace DDSS_LobbyGuard.Patches
                 && !lobbyPlayer.IsGhost())
             {
                 bool isJanitor = lobbyPlayer.IsJanitor();
-                PlayerRole playerRole = lobbyPlayer.NetworkplayerRole;
+                PlayerRole playerRole = lobbyPlayer.playerRole;
 
                 // Reset WorkStation
                 if (!isJanitor 
                     || ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value)
                     lobbyPlayer.ServerSetWorkStation(null, playerRole, true);
 
-                lobbyPlayer.NetworkisFired = true;
                 lobbyPlayer.isFired = true;
 
-                bool wasHR = (lobbyPlayer.NetworksubRole == SubRole.HrRep);
+                bool wasHR = (lobbyPlayer.subRole == SubRole.HrRep);
                 if (GameManager.instance.NetworkuseHrRep
                     && GameManager.instance.NetworkselectNewHrRepWhenFired
                     && wasHR)

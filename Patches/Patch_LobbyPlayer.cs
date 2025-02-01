@@ -5,10 +5,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
-using Il2CppObjects.Scripts;
-using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
-using Il2CppProps.WorkStation.Phone;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -96,89 +93,13 @@ namespace DDSS_LobbyGuard.Patches
                 return;
 
             // Check if Win Screen is Hidden
-            if (InteractionSecurity.GetWinner(GameManager.instance) == PlayerRole.None)
+            if (GameManager.instance.GetWinner() == PlayerRole.None)
             {
                 // Force NetworkisFired to false for Janitors to be Reassignable
                 if (ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value
                     && __instance.IsJanitor())
-                {
-                    __instance.NetworkisFired = false;
                     __instance.isFired = false;
-                }
-
-                // Spoof Role to Hide Slackers
-                if (ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                {
-                    if (__instance.NetworkplayerRole == PlayerRole.Slacker)
-                        __instance.NetworkplayerRole = PlayerRole.Specialist;
-                    if (__instance.NetworkoriginalPlayerRole == PlayerRole.Slacker)
-                        __instance.NetworkoriginalPlayerRole = PlayerRole.Specialist;
-                }
             }
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.RpcSetPlayerRole))]
-        private static bool RpcSetPlayerRole_Prefix(LobbyPlayer __instance,
-            ref PlayerRole __0,
-            bool __1)
-        {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return true;
-
-            // Check for Slacker Role
-            if (!NetworkServer.activeHost
-                || !__instance.isServer)
-                return true;
-
-            if (__0 != PlayerRole.Slacker)
-            {
-                InteractionSecurity.RemoveSlacker(__instance);
-                return true;
-            }
-
-            // Send Real Role to Player
-            InteractionSecurity.AddSlacker(__instance);
-            __instance.CustomRpcSetPlayerRole(__0, true, __instance.connectionToClient);
-
-            // Check to Fake for All
-            //if (!GameManager.instance.slackersCanSeeSlackers)
-            //{
-                // Send Fake Role to All
-                foreach (NetworkConnectionToClient networkConnectionToClient in __instance.netIdentity.observers.Values)
-                    if ((networkConnectionToClient != null)
-                        && !networkConnectionToClient.WasCollected
-                        && (networkConnectionToClient.connectionId != __instance.connectionToClient.connectionId))
-                        __instance.CustomRpcSetPlayerRole(PlayerRole.Specialist, false, networkConnectionToClient);
-            //}
-            //else
-            //{
-                // Iterate through All Observers
-            //    foreach (NetworkConnectionToClient networkConnectionToClient in __instance.netIdentity.observers.Values)
-            //        if ((networkConnectionToClient != null)
-            //            && !networkConnectionToClient.WasCollected
-            //            && (networkConnectionToClient.connectionId != __instance.connectionToClient.connectionId))
-            //        {
-            //            LobbyPlayer player = networkConnectionToClient.identity.GetComponent<LobbyPlayer>();
-            //            if (InteractionSecurity.IsSlacker(player)
-            //                || (player.NetworkplayerRole == PlayerRole.Slacker))
-            //            {
-                            // Send __instance Role -> player
-            //                __instance.RpcSetPlayerRoleSpecific(PlayerRole.Slacker, false, networkConnectionToClient);
-
-                            // Send player Role -> __instance
-            //                player.RpcSetPlayerRoleSpecific(PlayerRole.Slacker, false, __instance.connectionToClient);
-            //            }
-            //            else
-            //            {
-                            // Send __instance Fake Role -> player
-            //                __instance.RpcSetPlayerRoleSpecific(PlayerRole.Specialist, false, networkConnectionToClient);
-            //            }
-            //        }
-            //}
-
-            // Prevent Original
-            return false;
         }
 
         [HarmonyPrefix]
@@ -202,32 +123,6 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             sender.UserCode_CmdReplacePlayer__NetworkConnectionToClient(__2);
-
-            // Prevent Original
-            return false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.InvokeUserCode_CmdReplacePlayerWithSpectator__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_CmdReplacePlayerWithSpectator__NetworkConnectionToClient_Prefix(NetworkBehaviour __0,
-            NetworkConnectionToClient __2)
-        {
-            // Validate Server
-            if ((__2.identity == null)
-                || __2.identity.WasCollected
-                || !LobbyManager.instance.gameStarted)
-                return false;
-
-            // Validate Sender
-            LobbyPlayer sender = __0.TryCast<LobbyPlayer>();
-            if ((sender == null)
-                || sender.WasCollected
-                || (sender.NetworkplayerController == null)
-                || sender.NetworkplayerController.WasCollected)
-                return false;
-
-            // Run Game Command
-            sender.UserCode_CmdReplacePlayerWithSpectator__NetworkConnectionToClient(__2);
 
             // Prevent Original
             return false;

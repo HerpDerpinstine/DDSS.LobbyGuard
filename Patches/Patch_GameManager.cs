@@ -4,7 +4,6 @@ using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppGameManagement;
-using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
@@ -16,49 +15,6 @@ namespace DDSS_LobbyGuard.Patches
     [HarmonyPatch]
     internal class Patch_GameManager
     {
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameManager), nameof(GameManager.NetworktargetGameState), MethodType.Setter)]
-        private static void NetworktargetGameState_set_Prefix(GameManager __instance, ref int __0)
-        {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return;
-            if (!NetworkServer.activeHost)
-                return;
-            if (__0 != (int)GameStates.GameFinished)
-                return;
-            if (InteractionSecurity.GetWinner(__instance) != PlayerRole.None)
-                return;
-            __0 = (int)GameStates.InGame;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameManager), nameof(GameManager.EndGameIfFinished))]
-        private static bool EndGameIfFinished_Prefix(GameManager __instance)
-        {
-            if (!NetworkServer.activeHost)
-                return false;
-            if (InteractionSecurity.GetWinner(__instance) == PlayerRole.None)
-                return false;
-
-            if (ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
-                {
-                    LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
-                    if (InteractionSecurity.IsSlacker(player))
-                    {
-                        player.NetworkplayerRole = PlayerRole.Slacker;
-                        player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
-                        player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
-                    }
-                }
-
-            // Change Game States
-            __instance.gameStateMachine.CurrentState.ChangeState(GameStates.GameFinished);
-
-            // Prevent Original
-            return false;
-        }
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.FindNewManager))]
         private static bool FindNewManager_Prefix(GameManager __instance, ref LobbyPlayer __result)
@@ -79,7 +35,7 @@ namespace DDSS_LobbyGuard.Patches
                     || player.WasCollected
                     || player.IsGhost()
                     || player.IsJanitor()
-                    || (player.NetworkplayerRole != PlayerRole.Specialist)
+                    || (player.playerRole != PlayerRole.Specialist)
                     || InteractionSecurity.IsSlacker(player))
                     continue;
 
@@ -125,11 +81,7 @@ namespace DDSS_LobbyGuard.Patches
                 }
                 else
                 {
-                    if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
-                        && InteractionSecurity.IsSlacker(oldManager))
-                        oldManager.ServerSetPlayerRole(PlayerRole.Slacker);
-                    else
-                        oldManager.ServerSetPlayerRole(newManager.playerRole);
+                    oldManager.ServerSetPlayerRole(newManager.playerRole);
                 }
 
                 oldManager.ServerSetWorkStation(newManager.NetworkworkStationController, oldManager.playerRole);
@@ -137,7 +89,7 @@ namespace DDSS_LobbyGuard.Patches
                 // Reset Old Manager Tasks
                 TaskController managerComponent = oldManager.GetComponent<TaskController>();
                 if (managerComponent != null)
-                    managerComponent.RpcClearTaskQueue();
+                    managerComponent.ServerClearTaskQueue();
             }
 
             // Set New Manager
@@ -153,7 +105,7 @@ namespace DDSS_LobbyGuard.Patches
             // Reset New Manager Tasks
             TaskController component = newManager.GetComponent<TaskController>();
             if (component != null)
-                component.RpcClearTaskQueue();
+                component.ServerClearTaskQueue();
 
             // Display New Roles
             if ((oldManager != null)
@@ -162,11 +114,11 @@ namespace DDSS_LobbyGuard.Patches
             else
                 __instance.RpcDisplayNewRoles(newManager.netIdentity, null);
 
-            if ((newManager.NetworksubRole == SubRole.HrRep)
+            if ((newManager.subRole == SubRole.HrRep)
                 && __instance.NetworkuseHrRep
                 && __instance.NetworkselectNewHrRepWhenFired)
                 __instance.SelectNewHrRep();
-            newManager.ServerSetSubRole(SubRole.None);
+            newManager.ServerSetSubRole(SubRole.None, true);
 
             // Prevent Original
             return false;
@@ -187,16 +139,6 @@ namespace DDSS_LobbyGuard.Patches
                 || player.IsGhost())
                 return false;
 
-            // Send Role
-            if (ConfigHandler.Gameplay.HideSlackersFromClients.Value
-                && __instance.revealRoleAfterFiring
-                && InteractionSecurity.IsSlacker(player))
-            {
-                player.NetworkplayerRole = PlayerRole.Slacker;
-                player.NetworkoriginalPlayerRole = PlayerRole.Slacker;
-                player.CustomRpcSetPlayerRole(PlayerRole.Slacker, false);
-            }
-
             // Get Janitor Count
             var janitorList = LobbyManager.instance.GetJanitorPlayers();
             bool flag = !player.IsJanitor()
@@ -214,22 +156,20 @@ namespace DDSS_LobbyGuard.Patches
             bool janitorsKeepWorkstation = ConfigHandler.Gameplay.AllowJanitorsToKeepWorkStation.Value;
             if (__2
                 && (!flag || !janitorsKeepWorkstation))
-                player.ServerSetWorkStation(null, player.NetworkplayerRole, true);
+                player.ServerSetWorkStation(null, player.playerRole, true);
 
             // Apply Fired State
             if (player.IsJanitor())
             {
-                player.NetworkisFired = true;
                 player.isFired = true;
             }
             else
             {
                 player.isFired = janitorsKeepWorkstation && flag || !flag;
-                player.NetworkisFired = janitorsKeepWorkstation && flag || !flag;
             }
 
             // Fire Player
-            player.RpcFirePlayer(true, player.NetworkplayerRole, !flag);
+            player.RpcFirePlayer(true, player.playerRole, flag ? PlayerRole.Janitor : PlayerRole.None, !flag);
 
             // Assign Janitor Role
             if (flag)
@@ -237,7 +177,7 @@ namespace DDSS_LobbyGuard.Patches
             else
                 player.ServerSetPlayerRole(PlayerRole.None);
 
-            bool wasHR = (player.NetworksubRole == SubRole.HrRep);
+            bool wasHR = (player.subRole == SubRole.HrRep);
             if (__instance.NetworkuseHrRep 
                 && __instance.NetworkselectNewHrRepWhenFired 
                 && wasHR)
@@ -248,7 +188,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // End Match if Winner is Found
             if (!__1
-                && (InteractionSecurity.GetWinner(__instance) != PlayerRole.None))
+                && (__instance.GetWinner() != PlayerRole.None))
                 __instance.EndGameIfFinished();
 
             // Prevent Original
@@ -276,17 +216,17 @@ namespace DDSS_LobbyGuard.Patches
                     continue;
 
                 // Reset any Current HR
-                if (player.NetworksubRole == SubRole.HrRep)
+                if (player.subRole == SubRole.HrRep)
                 {
-                    player.ServerSetSubRole(SubRole.None);
+                    player.ServerSetSubRole(SubRole.None, true);
                     continue;
                 }
 
                 // Skip Ghosts, Janitors, and Manager
                 if (player.IsGhost()
                     || player.IsJanitor()
-                    || (player.NetworkplayerRole == PlayerRole.Manager)
-                    || (player.NetworksubRole != SubRole.None))
+                    || (player.playerRole == PlayerRole.Manager)
+                    || (player.subRole != SubRole.None))
                     continue;
 
                 // Add Player to List
@@ -346,7 +286,7 @@ namespace DDSS_LobbyGuard.Patches
 
             // Run Game Command
             manager.UserCode_CmdAddProductivityFromTaskCompletion__PlayerRole__NetworkIdentity__NetworkConnectionToClient(
-                InteractionSecurity.IsSlacker(lobbyPlayer) ? PlayerRole.Slacker : lobbyPlayer.NetworkplayerRole,
+                InteractionSecurity.IsSlacker(lobbyPlayer) ? PlayerRole.Slacker : lobbyPlayer.playerRole,
                 sender,
                 __2);
 

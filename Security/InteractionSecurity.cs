@@ -21,7 +21,6 @@ namespace DDSS_LobbyGuard.Security
         private static Il2CppSystem.Type ImageType = Il2CppType.Of<PrintedImage>();
         private static Il2CppSystem.Type ToiletPaperType = Il2CppType.Of<ToiletPaper>();
 
-        private static Dictionary<LobbyPlayer, bool> _allSlackers = new();
         private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
 
         internal const float MAX_DISTANCE_DEFAULT = 2f;
@@ -48,7 +47,6 @@ namespace DDSS_LobbyGuard.Security
 
         internal static void OnSceneLoad()
         {
-            _allSlackers.Clear();
             _allCharacterNames.Clear();
         }
 
@@ -72,29 +70,7 @@ namespace DDSS_LobbyGuard.Security
         {
             if (player == null)
                 return false;
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return player.NetworkplayerRole == PlayerRole.Slacker;
-            return _allSlackers.ContainsKey(player);
-        }
-
-        internal static void AddSlacker(LobbyPlayer player)
-        {
-            if (player == null)
-                return;
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return;
-            _allSlackers[player] = true;
-        }
-
-        internal static void RemoveSlacker(LobbyPlayer player)
-        {
-            if (player == null)
-                return;
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return;
-            if (!_allSlackers.ContainsKey(player))
-                return;
-            _allSlackers.Remove(player);
+            return player.playerRole == PlayerRole.Slacker;
         }
 
         internal static void AddLobbyUICharacterName(PlayerLobbyUI ui, TextMeshProUGUI text)
@@ -126,67 +102,6 @@ namespace DDSS_LobbyGuard.Security
         }
         internal static bool CanSpawnItem(string interactableName, int maxCount)
             => GetTotalCountOfSpawnedItem(interactableName) < maxCount;
-
-        internal static PlayerRole GetWinner(GameManager manager)
-        {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return manager.GetWinner();
-
-            if (manager.finalProductivityMeter >= 1f)
-                return PlayerRole.Specialist;
-
-            if (manager.finalProductivityMeter <= 0f)
-                return PlayerRole.Slacker;
-
-            if (manager.onlyWinFromScore)
-                return PlayerRole.None;
-
-            int amountOfUnfiredSlackers = GetAmountOfUnfiredSlackers(LobbyManager.instance);
-            if (amountOfUnfiredSlackers <= 0)
-                return PlayerRole.Specialist;
-
-            int amountOfUnfiredSpecialists = GetAmountOfUnfiredSpecialists(LobbyManager.instance);
-            if (amountOfUnfiredSpecialists <= 0)
-                return PlayerRole.Slacker;
-
-            int numberOfFiredEmployees = manager.GetNumberOfFiredEmployees();
-            if (numberOfFiredEmployees >= manager.fireLimit)
-                return PlayerRole.Slacker;
-
-            return PlayerRole.None;
-
-        }
-
-        internal static int GetAmountOfUnfiredSlackers(LobbyManager manager)
-        {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return manager.GetAmountOfUnfiredSlackers();
-
-            int num = 0;
-            foreach (NetworkIdentity networkIdentity in manager.GetAllPlayers())
-            {
-                LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
-                if (IsSlacker(player))
-                    num++;
-            }
-            return num;
-        }
-
-        internal static int GetAmountOfUnfiredSpecialists(LobbyManager manager)
-        {
-            if (!ConfigHandler.Gameplay.HideSlackersFromClients.Value)
-                return manager.GetAmountOfUnfiredSpecialists();
-
-            int num = 0;
-            foreach (NetworkIdentity networkIdentity in manager.GetAllPlayers())
-            {
-                LobbyPlayer player = networkIdentity.GetComponent<LobbyPlayer>();
-                if ((player.NetworkplayerRole == PlayerRole.Specialist)
-                    && !IsSlacker(player))
-                    num++;
-            }
-            return num;
-        }
 
         internal static bool CanUseUsable(NetworkIdentity player, Usable usable)
         {

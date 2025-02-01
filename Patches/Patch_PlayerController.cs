@@ -1,16 +1,9 @@
-﻿//using DDSS_LobbyGuard.Config;
-using DDSS_LobbyGuard.Security;
-using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
-using Il2CppGameManagement;
-//using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using UnityEngine;
-//using Il2CppPlayer.PlayerEffects;
-//using Il2CppPlayer.StateMachineLogic;
-//using UnityEngine;
 
 namespace DDSS_LobbyGuard.Patches
 {
@@ -89,86 +82,5 @@ namespace DDSS_LobbyGuard.Patches
             // Prevent Original
             return false;
         }
-
-        /*
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerController), nameof(PlayerController.SetLocalVelocity))]
-        private static void SetLocalVelocity_Prefix(PlayerController __instance)
-        {
-            if (!ConfigHandler.Gameplay.PlayerVelocityEnforcement.Value)
-                return;
-
-            // Check for Chair
-            if (!NetworkServer.activeHost
-                || !__instance.isServer
-                || __instance.isInChair)
-                return;
-
-            // Check for Game Start
-            if ((GameManager.instance.NetworktargetGameState != (int)GameStates.InGame)
-                && (GameManager.instance.NetworktargetGameState != (int)GameStates.Meeting))
-                return;
-
-            // Check Sprint
-            bool isSprinting = __instance.NetworktargetState == (int)States.Sprint;
-            bool hasCoffeeEffect = !GameManager.instance.noSprinting
-                || (__instance.GetComponent<PlayerEffectController>().NetworktargetState == (int)PlayerEffects.SpeedBoost);
-
-            // Get Max Speed
-            float maxSpeed = ((isSprinting && hasCoffeeEffect)
-                ? __instance.sprintSpeed
-                : __instance.moveSpeed) * Time.unscaledDeltaTime;
-
-            // Validate Speed
-            Vector3 velocity = (__instance.transform.position - __instance.lastPos);
-            Vector3 velocityNoUp = velocity;
-            velocityNoUp.y = 0f;
-            float magnitude = velocityNoUp.magnitude;
-            if (magnitude <= maxSpeed)
-                return;
-
-            // Clamp Speed
-            Vector3 newDistance = Vector3.ClampMagnitude(velocityNoUp, maxSpeed);
-            newDistance.y = velocity.y;
-
-            // Force Position to Location
-            Vector3 correctedPos = __instance.lastPos + newDistance;
-            ForcePosition(__instance, correctedPos);
-        }
-
-        private static void ForcePosition(PlayerController __instance, Vector3 pos)
-        {
-            __instance.enabled = false;
-            __instance.netIdentity.enabled = false;
-
-            if (__instance.isLocalPlayer)
-                __instance.controller.enabled = false;
-
-            NetworkTransform trans = __instance.gameObject.GetComponent<NetworkTransform>();
-            if (trans != null)
-                trans.enabled = false;
-
-            __instance.transform.position = pos;
-            __instance.ServerMovePlayer(pos);
-            __instance.SetDirty();
-
-            if (trans != null)
-            {
-                trans.RpcTeleport(pos);
-                trans.SetPosition(pos);
-                trans.SetDirty();
-                trans.enabled = true;
-            }
-
-            if (__instance.isLocalPlayer)
-                __instance.controller.enabled = true;
-
-            __instance.netIdentity.enabled = true;
-            __instance.enabled = true;
-
-            if (__instance.NetworktargetState == (int)States.Idle)
-                __instance.NetworktargetState = (int)States.Movement;
-        }
-        */
     }
 }

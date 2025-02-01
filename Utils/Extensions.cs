@@ -45,7 +45,7 @@ namespace DDSS_LobbyGuard.Utils
         }
 
         internal static bool IsGhost(this LobbyPlayer player)
-            => (player.NetworkplayerRole == PlayerRole.None);
+            => (player.playerRole == PlayerRole.None);
         internal static bool IsGhost(this PlayerController controller)
         {
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
@@ -66,7 +66,7 @@ namespace DDSS_LobbyGuard.Utils
         }
 
         internal static bool IsJanitor(this LobbyPlayer player)
-            => (player.NetworkplayerRole == PlayerRole.Janitor);
+            => (player.playerRole == PlayerRole.Janitor);
         internal static bool IsJanitor(this PlayerController controller)
         {
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
@@ -87,7 +87,7 @@ namespace DDSS_LobbyGuard.Utils
         }
 
         internal static bool IsSpecialist(this LobbyPlayer player)
-            => (player.NetworkplayerRole == PlayerRole.Specialist);
+            => (player.playerRole == PlayerRole.Specialist);
         internal static bool IsSpecialist(this PlayerController controller)
         {
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
@@ -119,7 +119,7 @@ namespace DDSS_LobbyGuard.Utils
                 || lobbyPlayer.WasCollected)
                 return PlayerRole.None;
 
-            return lobbyPlayer.NetworkplayerRole;
+            return lobbyPlayer.playerRole;
         }
 
         internal static SubRole GetPlayerSubRole(this NetworkIdentity player)
@@ -134,7 +134,7 @@ namespace DDSS_LobbyGuard.Utils
                 || lobbyPlayer.WasCollected)
                 return SubRole.None;
 
-            return lobbyPlayer.NetworksubRole;
+            return lobbyPlayer.subRole;
         }
 
         internal static LobbyPlayer GetLobbyPlayer(this NetworkIdentity player)

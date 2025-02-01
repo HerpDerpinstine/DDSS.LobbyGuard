@@ -39,8 +39,8 @@ namespace DDSS_LobbyGuard.Patches
             if ((targetPlayer == null)
                 || targetPlayer.WasCollected
                 || targetPlayer.IsGhost()
-                || (targetPlayer.NetworkplayerRole == PlayerRole.Manager)
-                || (targetPlayer.NetworksubRole == SubRole.Assistant))
+                || (targetPlayer.playerRole == PlayerRole.Manager)
+                || (targetPlayer.subRole == SubRole.Assistant))
                 return false;
 
             // Validate Sender
@@ -59,7 +59,7 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer lobbyPlayer = senderController.NetworklobbyPlayer;
             if ((lobbyPlayer == null)
                 || lobbyPlayer.WasCollected
-                || (lobbyPlayer.NetworkplayerRole != PlayerRole.Manager))
+                || (lobbyPlayer.playerRole != PlayerRole.Manager))
                 return false;
 
             // Validate Distance
@@ -76,15 +76,15 @@ namespace DDSS_LobbyGuard.Patches
                 LobbyPlayer oldPlayer = networkIdentity.GetComponent<LobbyPlayer>();
                 if ((oldPlayer == null)
                     || (oldPlayer == targetPlayer)
-                    || (oldPlayer.NetworksubRole != SubRole.Assistant))
+                    || (oldPlayer.subRole != SubRole.Assistant))
                     continue;
 
                 // Reset Role
-                oldPlayer.ServerSetSubRole(SubRole.None);
+                oldPlayer.ServerSetSubRole(SubRole.None, true);
             }
 
-            bool wasHR = (targetPlayer.NetworksubRole == SubRole.HrRep);
-            targetPlayer.ServerSetSubRole(SubRole.Assistant);
+            bool wasHR = (targetPlayer.subRole == SubRole.HrRep);
+            targetPlayer.ServerSetSubRole(SubRole.Assistant, true);
             if (GameManager.instance.NetworkuseHrRep && wasHR)
                 GameManager.instance.SelectNewHrRep();
 
@@ -124,8 +124,8 @@ namespace DDSS_LobbyGuard.Patches
             if ((targetPlayer == null)
                 || targetPlayer.WasCollected
                 || targetPlayer.IsGhost()
-                || (targetPlayer.NetworkplayerRole == PlayerRole.Manager)
-                || (targetPlayer.NetworksubRole == SubRole.None))
+                || (targetPlayer.playerRole == PlayerRole.Manager)
+                || (targetPlayer.subRole == SubRole.None))
                 return false;
 
             // Validate Sender
@@ -144,14 +144,14 @@ namespace DDSS_LobbyGuard.Patches
             LobbyPlayer lobbyPlayer = senderController.NetworklobbyPlayer;
             if ((lobbyPlayer == null)
                 || lobbyPlayer.WasCollected
-                || (lobbyPlayer.NetworkplayerRole != PlayerRole.Manager))
+                || (lobbyPlayer.playerRole != PlayerRole.Manager))
                 return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
                 return false;
 
-            targetPlayer.ServerSetSubRole(SubRole.None);
+            targetPlayer.ServerSetSubRole(SubRole.None, true);
             GameManager.instance.RpcSetAssistant(targetPlayer.netIdentity, null);
 
             // Prevent Original
