@@ -119,6 +119,7 @@ namespace DDSS_LobbyGuard.Patches
             int slackerCount = 0;
             int specialistCount = 0;
             int slackerAmount = manager.slackerAmount;
+            List<LobbyPlayer> allSlackers = new();
             for (int i = 0; i < playerCount; i++)
             {
                 // Get Player
@@ -137,6 +138,7 @@ namespace DDSS_LobbyGuard.Patches
                     slackerCount++;
                     lobbyPlayer.ServerSetPlayerRole(PlayerRole.Slacker);
                     lobbyPlayer.ServerSetWorkStation(randomWorkstation, PlayerRole.Slacker, true);
+                    allSlackers.Add(lobbyPlayer);
                 }
                 else // Specialist
                 {
@@ -145,6 +147,11 @@ namespace DDSS_LobbyGuard.Patches
                     lobbyPlayer.ServerSetWorkStation(randomWorkstation, PlayerRole.Specialist, true);
                 }
             }
+
+            if (GameManager.instance.slackersCanSeeSlackers)
+                foreach (var player in allSlackers)
+                    foreach (var player2 in allSlackers)
+                        player.RpcSetPlayerRole(player2.connectionToClient, player.playerRole);
 
             for (int i = 0; i < playerCount; i++)
             {
