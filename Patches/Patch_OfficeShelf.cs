@@ -55,20 +55,18 @@ namespace DDSS_LobbyGuard.Patches
             int docCatId = __1.SafeReadInt();
             DocumentCategory documentCategory = (DocumentCategory)docCatId;
 
-            // Get Binder
-            int binder = __1.SafeReadInt();
-            if (binder < 0)
-                binder = 0;
-
             // Validate Binder Manager
             if ((BinderManager.instance == null)
                 || (BinderManager.instance.binders == null)
                 || !BinderManager.instance.binders.ContainsKey(documentCategory))
                 return false;
 
-            // Get Binder Category
             var binderCat = BinderManager.instance.binders[documentCategory];
             int binderCount = binderCat.Count - 1;
+
+            int binder = __1.SafeReadInt();
+            if (binder < 0)
+                binder = 0;
             if (binder > binderCount)
                 binder = binderCount;
 
@@ -93,7 +91,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Run Game Command
-            shelf.UserCode_CmdSpawnDocument__String__String__DocumentCategory__Int32__NetworkConnectionToClient(document, fileName, documentCategory, binder, __2);
+            binderObj.ServerAddDocument(document, documentContent);
 
             // Prevent Original
             return false;
