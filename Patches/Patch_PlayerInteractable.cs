@@ -66,33 +66,7 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
                 return false;
 
-            // Get Last Assistant
-            LobbyPlayer lastAssistant = LobbyManager.instance.GetAssistantPlayer();
-
-            // Run Game Command
-            foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
-            {
-                // Get Old Player
-                LobbyPlayer oldPlayer = networkIdentity.GetComponent<LobbyPlayer>();
-                if ((oldPlayer == null)
-                    || (oldPlayer == targetPlayer)
-                    || (oldPlayer.subRole != SubRole.Assistant))
-                    continue;
-
-                // Reset Role
-                oldPlayer.ServerSetSubRole(SubRole.None, true);
-            }
-
-            bool wasHR = (targetPlayer.subRole == SubRole.HrRep);
-            targetPlayer.ServerSetSubRole(SubRole.Assistant, true);
-            if (GameManager.instance.NetworkuseHrRep && wasHR)
-                GameManager.instance.SelectNewHrRep();
-
-            if ((lastAssistant != null)
-                && !lastAssistant.WasCollected)
-                GameManager.instance.RpcSetAssistant(lastAssistant.netIdentity, targetPlayer.netIdentity);
-            else
-                GameManager.instance.RpcSetAssistant(null, targetPlayer.netIdentity);
+            GameManager.instance.ServerSetAssistant(targetPlayer.netIdentity);
 
             // Prevent Original
             return false;
@@ -151,10 +125,9 @@ namespace DDSS_LobbyGuard.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
                 return false;
 
-            targetPlayer.ServerSetSubRole(SubRole.None, true);
-            GameManager.instance.RpcSetAssistant(targetPlayer.netIdentity, null);
+            GameManager.instance.ServerSetAssistant(null);
 
-            // Prevent Original
+            // Prevent Original 
             return false;
         }
 

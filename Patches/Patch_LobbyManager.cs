@@ -114,7 +114,6 @@ namespace DDSS_LobbyGuard.Patches
 
                 bool wasHR = (lobbyPlayer.subRole == SubRole.HrRep);
                 if (GameManager.instance.NetworkuseHrRep
-                    && GameManager.instance.NetworkselectNewHrRepWhenFired
                     && wasHR)
                     GameManager.instance.SelectNewHrRep();
 

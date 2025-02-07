@@ -10,11 +10,11 @@ using Il2CppProps.WorkStation.Phone;
 
 namespace DDSS_LobbyGuard.Patches
 {
-    [HarmonyPatch]
+    //[HarmonyPatch]
     internal class Patch_PhoneController
     {
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneController), nameof(PhoneController.InvokeUserCode_CmdCall__NetworkIdentity__String__NetworkConnectionToClient))]
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PhoneController), nameof(PhoneController.InvokeUserCode_CmdCall__NetworkIdentity__String__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdCall__NetworkIdentity__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkReader __1,

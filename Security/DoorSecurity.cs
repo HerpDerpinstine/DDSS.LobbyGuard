@@ -54,12 +54,12 @@ namespace DDSS_LobbyGuard.Security
                 return;
 
             Vector3 size = collider.size;
-            if (size.x < 0.6f)
-                size.x = 0.6f;
-            if (size.y < 0.6f)
-                size.y = 0.6f;
-            if (size.z < 0.6f)
-                size.z = 0.6f;
+            if (size.x < 0.5f)
+                size.x = 0.5f;
+            if (size.y < 0.5f)
+                size.y = 0.5f;
+            if (size.z < 0.5f)
+                size.z = 0.5f;
             collider.size = size;
         }
 

@@ -117,8 +117,7 @@ namespace DDSS_LobbyGuard.Patches
                 __instance.RpcDisplayNewRoles(newManager.netIdentity, null);
 
             if ((newManager.subRole == SubRole.HrRep)
-                && __instance.NetworkuseHrRep
-                && __instance.NetworkselectNewHrRepWhenFired)
+                && __instance.NetworkuseHrRep)
                 __instance.SelectNewHrRep();
             newManager.ServerSetSubRole(SubRole.None, true);
 
@@ -161,7 +160,6 @@ namespace DDSS_LobbyGuard.Patches
                 player.ServerSetWorkStation(null, player.playerRole, true);
 
             // Fire Player
-
             player.RpcFirePlayer(true, flag ? player.playerRole : player.originalPlayerRole, player.playerRole, !flag);
 
             // Assign Janitor Role
@@ -179,7 +177,6 @@ namespace DDSS_LobbyGuard.Patches
 
             bool wasHR = (player.subRole == SubRole.HrRep);
             if (__instance.NetworkuseHrRep
-                && __instance.NetworkselectNewHrRepWhenFired
                 && wasHR)
                 __instance.SelectNewHrRep();
 
@@ -187,8 +184,7 @@ namespace DDSS_LobbyGuard.Patches
             VoteBoxController.instance.ServerResetVote();
 
             // End Match if Winner is Found
-            if (!__1
-                && (__instance.GetWinner() != PlayerRole.None))
+            if (!__1)
                 __instance.EndGameIfFinished();
 
             // Prevent Original

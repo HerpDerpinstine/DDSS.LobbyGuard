@@ -9,11 +9,11 @@ using Il2CppProps.WorkStation.Phone;
 
 namespace DDSS_LobbyGuard.Patches
 {
-    [HarmonyPatch]
+    //[HarmonyPatch]
     internal class Patch_PhoneManager
     {
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdAnswerCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdAnswerCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdAnswerCall__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
@@ -72,8 +72,8 @@ namespace DDSS_LobbyGuard.Patches
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdCancelCall__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
@@ -135,8 +135,8 @@ namespace DDSS_LobbyGuard.Patches
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdEndCall__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
@@ -195,8 +195,8 @@ namespace DDSS_LobbyGuard.Patches
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdDeclineCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PhoneManager), nameof(PhoneManager.InvokeUserCode_CmdDeclineCall__NetworkIdentity__String__String__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdDeclineCall__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
             NetworkConnectionToClient __2)
