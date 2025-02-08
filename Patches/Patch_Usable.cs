@@ -133,6 +133,7 @@ namespace DDSS_LobbyGuard.Patches
                 return false;
 
             // Validate Chair
+            /*
             WorkStationController workStation = usable.TryCast<WorkStationController>();
             if ((workStation != null)
                 && !workStation.WasCollected)
@@ -142,6 +143,7 @@ namespace DDSS_LobbyGuard.Patches
                     && !phone.WasCollected)
                     phone.ForceCallToEnd(sender, __2);
             }
+            */
 
             // Validate Drop
             if (!InteractionSecurity.CanStopUseUsable(sender, usable.TryCast<Chair>()))

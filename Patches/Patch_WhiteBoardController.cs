@@ -123,8 +123,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkConnectionToClient __2)
         {
             if ((GameManager.instance == null)
-                || GameManager.instance.WasCollected
-                || (GameManager.instance.NetworktargetGameState != (int)GameStates.Meeting))
+                || GameManager.instance.WasCollected)
                 return false;
 
             // Get WhiteBoardController
@@ -148,7 +147,7 @@ namespace DDSS_LobbyGuard.Patches
                 || target.WasCollected)
                 return false;
 
-            whiteBoard.UserCode_CmdProtectPlayer__NetworkIdentity__NetworkIdentity__NetworkConnectionToClient(target, sender, __2);
+            GameManager.instance.ServerSetProtectedPlayer(target);
 
             // Prevent Original
             return false;
@@ -162,8 +161,7 @@ namespace DDSS_LobbyGuard.Patches
             NetworkConnectionToClient __2)
         {
             if ((GameManager.instance == null)
-                || GameManager.instance.WasCollected
-                || (GameManager.instance.NetworktargetGameState != (int)GameStates.Meeting))
+                || GameManager.instance.WasCollected)
                 return false;
 
             // Get WhiteBoardController
@@ -187,7 +185,7 @@ namespace DDSS_LobbyGuard.Patches
                 || target.WasCollected)
                 return false;
 
-            whiteBoard.UserCode_CmdStopProtectPlayer__NetworkIdentity__NetworkIdentity__NetworkConnectionToClient(target, sender, __2);
+            GameManager.instance.ServerResetProtectedPlayer();
 
             // Prevent Original
             return false;

@@ -152,7 +152,12 @@ namespace DDSS_LobbyGuard.Patches
             if ((localPlayer != null)
                 && !localPlayer.WasCollected
                 && (localPlayer.steamID != lobbyPlayer.steamID))
+            {
                 LobbySecurity.RemoveValidSteamID(lobbyPlayer.steamID);
+
+                // Log Client Leave
+                MelonMain._logger.Msg($"Player Left: {lobbyPlayer.username} ~ {lobbyPlayer.steamUsername} ~ {lobbyPlayer.steamID}");
+            }
         }
 
         [HarmonyPrefix]

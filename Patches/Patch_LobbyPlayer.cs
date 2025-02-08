@@ -53,6 +53,9 @@ namespace DDSS_LobbyGuard.Patches
             // Add SteamID
             LobbySecurity.RemoveValidSteamID(__instance.steamID);
             LobbySecurity.AddValidSteamID(__0);
+
+            // Log Client Join
+            MelonMain._logger.Msg($"Player Joined: {__instance.username} ~ {__instance.steamUsername} ~ {__0}");
         }
 #endif
 
