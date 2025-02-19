@@ -25,7 +25,8 @@ namespace DDSS_LobbyGuard.PersistentBlacklist
 
         internal static void OnLobbyOpen(LobbyManager manager)
         {
-            if (_error)
+            if (_error
+                || !ModuleConfig.Instance.PersistentBlacklist.Value)
                 return;
 
             LoadFile();
@@ -37,7 +38,7 @@ namespace DDSS_LobbyGuard.PersistentBlacklist
                         manager.blacklist.Add(player.SteamID);
         }
 
-        internal static void SaveFile()
+        private static void SaveFile()
         {
             if (_error)
                 return;
@@ -82,6 +83,9 @@ namespace DDSS_LobbyGuard.PersistentBlacklist
 
         internal static void RequestKick(LobbyPlayer player)
         {
+            if (!ModuleConfig.Instance.PersistentBlacklist.Value)
+                return;
+
             //if (ConfigHandler.Moderation.PromptForKick.Value)
             //    MelonMain.ShowPrompt("Moderation Confirmation", $"Kick {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyKick(player)), new Action(() => { }));
             //else
@@ -90,6 +94,9 @@ namespace DDSS_LobbyGuard.PersistentBlacklist
 
         internal static void RequestBlacklist(LobbyPlayer player)
         {
+            if (!ModuleConfig.Instance.PersistentBlacklist.Value)
+                return;
+
             //if (ConfigHandler.Moderation.PromptForBlacklist.Value)
             //    MelonMain.ShowPrompt("Moderation Confirmation", $"Blacklist {player.steamUsername}", "Confirm", "Cancel", new Action(() => ApplyBlacklist(player)), new Action(() => { }));
             //else
