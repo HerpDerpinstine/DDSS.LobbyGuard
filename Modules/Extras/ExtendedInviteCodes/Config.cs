@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.ExtendedInviteCodes
+namespace DDSS_LobbyGuard.Extras.ExtendedInviteCodes
 {
     internal class ModuleConfig : ConfigCategory
     {

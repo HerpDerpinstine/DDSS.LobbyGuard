@@ -2,7 +2,7 @@
 using Il2Cpp;
 using Il2CppMirror;
 
-namespace DDSS_LobbyGuard.ExtendedInviteCodes.Patches
+namespace DDSS_LobbyGuard.Extras.ExtendedInviteCodes.Patches
 {
     [HarmonyPatch]
     internal class Patch_NetworkManager

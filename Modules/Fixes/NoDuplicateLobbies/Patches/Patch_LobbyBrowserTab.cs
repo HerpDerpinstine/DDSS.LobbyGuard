@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Il2Cpp;
 
-namespace DDSS_LobbyGuard.NoDuplicateLobbies.Patches
+namespace DDSS_LobbyGuard.Fixes.NoDuplicateLobbies.Patches
 {
     [HarmonyPatch]
     internal class Patch_LobbyBrowserTab

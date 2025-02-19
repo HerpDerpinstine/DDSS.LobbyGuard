@@ -3,7 +3,7 @@ using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 
-namespace DDSS_LobbyGuard.PersistentBlacklist.Patches
+namespace DDSS_LobbyGuard.Extras.PersistentBlacklist.Patches
 {
     [HarmonyPatch]
     internal class Patch_LobbyManager

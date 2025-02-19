@@ -5,9 +5,9 @@
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>$(SolutionDir)Output\$(Configuration)\UserData\LobbyGuard\Modules\Fixes\</OutputPath>
+		<OutputPath>$(SolutionDir)Output\$(Configuration)\UserData\LobbyGuard\Modules\Extras\</OutputPath>
 		<OutputType>Library</OutputType>
-		<RootNamespace>DDSS_LobbyGuard.Fixes.RemoveRichText</RootNamespace>
+		<RootNamespace>DDSS_LobbyGuard.Extras.MoreJanitorSettings</RootNamespace>
         <Platforms>AnyCPU</Platforms>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -69,6 +69,18 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(Il2CppAssemblies)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+	<Reference Include="Unity.TextMeshPro">
+      <HintPath>$(Il2CppAssemblies)\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+	<Reference Include="UnityEngine.UI">
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

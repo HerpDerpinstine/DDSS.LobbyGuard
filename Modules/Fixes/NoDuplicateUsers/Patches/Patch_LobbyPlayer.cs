@@ -2,7 +2,7 @@
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 
-namespace DDSS_LobbyGuard.NoDuplicateUsers.Patches
+namespace DDSS_LobbyGuard.Fixes.NoDuplicateUsers.Patches
 {
     [HarmonyPatch]
     internal class Patch_LobbyPlayer

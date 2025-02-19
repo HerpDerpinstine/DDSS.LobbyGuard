@@ -1,4 +1,4 @@
-﻿namespace DDSS_LobbyGuard.ExtendedInviteCodes
+﻿namespace DDSS_LobbyGuard.Extras.ExtendedInviteCodes
 {
     internal static class InviteCodeSecurity
     {

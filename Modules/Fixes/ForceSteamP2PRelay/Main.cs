@@ -1,7 +1,7 @@
-﻿namespace DDSS_LobbyGuard.ForceSteamP2PRelay
+﻿namespace DDSS_LobbyGuard.Fixes.ForceSteamP2PRelay
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "ForceSteamP2PRelay";
+        public override string Name => "Fixes.ForceSteamP2PRelay";
     }
 }

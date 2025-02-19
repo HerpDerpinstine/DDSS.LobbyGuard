@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.DoorRework
+namespace DDSS_LobbyGuard.Fixes.DoorRework
 {
     internal class ModuleConfig : ConfigCategory
     {

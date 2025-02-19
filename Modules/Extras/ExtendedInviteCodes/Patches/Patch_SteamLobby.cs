@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Il2Cpp;
 
-namespace DDSS_LobbyGuard.ExtendedInviteCodes.Patches
+namespace DDSS_LobbyGuard.Extras.ExtendedInviteCodes.Patches
 {
     [HarmonyPatch]
     internal class Patch_SteamLobby

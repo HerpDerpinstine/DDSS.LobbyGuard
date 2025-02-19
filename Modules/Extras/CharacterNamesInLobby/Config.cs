@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.CharacterNamesInLobby
+namespace DDSS_LobbyGuard.Extras.CharacterNamesInLobby
 {
     internal class ModuleConfig : ConfigCategory
     {

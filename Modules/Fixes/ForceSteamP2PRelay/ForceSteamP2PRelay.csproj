@@ -7,7 +7,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\UserData\LobbyGuard\Modules\Fixes\</OutputPath>
 		<OutputType>Library</OutputType>
-		<RootNamespace>DDSS_LobbyGuard.ForceSteamP2PRelay</RootNamespace>
+		<RootNamespace>DDSS_LobbyGuard.Fixes.ForceSteamP2PRelay</RootNamespace>
         <Platforms>AnyCPU</Platforms>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

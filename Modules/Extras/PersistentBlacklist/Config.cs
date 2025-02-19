@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.PersistentBlacklist
+namespace DDSS_LobbyGuard.Extras.PersistentBlacklist
 {
     internal class ModuleConfig : ConfigCategory
     {

@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Il2CppProps.Door;
 
-namespace DDSS_LobbyGuard.DoorRework.Patches
+namespace DDSS_LobbyGuard.Fixes.DoorRework.Patches
 {
     [HarmonyPatch]
     internal class Patch_PlayerDetectionVolume

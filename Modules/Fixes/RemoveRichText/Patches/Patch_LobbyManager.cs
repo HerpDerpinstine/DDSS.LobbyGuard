@@ -2,7 +2,7 @@
 using HarmonyLib;
 using Il2Cpp;
 
-namespace DDSS_LobbyGuard.RemoveRichText.Patches
+namespace DDSS_LobbyGuard.Fixes.RemoveRichText.Patches
 {
     [HarmonyPatch]
     internal class Patch_LobbyManager

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
-namespace DDSS_LobbyGuard.PersistentBlacklist
+namespace DDSS_LobbyGuard.Extras.PersistentBlacklist
 {
     internal static class BlacklistSecurity
     {

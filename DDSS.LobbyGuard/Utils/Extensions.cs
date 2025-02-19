@@ -136,9 +136,19 @@ namespace DDSS_LobbyGuard.Utils
             return lobbyPlayer.subRole;
         }
 
-        public static LobbyPlayer GetLobbyPlayer(this NetworkIdentity player)
+        public static PlayerController GetPlayerController(this NetworkIdentity player)
         {
             PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return null;
+
+            return controller;
+        }
+
+        public static LobbyPlayer GetLobbyPlayer(this NetworkIdentity player)
+        {
+            PlayerController controller = GetPlayerController(player);
             if ((controller == null)
                 || controller.WasCollected)
                 return null;

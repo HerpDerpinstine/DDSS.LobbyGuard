@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DDSS_LobbyGuard.PersistentBlacklist
+namespace DDSS_LobbyGuard.Extras.PersistentBlacklist
 {
     [Serializable]
     public class BlacklistedPlayer

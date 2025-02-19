@@ -9,6 +9,7 @@ using MelonLoader.Utils;
 using System;
 using System.IO;
 using System.Reflection;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard
 {
@@ -181,5 +182,14 @@ namespace DDSS_LobbyGuard
             return true;
         }
 
+        public static bool IsWithinRange(Vector3 posA, Vector3 posB,
+            float maxRange)
+        {
+            float distance = Vector3.Distance(posA, posB);
+            if (distance < 0f)
+                distance *= -1f;
+
+            return distance <= maxRange;
+        }
     }
 }

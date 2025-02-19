@@ -5,9 +5,9 @@
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>$(SolutionDir)Output\$(Configuration)\UserData\LobbyGuard\Modules\Fixes\</OutputPath>
+		<OutputPath>$(SolutionDir)Output\$(Configuration)\UserData\LobbyGuard\Modules\Security\</OutputPath>
 		<OutputType>Library</OutputType>
-		<RootNamespace>DDSS_LobbyGuard.SteamIDVerification</RootNamespace>
+		<RootNamespace>DDSS_LobbyGuard.Security.Door</RootNamespace>
         <Platforms>AnyCPU</Platforms>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -40,7 +40,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Patches\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +69,10 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(Il2CppAssemblies)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.PhysicsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

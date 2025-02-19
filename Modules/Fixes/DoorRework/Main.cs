@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.DoorRework
+namespace DDSS_LobbyGuard.Fixes.DoorRework
 {
     internal class ModuleMain : ILobbyModule
     {
@@ -15,7 +15,7 @@ namespace DDSS_LobbyGuard.DoorRework
         private const float _doorAnimationDelay = 2f;
         private static Dictionary<DoorController, Coroutine> _applyStateCoroutines = new();
 
-        public override string Name => "DoorRework";
+        public override string Name => "Fixes.DoorRework";
         public override Type ConfigType => typeof(ModuleConfig);
 
         public override void OnSceneInit(int buildIndex, string sceneName)

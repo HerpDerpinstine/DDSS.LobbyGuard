@@ -3,13 +3,13 @@ using Il2CppUI.Tabs.LobbyTab;
 using System;
 using System.Collections.Generic;
 
-namespace DDSS_LobbyGuard.CharacterNamesInLobby
+namespace DDSS_LobbyGuard.Extras.CharacterNamesInLobby
 {
     internal class ModuleMain : ILobbyModule
     {
         private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
 
-        public override string Name => "CharacterNamesInLobby";
+        public override string Name => "Extras.CharacterNamesInLobby";
         public override Type ConfigType => typeof(ModuleConfig);
 
         public override void OnSceneInit(int buildIndex, string sceneName)

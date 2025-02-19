@@ -2,7 +2,7 @@
 using Il2Cpp;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.DoorRework.Patches
+namespace DDSS_LobbyGuard.Fixes.DoorRework.Patches
 {
     [HarmonyPatch]
     internal class Patch_DoorController

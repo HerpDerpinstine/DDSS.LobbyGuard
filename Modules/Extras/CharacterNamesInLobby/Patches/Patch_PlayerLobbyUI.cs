@@ -3,7 +3,7 @@ using Il2CppTMPro;
 using Il2CppUI.Tabs.LobbyTab;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.CharacterNamesInLobby.Patches
+namespace DDSS_LobbyGuard.Extras.CharacterNamesInLobby.Patches
 {
     [HarmonyPatch]
     internal class Patch_PlayerLobbyUI

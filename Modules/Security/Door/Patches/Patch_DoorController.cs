@@ -1,0 +1,147 @@
+﻿using DDSS_LobbyGuard.Utils;
+using HarmonyLib;
+using Il2Cpp;
+using Il2CppInterop.Runtime;
+using Il2CppMirror;
+using Il2CppPlayer;
+using Il2CppPlayer.Lobby;
+using Il2CppProps.Door;
+using Il2CppProps.Scripts;
+using UnityEngine;
+
+namespace DDSS_LobbyGuard.Security.Door.Patches
+{
+    [HarmonyPatch]
+    internal class Patch_DoorController
+    {
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdKnockDoor__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdKnockDoor__NetworkIdentity__NetworkConnectionToClient_Prefix(
+            NetworkBehaviour __0,
+            NetworkConnectionToClient __2)
+        {
+            // Get DoorController
+            DoorController door = __0.TryCast<DoorController>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (sender.IsGhost()
+                || !MelonMain.IsWithinRange(sender.transform.position, door.transform.position, 2f))
+                return false;
+
+            // Run Game Command
+            door.UserCode_CmdKnockDoor__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
+
+            // Get DoorController
+            DoorController door = __0.TryCast<DoorController>();
+            if ((door == null)
+                || door.WasCollected)
+                return false;
+
+            // Get Requested Lock State
+            int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
+
+            // Validate Distance
+            if (sender.IsGhost()
+                || !MelonMain.IsWithinRange(sender.transform.position, door.transform.position, 2f))
+                return false;
+
+            // Run Game Command
+            door.UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient(stateIndex, sender.GetPlayerController(), __2);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetLockState__NetworkIdentity__Boolean__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdSetLockState__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Get DoorController
+            DoorController door = __0.TryCast<DoorController>();
+            if ((door == null)
+                || door.WasCollected)
+                return false;
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
+
+            // Get State
+            __1.SafeReadNetworkIdentity();
+            bool requestedState = __1.SafeReadBool();
+            if (door.NetworkisLocked == requestedState)
+                return false;
+
+            // Validate Distance
+            if (!MelonMain.IsWithinRange(sender.transform.position, door.transform.position, 2f))
+                return false;
+
+            // Validate Lock Request
+            if (!door.PlayerCanChangeLockState(sender))
+                return false;
+
+            PlayerController controller = sender.GetPlayerController();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            // Get Player
+            LobbyPlayer oldPlayer = controller.NetworklobbyPlayer;
+            if ((oldPlayer == null)
+                || oldPlayer.WasCollected
+                || oldPlayer.IsGhost())
+                return false;
+
+            // Get DoorInteractable
+            DoorInteractable doorInteractable = door.GetComponentInChildren<DoorInteractable>();
+            if ((doorInteractable == null)
+                || doorInteractable.WasCollected)
+                return false;
+
+            // Validate Role
+            var role = oldPlayer.playerRole;
+            if (!doorInteractable.everyoneCanLock
+                && (role != PlayerRole.Manager)
+                && (role != PlayerRole.Janitor))
+            {
+                // Validate Placement
+                Collectible collectible = sender.GetCurrentCollectible();
+                if ((collectible == null)
+                    || collectible.WasCollected
+                    || (collectible.GetIl2CppType() != Il2CppType.Of<KeyController>()))
+                    return false;
+            }
+
+            // Apply State
+            door.UserCode_CmdSetLockState__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, requestedState, __2);
+
+            // Prevent Original
+            return false;
+        }
+    }
+}

@@ -7,7 +7,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\UserData\LobbyGuard\Modules\Fixes\</OutputPath>
 		<OutputType>Library</OutputType>
-		<RootNamespace>DDSS_LobbyGuard.NoDuplicateLobbies</RootNamespace>
+		<RootNamespace>DDSS_LobbyGuard.Fixes.NoDuplicateLobbies</RootNamespace>
         <Platforms>AnyCPU</Platforms>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

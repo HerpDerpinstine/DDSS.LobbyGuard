@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace DDSS_LobbyGuard.Extras.ExtendedInviteCodes
+namespace DDSS_LobbyGuard.Extras.MoreJanitorSettings
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Extras.ExtendedInviteCodes";
+        public override string Name => "Extras.MoreJanitorSettings";
         public override Type ConfigType => typeof(ModuleConfig);
     }
 }

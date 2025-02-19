@@ -4,7 +4,7 @@ using Il2CppSteamworks;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.NoDuplicateLobbies.Patches
+namespace DDSS_LobbyGuard.Fixes.NoDuplicateLobbies.Patches
 {
     [HarmonyPatch]
     internal class Patch_LobbyItem

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DDSS_LobbyGuard.NoDuplicateUsers
+namespace DDSS_LobbyGuard.Fixes.NoDuplicateUsers
 {
     internal static class LobbySecurity
     {

@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Il2CppMirror.FizzySteam;
 
-namespace DDSS_LobbyGuard.ForceSteamP2PRelay.Patches
+namespace DDSS_LobbyGuard.Fixes.ForceSteamP2PRelay.Patches
 {
     [HarmonyPatch]
     internal class Patch_FizzySteamworks
