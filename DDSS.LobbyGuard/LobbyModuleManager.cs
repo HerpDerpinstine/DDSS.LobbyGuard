@@ -1,5 +1,6 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
+using MelonLoader.Pastel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,8 +12,8 @@ namespace DDSS_LobbyGuard
 {
     internal static class LobbyModuleManager
     {
-        public static string _modulePath { get; private set; }
-        private static List<ILobbyModule> _modules = new();
+        internal static string _modulePath { get; private set; }
+        internal static List<ILobbyModule> _modules = new();
 
         internal static void Load()
         {
@@ -38,7 +39,6 @@ namespace DDSS_LobbyGuard
                 validAssemblies.Add(asm);
             }
 
-            List<ILobbyModule> validModules = new();
             foreach (var asm in validAssemblies)
             {
                 // Find Module
@@ -60,36 +60,45 @@ namespace DDSS_LobbyGuard
                     module.Config = (ConfigCategory)Activator.CreateInstance(configType);
 
                 // Add Module to Cache
-                validModules.Add(module);
+                _modules.Add(module);
             }
 
             // Sort Modules by Priority
-            validModules = validModules.OrderBy(item => item.Priority).ToList();
+            _modules = _modules.OrderBy(item => item.Priority).ToList();
 
-            // Run OnLoad
-            foreach (var module in validModules)
+            List<ILobbyModule> modulesToRemove = new();
+            foreach (var module in _modules)
             {
+                string moduleName = module.Name;
+
+#if DEBUG
+                MelonMain._logger.Msg($"Loading {moduleName}...");
+#endif
+
                 // Run OnLoad
                 if (!module.OnLoad())
                 {
                     module.OnQuit();
+                    modulesToRemove.Add(module);
                     continue;
                 }
 
                 // Apply Module Patches
-                HarmonyLib.Harmony harmony = new(module.Name);
-                if (!MelonMain.ApplyPatches(harmony, module.GetType().Assembly))
+                HarmonyLib.Harmony harmony = new(moduleName);
+                if (!MelonMain.ApplyPatches(harmony, module.GetType().Assembly, $"[{moduleName.Pastel("#800080")}] "))
                 {
                     harmony.UnpatchSelf();
                     module.OnQuit();
+                    modulesToRemove.Add(module);
                     continue;
                 }
 
                 // Add Module to Cache
                 module.HarmonyInstance = harmony;
-                _modules.Add(module);
-                MelonMain._logger.Msg($"Module Loaded: {module.Name}");
+                MelonMain._logger.Msg($"Module Loaded: {moduleName}");
             }
+            foreach (var module in modulesToRemove)
+                _modules.Remove(module);
         }
 
         internal static void Quit()

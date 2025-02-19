@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.GUI;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.GUI;
 using Il2CppUI.Tabs.SettingsTab;
 using MelonLoader;
 using System;
@@ -11,7 +12,6 @@ namespace DDSS_LobbyGuard.GUI.Internal
     {
         private static List<MelonPreferences_Category> _categoryCache = new();
         internal static Dictionary<SettingObject, MelonPreferences_Entry> _settingCache = new();
-        internal static List<MelonPreferences_Category> _validCategories = new();
 
         internal static void Reset()
         {
@@ -106,8 +106,10 @@ namespace DDSS_LobbyGuard.GUI.Internal
                     UnityEngine.Object.Destroy(ModSettingsManager._tab.settingsParent.GetChild(i).gameObject);
 
             // Add New Listings
-            foreach (MelonPreferences_Category melonCat in _validCategories)
+            foreach (var cat in ConfigCategory._allCategories.Values)
             {
+                MelonPreferences_Category melonCat = cat.Category;
+
                 // Create Category Object
                 ModSettingsCategoryBuilder.Create(melonCat.DisplayName);
                 _categoryCache.Add(melonCat);

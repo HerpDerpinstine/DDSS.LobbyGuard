@@ -11,7 +11,7 @@ namespace DDSS_LobbyGuard.ExtendedInviteCodes.Patches
         [HarmonyPatch(typeof(NetworkManager), nameof(NetworkManager.StartHost))]
         private static void StartHost_Prefix()
         {
-            if (!ModuleConfig.Instance.Enabled.Value)
+            if (!ModuleConfig.Instance.ExtendedInviteCodes.Value)
                 return;
 
             // Check if already has Invite Code
@@ -27,7 +27,7 @@ namespace DDSS_LobbyGuard.ExtendedInviteCodes.Patches
         [HarmonyPatch(typeof(SteamLobby), nameof(SteamLobby.GetRandomLobbyCode))]
         private static bool GetRandomLobbyCode_Prefix(ref string __result)
         {
-            if (!ModuleConfig.Instance.Enabled.Value)
+            if (!ModuleConfig.Instance.ExtendedInviteCodes.Value)
                 return true;
 
             // Generate New Code

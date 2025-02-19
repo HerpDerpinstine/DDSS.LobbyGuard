@@ -13,7 +13,7 @@ namespace DDSS_LobbyGuard.CharacterNamesInLobby
         public ModuleConfig() : base() 
             => Instance = this;
         public override string GetName()
-            => "CharacterNamesInLobby";
+            => "Lobby";
 
         public override void CreatePreferences()
         {

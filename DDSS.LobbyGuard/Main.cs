@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Components;
+using DDSS_LobbyGuard.Config;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppMirror;
@@ -6,7 +7,6 @@ using Il2CppUMUI;
 using MelonLoader;
 using MelonLoader.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -99,7 +99,7 @@ namespace DDSS_LobbyGuard
             return true;
         }
 
-        public static bool ApplyPatches(HarmonyLib.Harmony harmonyInstance, Assembly assembly)
+        public static bool ApplyPatches(HarmonyLib.Harmony harmonyInstance, Assembly assembly, string prefix = "")
         {
             foreach (Type type in assembly.GetValidTypes())
             {
@@ -110,8 +110,9 @@ namespace DDSS_LobbyGuard
                 // Apply
                 try
                 {
-                    if (MelonDebug.IsEnabled())
-                        _logger.Msg($"Applying {type.Name}");
+#if DEBUG
+                    _logger.Msg($"{prefix}Applying {type.Name}");
+#endif
 
                     harmonyInstance.PatchAll(type);
                 }
