@@ -1,4 +1,5 @@
 ﻿using DDSS_LobbyGuard.Config;
+using Il2Cpp;
 using Il2CppUI.Tabs.SettingsTab;
 using MelonLoader;
 using System;
@@ -9,8 +10,8 @@ namespace DDSS_LobbyGuard.GUI.Internal
 {
     internal static class ModSettingsFactory
     {
-        private static List<MelonPreferences_Category> _categoryCache = new();
         internal static Dictionary<SettingObject, MelonPreferences_Entry> _settingCache = new();
+        internal static Dictionary<eConfigType, CategoryButton> _categoryCache = new();
 
         internal static void Reset()
         {
@@ -27,8 +28,8 @@ namespace DDSS_LobbyGuard.GUI.Internal
             }
 
             // Save Categories
-            foreach (MelonPreferences_Category cat in _categoryCache)
-                cat.SaveToFile(false);
+            foreach (var cat in ConfigCategory._allCategories.Values)
+                cat.Save();
 
             // Reset Objects
             ModSettingsManager._tab.ShowSettings();
@@ -87,17 +88,62 @@ namespace DDSS_LobbyGuard.GUI.Internal
             }
 
             // Save Categories
-            foreach (MelonPreferences_Category cat in _categoryCache)
-                cat.SaveToFile(false);
+            foreach (var cat in ConfigCategory._allCategories.Values)
+                cat.Save();
 
             // Log Changes
             MelonMain._logger.Msg("Settings have been Saved!");
         }
 
-        internal static void Generate()
+        internal static void GenerateCategories()
         {
             // Clear Old Listings
             _categoryCache.Clear();
+            int childCount = ModSettingsManager._tab.categoryGrid.childCount;
+            if (childCount > 0)
+                for (int i = 0; i < childCount; i++)
+                    UnityEngine.Object.Destroy(ModSettingsManager._tab.categoryGrid.GetChild(i).gameObject);
+
+            // Add New Listings
+            int index = 0;
+            foreach (var cat in Enum.GetValues<eConfigType>())
+            {
+                // Create Category Button
+                string catName = Enum.GetName(cat);
+                CategoryButton category = ModSettingsCategoryBuilder.CreateButton(catName);
+                _categoryCache[cat] = category;
+                category.categoryIndex = index;
+                category.SetSelected(ModSettingsManager._tab.currentCategoryIndex);
+                category.button.enabled = (ModSettingsManager._tab.currentCategoryIndex != index);
+                category.button.SetHighlighted((ModSettingsManager._tab.currentCategoryIndex == index));
+
+                // Fix Button
+                category.button.OnClick = new();
+                category.button.OnClick.AddListener(new Action(() => OnCategorySelected(category)));
+
+                // Increase Index
+                index++;
+            }
+        }
+
+        internal static void OnCategorySelected(CategoryButton button)
+        {
+            ModSettingsManager._tab.SelectCategory(button.categoryIndex);
+            button.SetSelected(button.categoryIndex);
+            button.button.enabled = false;
+            button.button.SetHighlighted(true);
+
+            foreach (var cat in _categoryCache.Values)
+            {
+                cat.SetSelected(button.categoryIndex);
+                cat.button.enabled = true;
+                cat.button.SetHighlighted(false);
+            }
+        }
+
+        internal static void Generate()
+        {
+            // Clear Old Listings
             _settingCache.Clear();
             int childCount = ModSettingsManager._tab.settingsParent.childCount;
             if (childCount > 0)
@@ -107,11 +153,13 @@ namespace DDSS_LobbyGuard.GUI.Internal
             // Add New Listings
             foreach (var cat in ConfigCategory._allCategories.Values)
             {
+                if (ModSettingsManager._tab.currentCategoryIndex != (int)cat.ConfigType)
+                    continue;
+
                 MelonPreferences_Category melonCat = cat.Category;
 
                 // Create Category Object
                 ModSettingsCategoryBuilder.Create(melonCat.DisplayName);
-                _categoryCache.Add(melonCat);
 
                 // Iterate through Entries
                 foreach (MelonPreferences_Entry melonEntry in melonCat.Entries)

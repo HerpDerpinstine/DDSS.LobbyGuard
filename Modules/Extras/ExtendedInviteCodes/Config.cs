@@ -11,8 +11,12 @@ namespace DDSS_LobbyGuard.Extras.ExtendedInviteCodes
 
         public ModuleConfig() : base() 
             => Instance = this;
+        public override void Init()
+            => ConfigType = eConfigType.Extras;
         public override string GetName()
-            => "Lobby";
+            => "ExtendedInviteCodes";
+        public override string GetDisplayName()
+            => "Extended Invite Codes";
 
         public override void CreatePreferences()
         {

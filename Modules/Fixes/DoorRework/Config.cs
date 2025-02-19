@@ -11,8 +11,12 @@ namespace DDSS_LobbyGuard.Fixes.DoorRework
 
         public ModuleConfig() : base() 
             => Instance = this;
+        public override void Init()
+            => ConfigType = eConfigType.Fixes;
         public override string GetName()
-            => "Gameplay";
+            => "DoorRework";
+        public override string GetDisplayName()
+            => "Door Rework";
 
         public override void CreatePreferences()
         {

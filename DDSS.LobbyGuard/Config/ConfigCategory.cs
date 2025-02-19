@@ -10,6 +10,7 @@ namespace DDSS_LobbyGuard.Config
 
         public MelonPreferences_Category Category;
         public string FileName = "Config.cfg";
+        public eConfigType ConfigType;
 
         public ConfigCategory()
         {
@@ -40,7 +41,7 @@ namespace DDSS_LobbyGuard.Config
         public virtual string GetDisplayName() => GetName();
         public virtual void CreatePreferences() { }
 
-        public void Save() => Category.SaveToFile();
+        public void Save() => Category.SaveToFile(false);
 
         public MelonPreferences_Entry<T> CreatePref<T>(
             string id,

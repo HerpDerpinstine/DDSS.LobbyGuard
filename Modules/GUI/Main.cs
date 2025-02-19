@@ -1,4 +1,6 @@
-﻿namespace DDSS_LobbyGuard.GUI
+﻿using DDSS_LobbyGuard.GUI.Internal;
+
+namespace DDSS_LobbyGuard.GUI
 {
     internal class ModuleMain : ILobbyModule
     {

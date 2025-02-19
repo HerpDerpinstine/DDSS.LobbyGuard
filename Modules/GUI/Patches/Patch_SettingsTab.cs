@@ -31,6 +31,9 @@ namespace DDSS_LobbyGuard.GUI.Patches
             if (__instance != ModSettingsManager._tab)
                 return true;
 
+            // Generate Categories
+            ModSettingsFactory.GenerateCategories();
+
             // Prevent Original
             return false;
         }

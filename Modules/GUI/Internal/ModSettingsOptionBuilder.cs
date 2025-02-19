@@ -3,6 +3,7 @@ using Il2Cpp;
 using Il2CppLocalization;
 using Il2CppUI.Tabs.SettingsTab;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.GUI.Internal
@@ -11,6 +12,7 @@ namespace DDSS_LobbyGuard.GUI.Internal
     {
         internal static string _keyCodePrefix = "KeyCode_";
         internal static int _keyCodePrefixLen = _keyCodePrefix.Length;
+        internal static Dictionary<string, Setting> _nameToSetting = new();
 
         private static SettingObject CreateObject(Setting setting)
         {
@@ -30,7 +32,10 @@ namespace DDSS_LobbyGuard.GUI.Internal
             string description,
             SettingType type = SettingType.MultiChoice)
         {
-            Setting setting = new();
+            if (_nameToSetting.TryGetValue(name, out Setting setting))
+                return setting;
+
+            setting = new();
             setting.devOnly = false;
             setting.label = name;
             setting.Key = name;

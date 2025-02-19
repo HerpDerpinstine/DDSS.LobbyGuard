@@ -6,7 +6,7 @@ using Il2CppUMUI.UiElements;
 using System;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.GUI
+namespace DDSS_LobbyGuard.GUI.Internal
 {
     internal static class MainMenuPanelBuilder
     {
@@ -14,7 +14,7 @@ namespace DDSS_LobbyGuard.GUI
 
         internal static void MainMenuInit()
         {
-            if ((_newPanel != null)
+            if (_newPanel != null
                 && !_newPanel.WasCollected)
                 return;
 
@@ -35,7 +35,7 @@ namespace DDSS_LobbyGuard.GUI
                 return;
 
             // Clone the Panel
-            _newPanel = GameObject.Instantiate(aboutTab, aboutTab.transform.parent);
+            _newPanel = UnityEngine.Object.Instantiate(aboutTab, aboutTab.transform.parent);
             _newPanel.name = Properties.BuildInfo.Name;
             _newPanel.transform.localPosition = new(0f, 430f, 0f);
             _newPanel.transform.SetSiblingIndex(aboutTab.transform.GetSiblingIndex() + 1);
@@ -96,7 +96,7 @@ namespace DDSS_LobbyGuard.GUI
                     new Action(() => Application.OpenURL(Properties.BuildInfo.DownloadLink)));
 
                 // Setup Settings Button
-                Transform newButton = GameObject.Instantiate(creditsButtonTrans, creditsButtonTrans.parent);
+                Transform newButton = UnityEngine.Object.Instantiate(creditsButtonTrans, creditsButtonTrans.parent);
                 SetupButton(
                     newButton,
                     new(85, -66, 0),

@@ -14,8 +14,12 @@ namespace DDSS_LobbyGuard.Extras.MoreJanitorSettings
 
         public ModuleConfig() : base() 
             => Instance = this;
+        public override void Init()
+            => ConfigType = eConfigType.Extras;
         public override string GetName()
-            => "Gameplay";
+            => "MoreJanitorSettings";
+        public override string GetDisplayName()
+            => "More Janitor Settings";
 
         public override void CreatePreferences()
         {
