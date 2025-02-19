@@ -39,6 +39,7 @@ namespace DDSS_LobbyGuard
                 validAssemblies.Add(asm);
             }
 
+            List<ILobbyModule> validModules = new();
             foreach (var asm in validAssemblies)
             {
                 // Find Module
@@ -60,14 +61,13 @@ namespace DDSS_LobbyGuard
                     module.Config = (ConfigCategory)Activator.CreateInstance(configType);
 
                 // Add Module to Cache
-                _modules.Add(module);
+                validModules.Add(module);
             }
 
             // Sort Modules by Priority
-            _modules = _modules.OrderBy(item => item.Priority).ToList();
+            validModules = validModules.OrderBy(item => item.Priority).ToList();
 
-            List<ILobbyModule> modulesToRemove = new();
-            foreach (var module in _modules)
+            foreach (var module in validModules)
             {
                 string moduleName = module.Name;
 
@@ -78,8 +78,10 @@ namespace DDSS_LobbyGuard
                 // Run OnLoad
                 if (!module.OnLoad())
                 {
+#if DEBUG
+                    MelonMain._logger.Error($"{moduleName} OnLoad returned false");
+#endif
                     module.OnQuit();
-                    modulesToRemove.Add(module);
                     continue;
                 }
 
@@ -87,20 +89,18 @@ namespace DDSS_LobbyGuard
                 HarmonyLib.Harmony harmony = new(moduleName);
                 if (!MelonMain.ApplyPatches(harmony, module.GetType().Assembly, $"[{moduleName.Pastel("#800080")}] "))
                 {
+#if DEBUG
+                    MelonMain._logger.Error($"Failed to Apply Patches for {moduleName}");
+#endif
                     harmony.UnpatchSelf();
                     module.OnQuit();
-                    modulesToRemove.Add(module);
                     continue;
                 }
 
                 // Add Module to Cache
                 module.HarmonyInstance = harmony;
+                _modules.Add(module);
                 MelonMain._logger.Msg($"Module Loaded: {moduleName}");
-            }
-            foreach (var module in modulesToRemove)
-            {
-                MelonMain._logger.Msg($"Failed to load Module: {module.Name}");
-                _modules.Remove(module);
             }
         }
 

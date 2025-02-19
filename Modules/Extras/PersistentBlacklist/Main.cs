@@ -10,7 +10,7 @@ namespace DDSS_LobbyGuard.PersistentBlacklist
         public override bool OnLoad()
         {
             BlacklistSecurity.Setup();
-            return BlacklistSecurity._error;
+            return !BlacklistSecurity._error;
         }
     }
 }
