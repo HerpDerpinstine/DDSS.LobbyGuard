@@ -1,8 +1,11 @@
-﻿namespace DDSS_LobbyGuard.PersistentBlacklist
+﻿using System;
+
+namespace DDSS_LobbyGuard.PersistentBlacklist
 {
     internal class ModuleMain : ILobbyModule
     {
         public override string Name => "PersistentBlacklist";
+        public override Type ConfigType => typeof(ModuleConfig);
 
         public override bool OnLoad()
         {
