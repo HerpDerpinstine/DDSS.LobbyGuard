@@ -98,7 +98,10 @@ namespace DDSS_LobbyGuard
                 MelonMain._logger.Msg($"Module Loaded: {moduleName}");
             }
             foreach (var module in modulesToRemove)
+            {
+                MelonMain._logger.Msg($"Failed to load Module: {module.Name}");
                 _modules.Remove(module);
+            }
         }
 
         internal static void Quit()

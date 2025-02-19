@@ -1,5 +1,4 @@
 ﻿using DDSS_LobbyGuard.Config;
-using DDSS_LobbyGuard.GUI;
 using Il2CppUI.Tabs.SettingsTab;
 using MelonLoader;
 using System;
