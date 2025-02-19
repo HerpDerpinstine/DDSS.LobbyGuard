@@ -11,7 +11,7 @@ namespace DDSS_LobbyGuard
         public HarmonyLib.Harmony HarmonyInstance { get; internal set; }
         public ConfigCategory Config { get; internal set; }
 
-        public virtual bool OnLoad() { return true; }
+        public virtual bool OnLoad() => true;
         public virtual void OnQuit() { }
         public virtual void OnSceneInit(int buildIndex, string sceneName) { }
     }
