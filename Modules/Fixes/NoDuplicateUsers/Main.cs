@@ -1,7 +1,7 @@
-﻿namespace DDSS_LobbyGuard.RemoveRichText
+﻿namespace DDSS_LobbyGuard.NoDuplicateUsers
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "RemoveRichText";
+        public override string Name => "NoDuplicateUsers";
     }
 }
