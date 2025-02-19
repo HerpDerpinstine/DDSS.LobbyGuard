@@ -1,4 +1,6 @@
-﻿namespace DDSS_LobbyGuard.RemoveRichText
+﻿using System;
+
+namespace DDSS_LobbyGuard.RemoveRichText
 {
     internal class ModuleMain : ILobbyModule
     {

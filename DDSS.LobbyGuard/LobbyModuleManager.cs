@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿using DDSS_LobbyGuard.Config;
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,11 +21,9 @@ namespace DDSS_LobbyGuard
             if (!Directory.Exists(_modulePath))
                 Directory.CreateDirectory(_modulePath);
 
-            List<ILobbyModule> validModules = new();
-            int moduleFailures = 0;
+            List<Assembly> validAssemblies = new();
             foreach (var filePath in Directory.GetFiles(_modulePath, "*.dll", SearchOption.AllDirectories))
             {
-                // Load Assembly
                 Assembly asm = null;
                 try
                 {
@@ -32,17 +31,16 @@ namespace DDSS_LobbyGuard
                 }
                 catch (Exception ex)
                 {
-                    moduleFailures++;
-                    MelonMain._logger.Error($"Exception while attempting to load {filePath}: {ex}");
                     continue;
                 }
                 if (asm == null)
-                {
-                    moduleFailures++;
-                    MelonMain._logger.Error($"Failed to load {filePath}");
                     continue;
-                }
+                validAssemblies.Add(asm);
+            }
 
+            List<ILobbyModule> validModules = new();
+            foreach (var asm in validAssemblies)
+            {
                 // Find Module
                 ILobbyModule module = null;
                 foreach (var type in asm.GetValidTypes())
@@ -55,6 +53,11 @@ namespace DDSS_LobbyGuard
                 }
                 if (module == null)
                     continue;
+
+                // Load Preferences
+                Type configType = module.ConfigType;
+                if (configType != null)
+                    module.Config = (ConfigCategory)Activator.CreateInstance(configType);
 
                 // Add Module to Cache
                 validModules.Add(module);
