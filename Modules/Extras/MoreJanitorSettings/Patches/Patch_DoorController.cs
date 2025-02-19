@@ -13,24 +13,26 @@ namespace DDSS_LobbyGuard.Extras.MoreJanitorSettings.Patches
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetLockState__NetworkIdentity__Boolean__NetworkConnectionToClient))]
         private static bool UserCode_CmdSetLockState__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(NetworkIdentity __0, bool __1)
         {
+            // Get Player
             LobbyPlayer player = __0.GetLobbyPlayer();
             if ((player == null)
                 || player.WasCollected)
                 return false;
 
+            // Validate Role
             var role = player.playerRole;
-            if (role != PlayerRole.Janitor)
-                return true;
-
-            if (__1)
+            if (role == PlayerRole.Janitor)
             {
-                if (!ModuleConfig.Instance.AllowJanitorsToLockDoors.Value)
-                    return false;
-            }
-            else
-            {
-                if (!ModuleConfig.Instance.AllowJanitorsToUnlockDoors.Value)
-                    return false;
+                if (__1) // Locked
+                {
+                    if (!ModuleConfig.Instance.AllowJanitorsToLockDoors.Value)
+                        return false;
+                }
+                else // Unlocked
+                {
+                    if (!ModuleConfig.Instance.AllowJanitorsToUnlockDoors.Value)
+                        return false;
+                }
             }
 
             // Run Original
