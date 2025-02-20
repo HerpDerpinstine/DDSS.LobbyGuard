@@ -19,12 +19,12 @@ namespace DDSS_LobbyGuard.Modules.Security.Toilet.Patches
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Validate Seat
-            if (toilet.usingPlayerController != sender)
-                return false;
-
             // Validate Role
             if (sender.IsGhost())
+                return false;
+
+            // Validate Seat
+            if (toilet.usingPlayerController != sender)
                 return false;
 
             // Run Game Command
