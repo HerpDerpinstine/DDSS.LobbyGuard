@@ -14,8 +14,8 @@ namespace DDSS_LobbyGuard.Modules.Extras.CharacterNamesInLobby
 
         public override void OnSceneInit(int buildIndex, string sceneName)
         {
-            if (sceneName != "MainMenuScene"
-                && sceneName != "LobbyScene")
+            if ((sceneName != "MainMenuScene")
+                && (sceneName != "LobbyScene"))
                 return;
             _allCharacterNames.Clear();
         }

@@ -51,7 +51,8 @@ namespace DDSS_LobbyGuard.Modules
                     MelonMain._logger.Error($"{moduleName} OnLoad returned false");
 #endif
                     module.OnQuit();
-                    ConfigCategory._allCategories.Remove(module.Config.GetName());
+                    if (module.Config != null)
+                        ConfigCategory._allCategories.Remove(module.Config.GetName());
                     continue;
                 }
 
@@ -64,7 +65,8 @@ namespace DDSS_LobbyGuard.Modules
 #endif
                     module.HarmonyInstance.UnpatchSelf();
                     module.OnQuit();
-                    ConfigCategory._allCategories.Remove(module.Config.GetName());
+                    if (module.Config != null)
+                        ConfigCategory._allCategories.Remove(module.Config.GetName());
                     continue;
                 }
 
