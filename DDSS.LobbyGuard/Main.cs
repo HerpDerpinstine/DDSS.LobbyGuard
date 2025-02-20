@@ -1,10 +1,12 @@
 ﻿using DDSS_LobbyGuard.Components;
 using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.Modules;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppMirror;
 using Il2CppUMUI;
 using MelonLoader;
+using MelonLoader.Pastel;
 using MelonLoader.Utils;
 using System;
 using System.IO;
@@ -45,15 +47,6 @@ namespace DDSS_LobbyGuard
             if (!ManagedEnumerator.Register())
             {
                 _hasError = true;
-                return;
-            }
-
-            // Apply Main Patches
-            Assembly melonAssembly = typeof(MelonMain).Assembly;
-            if (!ApplyPatches(_harmony, melonAssembly))
-            {
-                _hasError = true;
-                _harmony.UnpatchSelf();
                 return;
             }
 
@@ -100,22 +93,27 @@ namespace DDSS_LobbyGuard
             return true;
         }
 
-        public static bool ApplyPatches(HarmonyLib.Harmony harmonyInstance, Assembly assembly, string prefix = "")
+        public static bool ApplyPatches(ILobbyModule module, Type moduleType)
         {
-            foreach (Type type in assembly.GetValidTypes())
+            string moduleName = module.Name;
+            Assembly asm = moduleType.Assembly;
+            foreach (Type type in asm.GetValidTypes())
             {
                 // Check Type for any Harmony Attribute
-                if (type.GetCustomAttribute<HarmonyPatch>() == null)
+                LobbyModulePatchAttribute att = type.GetCustomAttribute<LobbyModulePatchAttribute>();
+                if ((att == null)
+                    || (att.type != moduleType))
                     continue;
 
                 // Apply
                 try
                 {
 #if DEBUG
+                    string prefix = $"[{moduleName.Pastel("#800080")}] ";
                     _logger.Msg($"{prefix}Applying {type.Name}");
 #endif
 
-                    harmonyInstance.PatchAll(type);
+                    module.HarmonyInstance.PatchAll(type);
                 }
                 catch (Exception e)
                 {

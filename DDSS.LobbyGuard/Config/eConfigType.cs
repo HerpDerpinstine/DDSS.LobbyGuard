@@ -2,7 +2,7 @@
 {
     public enum eConfigType : int
     {
-        //General,
+        General,
         //Security,
         Fixes,
         Extras
