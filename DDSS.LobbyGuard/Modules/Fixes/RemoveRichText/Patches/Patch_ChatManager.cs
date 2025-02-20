@@ -11,9 +11,9 @@ namespace DDSS_LobbyGuard.Modules.Fixes.RemoveRichText.Patches
         [HarmonyPatch(typeof(ChatManager), nameof(ChatManager.UserCode_CmdSendChatMessage__LobbyPlayer__String__NetworkConnectionToClient))]
         private static bool UserCode_CmdSendChatMessage__LobbyPlayer__String__NetworkConnectionToClient_Prefix(ref string __1)
         {
-            __2 = __2.RemoveRichText();
-            if (string.IsNullOrEmpty(__2)
-                || string.IsNullOrWhiteSpace(__2))
+            __1 = __1.RemoveRichText();
+            if (string.IsNullOrEmpty(__1)
+                || string.IsNullOrWhiteSpace(__1))
                 return false;
 
             // Run Original
