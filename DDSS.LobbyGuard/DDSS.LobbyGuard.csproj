@@ -98,4 +98,7 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\Security\Toilet\Patches\" />
+  </ItemGroup>
 </Project>
