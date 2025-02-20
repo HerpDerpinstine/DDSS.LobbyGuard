@@ -8,8 +8,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.ServerTimeInMessages
         internal static ModuleConfig Instance { get; private set; }
 
         internal MelonPreferences_Entry<bool> UseServerTimeStampForEmails;
-        internal MelonPreferences_Entry<bool> UseServerTimeStampForLobbyChatMessages;
-        internal MelonPreferences_Entry<bool> UseServerTimeStampForMatchChatMessages;
+        internal MelonPreferences_Entry<bool> UseServerTimeStampForChatMessages;
 
         public ModuleConfig() : base()
             => Instance = this;
@@ -27,14 +26,9 @@ namespace DDSS_LobbyGuard.Modules.Extras.ServerTimeInMessages
                 "Displays a Unified TimeStamp from the Server on Received Emails",
                 true);
 
-            UseServerTimeStampForLobbyChatMessages = CreatePref("UseServerTimeStampForLobbyChatMessages",
-                "Use Server TimeStamp for Lobby Chat Messages",
-                "Displays a Unified TimeStamp from the Server on Received Chat Messages while in the Lobby",
-                true);
-
-            UseServerTimeStampForMatchChatMessages = CreatePref("UseServerTimeStampForMatchChatMessages",
-                "Use Server TimeStamp for Match Chat Messages",
-                "Displays a Unified TimeStamp from the Server on Received Chat Messages while In-Game",
+            UseServerTimeStampForChatMessages = CreatePref("UseServerTimeStampForChatMessages",
+                "Use Server TimeStamp for Chat Messages",
+                "Displays a Unified TimeStamp from the Server on Received Chat Messages",
                 true);
         }
     }

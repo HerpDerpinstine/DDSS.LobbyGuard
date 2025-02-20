@@ -11,8 +11,9 @@ namespace DDSS_LobbyGuard.Modules.Extras.ServerTimeInMessages.Patches
         [HarmonyPatch(typeof(LobbyManager), nameof(LobbyManager.UserCode_CmdSendChatMessage__NetworkIdentity__String__String__NetworkConnectionToClient))]
         private static void UserCode_CmdSendChatMessage__NetworkIdentity__String__String__NetworkConnectionToClient_Prefix(ref string __2)
         {
-            if (!ModuleConfig.Instance.UseServerTimeStampForLobbyChatMessages.Value)
-                __2 = DateTime.Now.ToString("HH:mm:ss");
+            if (!ModuleConfig.Instance.UseServerTimeStampForChatMessages.Value)
+                return;
+            __2 = DateTime.Now.ToString("HH:mm:ss");
         }
     }
 }
