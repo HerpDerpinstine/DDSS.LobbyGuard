@@ -40,6 +40,5 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
             // Prevent Original
             return false;
         }
-
     }
 }

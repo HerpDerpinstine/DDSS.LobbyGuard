@@ -1,5 +1,4 @@
-﻿using DDSS_LobbyGuard.Modules.Extras.MoreServerSettings.Internal;
-using DDSS_LobbyGuard.SecurityExtension;
+﻿using DDSS_LobbyGuard.SecurityExtension;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
@@ -52,11 +51,10 @@ namespace DDSS_LobbyGuard.Modules.Security.Server.Patches
             }
 
             // Run Game Command
-            ServerSecurity.OnSetConnection(sender, server, enabled);
+            server.UserCode_CmdSetConnectionEnabled__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, enabled, __2);
 
             // Prevent Original
             return false;
         }
-
     }
 }
