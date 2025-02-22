@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.SecurityExtension;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppGameManagement;
@@ -62,7 +63,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 return false;
 
             // Validate Distance
-            if (!MelonMain.IsWithinRange(sender.transform.position, controller.transform.position, 2f))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
                 return false;
 
             // Get Last Assistant
@@ -144,7 +145,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 return false;
 
             // Validate Distance
-            if (!MelonMain.IsWithinRange(sender.transform.position, controller.transform.position, 2f))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
                 return false;
 
             targetPlayer.ServerSetSubRole(SubRole.None, false);
@@ -188,7 +189,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 return false;
 
             // Validate Distance
-            if (!MelonMain.IsWithinRange(sender.transform.position, controller.transform.position, 1f)
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position, InteractionSecurity.MAX_DISTANCE_PLAYER)
                 || !interact.HasPlayerRequestedHandShake(senderInteract))
                 return false;
 
@@ -232,7 +233,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 return false;
 
             // Validate Distance
-            if (!MelonMain.IsWithinRange(sender.transform.position, controller.transform.position, 1f)
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position, InteractionSecurity.MAX_DISTANCE_PLAYER)
                 || interact.HasPlayerRequestedHandShake(senderInteract))
                 return false;
 

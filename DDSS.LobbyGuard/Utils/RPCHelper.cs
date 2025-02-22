@@ -8,14 +8,12 @@ namespace DDSS_LobbyGuard.Utils
         public enum eType
         {
             NONE,
-            LobbyPlayer_RpcSetPlayerRole,
             ComputerController_RpcClick,
             ComputerController_RpcCursorUp,
         }
 
         private static Dictionary<eType, (string, int)> _typeToQuery = new()
         {
-            [eType.LobbyPlayer_RpcSetPlayerRole] = ("Player.Lobby.LobbyPlayer::RpcSetPlayerRole", 0),
             [eType.ComputerController_RpcClick] = ("Computer.Scripts.System.ComputerController::RpcClick", 0),
             [eType.ComputerController_RpcCursorUp] = ("Computer.Scripts.System.ComputerController::RpcCursorUp", 0),
         };

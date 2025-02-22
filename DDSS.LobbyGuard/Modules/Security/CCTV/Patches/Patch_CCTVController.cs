@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.SecurityExtension;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
@@ -34,7 +35,7 @@ namespace DDSS_LobbyGuard.Modules.Security.CCTV.Patches
                 return false;
 
             // Validate Distance
-            if (!MelonMain.IsWithinRange(sender.transform.position, camera.transform.position, 3f))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position, InteractionSecurity.MAX_DISTANCE_CCTV))
                 return false;
 
             // Run Game Command

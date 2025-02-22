@@ -238,19 +238,6 @@ namespace DDSS_LobbyGuard.Utils
             => a.playerController != null
                 && a.playerController.netIdentity == b.NetworkplayerRequestedHandshakeWithThisPlayer;
 
-        public static void CustomRpcSetPlayerRole(this LobbyPlayer player, PlayerRole playerRole, bool giveNewTasks, NetworkConnectionToClient receipient = null)
-        {
-            NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();
-
-            networkWriterPooled.WriteInt((int)playerRole);
-            networkWriterPooled.WriteBool(giveNewTasks);
-
-            networkWriterPooled.SendCustomRPC(player,
-                RPCHelper.eType.LobbyPlayer_RpcSetPlayerRole,
-                receipient);
-            NetworkWriterPool.Return(networkWriterPooled);
-        }
-
         public static void CustomRpcClick(this ComputerController computer, Vector3 localCursorPos, int button, NetworkConnectionToClient receipient = null)
         {
             NetworkWriterPooled networkWriterPooled = NetworkWriterPool.Get();

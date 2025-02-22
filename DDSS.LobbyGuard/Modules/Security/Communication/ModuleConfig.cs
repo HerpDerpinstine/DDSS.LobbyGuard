@@ -12,11 +12,11 @@ namespace DDSS_LobbyGuard.Modules.Security.Communication
         public ModuleConfig() : base()
             => Instance = this;
         public override void Init()
-            => ConfigType = eConfigType.Extras;
+            => ConfigType = eConfigType.Security;
         public override string GetName()
-            => "ServerTimeInMessages";
+            => "Communication";
         public override string GetDisplayName()
-            => "Server Time in Messages";
+            => "Communication";
 
         public override void CreatePreferences()
         {

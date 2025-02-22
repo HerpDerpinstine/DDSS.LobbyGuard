@@ -1,5 +1,6 @@
 ﻿using DDSS_LobbyGuard.Modules;
 using DDSS_LobbyGuard.Modules.Security.Door;
+using DDSS_LobbyGuard.SecurityExtension;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -30,7 +31,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Door.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !MelonMain.IsWithinRange(sender.transform.position, door.transform.position, 2f))
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
 
             // Run Game Command
@@ -64,7 +65,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Door.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !MelonMain.IsWithinRange(sender.transform.position, door.transform.position, 2f))
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
 
             // Run Game Command
@@ -100,7 +101,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Door.Patches
                 return false;
 
             // Validate Distance
-            if (!MelonMain.IsWithinRange(sender.transform.position, door.transform.position, 2f))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
 
             // Validate Lock Request

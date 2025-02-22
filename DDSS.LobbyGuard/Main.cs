@@ -1,17 +1,17 @@
 ﻿using DDSS_LobbyGuard.Components;
-using DDSS_LobbyGuard.Config;
 using DDSS_LobbyGuard.Modules;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
-using Il2CppMirror;
 using Il2CppUMUI;
 using MelonLoader;
-using MelonLoader.Pastel;
 using MelonLoader.Utils;
 using System;
 using System.IO;
 using System.Reflection;
-using UnityEngine;
+
+#if DEBUG
+using MelonLoader.Pastel;
+#endif
 
 namespace DDSS_LobbyGuard
 {
@@ -36,15 +36,18 @@ namespace DDSS_LobbyGuard
             if (!Directory.Exists(_userDataPath))
                 Directory.CreateDirectory(_userDataPath);
 
-            // Prevent Exceptions from causing Disconnects
-            NetworkServer.exceptionsDisconnect = false;
-            NetworkClient.exceptionsDisconnect = false;
-
             // Let ModHelper know this isn't required for everyone
             MakeModHelperAware();
 
             // Register Main Custom Components
             if (!ManagedEnumerator.Register())
+            {
+                _hasError = true;
+                return;
+            }
+
+            // Register Main Custom Components
+            if (!CollectibleDestructionCallback.Register())
             {
                 _hasError = true;
                 return;
@@ -101,8 +104,30 @@ namespace DDSS_LobbyGuard
             {
                 // Check Type for any Harmony Attribute
                 LobbyModulePatchAttribute att = type.GetCustomAttribute<LobbyModulePatchAttribute>();
-                if ((att == null)
-                    || (att.type != moduleType))
+                bool hasAtt = true;
+                if (att == null)
+                    hasAtt = false;
+                else if (att.type != moduleType)
+                    continue;
+
+                bool shouldSkip = true;
+                foreach (var method in type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
+                {
+                    if (method.GetCustomAttribute<HarmonyPatch>() == null)
+                        continue;
+
+                    if (hasAtt)
+                        shouldSkip = false;
+                    else
+                    {
+#if DEBUG
+                        string prefix = $"[{moduleName.Pastel("#800080")}]";
+                        _logger.Error($"{prefix} {type.FullName} contains Harmony Patches without LobbyModulePatch attribute");
+#endif
+                    }
+                    break;
+                }
+                if (!hasAtt || shouldSkip)
                     continue;
 
                 // Apply
@@ -110,7 +135,7 @@ namespace DDSS_LobbyGuard
                 {
 #if DEBUG
                     string prefix = $"[{moduleName.Pastel("#800080")}] ";
-                    _logger.Msg($"{prefix}Applying {type.Name}");
+                    _logger.Msg($"{prefix}Applying {type.FullName}");
 #endif
 
                     module.HarmonyInstance.PatchAll(type);
@@ -178,16 +203,6 @@ namespace DDSS_LobbyGuard
             }
 
             return true;
-        }
-
-        public static bool IsWithinRange(Vector3 posA, Vector3 posB,
-            float maxRange)
-        {
-            float distance = Vector3.Distance(posA, posB);
-            if (distance < 0f)
-                distance *= -1f;
-
-            return distance <= maxRange;
         }
     }
 }
