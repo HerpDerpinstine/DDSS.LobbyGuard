@@ -146,6 +146,11 @@ namespace DDSS_LobbyGuard.Utils
             return controller;
         }
 
+        internal static bool IsSlacker(this LobbyPlayer player)
+        {
+            return player.playerRole == PlayerRole.Slacker;
+        }
+
         public static LobbyPlayer GetLobbyPlayer(this NetworkIdentity player)
         {
             PlayerController controller = GetPlayerController(player);
@@ -207,7 +212,7 @@ namespace DDSS_LobbyGuard.Utils
                 || (player.NetworktargetUBState == (int)UpperBodyStates.PoundChest)
                 || (player.NetworktargetUBState == (int)UpperBodyStates.Waving)
                 || (player.NetworktargetUBState == (int)UpperBodyStates.Clapping)
-                || (player.NetworktargetUBState == (int)UpperBodyStates.FacePalm));
+                || (player.NetworktargetUBState == (int)UpperBodyStates.MiddleFinger));
 
         public static bool IsCabinetOrganized(this FilingCabinetController cabinet)
         {

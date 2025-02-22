@@ -14,6 +14,30 @@ namespace DDSS_LobbyGuard.Modules.Security.TrashBin.Patches
     internal class Patch_TrashBin
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(Il2CppProps.TrashBin.TrashBin), nameof(Il2CppProps.TrashBin.TrashBin.InvokeUserCode_CmdEmptyBin__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdEmptyBin__NetworkIdentity__NetworkConnectionToClient_Prefix(
+            NetworkBehaviour __0,
+            NetworkConnectionToClient __2)
+        {
+            // Get TrashBin
+            Il2CppProps.TrashBin.TrashBin trashcan = __0.TryCast<Il2CppProps.TrashBin.TrashBin>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
+                return false;
+
+            // Run Game Command
+            trashcan.UserCode_CmdEmptyBin__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(Il2CppProps.TrashBin.TrashBin), nameof(Il2CppProps.TrashBin.TrashBin.InvokeUserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdEnableFire__NetworkIdentity__Boolean__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
@@ -56,7 +80,7 @@ namespace DDSS_LobbyGuard.Modules.Security.TrashBin.Patches
             if (enabled)
             {
                 // Get Player
-                if (!InteractionSecurity.IsSlacker(player))
+                if (!player.IsSlacker())
                     return false;
             }
             else
@@ -79,30 +103,5 @@ namespace DDSS_LobbyGuard.Modules.Security.TrashBin.Patches
             // Prevent Original
             return false;
         }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(Il2CppProps.TrashBin.TrashBin), nameof(Il2CppProps.TrashBin.TrashBin.InvokeUserCode_CmdEmptyBin__NetworkIdentity__NetworkConnectionToClient))]
-        private static bool InvokeUserCode_CmdEmptyBin__NetworkIdentity__NetworkConnectionToClient_Prefix(
-            NetworkBehaviour __0,
-            NetworkConnectionToClient __2)
-        {
-            // Get TrashBin
-            Il2CppProps.TrashBin.TrashBin trashcan = __0.TryCast<Il2CppProps.TrashBin.TrashBin>();
-
-            // Get Sender
-            NetworkIdentity sender = __2.identity;
-
-            // Validate Distance
-            if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
-                return false;
-
-            // Run Game Command
-            trashcan.UserCode_CmdEmptyBin__NetworkIdentity__NetworkConnectionToClient(sender, __2);
-
-            // Prevent Original
-            return false;
-        }
-
     }
 }

@@ -47,7 +47,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Server.Patches
                 LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
                 if ((lobbyPlayer == null)
                     || lobbyPlayer.WasCollected
-                    || !InteractionSecurity.IsSlacker(lobbyPlayer))
+                    || !lobbyPlayer.IsSlacker())
                     return false;
             }
 

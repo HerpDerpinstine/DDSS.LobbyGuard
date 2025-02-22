@@ -69,7 +69,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreWorkstationSettings.Internal
                         controller.virusInfectionTimeLimit = Random.Range(userMin, userMax);
 
                         if (!controller.NetworkisFirewallActive
-                            || InteractionSecurity.IsSlacker(controller.computerController.user))
+                            || controller.computerController.user.IsSlacker())
                         {
                             // Get Game Rule
                             float probability = GameManager.instance.virusProbability;

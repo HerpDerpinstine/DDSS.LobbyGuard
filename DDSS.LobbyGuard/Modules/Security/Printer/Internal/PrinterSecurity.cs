@@ -2,20 +2,20 @@
 using Il2CppProps.Printer;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.SecurityExtension
+namespace DDSS_LobbyGuard.Modules.Security.Printer.Internal
 {
     internal static class PrinterSecurity
     {
         private const int MAX_WIDTH = 87;
         private const int MAX_HEIGHT = 60;
-        
-        internal static bool VerifyImage(Printer printer, PrintedImage image)
+
+        internal static bool VerifyImage(Il2CppProps.Printer.Printer printer, PrintedImage image)
             => VerifyImage(printer, image.byteImg);
 
-        internal static bool VerifyImage(Printer printer, Il2CppStructArray<byte> bytes)
+        internal static bool VerifyImage(Il2CppProps.Printer.Printer printer, Il2CppStructArray<byte> bytes)
         {
             // Validate Byte Array
-            if ((bytes == null)
+            if (bytes == null
                 || bytes.WasCollected
                 || bytes.Count <= 0)
                 return false;
@@ -29,21 +29,21 @@ namespace DDSS_LobbyGuard.SecurityExtension
                 returnVal = VerifyImage(printer, _tempTexture);
 
             // Destroy Texture
-            if ((_tempTexture != null)
+            if (_tempTexture != null
                 && !_tempTexture.WasCollected)
-                GameObject.Destroy(_tempTexture);
+                Object.Destroy(_tempTexture);
 
             // Return Result
             return returnVal;
         }
 
-        internal static bool VerifyImage(Printer printer, Texture2D texture)
+        internal static bool VerifyImage(Il2CppProps.Printer.Printer printer, Texture2D texture)
         {
             // Validate
-            if ((texture == null)
+            if (texture == null
                 || texture.WasCollected
-                || (texture.width > MAX_WIDTH)
-                || (texture.height > MAX_HEIGHT)
+                || texture.width > MAX_WIDTH
+                || texture.height > MAX_HEIGHT
                 || !printer.VerifyImageColors(texture))
             {
                 // Image is Not Allowed

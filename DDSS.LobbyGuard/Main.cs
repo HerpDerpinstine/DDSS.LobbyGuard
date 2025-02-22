@@ -8,6 +8,8 @@ using MelonLoader.Utils;
 using System;
 using System.IO;
 using System.Reflection;
+using DDSS_LobbyGuard.SecurityExtension;
+
 
 #if DEBUG
 using MelonLoader.Pastel;
@@ -64,6 +66,13 @@ namespace DDSS_LobbyGuard
         {
             if (_hasError)
                 return;
+
+            if ((sceneName == "MainMenuScene")
+                || (sceneName == "LobbyScene"))
+            {
+                CollectibleSecurity.OnSceneLoad();
+                InteractionSecurity.UpdateSettings();
+            }
 
             LobbyModuleManager.SceneInit(buildIndex, sceneName);
         }

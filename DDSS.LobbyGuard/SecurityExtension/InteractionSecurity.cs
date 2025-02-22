@@ -1,17 +1,11 @@
-﻿using DDSS_LobbyGuard.Config;
-using DDSS_LobbyGuard.Utils;
-using Il2Cpp;
+﻿using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppObjects.Scripts;
 using Il2CppPlayer;
-using Il2CppPlayer.Lobby;
 using Il2CppProps.Printer;
 using Il2CppProps.WorkStation.Mouse;
-using Il2CppTMPro;
-using Il2CppUI.Tabs.LobbyTab;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.SecurityExtension
@@ -23,9 +17,6 @@ namespace DDSS_LobbyGuard.SecurityExtension
         private static Il2CppSystem.Type StorageBoxType = Il2CppType.Of<StorageBox>();
         private static Il2CppSystem.Type ToiletPaperType = Il2CppType.Of<ToiletPaper>();
         private static Il2CppSystem.Type MouseType = Il2CppType.Of<Mouse>();
-
-        private static Dictionary<LobbyPlayer, bool> _allSlackers = new();
-        private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
 
         internal const float MAX_DISTANCE_DEFAULT = 2f;
         internal const float MAX_DISTANCE_CCTV = 3f;
@@ -52,12 +43,6 @@ namespace DDSS_LobbyGuard.SecurityExtension
 
         internal static int MAX_PLAYERS { get; private set; }
 
-        internal static void OnSceneLoad()
-        {
-            _allSlackers.Clear();
-            _allCharacterNames.Clear();
-        }
-
         internal static void UpdateSettings()
         {
             // Validate Game Rules Manager
@@ -72,30 +57,6 @@ namespace DDSS_LobbyGuard.SecurityExtension
             MAX_INFECTED_USBS = MAX_PLAYERS;
             MAX_WATERCUPS = MAX_PLAYERS * 2;
             MAX_CIGS = MAX_PLAYERS * 3;
-        }
-
-        internal static bool IsSlacker(LobbyPlayer player)
-        {
-            return player.playerRole == PlayerRole.Slacker;
-        }
-
-        internal static void RemoveSlacker(LobbyPlayer player)
-        {
-            if (player == null)
-                return;
-            if (!_allSlackers.ContainsKey(player))
-                return;
-            _allSlackers.Remove(player);
-        }
-
-        internal static void AddLobbyUICharacterName(PlayerLobbyUI ui, TextMeshProUGUI text)
-            => _allCharacterNames[ui] = text;
-
-        internal static TextMeshProUGUI GetLobbyUICharacterName(PlayerLobbyUI ui)
-        {
-            if (_allCharacterNames.TryGetValue(ui, out var text))
-                return text;
-            return null;
         }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
