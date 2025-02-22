@@ -35,7 +35,7 @@ namespace DDSS_LobbyGuard.Modules.Security.StickyNote
             StickyNotesOnDoors = CreatePref("StickyNotesOnDoors",
                 "Sticky Notes on Doors",
                 "Allows the Grabbing and Placing of Sticky Notes on Doors",
-                false);
+                true);
         }
     }
 }

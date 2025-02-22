@@ -1,5 +1,5 @@
 ﻿using DDSS_LobbyGuard.Modules;
-using DDSS_LobbyGuard.Modules.Security.Door;
+using DDSS_LobbyGuard.Modules.Security.Door.Internal;
 using DDSS_LobbyGuard.SecurityExtension;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
@@ -42,6 +42,30 @@ namespace DDSS_LobbyGuard.Modules.Security.Door.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient))]
+        private static bool UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient_Prefix(
+            DoorController __instance,
+            int __0)
+        {
+            __0 = Mathf.Clamp(__0, -1, 1);
+
+            // Check for Lock
+            if ((__0 == 0)
+                || __instance.NetworkisLocked)
+                return false;
+
+            // Check if already Open
+            if (__instance.Networkstate != 0)
+                return false;
+
+            // Apply State
+            DoorSecurity.ApplyState(__instance, __0);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.InvokeUserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
@@ -50,22 +74,31 @@ namespace DDSS_LobbyGuard.Modules.Security.Door.Patches
         {
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            if (sender == null
+            if ((sender == null)
                 || sender.WasCollected)
                 return false;
 
             // Get DoorController
             DoorController door = __0.TryCast<DoorController>();
-            if (door == null
+            if ((door == null)
                 || door.WasCollected)
+                return false;
+
+            // Validate Distance
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
                 return false;
 
             // Get Requested Lock State
             int stateIndex = Mathf.Clamp(__1.SafeReadInt(), -1, 1);
 
-            // Validate Distance
-            if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+            // Check for Lock
+            if ((stateIndex == 0)
+                || door.NetworkisLocked)
+                return false;
+
+            // Check if already Open
+            if (door.Networkstate != 0)
                 return false;
 
             // Run Game Command

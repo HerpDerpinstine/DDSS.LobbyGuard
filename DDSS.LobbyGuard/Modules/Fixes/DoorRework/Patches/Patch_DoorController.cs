@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Il2Cpp;
+using Il2CppMirror;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework.Patches
@@ -17,26 +18,10 @@ namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(DoorController), nameof(DoorController.UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient))]
-        private static bool UserCode_CmdSetDoorState__Int32_Prefix(
-            DoorController __instance,
-            int __0)
+        private static void UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient_Prefix(DoorController __instance)
         {
-            __0 = Mathf.Clamp(__0, -1, 1);
-
-            // Check for Lock
-            if (__0 == 0
-                || __instance.NetworkisLocked)
-                return false;
-
-            // Check if already Open
-            if (__instance.Networkstate != 0)
-                return false;
-
-            // Apply State
-            ModuleMain.ApplyState(__instance, __0);
-
-            // Prevent Original
-            return false;
+            ModuleMain.FixColliderSize(__instance.playerDetectionVolumeForward);
+            ModuleMain.FixColliderSize(__instance.playerDetectionVolumeBackward);
         }
     }
 }

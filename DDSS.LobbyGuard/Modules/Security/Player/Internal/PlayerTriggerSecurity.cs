@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Modules.Security.Door.Internal;
+using DDSS_LobbyGuard.Utils;
 using Il2CppProps.Door;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,6 +35,10 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Internal
                 count = 0;
 
             _playerCounts[trigger] = count++;
+
+            if ((trigger.doorController != null) && (count == 1))
+                trigger.doorController.UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient(trigger.doorValue, null, null);
+
             trigger.isPlayerInside = true;
             trigger.StartCoroutine(ColliderCheckCoroutine(trigger, other));
         }
