@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 
@@ -7,9 +8,9 @@ namespace DDSS_LobbyGuard.Modules.Extras.JoinLogs.Patches
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_LobbyPlayer
     {
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
-        private static void NetworksteamID_Prefix(LobbyPlayer __instance, ulong __0)
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.VerifySteamId))]
+        private static void VerifySteamId_Postfix(LobbyPlayer __instance, ulong __0, ulong __1)
         {
             // Check for Host
             if (!NetworkServer.activeHost
@@ -19,10 +20,17 @@ namespace DDSS_LobbyGuard.Modules.Extras.JoinLogs.Patches
                 || __instance.connectionToClient.WasCollected
                 || !__instance.connectionToClient.isReady
                 || !__instance.connectionToClient.isAuthenticated
-                || (__instance.steamID != 0))
+                || (__0 != 0))
                 return;
 
-            MelonMain._logger.Msg($"Player Joined: {__instance.NetworksteamUsername} - {__instance.Networkusername} - {__0}");
+            // Remove Steam ID
+            LobbyPlayer localPlayer = LobbyManager.instance.GetLocalPlayer();
+            if ((localPlayer != null)
+                && !localPlayer.WasCollected
+                && (localPlayer != __instance))
+            {
+                MelonMain._logger.Msg($"Player Joined: {__instance.NetworksteamUsername} - {__instance.Networkusername} - {__1}");
+            }
         }
     }
 }

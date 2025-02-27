@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 
@@ -7,9 +8,9 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoDuplicateUsers.Patches
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_LobbyPlayer
     {
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.NetworksteamID), MethodType.Setter)]
-        private static void NetworksteamID_Prefix(LobbyPlayer __instance, ulong __0)
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.VerifySteamId))]
+        private static void VerifySteamId_Postfix(LobbyPlayer __instance, ulong __0, ulong __1)
         {
             // Check for Host
             if (!NetworkServer.activeHost
@@ -21,16 +22,26 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoDuplicateUsers.Patches
                 || !__instance.connectionToClient.isAuthenticated)
                 return;
 
-            // Player Check
-            if (ModuleMain.IsSteamIDInUse(__0))
+            LobbyPlayer localPlayer = LobbyManager.instance.GetLocalPlayer();
+            if ((localPlayer != null)
+                && !localPlayer.WasCollected
+                && (localPlayer != __instance))
             {
-                __instance.connectionToClient.Disconnect();
-                return;
-            }
+                MelonMain._logger.Msg(__1);
+                MelonMain._logger.Msg(localPlayer.NetworksteamID);
 
-            // Add SteamID
-            ModuleMain.RemoveValidSteamID(__instance.steamID);
-            ModuleMain.AddValidSteamID(__0);
+                // Player Check
+                if ((__1 == localPlayer.NetworksteamID)
+                    || ModuleMain.IsSteamIDInUse(__1))
+                {
+                    __instance.connectionToClient.Disconnect();
+                    return;
+                }
+
+                // Add SteamID
+                ModuleMain.RemoveValidSteamID(__0);
+                ModuleMain.AddValidSteamID(__1);
+            }
         }
     }
 }

@@ -25,9 +25,9 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoDuplicateUsers.Patches
 
             // Remove Steam ID
             LobbyPlayer localPlayer = __instance.GetLocalPlayer();
-            if (localPlayer != null
+            if ((localPlayer != null)
                 && !localPlayer.WasCollected
-                && localPlayer.steamID != lobbyPlayer.steamID)
+                && (localPlayer != __instance))
                 ModuleMain.RemoveValidSteamID(lobbyPlayer.steamID);
         }
     }

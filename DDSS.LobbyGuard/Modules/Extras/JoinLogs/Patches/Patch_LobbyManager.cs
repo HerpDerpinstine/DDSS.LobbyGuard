@@ -25,9 +25,9 @@ namespace DDSS_LobbyGuard.Modules.Extras.JoinLogs.Patches
 
             // Remove Steam ID
             LobbyPlayer localPlayer = __instance.GetLocalPlayer();
-            if (localPlayer != null
+            if ((localPlayer != null)
                 && !localPlayer.WasCollected
-                && localPlayer.steamID != lobbyPlayer.steamID)
+                && (localPlayer != __instance))
             {
                 MelonMain._logger.Msg($"Player Left: {lobbyPlayer.NetworksteamUsername} - {lobbyPlayer.Networkusername} - {lobbyPlayer.steamID}");
             }
