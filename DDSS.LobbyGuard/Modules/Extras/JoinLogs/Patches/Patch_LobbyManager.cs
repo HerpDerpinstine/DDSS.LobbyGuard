@@ -29,7 +29,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.JoinLogs.Patches
                 && !localPlayer.WasCollected
                 && localPlayer.steamID != lobbyPlayer.steamID)
             {
-                MelonMain._logger.Msg($"Player Left: {lobbyPlayer.NetworksteamUsername} - {lobbyPlayer.Networkusername} - {lobbyPlayer.NetworksteamID}");
+                MelonMain._logger.Msg($"Player Left: {lobbyPlayer.NetworksteamUsername} - {lobbyPlayer.Networkusername} - {lobbyPlayer.steamID}");
             }
         }
     }
