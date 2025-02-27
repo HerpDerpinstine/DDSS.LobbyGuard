@@ -27,9 +27,6 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoDuplicateUsers.Patches
                 && !localPlayer.WasCollected
                 && (localPlayer != __instance))
             {
-                MelonMain._logger.Msg(__1);
-                MelonMain._logger.Msg(localPlayer.NetworksteamID);
-
                 // Player Check
                 if ((__1 == localPlayer.NetworksteamID)
                     || ModuleMain.IsSteamIDInUse(__1))

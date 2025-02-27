@@ -27,7 +27,8 @@ namespace DDSS_LobbyGuard.Modules.Extras.JoinLogs.Patches
             LobbyPlayer localPlayer = LobbyManager.instance.GetLocalPlayer();
             if ((localPlayer != null)
                 && !localPlayer.WasCollected
-                && (localPlayer != __instance))
+                && (localPlayer != __instance)
+                && (__1 != localPlayer.NetworksteamID))
             {
                 MelonMain._logger.Msg($"Player Joined: {__instance.NetworksteamUsername} - {__instance.Networkusername} - {__1}");
             }
