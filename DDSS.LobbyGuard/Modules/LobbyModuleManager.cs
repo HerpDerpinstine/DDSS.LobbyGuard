@@ -23,6 +23,11 @@ namespace DDSS_LobbyGuard.Modules
 
                 // Create Module
                 ILobbyModule module = (ILobbyModule)Activator.CreateInstance(type);
+                if (module == null)
+                    continue;
+
+                if (module.IsDisabled)
+                    continue;
 
                 // Load Preferences
                 Type configType = module.ConfigType;

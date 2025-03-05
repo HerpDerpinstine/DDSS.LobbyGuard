@@ -106,6 +106,27 @@ namespace DDSS_LobbyGuard.Utils
             return controller.IsSpecialist();
         }
 
+        public static bool IsManager(this LobbyPlayer player)
+            => (player.playerRole == PlayerRole.Manager);
+        public static bool IsManager(this PlayerController controller)
+        {
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
+                return false;
+
+            return lobbyPlayer.IsManager();
+        }
+        public static bool IsManager(this NetworkIdentity player)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            return controller.IsManager();
+        }
+
         public static PlayerRole GetPlayerRole(this NetworkIdentity player)
         {
             PlayerController controller = player.GetComponent<PlayerController>();

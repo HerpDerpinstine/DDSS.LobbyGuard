@@ -10,6 +10,7 @@ namespace DDSS_LobbyGuard.Modules
         public virtual Type ConfigType { get; }
         public HarmonyLib.Harmony HarmonyInstance { get; internal set; }
         public ConfigCategory Config { get; internal set; }
+        public virtual bool IsDisabled { get; }
 
         public virtual bool OnLoad() => true;
         public virtual void OnQuit() { }

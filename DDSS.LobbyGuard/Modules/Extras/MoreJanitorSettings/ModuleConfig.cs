@@ -10,7 +10,6 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreJanitorSettings
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUpdateCCTV;
-        //internal MelonPreferences_Entry<bool> AllowJanitorsToKeepWorkStation;
 
         public ModuleConfig() : base()
             => Instance = this;
@@ -37,11 +36,6 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreJanitorSettings
                 "Allow Janitors to Update CCTV",
                 "Allows Janitors to Update Firmware on CCTV Cameras",
                 true);
-
-            //AllowJanitorsToKeepWorkStation = CreatePref("AllowJanitorsToKeepWorkStation",
-            //    "Allow Janitors to Keep WorkStation",
-            //    "Allows Janitors to Keep their Assigned WorkStation",
-            //    false);
         }
     }
 }
