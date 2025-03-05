@@ -1,5 +1,4 @@
-﻿using DDSS_LobbyGuard.Modules.Fixes.TerminationRework;
-using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppGameManagement;
