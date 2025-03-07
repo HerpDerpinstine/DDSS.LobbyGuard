@@ -89,6 +89,13 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             bool __1, // onlyDemoteOrFire
             bool __2) // resetDesk
         {
+            if ((__0 != null)
+                && !__0.WasCollected
+                && (__instance.protectedLobbyPlayer != null)
+                && !__instance.protectedLobbyPlayer.WasCollected
+                && (__instance.protectedLobbyPlayer == __0))
+                return false;
+
             // Get LobbyPlayer
             LobbyPlayer player = __0.GetComponent<LobbyPlayer>();
             if (player == null

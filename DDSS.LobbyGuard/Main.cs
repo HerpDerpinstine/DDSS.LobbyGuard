@@ -10,7 +10,6 @@ using System.IO;
 using System.Reflection;
 using DDSS_LobbyGuard.SecurityExtension;
 
-
 #if DEBUG
 using MelonLoader.Pastel;
 #endif
