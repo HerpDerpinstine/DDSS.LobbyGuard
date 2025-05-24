@@ -4,7 +4,7 @@ using HarmonyLib;
 using Il2CppMirror;
 using Il2CppProps.Elevator;
 
-namespace DDSS_LobbyGuard.Modules.Security.Server.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Elevator.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_ElevatorController
