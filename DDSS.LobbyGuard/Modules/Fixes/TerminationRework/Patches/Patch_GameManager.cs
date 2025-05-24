@@ -72,8 +72,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             else
                 __instance.RpcDisplayNewRoles(newManager.netIdentity, null);
 
-            if (newManager.subRole == SubRole.HrRep
-                && __instance.NetworkuseHrRep)
+            if (newManager.subRole == SubRole.HrRep)
                 __instance.SelectNewHrRep();
             newManager.ServerSetSubRole(SubRole.None, true);
 
@@ -103,47 +102,66 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
                 || player.IsGhost())
                 return false;
 
-            // Get Janitor Count
-            bool wasHR = player.subRole == SubRole.HrRep;
+            var current_role = player.playerRole;
+            var current_subrole = player.subRole;
+
+            bool is_hr_rep = current_subrole == SubRole.HrRep;
+
+            bool is_janitor = player.IsJanitor();
+            int max_janitor_count = __instance.NetworkjanitorAmount;
             var janitorList = LobbyManager.instance.GetJanitorPlayers();
-            bool flag = !player.IsJanitor()
-                && __instance.NetworkjanitorAmount > 0
-                && janitorList.Count < __instance.NetworkjanitorAmount;
+
+            bool should_janitors_keep_workstations = MoreJanitorSettingsConfig.Instance.AllowJanitorsToKeepWorkStation.Value;
+            bool should_become_janitor = !is_janitor
+                && (max_janitor_count > 0)
+                && (janitorList.Count < __instance.NetworkjanitorAmount);
 
             // Reset Termination Timer
             __instance.RpcResetTerminationTimer(__instance.terminationMaxTime);
+
+            // Reset Vote
+            VoteBoxController.instance.ServerResetVote();
 
             // End Meeting
             if (!__1)
                 __instance.ServerFinnishMeeting();
 
-            // Reset Workstation
-            bool janitorsKeepWorkstation = MoreJanitorSettingsConfig.Instance.AllowJanitorsToKeepWorkStation.Value;
-            if (__2
-                && (!flag || !janitorsKeepWorkstation))
-                player.ServerSetWorkStation(null, player.playerRole, true);
-
             // Fire Player
-            player.RpcFirePlayer(true, flag ? player.playerRole : player.originalPlayerRole, player.playerRole, !flag);
-
-            // Assign Janitor Role
-            player.originalPlayerRole = player.playerRole;
-            if (flag)
-                player.ServerSetPlayerRole(PlayerRole.Janitor);
-            else
-                player.ServerSetPlayerRole(PlayerRole.None);
+            player.RpcFirePlayer(true, should_become_janitor 
+                    ? current_role 
+                    : player.originalPlayerRole, 
+                current_role, 
+                !should_become_janitor);
 
             // Apply Fired State
-            player.isFired = !janitorsKeepWorkstation || !flag;
+            player.isFired = !should_janitors_keep_workstations || !should_become_janitor;
+            player.originalPlayerRole = current_role;
 
-            if (!flag)
+            // Check if should become Janitor or Ghost
+            if (should_become_janitor)
+            {
+                // Reset Workstation
+                if (__2 && !should_janitors_keep_workstations)
+                    player.ServerSetWorkStation(null, current_role, true);
+
+                // Apply New Role
+                player.ServerSetPlayerRole(PlayerRole.Janitor);
+            }
+            else
+            {
+                // Reset Workstation
+                player.ServerSetWorkStation(null, current_role, true);
+
+                // Apply New Role
+                player.ServerSetPlayerRole(PlayerRole.None);
+
+                // Replace Player with Ghost
                 player.ServerReplacePlayerWithSpectator(__0.connectionToClient);
-            if (__instance.NetworkuseHrRep
-                && wasHR)
-                __instance.SelectNewHrRep();
+            }
 
-            // Reset Vote
-            VoteBoxController.instance.ServerResetVote();
+            // Select New HR Rep
+            if (is_hr_rep)
+                __instance.SelectNewHrRep();
 
             // End Match if Winner is Found
             if (!__1)
