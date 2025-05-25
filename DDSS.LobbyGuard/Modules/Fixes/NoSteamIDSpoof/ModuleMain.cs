@@ -18,7 +18,6 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoSteamIDSpoof
 
         public override bool OnLoad()
         {
-            lobbyChatUpdate = Callback<LobbyChatUpdate_t>.Create(new Action<LobbyChatUpdate_t>(OnLobbyChatUpdate));
             lobbyChatUpdateServer = Callback<LobbyChatUpdate_t>.CreateGameServer(new Action<LobbyChatUpdate_t>(OnLobbyChatUpdate));
             return true;
         }
