@@ -11,6 +11,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings
 
         internal MelonPreferences_Entry<int> SlackerTrashBinFireDelay;
 
+        internal MelonPreferences_Entry<bool> AllowJanitorsToVote;
         internal MelonPreferences_Entry<bool> AllowJanitorsToPourInk;
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
@@ -42,6 +43,11 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings
                  "Slacker TrashBin Fire Delay",
                  "Seconds until TrashBin Fire Ignites from Slacker Task",
                  4);
+
+            AllowJanitorsToVote = CreatePref("AllowJanitorsToVote",
+                "Allow Janitors to Vote",
+                "Allows Janitors to Vote on Manager",
+                true);
 
             AllowJanitorsToPourInk = CreatePref("AllowJanitorsToPourInk",
                 "Allow Janitors to Pour Ink",
