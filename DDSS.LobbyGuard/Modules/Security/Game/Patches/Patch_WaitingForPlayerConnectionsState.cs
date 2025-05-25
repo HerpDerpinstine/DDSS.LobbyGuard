@@ -192,7 +192,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                 && (playerHRRep == null))
                 GameManager.instance.SelectNewHrRep();
 
-            // Assign HR Rep
+            // Assign Analyst
             if (GameManager.instance.NetworkuseAnalyst
                 && (playerAnalyst == null))
                 GameManager.instance.SelectNewAnalyst();
