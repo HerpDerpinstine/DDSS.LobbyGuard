@@ -5,7 +5,7 @@ using Il2CppMirror;
 using Il2CppProps.Scripts;
 using System.Collections.Generic;
 
-namespace DDSS_LobbyGuard.Modules.Security.Collectible.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_CollectibleHolder

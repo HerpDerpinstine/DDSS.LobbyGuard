@@ -31,7 +31,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Printer.Internal
             // Destroy Texture
             if (_tempTexture != null
                 && !_tempTexture.WasCollected)
-                Object.Destroy(_tempTexture);
+                GameObject.Destroy(_tempTexture);
 
             // Return Result
             return returnVal;

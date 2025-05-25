@@ -6,7 +6,7 @@ using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.Scripts;
 
-namespace DDSS_LobbyGuard.Modules.Security.Collectible.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_Consumable

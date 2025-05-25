@@ -72,7 +72,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
                 return false;
 
             // Create New Document Copy
-            GameObject docObj = Object.Instantiate(tray.documentPrefab.gameObject,
+            GameObject docObj = GameObject.Instantiate(tray.documentPrefab.gameObject,
                 tray.transform.position,
                 tray.transform.rotation);
             if (docObj == null

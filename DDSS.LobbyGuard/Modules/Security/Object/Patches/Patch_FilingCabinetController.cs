@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Il2Cpp;
 
-namespace DDSS_LobbyGuard.Modules.Security.Collectible.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_FilingCabinetController
