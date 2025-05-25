@@ -10,10 +10,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager
         internal MelonPreferences_Entry<bool> SpawnManagerKeys;
 
         public ModuleConfig() : base()
-        {
-            if (Instance == null)
-                Instance = this;
-        }
+            => Instance = this;
         public override void Init()
             => ConfigType = eConfigType.Security;
         public override string GetName()

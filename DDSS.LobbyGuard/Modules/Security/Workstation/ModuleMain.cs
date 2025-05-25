@@ -7,13 +7,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation
     {
         public override string Name => "Security.Workstation";
 
-        public override bool OnLoad()
-        {
-            new Extras.MoreRoleSettings.ModuleConfig();
-            new Extras.MoreWorkstationSettings.ModuleConfig();
-            return true;
-        }
-
         public override void OnSceneInit(int buildIndex, string sceneName)
         {
             if ((sceneName != "MainMenuScene")

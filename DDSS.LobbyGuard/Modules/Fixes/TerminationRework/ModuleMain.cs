@@ -10,12 +10,6 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework
         public override string Name => "Fixes.TerminationRework";
         public override Type ConfigType => typeof(ModuleConfig);
 
-        public override bool OnLoad()
-        {
-            new Extras.MoreRoleSettings.ModuleConfig();
-            return true;
-        }
-
         public override void OnSceneInit(int buildIndex, string sceneName)
         {
             if (sceneName != "MainMenuScene")

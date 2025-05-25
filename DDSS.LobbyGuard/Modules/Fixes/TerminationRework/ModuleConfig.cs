@@ -17,12 +17,9 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework
         internal MelonPreferences_Entry<eTermType> PlayerLeavesReduceTerminations;
 
         public ModuleConfig() : base()
-        {
-            if (Instance == null)
-                Instance = this;
-        }
+            => Instance = this;
         public override void Init()
-            => ConfigType = eConfigType.Extras;
+            => ConfigType = eConfigType.Fixes;
         public override string GetName()
             => "PlayerLeavesReduceTerminations";
         public override string GetDisplayName()
