@@ -2,7 +2,7 @@
 using Il2CppProps.Printer;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.Modules.Security.Printer.Internal
+namespace DDSS_LobbyGuard.Modules.Security.Paper.Internal
 {
     internal static class PrinterSecurity
     {
