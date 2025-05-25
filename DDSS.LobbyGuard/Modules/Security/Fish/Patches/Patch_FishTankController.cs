@@ -13,7 +13,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Fish.Patches
     internal class Patch_FishTankController
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(FishTankController), nameof(FishTankController.UserCode_CmdPourInk__NetworkIdentity__NetworkConnectionToClient))]
+        [HarmonyPatch(typeof(FishTankController), nameof(FishTankController.InvokeUserCode_CmdPourInk__NetworkIdentity__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdPourInk__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkIdentity __0,
             NetworkConnectionToClient __2)
         {
@@ -56,7 +56,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Fish.Patches
                 return false;
 
             tank.UserCode_CmdPourInk__NetworkIdentity__NetworkConnectionToClient(sender, __2);
-
 
             // Prevent Original
             return false;
