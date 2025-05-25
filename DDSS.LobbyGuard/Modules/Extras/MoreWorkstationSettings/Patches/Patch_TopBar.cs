@@ -7,7 +7,7 @@ using Il2CppWindow;
 using DDSS_LobbyGuard.Utils;
 using Il2CppObjects.Scripts;
 
-namespace DDSS_LobbyGuard.Modules.Extras.WindowBoundsClamp.Patches
+namespace DDSS_LobbyGuard.Modules.Extras.MoreWorkstationSettings.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_TopBar
@@ -22,7 +22,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.WindowBoundsClamp.Patches
 
             // Validate Window
             ApplicationWindow window = __instance._applicationWindow;
-            if ((window == null)
+            if (window == null
                 || window.WasCollected)
                 return false;
 
@@ -32,7 +32,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.WindowBoundsClamp.Patches
 
             // Get ComputerController
             ComputerController computer = __instance.GetComponentInParent<ComputerController>();
-            if ((computer == null)
+            if (computer == null
                 || computer.WasCollected)
                 return false;
 
@@ -65,8 +65,8 @@ namespace DDSS_LobbyGuard.Modules.Extras.WindowBoundsClamp.Patches
             bool shouldMove = false;
 
             // Validate Window Position X
-            if ((newWindowPos.x < minPosition.x)
-                || (newWindowPos.x > maxPosition.x))
+            if (newWindowPos.x < minPosition.x
+                || newWindowPos.x > maxPosition.x)
             {
                 // Signify Should be Fixed
                 shouldMove = true;
@@ -75,14 +75,14 @@ namespace DDSS_LobbyGuard.Modules.Extras.WindowBoundsClamp.Patches
                 float clampedX = Mathf.Clamp(newWindowPos.x, minPosition.x, maxPosition.x);
 
                 // Offset Mouse Position by Clamped Window Position
-                float targetDelta = (newWindowPos.x - clampedX);
+                float targetDelta = newWindowPos.x - clampedX;
                 newMouseDelta.x -= targetDelta;
                 newMousePos.x -= targetDelta;
             }
 
             // Validate Window Position Y
-            if ((newWindowPos.y < minPosition.y)
-                || (newWindowPos.y > maxPosition.y))
+            if (newWindowPos.y < minPosition.y
+                || newWindowPos.y > maxPosition.y)
             {
                 // Signify Should be Fixed
                 shouldMove = true;
@@ -91,7 +91,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.WindowBoundsClamp.Patches
                 float clampedY = Mathf.Clamp(newWindowPos.y, minPosition.y, maxPosition.y);
 
                 // Offset Mouse Position by Clamped Window Position
-                float targetDelta = (newWindowPos.y - clampedY);
+                float targetDelta = newWindowPos.y - clampedY;
                 newMouseDelta.y -= targetDelta;
                 newMousePos.y -= targetDelta;
             }

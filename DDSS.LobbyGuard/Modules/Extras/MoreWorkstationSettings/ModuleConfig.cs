@@ -9,6 +9,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreWorkstationSettings
 
         internal MelonPreferences_Entry<bool> AllowVirusesWhileServerIsDown;
         internal MelonPreferences_Entry<bool> WorkStationVirusTurnsOffFirewall;
+        internal MelonPreferences_Entry<bool> EnforceComputerWindowBoundary;
 
         public ModuleConfig() : base()
         {
@@ -32,6 +33,11 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreWorkstationSettings
             WorkStationVirusTurnsOffFirewall = CreatePref("WorkStationVirusTurnsOffFirewall",
                 "WorkStation Virus turns off Firewall",
                 "WorkStation Viruses will Automatically Turn Off the Firewall",
+                false);
+
+            EnforceComputerWindowBoundary = CreatePref("EnforceComputerWindowBoundary",
+                "Enforce Computer Window Boundary",
+                "Prevents Dragging Windows on WorkStation Computers outside of the Monitor's Boundaries",
                 false);
         }
     }
