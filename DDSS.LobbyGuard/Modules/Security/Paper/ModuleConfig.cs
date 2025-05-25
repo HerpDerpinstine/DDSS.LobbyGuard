@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.Modules.Security.Printer
+namespace DDSS_LobbyGuard.Modules.Security.Paper
 {
     internal class ModuleConfig : ConfigCategory
     {
@@ -16,9 +16,9 @@ namespace DDSS_LobbyGuard.Modules.Security.Printer
         public override void Init()
             => ConfigType = eConfigType.Security;
         public override string GetName()
-            => "Printer";
+            => "Paper";
         public override string GetDisplayName()
-            => "Printer";
+            => "Paper";
 
         public override void CreatePreferences()
         {

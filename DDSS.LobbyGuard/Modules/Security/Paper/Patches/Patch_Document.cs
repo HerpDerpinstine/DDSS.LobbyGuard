@@ -6,7 +6,7 @@ using Il2CppMirror;
 using Il2CppProps.Printer;
 using Il2CppProps.Scripts;
 
-namespace DDSS_LobbyGuard.Modules.Security.Printer.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_Document

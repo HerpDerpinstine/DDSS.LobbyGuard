@@ -6,7 +6,7 @@ using Il2CppMirror;
 using Il2CppProps.Printer;
 using Il2CppProps.Scripts;
 
-namespace DDSS_LobbyGuard.Modules.Security.Fax.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_Fax
@@ -30,9 +30,9 @@ namespace DDSS_LobbyGuard.Modules.Security.Fax.Patches
 
             // Validate Placement
             Collectible collectible = sender.GetCurrentCollectible();
-            if ((collectible == null)
-                || ((collectible.GetIl2CppType() != Il2CppType.Of<Document>())
-                    && (collectible.GetIl2CppType() != Il2CppType.Of<PrintedImage>())))
+            if (collectible == null
+                || collectible.GetIl2CppType() != Il2CppType.Of<Document>()
+                    && collectible.GetIl2CppType() != Il2CppType.Of<PrintedImage>())
                 return false;
 
             // Get Document
