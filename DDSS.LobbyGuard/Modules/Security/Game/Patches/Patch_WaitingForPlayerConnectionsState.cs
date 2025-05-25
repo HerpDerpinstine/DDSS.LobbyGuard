@@ -9,6 +9,7 @@ using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
+using Il2CppProps.ServerRack;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -85,6 +86,11 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                     && !virus.WasCollected)
                     virus.Start();
             }
+
+            // Start Server Controller
+            List<ServerController> serverList = [.. GameObject.FindObjectsByType<ServerController>(FindObjectsSortMode.None)];
+            foreach (ServerController server in serverList)
+                server.Start();
 
             // Get List of Players
             List<NetworkIdentity> allPlayers = LobbyManager.instance.GetAllPlayers();

@@ -3,12 +3,24 @@ using Il2Cpp;
 using Il2CppMirror;
 using UnityEngine;
 using Il2CppComputer.Scripts.System;
+using Il2CppGameManagement;
+using Il2CppGameManagement.StateMachine;
 
 namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_VirusController
     {
+        private static bool ShouldWaitForStart()
+        {
+            if ((GameManager.instance.NetworktargetGameState == (int)GameStates.WaitingForPlayerConnections)
+                    || (GameManager.instance.NetworktargetGameState == (int)GameStates.StartGame)
+                    || (GameManager.instance.NetworktargetGameState == (int)GameStates.GameFinished))
+                return true;
+
+            return false;
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(VirusController), nameof(VirusController.Start))]
         private static bool Start_Prefix(VirusController __instance)
@@ -51,7 +63,9 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                 __instance.virusScreen.color = Color.blue;
             }
 
-            if (NetworkServer.activeHost)
+            if (NetworkServer.activeHost 
+                && !__instance.isVirusActive
+                && !ShouldWaitForStart())
             {
                 __instance.virusInfectionTime += Time.deltaTime;
                 if (__instance.virusInfectionTime > __instance.virusInfectionTimeLimit)
