@@ -10,7 +10,10 @@ namespace DDSS_LobbyGuard.Modules.Security.Communication
         internal MelonPreferences_Entry<int> MaxCharactersOnChatMessages;
 
         public ModuleConfig() : base()
-            => Instance = this;
+        {
+            if (Instance == null)
+                Instance = this;
+        }
         public override void Init()
             => ConfigType = eConfigType.Security;
         public override string GetName()

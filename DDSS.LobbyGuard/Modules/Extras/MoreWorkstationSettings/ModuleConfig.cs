@@ -7,10 +7,14 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreWorkstationSettings
     {
         internal static ModuleConfig Instance { get; private set; }
 
+        internal MelonPreferences_Entry<bool> AllowVirusesWhileServerIsDown;
         internal MelonPreferences_Entry<bool> WorkStationVirusTurnsOffFirewall;
 
         public ModuleConfig() : base()
-            => Instance = this;
+        {
+            if (Instance == null)
+                Instance = this;
+        }
         public override void Init()
             => ConfigType = eConfigType.Extras;
         public override string GetName()
@@ -20,6 +24,11 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreWorkstationSettings
 
         public override void CreatePreferences()
         {
+            AllowVirusesWhileServerIsDown = CreatePref("AllowVirusesWhileServerIsDown",
+                "Allow Viruses while Server is Down",
+                "Allows WorkStations to get Viruses while the Server is Down",
+                true);
+
             WorkStationVirusTurnsOffFirewall = CreatePref("WorkStationVirusTurnsOffFirewall",
                 "WorkStation Virus turns off Firewall",
                 "WorkStation Viruses will Automatically Turn Off the Firewall",

@@ -11,7 +11,10 @@ namespace DDSS_LobbyGuard.Modules.VersionCheck
         internal MelonPreferences_Entry<bool> ShowPrompt;
 
         public ModuleConfig() : base()
-            => Instance = this;
+        {
+            if (Instance == null)
+                Instance = this;
+        }
         public override void Init()
             => ConfigType = eConfigType.General;
         public override string GetName()

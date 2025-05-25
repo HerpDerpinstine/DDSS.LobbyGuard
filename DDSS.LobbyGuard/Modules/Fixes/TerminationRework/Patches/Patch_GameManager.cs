@@ -29,7 +29,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             if (oldManager != null
                 && !oldManager.WasCollected)
             {
-                bool janitorsKeepWorkstation = MoreJanitorSettingsConfig.Instance.AllowJanitorsToKeepWorkStation.Value;
+                bool janitorsKeepWorkstation = Extras.MoreJanitorSettings.ModuleConfig.Instance.AllowJanitorsToKeepWorkStation.Value;
                 if (flag)
                 {
                     // Fire Old Manager
@@ -111,7 +111,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             int max_janitor_count = __instance.NetworkjanitorAmount;
             var janitorList = LobbyManager.instance.GetJanitorPlayers();
 
-            bool should_janitors_keep_workstations = MoreJanitorSettingsConfig.Instance.AllowJanitorsToKeepWorkStation.Value;
+            bool should_janitors_keep_workstations = Extras.MoreJanitorSettings.ModuleConfig.Instance.AllowJanitorsToKeepWorkStation.Value;
             bool should_become_janitor = !is_janitor
                 && (max_janitor_count > 0)
                 && (janitorList.Count < __instance.NetworkjanitorAmount);

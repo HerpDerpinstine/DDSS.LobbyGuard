@@ -12,7 +12,10 @@ namespace DDSS_LobbyGuard.Modules.Security.StickyNote
         internal MelonPreferences_Entry<bool> StickyNotesOnDoors;
 
         public ModuleConfig() : base()
-            => Instance = this;
+        {
+            if (Instance == null)
+                Instance = this;
+        }
         public override void Init()
             => ConfigType = eConfigType.Security;
         public override string GetName()

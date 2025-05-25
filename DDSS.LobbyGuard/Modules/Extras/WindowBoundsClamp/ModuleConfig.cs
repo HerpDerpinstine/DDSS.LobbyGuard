@@ -10,7 +10,10 @@ namespace DDSS_LobbyGuard.Modules.Extras.WindowBoundsClamp
         internal MelonPreferences_Entry<bool> EnforceComputerWindowBoundary;
 
         public ModuleConfig() : base()
-            => Instance = this;
+        {
+            if (Instance == null)
+                Instance = this;
+        }
         public override void Init()
             => ConfigType = eConfigType.Extras;
         public override string GetName()

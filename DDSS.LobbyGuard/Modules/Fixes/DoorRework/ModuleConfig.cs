@@ -10,7 +10,10 @@ namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework
         internal MelonPreferences_Entry<bool> CloseDoorsOnLock;
 
         public ModuleConfig() : base()
-            => Instance = this;
+        {
+            if (Instance == null)
+                Instance = this;
+        }
         public override void Init()
             => ConfigType = eConfigType.Fixes;
         public override string GetName()

@@ -11,7 +11,10 @@ namespace DDSS_LobbyGuard.Modules.Extras.ServerTimeInMessages
         internal MelonPreferences_Entry<bool> UseServerTimeStampForChatMessages;
 
         public ModuleConfig() : base()
-            => Instance = this;
+        {
+            if (Instance == null)
+                Instance = this;
+        }
         public override void Init()
             => ConfigType = eConfigType.Extras;
         public override string GetName()

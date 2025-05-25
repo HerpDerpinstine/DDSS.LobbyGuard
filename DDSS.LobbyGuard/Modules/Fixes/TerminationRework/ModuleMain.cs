@@ -12,7 +12,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework
 
         public override bool OnLoad()
         {
-            new MoreJanitorSettingsConfig();
+            new Extras.MoreJanitorSettings.ModuleConfig();
             return true;
         }
 

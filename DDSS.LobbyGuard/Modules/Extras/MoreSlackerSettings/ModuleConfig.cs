@@ -10,7 +10,10 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreSlackerSettings
         internal MelonPreferences_Entry<int> SlackerTrashBinFireDelay;
 
         public ModuleConfig() : base()
-            => Instance = this;
+        {
+            if (Instance == null)
+                Instance = this;
+        }
         public override void Init()
             => ConfigType = eConfigType.Extras;
         public override string GetName()

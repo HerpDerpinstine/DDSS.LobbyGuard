@@ -11,7 +11,10 @@ namespace DDSS_LobbyGuard.Modules.Extras.CharacterNamesInLobby
         internal MelonPreferences_Entry<bool> CharacterNamesInTextChat;
 
         public ModuleConfig() : base()
-            => Instance = this;
+        {
+            if (Instance == null)
+                Instance = this;
+        }
         public override void Init()
             => ConfigType = eConfigType.Extras;
         public override string GetName()

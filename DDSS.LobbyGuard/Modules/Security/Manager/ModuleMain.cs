@@ -6,5 +6,11 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager
     {
         public override string Name => "Security.Manager";
         public override Type ConfigType => typeof(ModuleConfig);
+
+        public override bool OnLoad()
+        {
+            new Extras.MoreJanitorSettings.ModuleConfig();
+            return true;
+        }
     }
 }
