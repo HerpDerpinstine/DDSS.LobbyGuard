@@ -30,11 +30,22 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            if (sender.GetPlayerSubRole() != SubRole.Assistant)
+            if ((sender.GetPlayerSubRole() != SubRole.Assistant)
+                && (sender.GetPlayerRole() != PlayerRole.Manager))
                 return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position))
+                return false;
+
+            // Validate Placement
+            Il2CppProps.Scripts.Collectible collectible = sender.GetCurrentCollectible();
+            if (collectible == null)
+                return false;
+
+            // Get CameraPropController
+            camera = collectible.TryCast<CameraPropController>();
+            if (camera == null)
                 return false;
 
             camera.UserCode_CmdCapture__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -62,24 +73,15 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            if (sender.GetPlayerSubRole() != SubRole.Assistant)
+            if ((sender.GetPlayerSubRole() != SubRole.Assistant)
+                && (sender.GetPlayerRole() != PlayerRole.Manager))
                 return false;
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position))
                 return false;
 
-            // Validate Placement
-            Il2CppProps.Scripts.Collectible collectible = sender.GetCurrentCollectible();
-            if (collectible == null)
-                return false;
-
-            // Get CameraPropController
-            camera = collectible.TryCast<CameraPropController>();
-            if (camera == null)
-                return false;
-
-            camera.UserCode_CmdCapture__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+            camera.UserCode_CmdUseOverride__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
