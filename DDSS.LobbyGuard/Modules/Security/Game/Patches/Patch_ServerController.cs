@@ -39,7 +39,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
             __instance.previousConnectionState = true;
 
             outageTime = 0f;
-            outageTimeLimit = 120f + Random.Range(120, 600);
+            outageTimeLimit = Random.Range(120, 600);
 
             // Prevent Original
             return false;
@@ -58,7 +58,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                 {
                     outageTime = 0f;
                     outageTimeLimit = Random.Range(120, 600);
-
                     ServerController.connectionsEnabled = false;
                 }
             }
