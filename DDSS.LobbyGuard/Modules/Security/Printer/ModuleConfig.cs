@@ -9,7 +9,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Printer
 
         internal MelonPreferences_Entry<bool> UsernamesOnPrintedDocuments;
         internal MelonPreferences_Entry<bool> UsernamesOnPrintedImages;
-        internal MelonPreferences_Entry<bool> PrinterCopiesWithSignature;
+        internal MelonPreferences_Entry<bool> PrinterCopiesSignatures;
 
         public ModuleConfig() : base()
             => Instance = this;
@@ -32,8 +32,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Printer
                 "Puts the Player's Username in the Name of their Custom Printed Image",
                 true); 
             
-            PrinterCopiesWithSignature = CreatePref("PrinterCopiesWithSignature",
-                "Printer Copies with Signature",
+            PrinterCopiesSignatures = CreatePref("PrinterCopiesSignatures",
+                "Printer Copies Signatures",
                 "Printer transfers the Signature of a Signed Document over to the Copy Document",
                 false);
         }

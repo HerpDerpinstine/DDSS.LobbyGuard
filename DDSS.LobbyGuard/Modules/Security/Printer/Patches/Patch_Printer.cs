@@ -337,7 +337,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Printer.Patches
                 imgCopy.SetName(img.interactableName);
                 printer.RpcSetImage(imgCopy.netIdentity, img.byteImg);
 
-                if (ModuleConfig.Instance.PrinterCopiesWithSignature.Value)
+                if (ModuleConfig.Instance.PrinterCopiesSignatures.Value)
                 {
                     // Set Signed State
                     imgCopy.Networksigned = img.Networksigned;
@@ -386,7 +386,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Printer.Patches
                 docCopy.SetName(doc.interactableName);
                 docCopy.SetText(doc.contentText.text);
 
-                if (ModuleConfig.Instance.PrinterCopiesWithSignature.Value)
+                if (ModuleConfig.Instance.PrinterCopiesSignatures.Value)
                 {
                     // Set Signed State
                     docCopy.Networksigned = doc.Networksigned;
