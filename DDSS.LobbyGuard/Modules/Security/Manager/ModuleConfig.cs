@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.Modules.Security.Keys
+namespace DDSS_LobbyGuard.Modules.Security.Manager
 {
     internal class ModuleConfig : ConfigCategory
     {
@@ -14,9 +14,9 @@ namespace DDSS_LobbyGuard.Modules.Security.Keys
         public override void Init()
             => ConfigType = eConfigType.Security;
         public override string GetName()
-            => "Keys";
+            => "Manager";
         public override string GetDisplayName()
-            => "Keys";
+            => "Manager";
 
         public override void CreatePreferences()
         {

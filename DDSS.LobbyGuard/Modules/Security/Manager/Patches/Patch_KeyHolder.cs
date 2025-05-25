@@ -3,7 +3,7 @@ using HarmonyLib;
 using Il2CppMirror;
 using Il2CppProps.Keys;
 
-namespace DDSS_LobbyGuard.Modules.Security.Keys.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_KeyHolder
