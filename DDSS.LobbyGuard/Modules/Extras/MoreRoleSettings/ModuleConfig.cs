@@ -7,8 +7,11 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings
     {
         internal static ModuleConfig Instance { get; private set; }
 
+        internal MelonPreferences_Entry<bool> AllowSpecialistsToPourInk;
+
         internal MelonPreferences_Entry<int> SlackerTrashBinFireDelay;
 
+        internal MelonPreferences_Entry<bool> AllowJanitorsToPourInk;
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUpdateCCTV;
@@ -30,10 +33,20 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings
 
         public override void CreatePreferences()
         {
+            AllowSpecialistsToPourInk = CreatePref("AllowSpecialistsToPourInk",
+                "Allow Specialists to Pour Ink",
+                "Allows Specialists to Pour Ink in the Fish Tank",
+                true);
+
             SlackerTrashBinFireDelay = CreatePref("SlackerTrashBinFireDelay",
                  "Slacker TrashBin Fire Delay",
                  "Seconds until TrashBin Fire Ignites from Slacker Task",
                  4);
+
+            AllowJanitorsToPourInk = CreatePref("AllowJanitorsToPourInk",
+                "Allow Janitors to Pour Ink",
+                "Allows Janitors to Pour Ink in the Fish Tank",
+                true);
 
             AllowJanitorsToLockDoors = CreatePref("AllowJanitorsToLockDoors",
                 "Allow Janitors to Lock Doors",
