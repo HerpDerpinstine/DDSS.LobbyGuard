@@ -1,5 +1,4 @@
-﻿using DDSS_LobbyGuard.Modules.Security.Workstation;
-using DDSS_LobbyGuard.SecurityExtension;
+﻿using DDSS_LobbyGuard.SecurityExtension;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2CppMirror;
@@ -10,7 +9,7 @@ using Il2CppProps.Misc.PaperTray;
 using Il2CppProps.Printer;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_PaperTray
@@ -72,7 +71,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
                 return false;
 
             // Create New Document Copy
-            GameObject docObj = GameObject.Instantiate(tray.documentPrefab.gameObject,
+            GameObject docObj = UnityEngine.Object.Instantiate(tray.documentPrefab.gameObject,
                 tray.transform.position,
                 tray.transform.rotation);
             if (docObj == null

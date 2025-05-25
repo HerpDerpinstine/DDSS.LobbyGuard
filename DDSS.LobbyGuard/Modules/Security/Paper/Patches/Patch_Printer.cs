@@ -1,4 +1,4 @@
-﻿using DDSS_LobbyGuard.Modules.Security.Printer.Internal;
+﻿using DDSS_LobbyGuard.Modules.Security.Paper.Internal;
 using DDSS_LobbyGuard.SecurityExtension;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
