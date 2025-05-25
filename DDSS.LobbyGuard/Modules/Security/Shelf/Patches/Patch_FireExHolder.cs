@@ -3,7 +3,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
 
-namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Shelf.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_FireExHolder
