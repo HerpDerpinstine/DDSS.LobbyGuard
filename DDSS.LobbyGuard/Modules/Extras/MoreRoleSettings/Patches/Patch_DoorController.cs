@@ -4,7 +4,7 @@ using Il2Cpp;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 
-namespace DDSS_LobbyGuard.Modules.Extras.MoreJanitorSettings.Patches
+namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_DoorController

@@ -44,7 +44,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
             if ((target == null)
                 || target.WasCollected
                 || target.IsGhost()
-                || (target.IsJanitor() && !Extras.MoreJanitorSettings.ModuleConfig.Instance.AllowJanitorsToKeepWorkStation.Value))
+                || (target.IsJanitor() && !Extras.MoreRoleSettings.ModuleConfig.Instance.AllowJanitorsToKeepWorkStation.Value))
                 return false;
 
             station.UserCode_CmdAssignDesk__NetworkIdentity__LobbyPlayer__NetworkConnectionToClient(sender, target, __2);

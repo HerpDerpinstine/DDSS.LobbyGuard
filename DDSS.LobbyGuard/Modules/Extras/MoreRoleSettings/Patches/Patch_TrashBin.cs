@@ -1,9 +1,9 @@
-﻿using DDSS_LobbyGuard.Modules.Extras.MoreSlackerSettings.Internal;
+﻿using DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings.Internal;
 using HarmonyLib;
 using Il2CppMirror;
 using Il2CppProps.TrashBin;
 
-namespace DDSS_LobbyGuard.Modules.Extras.MoreSlackerSettings.Patches
+namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_TrashBin

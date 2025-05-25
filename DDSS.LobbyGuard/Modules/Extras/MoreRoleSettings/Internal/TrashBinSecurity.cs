@@ -3,7 +3,7 @@ using Il2CppProps.TrashBin;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.Modules.Extras.MoreSlackerSettings.Internal
+namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings.Internal
 {
     internal static class TrashBinSecurity
     {

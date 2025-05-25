@@ -34,7 +34,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
                 PlayerRole playerRole = lobbyPlayer.playerRole;
 
                 if (!isJanitor
-                    || Extras.MoreJanitorSettings.ModuleConfig.Instance.AllowJanitorsToKeepWorkStation.Value)
+                    || Extras.MoreRoleSettings.ModuleConfig.Instance.AllowJanitorsToKeepWorkStation.Value)
                     lobbyPlayer.ServerSetWorkStation(null, playerRole, true);
 
                 // Check Setting

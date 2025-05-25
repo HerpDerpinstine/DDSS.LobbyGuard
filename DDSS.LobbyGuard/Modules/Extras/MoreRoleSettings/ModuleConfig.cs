@@ -1,11 +1,13 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.Modules.Extras.MoreJanitorSettings
+namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings
 {
     internal class ModuleConfig : ConfigCategory
     {
         internal static ModuleConfig Instance { get; private set; }
+
+        internal MelonPreferences_Entry<int> SlackerTrashBinFireDelay;
 
         internal MelonPreferences_Entry<bool> AllowJanitorsToLockDoors;
         internal MelonPreferences_Entry<bool> AllowJanitorsToUnlockDoors;
@@ -22,12 +24,17 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreJanitorSettings
         public override void Init()
             => ConfigType = eConfigType.Extras;
         public override string GetName()
-            => "MoreJanitorSettings";
+            => "MoreRoleSettings";
         public override string GetDisplayName()
-            => "More Janitor Settings";
+            => "More Role Settings";
 
         public override void CreatePreferences()
         {
+            SlackerTrashBinFireDelay = CreatePref("SlackerTrashBinFireDelay",
+                 "Slacker TrashBin Fire Delay",
+                 "Seconds until TrashBin Fire Ignites from Slacker Task",
+                 4);
+
             AllowJanitorsToLockDoors = CreatePref("AllowJanitorsToLockDoors",
                 "Allow Janitors to Lock Doors",
                 "Allows Janitors to Lock Doors",

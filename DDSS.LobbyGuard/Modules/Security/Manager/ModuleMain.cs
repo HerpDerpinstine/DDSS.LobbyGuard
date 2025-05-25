@@ -9,7 +9,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager
 
         public override bool OnLoad()
         {
-            new Extras.MoreJanitorSettings.ModuleConfig();
+            new Extras.MoreRoleSettings.ModuleConfig();
             return true;
         }
     }

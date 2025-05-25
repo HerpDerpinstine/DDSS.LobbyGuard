@@ -145,7 +145,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
                 || lobbyPlayer.IsGhost())
                 return false;
 
-            if (!Extras.MoreJanitorSettings.ModuleConfig.Instance.AllowJanitorsToUpdateComputers.Value
+            if (!Extras.MoreRoleSettings.ModuleConfig.Instance.AllowJanitorsToUpdateComputers.Value
                 && lobbyPlayer.IsJanitor())
                 return false;
 
