@@ -1,7 +1,9 @@
-﻿using DDSS_LobbyGuard.SecurityExtension;
+﻿using DDSS_LobbyGuard.Config;
+using DDSS_LobbyGuard.SecurityExtension;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppProps.Scripts;
 using UnityEngine;
@@ -61,6 +63,26 @@ namespace DDSS_LobbyGuard.Modules.Security.Shelf.Patches
 
             collectible = gameObject.GetComponent<Collectible>();
             collectible.ServerUseNoTypeVerification(sender);
+
+            // Get StickyNoteController
+            eConfigHostType configValue = StickyNote.ModuleConfig.Instance.UsernamesOnStickyNotes.Value;
+            if ((configValue != eConfigHostType.DISABLED)
+                && (collectible.GetIl2CppType() == Il2CppType.Of<StickyNoteController>()))
+            {
+                // Apply New Name
+                string userName = sender.GetUserName();
+                if (!string.IsNullOrEmpty(userName)
+                    && !string.IsNullOrWhiteSpace(userName))
+                {
+                    string newName = $"{userName.RemoveRichText()}'s Sticky Note";
+                    if (configValue == eConfigHostType.HOST_ONLY)
+                        collectible.interactableName =
+                            collectible.label = newName;
+                    else
+                        collectible.NetworkinteractableName =
+                            collectible.Networklabel = newName;
+                }
+            }
 
             // Prevent Original
             return false;
