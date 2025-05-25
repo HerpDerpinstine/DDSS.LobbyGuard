@@ -11,6 +11,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_GameManager
     {
+        /*
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.ReplaceManager))]
         private static bool ReplaceManager_Prefix(GameManager __instance)
@@ -79,6 +80,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             // Prevent Original
             return false;
         }
+        */
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.ServerFirePlayer))]
@@ -106,6 +108,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             var current_subrole = player.subRole;
 
             bool is_hr_rep = current_subrole == SubRole.HrRep;
+            bool is_analyst = current_subrole == SubRole.Analyst;
 
             bool is_janitor = player.IsJanitor();
             int max_janitor_count = __instance.NetworkjanitorAmount;
@@ -135,7 +138,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
 
             // Apply Fired State
             player.isFired = !should_janitors_keep_workstations || !should_become_janitor;
-            player.originalPlayerRole = current_role;
+            player.subRole = SubRole.None;
 
             // Check if should become Janitor or Ghost
             if (should_become_janitor)
@@ -146,6 +149,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
 
                 // Apply New Role
                 player.ServerSetPlayerRole(PlayerRole.Janitor);
+                player.originalPlayerRole = current_role;
             }
             else
             {
@@ -160,8 +164,16 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             }
 
             // Select New HR Rep
-            if (is_hr_rep)
+            if (__instance.useHrRep
+                && __instance.selectNewHrRepWhenFired
+                && is_hr_rep)
                 __instance.SelectNewHrRep();
+
+            // Select New Analyst
+            if (__instance.useAnalyst
+                && __instance.selectNewAnalystWhenFired
+                && is_analyst)
+                __instance.SelectNewAnalyst();
 
             // End Match if Winner is Found
             if (!__1)
