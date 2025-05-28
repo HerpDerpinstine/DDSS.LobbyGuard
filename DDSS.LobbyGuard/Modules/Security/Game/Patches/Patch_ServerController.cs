@@ -57,6 +57,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                     outageTime = 0f;
                     outageTimeLimit = Random.Range(ModuleConfig.Instance.ServerOutageRandomMinimum.Value, ModuleConfig.Instance.ServerOutageRandomMaximum.Value);
                     ServerController.connectionsEnabled = false;
+                    __instance.RpcSetConnectionEnabled(null, false);
                 }
             }
 

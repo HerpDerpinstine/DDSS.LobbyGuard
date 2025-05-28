@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Il2CppProps.Door;
+using UnityEngine;
 
 namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework.Patches
 {
@@ -8,7 +9,10 @@ namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerDetectionVolume), nameof(PlayerDetectionVolume.OnTriggerEnter))]
-        private static void OnTriggerEnter_Prefix(PlayerDetectionVolume __instance)
-            => ModuleMain.FixColliderSize(__instance);
+        private static bool OnTriggerEnter_Prefix(PlayerDetectionVolume __instance, Collider __0)
+        {
+            ModuleMain.FixColliderSize(__instance);
+            return __0 != null;
+        }
     }
 }
