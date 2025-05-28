@@ -6,7 +6,7 @@ namespace DDSS_LobbyGuard.Config
 {
     public class ConfigCategory
     {
-        public static Dictionary<string, ConfigCategory> _allCategories = new();
+        public static SortedDictionary<string, ConfigCategory> _allCategories = new();
 
         public MelonPreferences_Category Category;
         public string FileName = "Config.cfg";
