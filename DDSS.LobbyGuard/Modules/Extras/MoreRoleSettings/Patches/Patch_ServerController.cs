@@ -12,9 +12,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings.Patches
         [HarmonyPatch(typeof(ServerController), nameof(ServerController.RpcSetConnectionEnabled))]
         private static void RpcEnableFire_Postfix(ServerController __instance, bool __1)
         {
-            ServerController.connectionsEnabled = __1;
-            if (!__1)
-                ServerSecurity.OnOutageEnd(__instance);
+            ServerSecurity.OnOutageEnd(__instance);
         }
 
         [HarmonyPrefix]
