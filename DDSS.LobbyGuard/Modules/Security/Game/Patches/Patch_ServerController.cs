@@ -1,11 +1,9 @@
-﻿using DDSS_LobbyGuard.Utils;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppGameManagement.StateMachine;
 using Il2CppMirror;
 using Il2CppProps.ServerRack;
-using System.Collections;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
@@ -39,7 +37,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
             __instance.previousConnectionState = true;
 
             outageTime = 0f;
-            outageTimeLimit = Random.Range(120, 600);
+            outageTimeLimit = Random.Range(ModuleConfig.Instance.ServerOutageRandomMinimum.Value, ModuleConfig.Instance.ServerOutageRandomMaximum.Value);
 
             // Prevent Original
             return false;
@@ -57,7 +55,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                 if (outageTime > outageTimeLimit)
                 {
                     outageTime = 0f;
-                    outageTimeLimit = Random.Range(120, 600);
+                    outageTimeLimit = Random.Range(ModuleConfig.Instance.ServerOutageRandomMinimum.Value, ModuleConfig.Instance.ServerOutageRandomMaximum.Value);
                     ServerController.connectionsEnabled = false;
                 }
             }
