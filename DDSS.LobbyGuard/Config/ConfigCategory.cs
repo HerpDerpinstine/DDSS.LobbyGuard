@@ -49,12 +49,18 @@ namespace DDSS_LobbyGuard.Config
             string description,
             T defaultValue = default,
             bool isHidden = false)
-            => Category.CreateEntry(id,
+        {
+            var existingEntry = Category.GetEntry<T>(id);
+            if (existingEntry != null)
+                return existingEntry;
+
+            return Category.CreateEntry(id,
                 defaultValue,
                 displayName,
                 description,
                 isHidden,
                 false,
                 null);
+        }
     }
 }
