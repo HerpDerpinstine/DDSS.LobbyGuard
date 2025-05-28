@@ -10,6 +10,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings
         internal MelonPreferences_Entry<bool> AllowSpecialistsToPourInk;
 
         internal MelonPreferences_Entry<int> SlackerTrashBinFireDelay;
+        internal MelonPreferences_Entry<int> SlackerServerOutageDelay;
 
         internal MelonPreferences_Entry<bool> AllowJanitorsToVote;
         internal MelonPreferences_Entry<bool> AllowJanitorsToPourInk;
@@ -34,6 +35,11 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings
                 "Allow Specialists to Pour Ink",
                 "Allows Specialists to Pour Ink in the Fish Tank",
                 true);
+
+            SlackerServerOutageDelay = CreatePref("SlackerServerOutageDelay",
+                 "Slacker Server OutageDelay",
+                 "Seconds until Server has an Outage from Slacker Task",
+                 6);
 
             SlackerTrashBinFireDelay = CreatePref("SlackerTrashBinFireDelay",
                  "Slacker TrashBin Fire Delay",
