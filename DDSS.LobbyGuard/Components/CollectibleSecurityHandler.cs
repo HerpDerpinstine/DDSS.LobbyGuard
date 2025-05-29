@@ -32,17 +32,13 @@ namespace DDSS_LobbyGuard.Components
             => MelonMain.RegisterComponent<CollectibleSecurityHandler>();
         public CollectibleSecurityHandler(IntPtr ptr) : base(ptr) { }
 
-        public void Start()
+        public void Update()
         {
-            if (!CollectibleSecurity._allSecurityHandlers.ContainsKey(gameObject))
-                CollectibleSecurity._allSecurityHandlers[gameObject] = this;
+
         }
 
         public void OnDestroy()
         {
-            if (CollectibleSecurity._allSecurityHandlers.ContainsKey(gameObject))
-                CollectibleSecurity._allSecurityHandlers.Remove(gameObject);
-
             if ((collectibleType == eCollectibleType.NO_CALLBACK)
                 || (gameObject == null)
                 || gameObject.WasCollected

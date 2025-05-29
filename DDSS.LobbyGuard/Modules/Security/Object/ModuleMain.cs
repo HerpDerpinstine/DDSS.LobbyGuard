@@ -5,14 +5,17 @@
         public override string Name => "Object";
         public override eModuleType ModuleType => eModuleType.Security;
 
-        public override bool OnLoad()
+        public override void OnSceneInit(int buildIndex, string sceneName)
         {
-            return true;
-        }
+            // Find All Static Objects
 
-        public override void OnQuit()
-        {
-            
+            // Get Position of Object
+
+            // Find All Colliders
+
+            // Get Collider Bounds
+
+            // Cache Min/Max
         }
     }
 }
