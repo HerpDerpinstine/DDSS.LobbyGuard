@@ -9,10 +9,6 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoDuplicateUsers
         public override string Name => "NoDuplicateUsers";
         public override eModuleType ModuleType => eModuleType.Fixes;
 
-#if DEBUG
-        public override bool OnLoad() => false;
-#endif
-
         public override void OnSceneInit(int buildIndex, string sceneName)
         {
             if (sceneName != "MainMenuScene")
