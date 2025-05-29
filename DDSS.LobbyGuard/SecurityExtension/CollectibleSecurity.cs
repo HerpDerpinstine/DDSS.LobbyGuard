@@ -32,14 +32,10 @@ namespace DDSS_LobbyGuard.SecurityExtension
     {
         private static Type _trashBinType = Il2CppType.Of<TrashBin>();
 
-        internal static Dictionary<GameObject, CollectibleSecurityHandler> _allSecurityHandlers = new();
         internal static Dictionary<GameObject, CollectibleHolder> _holderSpawnCache = new();
-
+        
         internal static void OnSceneLoad()
-        {
-            _allSecurityHandlers.Clear();
-            _holderSpawnCache.Clear();
-        }
+            => _holderSpawnCache.Clear();
 
         internal static bool CanPlace(NetworkIdentity player, CollectibleHolder holder, Collectible collectible)
         {

@@ -7,11 +7,11 @@
 
         public override void OnSceneInit(int buildIndex, string sceneName)
         {
-            // Find All Static Objects
+            // Get Scene
 
-            // Get Position of Object
+            // Find All Colliders in Scene
 
-            // Find All Colliders
+            // Get Position + Offset of Collider
 
             // Get Collider Bounds
 
