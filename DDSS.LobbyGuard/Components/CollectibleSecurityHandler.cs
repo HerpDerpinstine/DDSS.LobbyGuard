@@ -31,11 +31,6 @@ namespace DDSS_LobbyGuard.Components
             => MelonMain.RegisterComponent<CollectibleSecurityHandler>();
         public CollectibleSecurityHandler(IntPtr ptr) : base(ptr) { }
 
-        public void FixedUpdate()
-        {
-
-        }
-
         public void OnDestroy()
         {
             if ((collectibleType == eCollectibleType.NO_CALLBACK)
