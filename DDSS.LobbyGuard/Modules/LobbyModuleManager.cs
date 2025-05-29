@@ -57,7 +57,7 @@ namespace DDSS_LobbyGuard.Modules
 #endif
                     module.OnQuit();
                     if (module.Config != null)
-                        ConfigCategory._allCategories.Remove(module.Config.GetName());
+                        ConfigCategory._allCategories.Remove(module.Config.CategoryID);
                     continue;
                 }
 
@@ -71,7 +71,7 @@ namespace DDSS_LobbyGuard.Modules
                     module.HarmonyInstance.UnpatchSelf();
                     module.OnQuit();
                     if (module.Config != null)
-                        ConfigCategory._allCategories.Remove(module.Config.GetName());
+                        ConfigCategory._allCategories.Remove(module.Config.CategoryID);
                     continue;
                 }
 

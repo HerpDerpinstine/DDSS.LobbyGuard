@@ -12,11 +12,11 @@ namespace DDSS_LobbyGuard.Modules.VersionCheck
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override void Init()
-            => ConfigType = eConfigType.General;
-        public override string GetName()
+        public override eConfigType ConfigType
+            => eConfigType.General;
+        public override string ID
             => "VersionCheck";
-        public override string GetDisplayName()
+        public override string DisplayName
             => "Version Check";
 
         public override void CreatePreferences()

@@ -18,11 +18,11 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override void Init()
-            => ConfigType = eConfigType.Fixes;
-        public override string GetName()
+        public override eConfigType ConfigType
+            => eConfigType.Fixes;
+        public override string ID
             => "PlayerLeavesReduceTerminations";
-        public override string GetDisplayName()
+        public override string DisplayName
             => "Player Leaves Reduce Terminations";
 
         public override void CreatePreferences()

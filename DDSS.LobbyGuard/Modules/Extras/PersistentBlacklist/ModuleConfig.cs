@@ -14,11 +14,11 @@ namespace DDSS_LobbyGuard.Modules.Extras.PersistentBlacklist
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override void Init()
-            => ConfigType = eConfigType.Extras;
-        public override string GetName()
+        public override eConfigType ConfigType
+            => eConfigType.Extras;
+        public override string ID
             => "PersistentBlacklist";
-        public override string GetDisplayName()
+        public override string DisplayName
             => "Persistent Blacklist";
 
         public override void CreatePreferences()

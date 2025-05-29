@@ -11,11 +11,11 @@ namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override void Init()
-            => ConfigType = eConfigType.Fixes;
-        public override string GetName()
+        public override eConfigType ConfigType
+            => eConfigType.Fixes;
+        public override string ID
             => "DoorRework";
-        public override string GetDisplayName()
+        public override string DisplayName
             => "Door Rework";
 
         public override void CreatePreferences()

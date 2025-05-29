@@ -12,11 +12,11 @@ namespace DDSS_LobbyGuard.Modules.Extras.CharacterNamesInLobby
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override void Init()
-            => ConfigType = eConfigType.Extras;
-        public override string GetName()
+        public override eConfigType ConfigType
+            => eConfigType.Extras;
+        public override string ID
             => "CharacterNamesInLobby";
-        public override string GetDisplayName()
+        public override string DisplayName
             => "Character Names in Lobby";
 
         public override void CreatePreferences()

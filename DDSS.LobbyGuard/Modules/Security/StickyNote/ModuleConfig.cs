@@ -13,11 +13,11 @@ namespace DDSS_LobbyGuard.Modules.Security.StickyNote
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override void Init()
-            => ConfigType = eConfigType.Security;
-        public override string GetName()
+        public override eConfigType ConfigType
+            => eConfigType.Security;
+        public override string ID
             => "StickyNote";
-        public override string GetDisplayName()
+        public override string DisplayName
             => "Sticky Note";
 
         public override void CreatePreferences()
