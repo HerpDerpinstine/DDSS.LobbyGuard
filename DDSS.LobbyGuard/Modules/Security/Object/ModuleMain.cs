@@ -4,5 +4,15 @@
     {
         public override string Name => "Object";
         public override eModuleType ModuleType => eModuleType.Security;
+
+        public override bool OnLoad()
+        {
+            return true;
+        }
+
+        public override void OnQuit()
+        {
+            
+        }
     }
 }

@@ -6,6 +6,7 @@ using Il2CppProps.Keys;
 using Il2CppProps.Scripts;
 using Il2CppProps.Shelf;
 using Il2CppProps.Stereo;
+using MelonLoader;
 using System;
 using UnityEngine;
 
@@ -31,8 +32,17 @@ namespace DDSS_LobbyGuard.Components
             => MelonMain.RegisterComponent<CollectibleSecurityHandler>();
         public CollectibleSecurityHandler(IntPtr ptr) : base(ptr) { }
 
+        public void Start()
+        {
+            if (!CollectibleSecurity._allSecurityHandlers.ContainsKey(gameObject))
+                CollectibleSecurity._allSecurityHandlers[gameObject] = this;
+        }
+
         public void OnDestroy()
         {
+            if (CollectibleSecurity._allSecurityHandlers.ContainsKey(gameObject))
+                CollectibleSecurity._allSecurityHandlers.Remove(gameObject);
+
             if ((collectibleType == eCollectibleType.NO_CALLBACK)
                 || (gameObject == null)
                 || gameObject.WasCollected
