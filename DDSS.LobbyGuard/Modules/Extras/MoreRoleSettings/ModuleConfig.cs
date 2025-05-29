@@ -37,7 +37,7 @@ namespace DDSS_LobbyGuard.Modules.Extras.MoreRoleSettings
                 true);
 
             SlackerServerOutageDelay = CreatePref("SlackerServerOutageDelay",
-                 "Slacker Server OutageDelay",
+                 "Slacker Server Outage Delay",
                  "Seconds until Server has an Outage from Slacker Task",
                  6);
 
