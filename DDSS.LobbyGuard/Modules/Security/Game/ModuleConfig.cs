@@ -9,6 +9,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Game
 
         internal MelonPreferences_Entry<int> ServerOutageRandomMinimum;
         internal MelonPreferences_Entry<int> ServerOutageRandomMaximum;
+        internal MelonPreferences_Entry<int> WorkstationVirusRandomMinimum;
+        internal MelonPreferences_Entry<int> WorkstationVirusRandomMaximum;
 
         public ModuleConfig() : base()
             => Instance = this;
@@ -30,6 +32,16 @@ namespace DDSS_LobbyGuard.Modules.Security.Game
                 "Server Outage Random Maximum",
                 "Maximum Value for the Random Timer of Server Outages",
                 600);
+
+            WorkstationVirusRandomMinimum = CreatePref("WorkstationVirusRandomMinimum",
+                "Workstation Virus Random Minimum",
+                "Minimum Value for the Random Timer of Workstation Viruses",
+                30);
+
+            WorkstationVirusRandomMaximum = CreatePref("WorkstationVirusRandomMaximum",
+                "Workstation Virus Random Maximum",
+                "Maximum Value for the Random Timer of Workstation Viruses",
+                60);
         }
     }
 }

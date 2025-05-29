@@ -22,6 +22,15 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(VirusController), nameof(VirusController.ServerSetVirus))]
+        private static void ServerSetVirus_Prefix(VirusController __instance, bool __0)
+        {
+            __instance.virusInfectionTime = 0f;
+            __instance.virusInfectionTimeLimit = Random.Range(ModuleConfig.Instance.WorkstationVirusRandomMinimum.Value,
+                ModuleConfig.Instance.WorkstationVirusRandomMaximum.Value);
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(VirusController), nameof(VirusController.Start))]
         private static bool Start_Prefix(VirusController __instance)
         {
@@ -33,7 +42,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
             __instance.isFirewallActive = true;
             __instance.isVirusActive = false;
             __instance.virusInfectionTime = 0f;
-            __instance.virusInfectionTimeLimit = 120f + Random.Range(30, 45);
+            __instance.virusInfectionTimeLimit = Random.Range(ModuleConfig.Instance.WorkstationVirusRandomMinimum.Value,
+                ModuleConfig.Instance.WorkstationVirusRandomMaximum.Value);
 
             // Prevent Original
             return false;
@@ -71,8 +81,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                 if (__instance.virusInfectionTime > __instance.virusInfectionTimeLimit)
                 {
                     __instance.virusInfectionTime = 0f;
-                    __instance.virusInfectionTimeLimit = Random.Range(30, 45);
-
+                    __instance.virusInfectionTimeLimit = Random.Range(ModuleConfig.Instance.WorkstationVirusRandomMinimum.Value,
+                        ModuleConfig.Instance.WorkstationVirusRandomMaximum.Value);
                     if (__instance.computerController.user != null)
                         __instance.PerformPotentialVirusActivity();
                 }
