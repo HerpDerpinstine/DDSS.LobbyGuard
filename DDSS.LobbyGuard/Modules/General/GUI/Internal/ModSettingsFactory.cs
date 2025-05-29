@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.Modules.GUI.Internal
+namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 {
     internal static class ModSettingsFactory
     {
@@ -86,8 +86,8 @@ namespace DDSS_LobbyGuard.Modules.GUI.Internal
                 _categoryCache[cat] = category;
                 category.categoryIndex = index;
                 category.SetSelected(ModSettingsManager._tab.currentCategoryIndex);
-                category.button.enabled = (ModSettingsManager._tab.currentCategoryIndex != index);
-                category.button.SetHighlighted((ModSettingsManager._tab.currentCategoryIndex == index));
+                category.button.enabled = ModSettingsManager._tab.currentCategoryIndex != index;
+                category.button.SetHighlighted(ModSettingsManager._tab.currentCategoryIndex == index);
 
                 // Fix Button
                 category.button.OnClick = new();

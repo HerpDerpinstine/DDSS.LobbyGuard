@@ -1,9 +1,10 @@
-﻿using DDSS_LobbyGuard.Modules.GUI.Internal;
+﻿using DDSS_LobbyGuard.Modules.General.GUI;
+using DDSS_LobbyGuard.Modules.General.GUI.Internal;
 using HarmonyLib;
 using Il2CppUI.Tabs.SettingsTab;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.Modules.GUI.Patches
+namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_SettingObject

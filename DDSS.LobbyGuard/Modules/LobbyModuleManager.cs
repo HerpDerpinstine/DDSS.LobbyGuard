@@ -14,7 +14,7 @@ namespace DDSS_LobbyGuard.Modules
         internal static void Load()
         {
             Assembly asm = typeof(LobbyModuleManager).Assembly;
-            List<ILobbyModule> validModules = new();
+            SortedList<string, ILobbyModule> validModules = new();
             foreach (var type in asm.GetValidTypes())
             {
                 // Find Module
@@ -35,13 +35,12 @@ namespace DDSS_LobbyGuard.Modules
                     module.Config = (ConfigCategory)Activator.CreateInstance(configType);
 
                 // Add Module to Cache
-                validModules.Add(module);
+                validModules.Add(module.Name, module);
             }
 
             // Sort Modules by Priority
-            validModules = validModules.OrderBy(item => item.Priority).ToList();
-
-            foreach (var module in validModules)
+            var orderedValidModules = validModules.Values.OrderBy(item => item.Priority);
+            foreach (var module in orderedValidModules)
             {
                 string moduleName = module.Name;
 

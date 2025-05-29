@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.Modules.VersionCheck
+namespace DDSS_LobbyGuard.Modules.General.VersionCheck
 {
     internal class ModuleMain : ILobbyModule
     {
@@ -14,7 +14,7 @@ namespace DDSS_LobbyGuard.Modules.VersionCheck
         private HttpClient _client = new();
         private bool _hasChecked;
 
-        public override string Name => "VersionCheck";
+        public override string Name => "General.VersionCheck";
         public override int Priority => 100;
         public override Type ConfigType => typeof(ModuleConfig);
 

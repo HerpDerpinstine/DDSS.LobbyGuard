@@ -4,7 +4,7 @@ using Il2CppUI.Tabs.SettingsTab;
 using System;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.Modules.GUI.Internal
+namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 {
     internal static class ModSettingsOptionBuilder
     {

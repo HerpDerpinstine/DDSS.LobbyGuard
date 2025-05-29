@@ -1,8 +1,9 @@
-﻿using HarmonyLib;
+﻿using DDSS_LobbyGuard.Modules.General.GUI;
+using HarmonyLib;
 using Il2Cpp;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
-namespace DDSS_LobbyGuard.Modules.GUI.Patches
+namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_LocalizationManager

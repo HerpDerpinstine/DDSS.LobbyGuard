@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.Modules.VersionCheck
+namespace DDSS_LobbyGuard.Modules.General.VersionCheck
 {
     internal class ModuleConfig : ConfigCategory
     {
@@ -25,7 +25,7 @@ namespace DDSS_LobbyGuard.Modules.VersionCheck
                "Check For Updates",
                "Checks to see if there is an Update available",
                true);
-            
+
             ShowPrompt = CreatePref("ShowPrompt",
                "Show Prompt",
                "Shows a Prompt if an Update is found",

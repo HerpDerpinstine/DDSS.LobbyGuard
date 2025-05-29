@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.Modules.GUI.Internal
+namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 {
     internal static class ModSettingsManager
     {
