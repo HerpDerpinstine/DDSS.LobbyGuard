@@ -5,7 +5,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Security.Workstation";
+        public override string Name => "Workstation";
+        public override eModuleType ModuleType => eModuleType.Security;
 
         public override void OnSceneInit(int buildIndex, string sceneName)
         {

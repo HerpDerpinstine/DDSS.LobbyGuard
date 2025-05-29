@@ -12,7 +12,8 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoSteamIDSpoof
 
         internal static bool IsSteamLobby = false;
 
-        public override string Name => "Fixes.NoSteamIDSpoof";
+        public override string Name => "NoSteamIDSpoof";
+        public override eModuleType ModuleType => eModuleType.Fixes;
         public override int Priority => -100;
 
         public override bool OnLoad()

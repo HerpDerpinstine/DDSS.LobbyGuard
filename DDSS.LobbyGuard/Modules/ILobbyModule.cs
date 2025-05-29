@@ -6,6 +6,8 @@ namespace DDSS_LobbyGuard.Modules
     public abstract class ILobbyModule
     {
         public abstract string Name { get; }
+        public abstract eModuleType ModuleType { get; }
+
         public virtual int Priority { get; }
         public virtual Type ConfigType { get; }
         public HarmonyLib.Harmony HarmonyInstance { get; internal set; }

@@ -48,7 +48,7 @@ namespace DDSS_LobbyGuard
             }
 
             // Register Main Custom Components
-            if (!CollectibleDestructionCallback.Register())
+            if (!CollectibleSecurityHandler.Register())
             {
                 _hasError = true;
                 return;
@@ -106,7 +106,9 @@ namespace DDSS_LobbyGuard
 
         public static bool ApplyPatches(ILobbyModule module, Type moduleType)
         {
-            string moduleName = module.Name;
+            string moduleTypeName = Enum.GetName(typeof(eModuleType), module.ModuleType);
+            string moduleName = $"{moduleTypeName}.{module.Name}";
+
             Assembly asm = moduleType.Assembly;
             foreach (Type type in asm.GetValidTypes())
             {

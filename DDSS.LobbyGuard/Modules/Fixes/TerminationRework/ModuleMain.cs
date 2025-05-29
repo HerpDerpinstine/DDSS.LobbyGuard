@@ -7,7 +7,8 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework
         private static Random _rnd = new();
         internal static bool _canTerminate;
 
-        public override string Name => "Fixes.TerminationRework";
+        public override string Name => "TerminationRework";
+        public override eModuleType ModuleType => eModuleType.Fixes;
         public override Type ConfigType => typeof(ModuleConfig);
 
         public override void OnSceneInit(int buildIndex, string sceneName)

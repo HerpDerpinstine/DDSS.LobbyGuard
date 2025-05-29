@@ -1,6 +1,6 @@
-﻿namespace DDSS_LobbyGuard.Config
+﻿namespace DDSS_LobbyGuard.Modules
 {
-    public enum eConfigType : int
+    public enum eModuleType : int
     {
         General,
         Security,

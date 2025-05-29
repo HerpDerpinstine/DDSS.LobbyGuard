@@ -11,7 +11,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
     internal static class ModSettingsFactory
     {
         internal static Dictionary<SettingObject, MelonPreferences_Entry> _settingCache = new();
-        internal static Dictionary<eConfigType, CategoryButton> _categoryCache = new();
+        internal static Dictionary<eModuleType, CategoryButton> _categoryCache = new();
 
         internal static void Reset()
         {
@@ -78,7 +78,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 
             // Add New Listings
             int index = 0;
-            foreach (var cat in Enum.GetValues<eConfigType>())
+            foreach (var cat in Enum.GetValues<eModuleType>())
             {
                 // Create Category Button
                 string catName = Enum.GetName(cat);

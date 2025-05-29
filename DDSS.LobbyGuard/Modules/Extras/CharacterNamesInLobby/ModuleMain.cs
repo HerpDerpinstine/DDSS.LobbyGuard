@@ -9,7 +9,8 @@ namespace DDSS_LobbyGuard.Modules.Extras.CharacterNamesInLobby
     {
         private static Dictionary<PlayerLobbyUI, TextMeshProUGUI> _allCharacterNames = new();
 
-        public override string Name => "Extras.CharacterNamesInLobby";
+        public override string Name => "CharacterNamesInLobby";
+        public override eModuleType ModuleType => eModuleType.Extras;
         public override Type ConfigType => typeof(ModuleConfig);
 
         public override void OnSceneInit(int buildIndex, string sceneName)

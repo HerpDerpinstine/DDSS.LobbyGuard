@@ -4,7 +4,8 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoExceptionDisconnect
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Fixes.NoExceptionDisconnect";
+        public override string Name => "NoExceptionDisconnect";
+        public override eModuleType ModuleType => eModuleType.Fixes;
 
         public override bool OnLoad()
         {

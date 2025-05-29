@@ -29,27 +29,36 @@ namespace DDSS_LobbyGuard.Modules
                 if (module.IsDisabled)
                     continue;
 
+                // Add Module to Cache
+                string moduleTypeName = Enum.GetName(typeof(eModuleType), module.ModuleType);
+                string moduleName = $"{moduleTypeName}.{module.Name}";
+                validModules.Add(moduleName, module);
+            }
+
+            foreach (var module in validModules.Values)
+            {
                 // Load Preferences
                 Type configType = module.ConfigType;
                 if (configType != null)
                     module.Config = (ConfigCategory)Activator.CreateInstance(configType);
-
-                // Add Module to Cache
-                validModules.Add(module.Name, module);
             }
+
+            LobbyModuleManagerConfig.CreatePreferences(validModules);
 
             // Sort Modules by Priority
             var orderedValidModules = validModules.Values.OrderBy(item => item.Priority);
             foreach (var module in orderedValidModules)
             {
-                string moduleName = module.Name;
+                string moduleTypeName = Enum.GetName(typeof(eModuleType), module.ModuleType);
+                string moduleName = $"{moduleTypeName}.{module.Name}";
 
 #if DEBUG
                 MelonMain._logger.Msg($"Loading {moduleName}...");
 #endif
 
                 // Run OnLoad
-                if (!module.OnLoad())
+                if (!LobbyModuleManagerConfig.IsModuleEnabled(module)
+                    || !module.OnLoad())
                 {
 #if DEBUG
                     MelonMain._logger.Error($"{moduleName} OnLoad returned false");

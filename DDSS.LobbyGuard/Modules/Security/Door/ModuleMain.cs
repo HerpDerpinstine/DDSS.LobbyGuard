@@ -4,7 +4,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Door
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Security.Door";
+        public override string Name => "Door";
+        public override eModuleType ModuleType => eModuleType.Security;
 
         public override void OnSceneInit(int buildIndex, string sceneName)
         {

@@ -11,8 +11,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override eConfigType ConfigType
-            => eConfigType.Security;
+        public override eModuleType ConfigType
+            => eModuleType.Security;
         public override string ID
             => "Manager";
         public override string DisplayName

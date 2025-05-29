@@ -12,8 +12,8 @@ namespace DDSS_LobbyGuard.Modules.Extras.ServerTimeInMessages
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override eConfigType ConfigType
-            => eConfigType.Extras;
+        public override eModuleType ConfigType
+            => eModuleType.Extras;
         public override string ID
             => "ServerTimeInMessages";
         public override string DisplayName

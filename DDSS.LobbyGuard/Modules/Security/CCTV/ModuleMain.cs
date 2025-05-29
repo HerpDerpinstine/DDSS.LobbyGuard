@@ -2,6 +2,7 @@
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Security.CCTV";
+        public override string Name => "CCTV";
+        public override eModuleType ModuleType => eModuleType.Security;
     }
 }

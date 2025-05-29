@@ -2,6 +2,7 @@
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Security.Shelf";
+        public override string Name => "Shelf";
+        public override eModuleType ModuleType => eModuleType.Security;
     }
 }

@@ -2,6 +2,7 @@
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Fixes.NoVerifyError";
+        public override string Name => "NoVerifyError";
+        public override eModuleType ModuleType => eModuleType.Fixes;
     }
 }

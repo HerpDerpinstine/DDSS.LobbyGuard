@@ -12,12 +12,8 @@ using UnityEngine;
 namespace DDSS_LobbyGuard.Components
 {
     [ClassInjectionAssemblyTarget("DDSS.LobbyGuard")]
-    public class CollectibleDestructionCallback : MonoBehaviour
+    public class CollectibleSecurityHandler : MonoBehaviour
     {
-        internal static bool Register()
-            => MelonMain.RegisterComponent<CollectibleDestructionCallback>();
-        public CollectibleDestructionCallback(IntPtr ptr) : base(ptr) { }
-
         internal enum eCollectibleType
         {
             CD,
@@ -30,6 +26,15 @@ namespace DDSS_LobbyGuard.Components
         }
         internal eCollectibleType collectibleType = eCollectibleType.NO_CALLBACK;
         internal int extraIndex;
+
+        internal static bool Register()
+            => MelonMain.RegisterComponent<CollectibleSecurityHandler>();
+        public CollectibleSecurityHandler(IntPtr ptr) : base(ptr) { }
+
+        public void FixedUpdate()
+        {
+
+        }
 
         public void OnDestroy()
         {

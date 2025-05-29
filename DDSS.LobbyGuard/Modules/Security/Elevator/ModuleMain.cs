@@ -2,6 +2,7 @@
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Security.Elevator";
+        public override string Name => "Elevator";
+        public override eModuleType ModuleType => eModuleType.Security;
     }
 }

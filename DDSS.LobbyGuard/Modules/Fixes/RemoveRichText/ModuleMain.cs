@@ -2,6 +2,7 @@
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Fixes.RemoveRichText";
+        public override string Name => "RemoveRichText";
+        public override eModuleType ModuleType => eModuleType.Fixes;
     }
 }

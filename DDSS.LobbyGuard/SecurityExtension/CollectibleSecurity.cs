@@ -69,25 +69,25 @@ namespace DDSS_LobbyGuard.SecurityExtension
         internal static void SpawnMug(GameObject prefab, MugHolder holder)
             => SpawnAndPlace<Mug, MugHolder>(prefab,
                 holder,
-                CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK,
+                CollectibleSecurityHandler.eCollectibleType.NO_CALLBACK,
                 null);
         
         internal static void SpawnMouse(GameObject prefab, MouseHolder holder)
             => SpawnAndPlace<Mouse, MouseHolder>(prefab,
                 holder,
-                CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK,
+                CollectibleSecurityHandler.eCollectibleType.NO_CALLBACK,
                 null);
 
         internal static void SpawnKey(KeyHolder holder)
             => SpawnAndPlace<KeyController, KeyHolder>(holder.keyPrefab,
                 holder,
-                CollectibleDestructionCallback.eCollectibleType.KEYS,
+                CollectibleSecurityHandler.eCollectibleType.KEYS,
                 null);
 
         internal static void SpawnFireEx(FireExHolder holder)
             => SpawnAndPlace<FireExController, FireExHolder>(holder.fireExControllerPrefab,
                 holder,
-                CollectibleDestructionCallback.eCollectibleType.FIRE_EX,
+                CollectibleSecurityHandler.eCollectibleType.FIRE_EX,
                 null);
 
         internal static void SpawnStorageBoxStart(ShelfController shelf)
@@ -100,7 +100,7 @@ namespace DDSS_LobbyGuard.SecurityExtension
         internal static void SpawnStorageBox(ShelfController shelf, int index)
             => SpawnAndPlace(shelf.storageBoxPrefab,
                 shelf,
-                CollectibleDestructionCallback.eCollectibleType.STORAGE_BOX,
+                CollectibleSecurityHandler.eCollectibleType.STORAGE_BOX,
                 (StorageBox box) => box.NetworkprefabIndex = index,
                 index);
 
@@ -112,7 +112,7 @@ namespace DDSS_LobbyGuard.SecurityExtension
         internal static void SpawnBinder(OfficeShelf shelf, int index)
             => SpawnAndPlace(shelf.binderPrefab,
                 shelf,
-                CollectibleDestructionCallback.eCollectibleType.BINDER,
+                CollectibleSecurityHandler.eCollectibleType.BINDER,
                 (Binder binder) =>
                 {
                     if (BinderManager.instance.binders == null)
@@ -144,19 +144,19 @@ namespace DDSS_LobbyGuard.SecurityExtension
         internal static void SpawnCD(CDHolder holder, int index)
             => SpawnAndPlace(holder.cdCasePrefab,
                 holder,
-                CollectibleDestructionCallback.eCollectibleType.CD,
+                CollectibleSecurityHandler.eCollectibleType.CD,
                 (CDCase cd) => cd.NetworksongIndex = index,
                 index);
 
 
         private delegate void dSpawnAndPlace<T>(T obj) 
             where T : Collectible;
-        private static void SpawnAndPlace<T, Z>(GameObject prefab, Z holder, CollectibleDestructionCallback.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
+        private static void SpawnAndPlace<T, Z>(GameObject prefab, Z holder, CollectibleSecurityHandler.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
             where T : Collectible
             where Z : CollectibleHolder
             => holder.StartCoroutine(SpawnAndPlaceCoroutine(prefab, holder, type, afterSpawn, extraIndex));
 
-        private static IEnumerator SpawnAndPlaceCoroutine<T, Z>(GameObject prefab, Z holder, CollectibleDestructionCallback.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
+        private static IEnumerator SpawnAndPlaceCoroutine<T, Z>(GameObject prefab, Z holder, CollectibleSecurityHandler.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
             where T : Collectible
             where Z : CollectibleHolder
         {
@@ -187,11 +187,11 @@ namespace DDSS_LobbyGuard.SecurityExtension
 
             NetworkServer.Spawn(gameObject);
 
-            if (type != CollectibleDestructionCallback.eCollectibleType.NO_CALLBACK)
+            if (type != CollectibleSecurityHandler.eCollectibleType.NO_CALLBACK)
             {
                 _holderSpawnCache[gameObject] = holder;
 
-                CollectibleDestructionCallback callback = gameObject.AddComponent<CollectibleDestructionCallback>();
+                CollectibleSecurityHandler callback = gameObject.AddComponent<CollectibleSecurityHandler>();
                 callback.collectibleType = type;
                 callback.extraIndex = extraIndex;
             }

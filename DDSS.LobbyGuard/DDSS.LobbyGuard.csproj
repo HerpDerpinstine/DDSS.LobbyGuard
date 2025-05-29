@@ -102,7 +102,4 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\VersionCheck\" />
-  </ItemGroup>
 </Project>

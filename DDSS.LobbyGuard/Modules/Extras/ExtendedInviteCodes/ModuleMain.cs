@@ -9,7 +9,8 @@ namespace DDSS_LobbyGuard.Modules.Extras.ExtendedInviteCodes
         private const string AllowedCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private const int CharacterCount = 8;
 
-        public override string Name => "Extras.ExtendedInviteCodes";
+        public override string Name => "ExtendedInviteCodes";
+        public override eModuleType ModuleType => eModuleType.Extras;
         public override Type ConfigType => typeof(ModuleConfig);
 
         internal static string GenerateNewCode()

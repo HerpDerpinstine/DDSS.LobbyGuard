@@ -2,6 +2,7 @@
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Extras.JoinLogs";
+        public override string Name => "JoinLogs";
+        public override eModuleType ModuleType => eModuleType.Extras;
     }
 }

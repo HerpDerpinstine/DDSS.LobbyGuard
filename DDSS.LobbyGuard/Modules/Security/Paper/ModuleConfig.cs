@@ -13,8 +13,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override eConfigType ConfigType
-            => eConfigType.Security;
+        public override eModuleType ConfigType
+            => eModuleType.Security;
         public override string ID
             => "Paper";
         public override string DisplayName

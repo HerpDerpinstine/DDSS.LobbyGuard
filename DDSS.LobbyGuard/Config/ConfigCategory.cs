@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿using DDSS_LobbyGuard.Modules;
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,32 +13,57 @@ namespace DDSS_LobbyGuard.Config
         public MelonPreferences_Category Category;
         public string FileExt = ".cfg";
 
-        public virtual eConfigType ConfigType { get => eConfigType.General; }
-        public virtual string ID { get; }
-        public virtual string DisplayName { get => ID; }
+        public virtual eModuleType ConfigType { get; set; }
+        public virtual string ID { get; set; }
+        public virtual string DisplayName { get; set; }
 
         public ConfigCategory()
         {
+            string folderPath = Path.Combine(MelonMain._userDataPath, "Config");
+            string fileName = Enum.GetName(typeof(eModuleType), ConfigType);
+
+            Setup(folderPath, fileName, ID, DisplayName, ConfigType);
+
+            if (!_allCategories.ContainsKey(ID))
+                _allCategories[ID] = this;
+        }
+
+        public ConfigCategory(string folderPath,
+            string fileName,
+            string categoryID,
+            string categoryDisplayName,
+            eModuleType categoryType)
+            => Setup(folderPath, fileName, categoryID, categoryDisplayName, categoryType);
+
+        public void Setup(string folderPath,
+            string fileName,
+            string categoryID,
+            string categoryDisplayName,
+            eModuleType categoryType)
+        {
+            if (string.IsNullOrEmpty(categoryDisplayName)
+                || string.IsNullOrWhiteSpace(categoryDisplayName))
+                categoryDisplayName = categoryID;
+
+            ID = categoryID;
+            DisplayName = categoryDisplayName;
+            ConfigType = categoryType;
+
             Category = MelonPreferences.GetCategory(ID);
             if (Category == null)
             {
                 Category = MelonPreferences.CreateCategory(ID, DisplayName, true, false);
                 Category.DestroyFileWatcher();
 
-                string folderPath = Path.Combine(MelonMain._userDataPath, "Config");
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);
 
-                string configType = Enum.GetName(typeof(eConfigType), ConfigType);
-                string filePath = Path.Combine(folderPath, $"{configType}{FileExt}");
+                string filePath = Path.Combine(folderPath, $"{fileName}{FileExt}");
                 Category.SetFilePath(filePath, true, false);
             }
 
             CreatePreferences();
             Category.SaveToFile(false);
-
-            if (!_allCategories.ContainsKey(ID))
-                _allCategories[ID] = this;
         }
 
         public virtual void CreatePreferences() { }

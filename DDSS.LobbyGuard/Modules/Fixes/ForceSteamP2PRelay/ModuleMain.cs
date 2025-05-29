@@ -2,6 +2,7 @@
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Fixes.ForceSteamP2PRelay";
+        public override string Name => "ForceSteamP2PRelay";
+        public override eModuleType ModuleType => eModuleType.Fixes;
     }
 }

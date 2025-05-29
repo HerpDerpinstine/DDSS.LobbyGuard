@@ -2,6 +2,7 @@
 {
     internal class ModuleMain : ILobbyModule
     {
-        public override string Name => "Fixes.NoDuplicateLobbies";
+        public override string Name => "NoDuplicateLobbies";
+        public override eModuleType ModuleType => eModuleType.Fixes;
     }
 }

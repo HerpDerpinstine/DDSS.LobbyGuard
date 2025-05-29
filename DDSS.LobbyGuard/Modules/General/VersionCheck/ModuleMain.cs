@@ -14,7 +14,8 @@ namespace DDSS_LobbyGuard.Modules.General.VersionCheck
         private HttpClient _client = new();
         private bool _hasChecked;
 
-        public override string Name => "General.VersionCheck";
+        public override string Name => "VersionCheck";
+        public override eModuleType ModuleType => eModuleType.General;
         public override int Priority => 100;
         public override Type ConfigType => typeof(ModuleConfig);
 

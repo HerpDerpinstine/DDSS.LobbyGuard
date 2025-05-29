@@ -6,7 +6,8 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoDuplicateUsers
     {
         private static List<ulong> _validIds = new List<ulong>();
 
-        public override string Name => "Fixes.NoDuplicateUsers";
+        public override string Name => "NoDuplicateUsers";
+        public override eModuleType ModuleType => eModuleType.Fixes;
 
 #if DEBUG
         public override bool OnLoad() => false;

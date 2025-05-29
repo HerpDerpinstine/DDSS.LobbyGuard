@@ -14,8 +14,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Game
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override eConfigType ConfigType
-            => eConfigType.Security;
+        public override eModuleType ConfigType
+            => eModuleType.Security;
         public override string ID
             => "Game";
         public override string DisplayName

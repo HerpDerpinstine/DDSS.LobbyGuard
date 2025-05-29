@@ -8,7 +8,8 @@ namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework
     {
         private const float _colliderSizeMin = 0.5f;
 
-        public override string Name => "Fixes.DoorRework";
+        public override string Name => "DoorRework";
+        public override eModuleType ModuleType => eModuleType.Fixes;
         public override Type ConfigType => typeof(ModuleConfig);
 
         internal static void DoorStart()

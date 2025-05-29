@@ -11,8 +11,8 @@ namespace DDSS_LobbyGuard.Modules.Extras.ExtendedInviteCodes
 
         public ModuleConfig() : base()
             => Instance = this;
-        public override eConfigType ConfigType
-            => eConfigType.Extras;
+        public override eModuleType ConfigType
+            => eModuleType.Extras;
         public override string ID
             => "ExtendedInviteCodes";
         public override string DisplayName
