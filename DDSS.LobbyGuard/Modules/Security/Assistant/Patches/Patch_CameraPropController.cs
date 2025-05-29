@@ -30,8 +30,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            if ((sender.GetPlayerSubRole() != SubRole.Assistant)
-                && (sender.GetPlayerRole() != PlayerRole.Manager))
+            if (sender.GetPlayerSubRole() != SubRole.Assistant)
                 return false;
 
             // Validate Distance
@@ -73,8 +72,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
 
             // Get Sender
             NetworkIdentity sender = __2.identity;
-            if ((sender.GetPlayerSubRole() != SubRole.Assistant)
-                && (sender.GetPlayerRole() != PlayerRole.Manager))
+            if (sender.GetPlayerSubRole() != SubRole.Assistant)
                 return false;
 
             // Validate Distance

@@ -7,6 +7,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoSteamIDSpoof
     internal class ModuleMain : ILobbyModule
     {
         private static List<ulong> _validIds = new List<ulong>();
+        private Callback<LobbyChatUpdate_t> lobbyChatUpdate;
         private Callback<LobbyChatUpdate_t> lobbyChatUpdateServer;
 
         internal static bool IsSteamLobby = false;
@@ -16,6 +17,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoSteamIDSpoof
 
         public override bool OnLoad()
         {
+            lobbyChatUpdate = Callback<LobbyChatUpdate_t>.Create(new Action<LobbyChatUpdate_t>(OnLobbyChatUpdate));
             lobbyChatUpdateServer = Callback<LobbyChatUpdate_t>.CreateGameServer(new Action<LobbyChatUpdate_t>(OnLobbyChatUpdate));
             return true;
         }
@@ -23,6 +25,11 @@ namespace DDSS_LobbyGuard.Modules.Fixes.NoSteamIDSpoof
         public override void OnQuit()
         {
             _validIds.Clear();
+            if (lobbyChatUpdate != null)
+            {
+                lobbyChatUpdate.Dispose();
+                lobbyChatUpdate = null;
+            }
             if (lobbyChatUpdateServer != null)
             {
                 lobbyChatUpdateServer.Dispose();
