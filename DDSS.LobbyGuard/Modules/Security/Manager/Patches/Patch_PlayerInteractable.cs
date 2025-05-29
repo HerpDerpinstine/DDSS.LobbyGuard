@@ -40,7 +40,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 || targetPlayer.WasCollected
                 || targetPlayer.IsGhost()
                 || (targetPlayer.playerRole == PlayerRole.Manager)
-                || (targetPlayer.subRole == SubRole.Assistant))
+                || (targetPlayer.subRole != SubRole.None))
                 return false;
 
             // Validate Sender
@@ -99,7 +99,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 || targetPlayer.WasCollected
                 || targetPlayer.IsGhost()
                 || (targetPlayer.playerRole == PlayerRole.Manager)
-                || (targetPlayer.subRole == SubRole.None))
+                || (targetPlayer.subRole != SubRole.Assistant))
                 return false;
 
             // Validate Sender

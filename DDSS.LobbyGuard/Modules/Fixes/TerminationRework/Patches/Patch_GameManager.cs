@@ -5,13 +5,90 @@ using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
+using System.Collections.Generic;
 
 namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_GameManager
     {
-        /*
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.SelectNewHrRep))]
+        private static bool SelectNewHrRep_Prefix(GameManager __instance)
+        {
+            List<NetworkIdentity> list = new List<NetworkIdentity>(LobbyManager.instance.connectedLobbyPlayers.ToArray());
+            list.Shuffle();
+            foreach (NetworkIdentity networkIdentity in list)
+            {
+                if (networkIdentity != null)
+                {
+                    LobbyPlayer component = networkIdentity.GetComponent<LobbyPlayer>();
+                    if ((component != null)
+                        && ((component.playerRole == PlayerRole.Specialist) || (component.playerRole == PlayerRole.Slacker))
+                        && !component.isFired
+                        && (component.subRole == SubRole.None))
+                    {
+                        component.ServerSetSubRole(SubRole.HrRep, true);
+                        break;
+                    }
+                }
+            }
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.SelectNewAnalyst))]
+        private static bool SelectNewAnalyst_Prefix(GameManager __instance)
+        {
+            List<NetworkIdentity> list = new List<NetworkIdentity>(LobbyManager.instance.connectedLobbyPlayers.ToArray());
+            list.Shuffle();
+            foreach (NetworkIdentity networkIdentity in list)
+            {
+                if (networkIdentity != null)
+                {
+                    LobbyPlayer component = networkIdentity.GetComponent<LobbyPlayer>();
+                    if ((component != null)
+                        && ((component.playerRole == PlayerRole.Specialist) || (component.playerRole == PlayerRole.Slacker))
+                        && !component.isFired
+                        && (component.subRole == SubRole.None))
+                    {
+                        component.ServerSetSubRole(SubRole.Analyst, true);
+                        break;
+                    }
+                }
+            }
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.FindNewManager))]
+        private static bool FindNewManager_Prefix(GameManager __instance, ref LobbyPlayer __result)
+        {
+            List<NetworkIdentity> list = new List<NetworkIdentity>(LobbyManager.instance.connectedLobbyPlayers.ToArray());
+            list.Shuffle();
+            foreach (NetworkIdentity networkIdentity in list)
+            {
+                if (networkIdentity != null)
+                {
+                    LobbyPlayer component = networkIdentity.GetComponent<LobbyPlayer>();
+                    if ((component != null) 
+                        && (component.playerRole == PlayerRole.Specialist) 
+                        && !component.isFired)
+                    {
+                        __result = component;
+                        break;
+                    }
+                }
+            }
+
+            // Prevent Original
+            return false;
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.ReplaceManager))]
         private static bool ReplaceManager_Prefix(GameManager __instance)
@@ -66,6 +143,14 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             if (component != null)
                 component.ServerClearTaskQueue();
 
+            if (newManager.subRole == SubRole.HrRep)
+                __instance.SelectNewHrRep();
+
+            if (newManager.subRole == SubRole.Analyst)
+                __instance.SelectNewAnalyst();
+
+            newManager.ServerSetSubRole(SubRole.None, true);
+
             // Display New Roles
             if (oldManager != null
                 && !oldManager.WasCollected)
@@ -73,14 +158,9 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             else
                 __instance.RpcDisplayNewRoles(newManager.netIdentity, null);
 
-            if (newManager.subRole == SubRole.HrRep)
-                __instance.SelectNewHrRep();
-            newManager.ServerSetSubRole(SubRole.None, true);
-
             // Prevent Original
             return false;
         }
-        */
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.ServerFirePlayer))]
