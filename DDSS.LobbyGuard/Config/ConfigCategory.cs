@@ -7,47 +7,37 @@ namespace DDSS_LobbyGuard.Config
 {
     public class ConfigCategory
     {
-        private string _catID;
-
         public static SortedDictionary<string, ConfigCategory> _allCategories = new();
 
         public MelonPreferences_Category Category;
-        public string FileName = "Config.cfg";
+        public string FileExt = ".cfg";
 
         public virtual eConfigType ConfigType { get => eConfigType.General; }
         public virtual string ID { get; }
         public virtual string DisplayName { get => ID; }
 
-        public string CategoryID
-        {
-            get
-            {
-                if (_catID == null)
-                {
-                    string configType = Enum.GetName(typeof(eConfigType), ConfigType);
-                    _catID = $"{configType}.{ID}";
-                }
-                return _catID;
-            }
-        }
-
         public ConfigCategory()
         {
-            Category = MelonPreferences.GetCategory(CategoryID);
+            Category = MelonPreferences.GetCategory(ID);
             if (Category == null)
             {
-                Category = MelonPreferences.CreateCategory(CategoryID, DisplayName, true, false);
+                Category = MelonPreferences.CreateCategory(ID, DisplayName, true, false);
                 Category.DestroyFileWatcher();
 
-                string filePath = Path.Combine(MelonMain._userDataPath, FileName);
+                string folderPath = Path.Combine(MelonMain._userDataPath, "Config");
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                string configType = Enum.GetName(typeof(eConfigType), ConfigType);
+                string filePath = Path.Combine(folderPath, $"{configType}{FileExt}");
                 Category.SetFilePath(filePath, true, false);
             }
 
             CreatePreferences();
             Category.SaveToFile(false);
 
-            if (!_allCategories.ContainsKey(CategoryID))
-                _allCategories[CategoryID] = this;
+            if (!_allCategories.ContainsKey(ID))
+                _allCategories[ID] = this;
         }
 
         public virtual void CreatePreferences() { }
