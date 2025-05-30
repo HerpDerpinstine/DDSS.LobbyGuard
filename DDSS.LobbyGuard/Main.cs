@@ -61,6 +61,16 @@ namespace DDSS_LobbyGuard
             _logger.Msg("Initialized!");
         }
 
+        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
+        {
+            if (_hasError)
+                return;
+
+            if ((sceneName == "MainMenuScene")
+                || (sceneName == "LobbyScene"))
+                CollectibleSecurity.OnSceneLoad();
+        }
+
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
             if (_hasError)
@@ -69,7 +79,6 @@ namespace DDSS_LobbyGuard
             if ((sceneName == "MainMenuScene")
                 || (sceneName == "LobbyScene"))
             {
-                CollectibleSecurity.OnSceneLoad();
                 InteractionSecurity.UpdateSettings();
             }
 

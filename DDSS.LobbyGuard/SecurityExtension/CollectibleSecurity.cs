@@ -8,6 +8,7 @@ using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using Il2CppProps;
+using Il2CppProps.CameraProp;
 using Il2CppProps.FireEx;
 using Il2CppProps.Keys;
 using Il2CppProps.Misc.PaperTray;
@@ -22,6 +23,7 @@ using Il2CppProps.WC.Toilet;
 using Il2CppProps.WorkStation.Mouse;
 using Il2CppProps.WorkStation.Scripts;
 using Il2CppSystem;
+using MelonLoader;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,9 +35,18 @@ namespace DDSS_LobbyGuard.SecurityExtension
         private static Type _trashBinType = Il2CppType.Of<TrashBin>();
 
         internal static Dictionary<GameObject, CollectibleHolder> _holderSpawnCache = new();
-        
+
+        internal static GameObject _cameraPrefab;
+        internal static Vector3 _cameraSpawnPos;
+        internal static Quaternion _cameraSpawnRot;
+
         internal static void OnSceneLoad()
-            => _holderSpawnCache.Clear();
+        {
+            _cameraPrefab = null;
+            _cameraSpawnPos = Vector3.zero;
+            _cameraSpawnRot = Quaternion.identity;
+            _holderSpawnCache.Clear();
+        }
 
         internal static bool CanPlace(NetworkIdentity player, CollectibleHolder holder, Collectible collectible)
         {
@@ -148,6 +159,17 @@ namespace DDSS_LobbyGuard.SecurityExtension
                 (CDCase cd) => cd.NetworksongIndex = index,
                 index);
 
+        internal static void SpawnCamera(MonoBehaviour coroutineParent)
+            => SpawnAndPlace(coroutineParent,
+                _cameraPrefab,
+                _cameraSpawnPos,
+                _cameraSpawnRot,
+                CollectibleSecurityHandler.eCollectibleType.CAMERA,
+                (CameraPropController camera) =>
+                {
+                    CameraPropController.instance = camera;
+                    camera.gameObject.SetActive(true);
+                });
 
         private delegate void dSpawnAndPlace<T>(T obj) 
             where T : Collectible;
@@ -155,6 +177,10 @@ namespace DDSS_LobbyGuard.SecurityExtension
             where T : Collectible
             where Z : CollectibleHolder
             => holder.StartCoroutine(SpawnAndPlaceCoroutine(prefab, holder, type, afterSpawn, extraIndex));
+
+        private static void SpawnAndPlace<T>(MonoBehaviour coroutineParent, GameObject prefab, Vector3 position, Quaternion rotation, CollectibleSecurityHandler.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
+            where T : Collectible
+            => coroutineParent.StartCoroutine(SpawnAndPlaceCoroutine(prefab, position, rotation, type, afterSpawn, extraIndex));
 
         private static IEnumerator SpawnAndPlaceCoroutine<T, Z>(GameObject prefab, Z holder, CollectibleSecurityHandler.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
             where T : Collectible
@@ -208,6 +234,59 @@ namespace DDSS_LobbyGuard.SecurityExtension
 
             if (afterSpawn != null)
                 afterSpawn(obj);
+
+            yield break;
+        }
+
+        private static IEnumerator SpawnAndPlaceCoroutine<T>(GameObject prefab, Vector3 position, Quaternion rotation, CollectibleSecurityHandler.eCollectibleType type, dSpawnAndPlace<T> afterSpawn, int extraIndex = 0)
+            where T : Collectible
+        {
+            while (GameManager.instance.currentGameState <= (int)GameStates.WaitingForPlayerConnections)
+                yield return null;
+
+            bool flag = false;
+            while (!flag)
+            {
+                flag = true;
+                foreach (NetworkIdentity networkIdentity in LobbyManager.instance.GetAllPlayers())
+                    if (networkIdentity == null || networkIdentity.GetComponent<LobbyPlayer>().NetworkplayerController == null)
+                    {
+                        flag = false;
+                        break;
+                    }
+                if (!flag)
+                    yield return null;
+            }
+
+            yield return new WaitForSeconds(1f);
+
+            GameObject gameObject = GameObject.Instantiate(prefab, position, rotation);
+            gameObject.transform.position = position;
+            gameObject.transform.rotation = rotation;
+
+            yield return new WaitForSeconds(1f);
+
+            NetworkServer.Spawn(gameObject);
+
+            if (type != CollectibleSecurityHandler.eCollectibleType.NO_CALLBACK)
+            {
+                CollectibleSecurityHandler callback = gameObject.AddComponent<CollectibleSecurityHandler>();
+                callback.collectibleType = type;
+                callback.extraIndex = extraIndex;
+            }
+
+            yield return new WaitForSeconds(3f);
+
+            gameObject.transform.position = position;
+            gameObject.transform.rotation = rotation;
+
+            yield return new WaitForSeconds(1f);
+
+            if (afterSpawn != null)
+            {
+                T obj = gameObject.GetComponent<T>();
+                afterSpawn(obj);
+            }
 
             yield break;
         }
