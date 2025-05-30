@@ -23,13 +23,23 @@ namespace DDSS_LobbyGuard.Modules.Security.Analyst.Patches
                 return false;
 
             // Get EaselController
+            if ((__0 == null)
+                || __0.WasCollected)
+                return false;
             EaselController easel = __0.TryCast<EaselController>();
             if ((easel == null)
                 || easel.WasCollected)
                 return false;
 
             // Get Sender
+            if ((__2 == null)
+                || __2.WasCollected)
+                return false;
+
             NetworkIdentity sender = __2.identity;
+            if ((sender == null)
+                || sender.WasCollected)
+                return false;
             if (sender.GetPlayerSubRole() != SubRole.Analyst)
                 return false;
 
@@ -37,20 +47,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Analyst.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, easel.transform.position))
                 return false;
 
-            NetworkIdentity targetA = __1.SafeReadNetworkIdentity();
-            if ((targetA == null)
-                || targetA.WasCollected)
-                return false; 
-            
-            NetworkIdentity targetB = __1.SafeReadNetworkIdentity();
-            if ((targetB == null)
-                || targetB.WasCollected)
-                return false;
-
-            easel.UserCode_CmdShowStatistics__NetworkIdentity__NetworkIdentity__NetworkIdentity__NetworkConnectionToClient(sender, targetA, targetB, __2);
-
-            // Prevent Original
-            return false;
+            // Run Original
+            return true;
         }
     }
 }
