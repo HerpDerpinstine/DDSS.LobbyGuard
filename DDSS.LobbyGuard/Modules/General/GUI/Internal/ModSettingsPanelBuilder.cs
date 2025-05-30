@@ -41,6 +41,10 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                 tab.scrollRect.verticalScrollbar.value = 1f;
                 tab.scrollRect.SetDirty();
 
+                // Fix Category Layout
+                LayoutGroup canvasLayout = tab.categoryGrid.GetComponent<LayoutGroup>();
+                canvasLayout.childAlignment = TextAnchor.MiddleCenter;
+
                 // Change Clone Title
                 Transform cloneTitleTrans = _settingsTabObj.transform.Find("Tab/Tasks/TopBar/Title");
                 if (cloneTitleTrans != null)

@@ -93,6 +93,10 @@
       <HintPath>$(Il2CppAssemblies)\UnityEngine.PhysicsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(Il2CppAssemblies)\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(Il2CppAssemblies)\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
