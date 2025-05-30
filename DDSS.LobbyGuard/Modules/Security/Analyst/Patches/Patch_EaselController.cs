@@ -47,8 +47,21 @@ namespace DDSS_LobbyGuard.Modules.Security.Analyst.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, easel.transform.position))
                 return false;
 
-            // Run Original
-            return true;
+            __1.SafeReadNetworkIdentity();
+
+            NetworkIdentity targetA = __1.SafeReadNetworkIdentity();
+            if ((targetA == null)
+                || targetA.WasCollected)
+                return false;
+            NetworkIdentity targetB = __1.SafeReadNetworkIdentity();
+            if ((targetB == null)
+                || targetB.WasCollected)
+                return false;
+
+            easel.UserCode_CmdShowStatistics__NetworkIdentity__NetworkIdentity__NetworkIdentity__NetworkConnectionToClient(sender, targetA, targetB, __2);
+
+            // Prevent Original
+            return false;
         }
     }
 }
