@@ -37,7 +37,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
             // Fix Prefab
             NetworkIdentity netIdentity = CollectibleSecurity._cameraPrefab.GetComponent<NetworkIdentity>();
             netIdentity.ResetState();
-            //GameObject.Destroy(netIdentity);
 
             // Add Initial CollectibleSecurityHandler to This Camera
             CollectibleSecurityHandler handler = __instance.gameObject.AddComponent<CollectibleSecurityHandler>();

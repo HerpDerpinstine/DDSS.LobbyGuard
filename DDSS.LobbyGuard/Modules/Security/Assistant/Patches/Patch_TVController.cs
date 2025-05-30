@@ -5,7 +5,7 @@ using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
-using Il2CppProps.CameraProp;
+using MelonLoader;
 
 namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
 {
@@ -70,11 +70,12 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, TV.transform.position))
                 return false;
 
+            __1.SafeReadNetworkIdentity();
             int inc = __1.SafeReadInt();
-            if (inc < -1)
-                inc = -1;
             if (inc > 1)
                 inc = 1;
+            if (inc < 1)
+                inc = -1;
 
             TV.UserCode_CmdIncrementPhotoIndex__NetworkIdentity__Int32__NetworkConnectionToClient(sender, inc, __2);
 
@@ -138,16 +139,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
 
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, TV.transform.position))
-                return false;
-
-            // Validate Placement
-            Il2CppProps.Scripts.Collectible collectible = sender.GetCurrentCollectible();
-            if (collectible == null)
-                return false;
-
-            // Get CameraPropController
-            CameraPropController camera = collectible.TryCast<CameraPropController>();
-            if (camera == null)
                 return false;
 
             TV.UserCode_CmdStartTransfer__NetworkIdentity__NetworkConnectionToClient(sender, __2);
