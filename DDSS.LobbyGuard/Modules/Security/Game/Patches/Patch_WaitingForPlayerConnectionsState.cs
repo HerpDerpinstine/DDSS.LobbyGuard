@@ -76,17 +76,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                 virus.Start();
             }
 
-            // Start Manager Virus Controller
-            ComputerController managerComputer = manager.managerWorkStationController.computerController;
-            if ((managerComputer != null)
-                && !managerComputer.WasCollected)
-            {
-                VirusController virus = managerComputer.GetComponent<VirusController>();
-                if ((virus != null)
-                    && !virus.WasCollected)
-                    virus.Start();
-            }
-
             // Start Server Controller
             List<ServerController> serverList = [.. GameObject.FindObjectsByType<ServerController>(FindObjectsSortMode.None)];
             foreach (ServerController server in serverList)
