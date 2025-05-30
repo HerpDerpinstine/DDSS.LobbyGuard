@@ -66,6 +66,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
                 return false;
 
+            if (ModuleConfig.Instance.AutomaticallyDemotePreviousAssistant.Value)
+                GameManager.instance.ServerSetAssistant(null);
             GameManager.instance.ServerSetAssistant(targetPlayer.netIdentity);
 
             // Prevent Original
