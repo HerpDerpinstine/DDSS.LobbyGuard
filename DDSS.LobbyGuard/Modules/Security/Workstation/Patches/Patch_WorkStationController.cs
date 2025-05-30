@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.SecurityExtension;
+﻿using DDSS_LobbyGuard.Modules.Security.Workstation.Internal;
+using DDSS_LobbyGuard.SecurityExtension;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
@@ -12,12 +13,20 @@ using Il2CppProps.Scripts;
 using Il2CppProps.ServerRack;
 using Il2CppProps.WorkStation.Mouse;
 using Il2CppProps.WorkStation.Scripts;
+using MelonLoader;
 
 namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_WorkStationController
     {
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.WatchForStats))]
+        private static void WatchForStats()
+        {
+            MelonDebug.Msg("WatchForStats");
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.SpawnDeskItems))]
         private static bool SpawnDeskItems_Prefix(WorkStationController __instance, PlayerRole __0)
@@ -47,6 +56,32 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
                     (__0 == PlayerRole.Manager) ? __instance.bossMugPrefab : __instance.mugPrefab,
                     mugHolder);
             }
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.InvokeUserCode_CmdStartWatchForStats__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdStartWatchForStats__NetworkIdentity__NetworkConnectionToClient_Prefix(
+            NetworkBehaviour __0,
+            NetworkReader __1,
+            NetworkConnectionToClient __2)
+        {
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Get WorkStationController
+            WorkStationController controller = __0.TryCast<WorkStationController>();
+            if (controller == null)
+                return false;
+
+            // Validate Player
+            if (!ComputerSecurity.ValidatePlayer(controller.computerController, sender))
+                return false;
+
+            // Run Game Command
+            controller.UserCode_CmdStartWatchForStats__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
