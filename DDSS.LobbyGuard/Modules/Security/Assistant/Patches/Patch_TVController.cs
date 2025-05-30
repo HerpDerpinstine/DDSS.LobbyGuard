@@ -72,7 +72,13 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, TV.transform.position))
                 return false;
 
-            TV.UserCode_CmdIncrementPhotoIndex__NetworkIdentity__Int32__NetworkConnectionToClient(sender, 1, __2);
+            int inc = __1.SafeReadInt();
+            if (inc < -1)
+                inc = -1;
+            if (inc > 1)
+                inc = 1;
+
+            TV.UserCode_CmdIncrementPhotoIndex__NetworkIdentity__Int32__NetworkConnectionToClient(sender, inc, __2);
 
             // Prevent Original
             return false;
