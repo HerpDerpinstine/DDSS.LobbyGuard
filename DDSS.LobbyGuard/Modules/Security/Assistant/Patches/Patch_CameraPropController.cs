@@ -79,6 +79,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position))
                 return false;
 
+            camera.UpdateText();
             camera.UserCode_CmdUseOverride__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
