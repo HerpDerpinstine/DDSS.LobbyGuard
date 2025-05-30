@@ -154,7 +154,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                     lobbyPlayer.ServerSetPlayerRole(PlayerRole.Manager);
                     lobbyPlayer.ServerSetWorkStation(manager.managerWorkStationController, PlayerRole.Manager, true);
                 }
-                else if (slackerCount <= slackerAmount) // Slacker
+                else if (slackerCount < slackerAmount) // Slacker
                 {
                     slackerCount++;
                     lobbyPlayer.ServerSetPlayerRole(PlayerRole.Slacker);
