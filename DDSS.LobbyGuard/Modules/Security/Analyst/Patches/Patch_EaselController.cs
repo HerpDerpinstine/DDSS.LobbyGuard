@@ -44,7 +44,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Analyst.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, easel.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, easel.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             __1.SafeReadNetworkIdentity();

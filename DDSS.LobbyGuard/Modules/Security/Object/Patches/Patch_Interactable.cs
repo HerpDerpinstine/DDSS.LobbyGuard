@@ -1,7 +1,9 @@
 ﻿using DDSS_LobbyGuard.SecurityExtension;
 using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
+using Il2CppInterop.Runtime;
 using Il2CppMirror;
+using Il2CppProps.Easel;
 using Il2CppProps.Scripts;
 using UnityEngine;
 
@@ -27,11 +29,14 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
             if (sender.IsGhost())
                 return false;
 
+            // Get Max Distance
+            float maxDistance = InteractionSecurity.GetMaxDistanceFromDictionary(interact.GetIl2CppType());
+
             // Validate Distance
             float distance = Vector3.Distance(sender.transform.position, interact.transform.position);
             if (distance < 0f)
                 distance *= -1f;
-            if (distance > InteractionSecurity.MAX_DISTANCE_CCTV)
+            if (distance > maxDistance)
                 return false;
 
             // Validate Cooldown
@@ -40,7 +45,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
             bool initial = __1.ReadBool();
             if (initial)
             {
-                if (distance > InteractionSecurity.MAX_DISTANCE_DEFAULT)
+                if (distance > maxDistance)
                     return false;
 
                 if ((coolDown <= 0f)
@@ -49,7 +54,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
             }
             else
             {
-                if ((distance <= InteractionSecurity.MAX_DISTANCE_DEFAULT)
+                if ((distance <= maxDistance)
                     || (interact.interactionTimeCounter <= 0f))
                     return false;
 

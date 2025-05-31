@@ -34,7 +34,7 @@ namespace DDSS_LobbyGuard.Modules.Security.HR.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             __1.SafeReadNetworkIdentity();
@@ -72,7 +72,7 @@ namespace DDSS_LobbyGuard.Modules.Security.HR.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             __1.SafeReadNetworkIdentity();

@@ -35,7 +35,7 @@ namespace DDSS_LobbyGuard.Modules.Security.CCTV.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position, InteractionSecurity.MAX_DISTANCE_CCTV))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             // Run Game Command

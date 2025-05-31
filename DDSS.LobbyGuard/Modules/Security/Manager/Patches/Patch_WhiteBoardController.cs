@@ -36,7 +36,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             NetworkIdentity target = __1.SafeReadNetworkIdentity();
@@ -74,7 +74,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             whiteBoard.UserCode_CmdCallMeeting__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -106,7 +106,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, whiteBoard.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             whiteBoard.UserCode_CmdEndMeeting__NetworkIdentity__NetworkConnectionToClient(sender, __2);
