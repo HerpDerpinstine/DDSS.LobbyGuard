@@ -41,16 +41,15 @@ namespace DDSS_LobbyGuard
             string legacyConfigPath = Path.Combine(_userDataPath, "Config.cfg");
             if (File.Exists(legacyConfigPath))
             {
-                string legacyName = "Legacy";
-                string legacyExt = ".cfg.old";
-                string tempFileName = $"{legacyName}{legacyExt}";
+                string legacyName = "Legacy.cfg.old";
+                string tempFileName = legacyName;
                 string tempFilePath = Path.Combine(_userDataPath, tempFileName);
 
                 int i = 0;
                 while (File.Exists(tempFilePath))
                 {
                     i++;
-                    tempFileName = $"{legacyName} ({i}){legacyExt}";
+                    tempFileName = $"{legacyName}.{i}";
                     tempFilePath = Path.Combine(_userDataPath, tempFileName);
                 }
 
