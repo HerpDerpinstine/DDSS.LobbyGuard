@@ -7,18 +7,27 @@ using Il2CppPlayer;
 using Il2CppProps.Easel;
 using Il2CppProps.Printer;
 using Il2CppProps.WorkStation.Mouse;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.SecurityExtension
 {
     internal static class InteractionSecurity
     {
-        private static Il2CppSystem.Type DocumentType = Il2CppType.Of<Document>();
-        private static Il2CppSystem.Type ImageType = Il2CppType.Of<PrintedImage>();
-        private static Il2CppSystem.Type StorageBoxType = Il2CppType.Of<StorageBox>();
-        private static Il2CppSystem.Type ToiletPaperType = Il2CppType.Of<ToiletPaper>();
-        private static Il2CppSystem.Type MouseType = Il2CppType.Of<Mouse>();
+        private static readonly Il2CppSystem.Type DocumentType = Il2CppType.Of<Document>();
+        private static readonly Il2CppSystem.Type ImageType = Il2CppType.Of<PrintedImage>();
+        private static readonly Il2CppSystem.Type StorageBoxType = Il2CppType.Of<StorageBox>();
+        private static readonly Il2CppSystem.Type ToiletPaperType = Il2CppType.Of<ToiletPaper>();
+        private static readonly Il2CppSystem.Type MouseType = Il2CppType.Of<Mouse>();
+
+        // These types use MAX_DISTANCE_EXTENDED for their Range Checks
+        // Be sure to apply these additionally in
+        // `DDSS_LobbyGuard.Modules.Security.Object.Patches`
+        // `Patch_Interactable.InvokeUserCode_CmdSetInteractionTimeCounter__NetworkIdentity__Single__Boolean__NetworkConnectionToClient_Prefix`
+        internal static readonly Il2CppSystem.Type TVType = Il2CppType.Of<TVController>();
+        internal static readonly Il2CppSystem.Type CCTVType = Il2CppType.Of<CCTVController>();
+        internal static readonly Il2CppSystem.Type EaselType = Il2CppType.Of<EaselController>();
+        internal static readonly Il2CppSystem.Type WhiteBoardType = Il2CppType.Of<WhiteBoardController>();
+        internal static readonly Il2CppSystem.Type KitchenCabinetType = Il2CppType.Of<KitchenCabinetController>();
 
         internal const float MAX_DISTANCE_DEFAULT = 2f;
         internal const float MAX_DISTANCE_EXTENDED = 3f;
@@ -44,15 +53,6 @@ namespace DDSS_LobbyGuard.SecurityExtension
 
         internal static int MAX_PLAYERS { get; private set; }
 
-        private static Dictionary<Il2CppSystem.Type, float> _typeToMaxDistance = new()
-        {
-            { Il2CppType.Of<TVController>(), MAX_DISTANCE_EXTENDED },
-            { Il2CppType.Of<CCTVController>(), MAX_DISTANCE_EXTENDED },
-            { Il2CppType.Of<EaselController>(), MAX_DISTANCE_EXTENDED },
-            { Il2CppType.Of<WhiteBoardController>(), MAX_DISTANCE_EXTENDED },
-            { Il2CppType.Of<KitchenCabinetController>(), MAX_DISTANCE_EXTENDED },
-        };
-
         internal static void UpdateSettings()
         {
             // Validate Game Rules Manager
@@ -67,14 +67,6 @@ namespace DDSS_LobbyGuard.SecurityExtension
             MAX_INFECTED_USBS = MAX_PLAYERS;
             MAX_WATERCUPS = MAX_PLAYERS * 2;
             MAX_CIGS = MAX_PLAYERS * 3;
-        }
-
-        internal static float GetMaxDistanceFromDictionary(Il2CppSystem.Type objType)
-        {
-            if (_typeToMaxDistance.TryGetValue(objType, out float newRange))
-                return newRange;
-
-            return MAX_DISTANCE_DEFAULT;
         }
 
         internal static bool IsWithinRange(Vector3 posA, Vector3 posB,

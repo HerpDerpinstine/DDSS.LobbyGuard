@@ -9,7 +9,6 @@ using Il2CppPlayer;
 using Il2CppPlayer.Scripts;
 using Il2CppProps.Door;
 using Il2CppProps.Scripts;
-using UnityEngine;
 
 namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
 {

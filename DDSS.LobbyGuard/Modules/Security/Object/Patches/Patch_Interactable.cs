@@ -30,7 +30,14 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
                 return false;
 
             // Get Max Distance
-            float maxDistance = InteractionSecurity.GetMaxDistanceFromDictionary(interact.GetIl2CppType());
+            float maxDistance = InteractionSecurity.MAX_DISTANCE_DEFAULT;
+            Il2CppSystem.Type interactType = interact.GetIl2CppType();
+            if ((interactType == InteractionSecurity.TVType)
+                || (interactType == InteractionSecurity.CCTVType)
+                || (interactType == InteractionSecurity.EaselType)
+                || (interactType == InteractionSecurity.WhiteBoardType)
+                || (interactType == InteractionSecurity.KitchenCabinetType))
+                maxDistance = InteractionSecurity.MAX_DISTANCE_EXTENDED;
 
             // Validate Distance
             float distance = Vector3.Distance(sender.transform.position, interact.transform.position);
