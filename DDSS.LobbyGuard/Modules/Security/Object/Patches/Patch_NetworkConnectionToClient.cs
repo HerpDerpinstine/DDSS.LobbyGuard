@@ -4,7 +4,7 @@ using Il2CppMirror;
 using Il2CppPlayer;
 using System.Collections.Generic;
 
-namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
+namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_NetworkConnectionToClient
@@ -26,21 +26,21 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
             foreach (NetworkIdentity networkIdentity in ownedObjs)
             {
                 // Validate Identity
-                if ((networkIdentity == null)
+                if (networkIdentity == null
                     || networkIdentity.WasCollected)
                     continue;
 
                 // Validate Player
                 PlayerController player = networkIdentity.GetComponent<PlayerController>();
-                if ((player != null)
+                if (player != null
                     && !player.WasCollected
-                    && (player.currentUsables.Count > 0))
+                    && player.currentUsables.Count > 0)
                 {
                     // Get All Held Usables
                     foreach (Usable usable in player.currentUsables.ToArray())
                     {
                         // Validate Usable
-                        if ((usable == null)
+                        if (usable == null
                             || usable.WasCollected)
                             continue;
 
@@ -63,7 +63,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
             foreach (NetworkIdentity networkIdentity in ownedObjs)
             {
                 // Validate Identity
-                if ((networkIdentity == null)
+                if (networkIdentity == null
                     || networkIdentity.WasCollected)
                     continue;
 
