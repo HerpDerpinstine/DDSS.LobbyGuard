@@ -30,7 +30,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, station.transform.position))
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, station.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             // Get Target

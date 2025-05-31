@@ -110,7 +110,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(
                 sender.transform.position,
-                station.transform.position))
+                station.transform.position,
+                InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             // Validate Sender
@@ -165,7 +166,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(
                 sender.transform.position,
-                station.transform.position))
+                station.transform.position,
+                InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             // Validate Sender
@@ -222,7 +224,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
             if (sender.IsGhost()
                 || !InteractionSecurity.IsWithinRange(
                 sender.transform.position,
-                station.transform.position))
+                station.transform.position,
+                InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             // Get Values
@@ -280,7 +283,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
             if (sender.IsGhost()
                 || !InteractionSecurity.IsWithinRange(
                 sender.transform.position,
-                station.transform.position))
+                station.transform.position,
+                InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             // Get CigarettePack from Prefab
@@ -343,7 +347,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
             // Validate Distance
             if (!InteractionSecurity.IsWithinRange(
                 sender.transform.position,
-                station.transform.position))
+                station.transform.position,
+                InteractionSecurity.MAX_DISTANCE_EXTENDED))
                 return false;
 
             Usable usable = controller.GetCurrentUsable();
