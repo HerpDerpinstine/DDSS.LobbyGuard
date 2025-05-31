@@ -37,6 +37,26 @@ namespace DDSS_LobbyGuard
             if (!Directory.Exists(_userDataPath))
                 Directory.CreateDirectory(_userDataPath);
 
+            // Rename Legacy Config
+            string legacyConfigPath = Path.Combine(_userDataPath, "Config.cfg");
+            if (File.Exists(legacyConfigPath))
+            {
+                string legacyName = "Legacy";
+                string legacyExt = ".cfg.old";
+                string tempFileName = $"{legacyName}{legacyExt}";
+                string tempFilePath = Path.Combine(_userDataPath, tempFileName);
+
+                int i = 0;
+                while (File.Exists(tempFilePath))
+                {
+                    i++;
+                    tempFileName = $"{legacyName} ({i}){legacyExt}";
+                    tempFilePath = Path.Combine(_userDataPath, tempFileName);
+                }
+
+                File.Move(legacyConfigPath, tempFilePath);
+            }
+
             // Let ModHelper know this isn't required for everyone
             MakeModHelperAware();
 
