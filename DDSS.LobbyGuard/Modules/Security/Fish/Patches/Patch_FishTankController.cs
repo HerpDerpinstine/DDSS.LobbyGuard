@@ -32,7 +32,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Fish.Patches
             if ((lobbyPlayer == null)
                 || lobbyPlayer.WasCollected
                 || lobbyPlayer.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, tank.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, tank))
                 return false;
 
             if (!Extras.MoreRoleSettings.ModuleConfig.Instance.AllowJanitorsToPourInk.Value

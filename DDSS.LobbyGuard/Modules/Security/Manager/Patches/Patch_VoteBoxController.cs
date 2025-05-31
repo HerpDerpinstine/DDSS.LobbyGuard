@@ -34,7 +34,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, box.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, box))
                 return false;
 
             // Validate Role

@@ -29,7 +29,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, printer.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, printer))
                 return false;
 
             // Validate Placement
@@ -63,7 +63,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, printer.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, printer))
                 return false;
 
             // Validate Placement
@@ -294,7 +294,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, printer.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, printer))
                 return false;
 
             // Validate Placement

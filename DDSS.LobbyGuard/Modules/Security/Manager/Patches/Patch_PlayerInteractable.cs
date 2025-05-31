@@ -49,13 +49,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 || senderController.WasCollected)
                 return false;
 
-            // Validate Interactable
-            PlayerInteractable senderInteract = senderController.playerInteractable;
-            if ((senderInteract == null)
-                || senderInteract.WasCollected
-                || (senderInteract == interact))
-                return false;
-
             LobbyPlayer lobbyPlayer = senderController.NetworklobbyPlayer;
             if ((lobbyPlayer == null)
                 || lobbyPlayer.WasCollected
@@ -63,7 +56,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, interact))
                 return false;
 
             GameManager.instance.ServerSetAssistant(targetPlayer.netIdentity);
@@ -122,7 +115,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, interact))
                 return false;
 
             GameManager.instance.ServerSetAssistant(null);

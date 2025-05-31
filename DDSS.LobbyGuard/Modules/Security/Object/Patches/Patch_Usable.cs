@@ -37,7 +37,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
 
             // Validate Distance
             if (controller.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, usable))
                 return false;
 
             // Validate Drop
@@ -86,7 +86,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
 
             // Validate Distance
             if (controller.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, usable))
                 return false;
 
             // Validate Grab

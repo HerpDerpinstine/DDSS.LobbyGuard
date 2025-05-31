@@ -26,7 +26,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Elevator.Patches
                 || !door.enabled
                 || !door.NetworkcanOpenDoor
                 || door.isDoorOpen
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, door.transform.position))
                 return false;
 
             // Run Game Command

@@ -25,7 +25,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Server.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, server.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, server))
                 return false;
 
             // Get Values

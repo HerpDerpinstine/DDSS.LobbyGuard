@@ -60,7 +60,7 @@ namespace DDSS_LobbyGuard.Modules.Security.StickyNote.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(__0.transform.position, __instance.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(__0, __instance))
                 return false;
 
             // Get DoorInteractable

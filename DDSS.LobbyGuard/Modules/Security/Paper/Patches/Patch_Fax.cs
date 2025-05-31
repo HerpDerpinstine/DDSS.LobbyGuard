@@ -25,7 +25,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, fax.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, fax))
                 return false;
 
             // Validate Placement

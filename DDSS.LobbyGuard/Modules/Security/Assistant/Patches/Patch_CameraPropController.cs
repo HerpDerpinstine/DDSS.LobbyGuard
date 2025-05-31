@@ -35,7 +35,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, camera))
                 return false;
 
             // Validate Placement
@@ -77,7 +77,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, camera))
                 return false;
 
             // Reset Photo Text

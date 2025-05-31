@@ -28,7 +28,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, beer.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, beer))
                 return false;
 
             // Validate Placement

@@ -28,11 +28,11 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
                 return false;
 
             // Get Distance
-            float maxDistance = InteractionSecurity.MAX_DISTANCE_DEFAULT;
+            float maxDistance = InteractionSecurity.MAX_INTERACTION_DISTANCE;
             float distance = Vector3.Distance(sender.transform.position, interact.transform.position);
             if (distance < 0f)
                 distance *= -1f;
-            if (distance > InteractionSecurity.MAX_DISTANCE_EXTENDED)
+            if (distance > (maxDistance + 1f))
                 return false;
 
             // Validate Cooldown

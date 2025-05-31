@@ -71,7 +71,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Shelf.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, holder))
                 return false;
 
             // Validate Placement
@@ -112,7 +112,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Shelf.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, holder.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, holder))
                 return false;
 
             // Get Collectible NetworkIdentity

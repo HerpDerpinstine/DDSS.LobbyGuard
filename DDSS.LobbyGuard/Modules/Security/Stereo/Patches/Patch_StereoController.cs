@@ -23,7 +23,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Stereo.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, stereo.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, stereo))
                 return false;
 
             // Run Game Command
@@ -47,7 +47,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Stereo.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, stereo.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, stereo))
                 return false;
 
             // Run Game Command

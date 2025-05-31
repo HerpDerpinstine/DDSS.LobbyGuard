@@ -25,7 +25,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Shelf.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, machine.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, machine))
                 return false;
 
             // Get Interactible Name
@@ -57,7 +57,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Shelf.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, machine.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, machine))
                 return false;
 
             // Get Index

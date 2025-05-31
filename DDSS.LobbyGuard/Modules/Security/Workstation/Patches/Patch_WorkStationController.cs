@@ -108,10 +108,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(
-                sender.transform.position,
-                station.transform.position,
-                InteractionSecurity.MAX_DISTANCE_EXTENDED))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, station))
                 return false;
 
             // Validate Sender
@@ -164,10 +161,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
             NetworkIdentity sender = __2.identity;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(
-                sender.transform.position,
-                station.transform.position,
-                InteractionSecurity.MAX_DISTANCE_EXTENDED))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, station))
                 return false;
 
             // Validate Sender
@@ -222,10 +216,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(
-                sender.transform.position,
-                station.transform.position,
-                InteractionSecurity.MAX_DISTANCE_EXTENDED))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, station))
                 return false;
 
             // Get Values
@@ -281,10 +272,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(
-                sender.transform.position,
-                station.transform.position,
-                InteractionSecurity.MAX_DISTANCE_EXTENDED))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, station))
                 return false;
 
             // Get CigarettePack from Prefab
@@ -345,10 +333,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(
-                sender.transform.position,
-                station.transform.position,
-                InteractionSecurity.MAX_DISTANCE_EXTENDED))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, station))
                 return false;
 
             Usable usable = controller.GetCurrentUsable();

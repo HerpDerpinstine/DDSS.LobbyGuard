@@ -63,7 +63,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
                 || (Mathf.Abs(localDif.z) > 2f))
                 return false;
 
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, pos))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, writeSurface))
                 return false;
 
             // Run Game Command

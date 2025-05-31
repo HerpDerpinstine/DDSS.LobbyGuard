@@ -24,7 +24,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, box.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, box))
                 return false;
 
             // Get Collectible

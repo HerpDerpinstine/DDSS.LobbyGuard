@@ -44,10 +44,10 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
                         || document.signed)
                         return false;
                 }
-                else if (!InteractionSecurity.IsWithinRange(sender.transform.position, document.transform.position))
+                else if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, document))
                     return false;
             }
-            else if (!InteractionSecurity.IsWithinRange(sender.transform.position, document.transform.position))
+            else if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, document))
                 return false;
 
             // Run Game Command

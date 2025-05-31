@@ -25,7 +25,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Elevator.Patches
             // Validate Distance
             if (sender.IsGhost()
                 || !elevator.enabled
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, elevator.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, elevator))
                 return false;
 
             __1.SafeReadNetworkIdentity();

@@ -36,7 +36,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, binder.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, binder))
                 return false;
 
             // Validate Placement
@@ -80,7 +80,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, binder.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, binder))
                 return false;
 
             // Get Collectible

@@ -27,7 +27,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, shredder.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, shredder))
                 return false;
 
             // Run Game Command
@@ -55,7 +55,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, shredder.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, shredder))
                 return false;
 
             // Run Game Command

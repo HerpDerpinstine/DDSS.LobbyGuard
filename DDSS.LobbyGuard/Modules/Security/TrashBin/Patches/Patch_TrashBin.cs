@@ -27,7 +27,7 @@ namespace DDSS_LobbyGuard.Modules.Security.TrashBin.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, trashcan))
                 return false;
 
             // Run Game Command
@@ -65,7 +65,7 @@ namespace DDSS_LobbyGuard.Modules.Security.TrashBin.Patches
                 || player.IsGhost())
                 return false;
 
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, trashcan.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, trashcan))
                 return false;
 
             // Get Values

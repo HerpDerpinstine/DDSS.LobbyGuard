@@ -29,7 +29,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Shelf.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, cabinet.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, cabinet))
                 return false;
 
             // Get Index

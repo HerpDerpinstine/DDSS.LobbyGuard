@@ -31,7 +31,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Door.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, door.doorInteractable))
                 return false;
 
             // Run Game Command
@@ -86,7 +86,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Door.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, door.doorInteractable))
                 return false;
 
             // Get Requested Lock State
@@ -134,7 +134,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Door.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, door.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, door.doorInteractable))
                 return false;
 
             // Validate Lock Request

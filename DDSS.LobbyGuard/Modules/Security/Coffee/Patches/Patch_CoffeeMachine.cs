@@ -24,7 +24,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Coffee.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, machine.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, machine))
                 return false;
 
             if (machine.collectibles.Count <= 0)

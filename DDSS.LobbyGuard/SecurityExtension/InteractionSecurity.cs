@@ -1,4 +1,5 @@
-﻿using Il2Cpp;
+﻿using DDSS_LobbyGuard.Utils;
+using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
@@ -6,6 +7,7 @@ using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppProps.Easel;
 using Il2CppProps.Printer;
+using Il2CppProps.Scripts;
 using Il2CppProps.VendingMachine;
 using Il2CppProps.WorkStation.Mouse;
 using UnityEngine;
@@ -20,20 +22,6 @@ namespace DDSS_LobbyGuard.SecurityExtension
         private static readonly Il2CppSystem.Type ToiletPaperType = Il2CppType.Of<ToiletPaper>();
         private static readonly Il2CppSystem.Type MouseType = Il2CppType.Of<Mouse>();
 
-        // These types use MAX_DISTANCE_EXTENDED for their Range Checks
-        // Be sure to apply these additionally in
-        // `DDSS_LobbyGuard.Modules.Security.Object.Patches`
-        // `Patch_Interactable.InvokeUserCode_CmdSetInteractionTimeCounter__NetworkIdentity__Single__Boolean__NetworkConnectionToClient_Prefix`
-        internal static readonly Il2CppSystem.Type TVType = Il2CppType.Of<TVController>();
-        internal static readonly Il2CppSystem.Type CCTVType = Il2CppType.Of<CCTVController>();
-        internal static readonly Il2CppSystem.Type EaselType = Il2CppType.Of<EaselController>();
-        internal static readonly Il2CppSystem.Type WhiteBoardType = Il2CppType.Of<WhiteBoardController>();
-        internal static readonly Il2CppSystem.Type KitchenCabinetType = Il2CppType.Of<KitchenCabinetController>();
-        internal static readonly Il2CppSystem.Type VendingMachineType = Il2CppType.Of<VendingMachine>();
-
-        internal const float MAX_DISTANCE_DEFAULT = 2f;
-        internal const float MAX_DISTANCE_EXTENDED = 3f;
-
         internal const int MAX_DOCUMENTS_TRAY = 10;
         internal const int MAX_DOCUMENTS_BINDER = 10;
 
@@ -47,6 +35,7 @@ namespace DDSS_LobbyGuard.SecurityExtension
         internal const int MAX_DOCUMENT_CHARS = 240;
 
         internal const int MAX_INTERACTION_COOLDOWN = 30;
+        internal const float MAX_INTERACTION_DISTANCE = 2f;
 
         internal static int MAX_CIGS { get; private set; }
         internal static int MAX_CIG_PACKS { get; private set; }
@@ -71,14 +60,62 @@ namespace DDSS_LobbyGuard.SecurityExtension
             MAX_CIGS = MAX_PLAYERS * 3;
         }
 
-        internal static bool IsWithinRange(Vector3 posA, Vector3 posB,
-            float maxRange = MAX_DISTANCE_DEFAULT)
+        internal static bool IsWithinRange(Vector3 posA, Vector3 posB, float maxRange)
         {
             float distance = Vector3.Distance(posA, posB);
             if (distance < 0f)
                 distance *= -1f;
 
             return distance <= maxRange;
+        }
+
+        internal static bool IsPlayerWithinInteractRange<T>(NetworkIdentity player, T obj)
+            where T : Interactable
+        {
+            if ((player == null)
+                || player.WasCollected
+                || (obj == null)
+                || obj.WasCollected)
+                return false;
+
+            PlayerController playerController = player.GetPlayerController();
+            if ((playerController == null)
+                || playerController.WasCollected)
+                return false;
+
+            CameraController playerCamera = playerController.cameraController;
+            if ((playerCamera == null)
+                || playerCamera.WasCollected)
+                return false;
+
+            Collider objCollider = obj.gameObject.GetComponent<Collider>();
+            if ((objCollider == null)
+                || objCollider.WasCollected)
+                return false;
+
+            Vector3 cameraPos = playerCamera.transform.position;
+            Vector3 closestObjPoint = objCollider.ClosestPoint(cameraPos);
+            return IsWithinRange(cameraPos, closestObjPoint, MAX_INTERACTION_DISTANCE);
+        }
+
+        internal static bool IsPlayerWithinInteractRange(NetworkIdentity player, Vector3 closestObjPoint)
+        {
+            if ((player == null)
+                || player.WasCollected)
+                return false;
+
+            PlayerController playerController = player.GetPlayerController();
+            if ((playerController == null)
+                || playerController.WasCollected)
+                return false;
+
+            CameraController playerCamera = playerController.cameraController;
+            if ((playerCamera == null)
+                || playerCamera.WasCollected)
+                return false;
+
+            Vector3 cameraPos = playerCamera.transform.position;
+            return IsWithinRange(cameraPos, closestObjPoint, MAX_INTERACTION_DISTANCE);
         }
 
         private static int GetTotalCountOfSpawnedItem(string interactableName)

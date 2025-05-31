@@ -24,7 +24,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Pumpkin.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, pumpkin.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, pumpkin))
                 return false;
 
             __1.SafeReadNetworkIdentity();

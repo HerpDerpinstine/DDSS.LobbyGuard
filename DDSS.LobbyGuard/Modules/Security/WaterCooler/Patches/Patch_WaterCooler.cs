@@ -25,7 +25,7 @@ namespace DDSS_LobbyGuard.Modules.Security.WaterCooler.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, cooler.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, cooler))
                 return false;
 
             // Get Collectible
@@ -62,7 +62,7 @@ namespace DDSS_LobbyGuard.Modules.Security.WaterCooler.Patches
 
             // Validate Distance
             if (sender.IsGhost()
-                || !InteractionSecurity.IsWithinRange(sender.transform.position, cooler.transform.position))
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, cooler))
                 return false;
 
             // Validate Placement

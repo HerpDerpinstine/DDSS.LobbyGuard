@@ -35,7 +35,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, TV.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, TV))
                 return false;
 
             TV.UserCode_CmdShowPhotos__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -67,7 +67,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, TV.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, TV))
                 return false;
 
             __1.SafeReadNetworkIdentity();
@@ -106,7 +106,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, TV.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, TV))
                 return false;
 
             TV.UserCode_CmdEndSlideshow__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -138,7 +138,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, TV.transform.position, InteractionSecurity.MAX_DISTANCE_EXTENDED))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, TV))
                 return false;
 
             TV.UserCode_CmdStartTransfer__NetworkIdentity__NetworkConnectionToClient(sender, __2);

@@ -43,7 +43,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, cigarettePack.transform.position))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, cigarettePack))
                 return false;
 
             // Get Cigarette from Prefab
