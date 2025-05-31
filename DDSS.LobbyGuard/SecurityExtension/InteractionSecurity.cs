@@ -6,6 +6,7 @@ using Il2CppObjects.Scripts;
 using Il2CppPlayer;
 using Il2CppProps.Easel;
 using Il2CppProps.Printer;
+using Il2CppProps.VendingMachine;
 using Il2CppProps.WorkStation.Mouse;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ namespace DDSS_LobbyGuard.SecurityExtension
         internal static readonly Il2CppSystem.Type EaselType = Il2CppType.Of<EaselController>();
         internal static readonly Il2CppSystem.Type WhiteBoardType = Il2CppType.Of<WhiteBoardController>();
         internal static readonly Il2CppSystem.Type KitchenCabinetType = Il2CppType.Of<KitchenCabinetController>();
+        internal static readonly Il2CppSystem.Type VendingMachineType = Il2CppType.Of<VendingMachine>();
 
         internal const float MAX_DISTANCE_DEFAULT = 2f;
         internal const float MAX_DISTANCE_EXTENDED = 3f;

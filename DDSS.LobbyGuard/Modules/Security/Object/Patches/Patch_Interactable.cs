@@ -36,7 +36,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
                 || (interactType == InteractionSecurity.CCTVType)
                 || (interactType == InteractionSecurity.EaselType)
                 || (interactType == InteractionSecurity.WhiteBoardType)
-                || (interactType == InteractionSecurity.KitchenCabinetType))
+                || (interactType == InteractionSecurity.KitchenCabinetType)
+                || (interactType == InteractionSecurity.VendingMachineType))
                 maxDistance = InteractionSecurity.MAX_DISTANCE_EXTENDED;
 
             // Validate Distance
