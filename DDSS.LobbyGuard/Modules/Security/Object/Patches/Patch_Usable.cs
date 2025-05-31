@@ -41,10 +41,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
                 return false;
 
-            // Get Usable Type
-            Il2CppSystem.Type usableType = usable.GetIl2CppType();
-            if ((usableType == null)
-                || usableType.WasCollected)
+            // Validate Drop
+            if (!InteractionSecurity.CanStopUseUsable(sender, usable.TryCast<Chair>()))
                 return false;
 
             // Validate Chair
@@ -59,10 +57,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
                     phone.ForceCallToEnd(sender, __2);
             }
             */
-
-            // Validate Drop
-            if (!InteractionSecurity.CanStopUseUsable(sender, usable.TryCast<Chair>()))
-                return false;
 
             // Run Game Command
             usable.UserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -94,6 +88,10 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
             // Validate Distance
             if (controller.IsGhost()
                 || !InteractionSecurity.IsWithinRange(sender.transform.position, usable.transform.position))
+                return false;
+
+            // Validate Grab
+            if (!InteractionSecurity.CanUseUsable(sender, usable))
                 return false;
 
             // Get Usable Type
@@ -143,10 +141,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
                     }
                 }
             }
-
-            // Validate Grab
-            if (!InteractionSecurity.CanUseUsable(sender, usable))
-                return false;
 
             // Run Game Command
             usable.UserCode_CmdUse__NetworkIdentity__NetworkConnectionToClient(sender, __2);

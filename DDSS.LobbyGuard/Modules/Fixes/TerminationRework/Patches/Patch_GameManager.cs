@@ -210,9 +210,9 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
                 __instance.ServerFinnishMeeting();
 
             // Fire Player
-            player.RpcFirePlayer(true, (should_become_janitor || !is_janitor)
-                    ? current_role 
-                    : player.originalPlayerRole, 
+            player.RpcFirePlayer(true, is_janitor
+                    ? player.originalPlayerRole
+                    : current_role, 
                 current_role, 
                 !should_become_janitor);
 
