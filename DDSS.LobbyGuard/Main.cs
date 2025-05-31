@@ -38,19 +38,23 @@ namespace DDSS_LobbyGuard
                 Directory.CreateDirectory(_userDataPath);
 
             // Rename Legacy Config
+            string newTempFolder = Path.Combine(_userDataPath, "Old");
+            if (!Directory.Exists(newTempFolder))
+                Directory.CreateDirectory(newTempFolder);
+
             string legacyConfigPath = Path.Combine(_userDataPath, "Config.cfg");
             if (File.Exists(legacyConfigPath))
             {
                 string legacyName = "Legacy.cfg.old";
                 string tempFileName = legacyName;
-                string tempFilePath = Path.Combine(_userDataPath, tempFileName);
+                string tempFilePath = Path.Combine(newTempFolder, tempFileName);
 
                 int i = 0;
                 while (File.Exists(tempFilePath))
                 {
                     i++;
                     tempFileName = $"{legacyName}.{i}";
-                    tempFilePath = Path.Combine(_userDataPath, tempFileName);
+                    tempFilePath = Path.Combine(newTempFolder, tempFileName);
                 }
 
                 File.Move(legacyConfigPath, tempFilePath);
