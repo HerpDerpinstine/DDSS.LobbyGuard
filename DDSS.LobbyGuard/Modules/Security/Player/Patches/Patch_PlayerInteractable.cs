@@ -22,13 +22,19 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 || interact.WasCollected)
                 return false;
 
+            // Validate Target
+            PlayerController controller = interact.playerController;
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
             // Validate Sender
-            PlayerController controller = sender.GetComponent<PlayerController>();
-            if ((controller == null)
-                || controller.WasCollected)
+            PlayerController senderController = sender.GetComponent<PlayerController>();
+            if ((senderController == null)
+                || senderController.WasCollected)
                 return false;
 
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
@@ -45,7 +51,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position, InteractionSecurity.MAX_DISTANCE_PLAYER)
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position)
                 || !interact.HasPlayerRequestedHandShake(senderInteract))
                 return false;
 
@@ -66,13 +72,19 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 || interact.WasCollected)
                 return false;
 
+            // Validate Target
+            PlayerController controller = interact.playerController;
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
             // Validate Sender
-            PlayerController controller = sender.GetComponent<PlayerController>();
-            if ((controller == null)
-                || controller.WasCollected)
+            PlayerController senderController = sender.GetComponent<PlayerController>();
+            if ((senderController == null)
+                || senderController.WasCollected)
                 return false;
 
             LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
@@ -89,7 +101,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 return false;
 
             // Validate Distance
-            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position, InteractionSecurity.MAX_DISTANCE_PLAYER)
+            if (!InteractionSecurity.IsWithinRange(sender.transform.position, controller.transform.position)
                 || interact.HasPlayerRequestedHandShake(senderInteract))
                 return false;
 
