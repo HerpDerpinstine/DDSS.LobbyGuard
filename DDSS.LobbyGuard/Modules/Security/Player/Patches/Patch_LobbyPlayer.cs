@@ -34,7 +34,16 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 return;
 
             foreach (var usable in controller.currentUsables)
+            {
+                // Drop It
                 usable.UserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient(controllerNet, controller.connectionToClient);
+
+                // Manually Drop It on Server's Client
+                usable.UserCode_RpcOnStopUse__NetworkIdentity(controllerNet);
+
+                // Change Ownership
+                usable.netIdentity.RemoveClientAuthority();
+            }
         }
 
         [HarmonyPrefix]
@@ -66,7 +75,14 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 if (usableType != cameraType)
                     continue;
 
+                // Drop It
                 usable.UserCode_CmdStopUse__NetworkIdentity__NetworkConnectionToClient(controllerNet, controller.connectionToClient);
+
+                // Manually Drop It on Server's Client
+                usable.UserCode_RpcOnStopUse__NetworkIdentity(controllerNet);
+
+                // Change Ownership
+                usable.netIdentity.RemoveClientAuthority();
             }
         }
 
