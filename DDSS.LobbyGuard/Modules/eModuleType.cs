@@ -5,6 +5,7 @@
         General,
         Security,
         Fixes,
-        Extras
+        Extras,
+        Decay,
     }
 }
