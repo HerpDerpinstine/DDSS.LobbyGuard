@@ -1,6 +1,7 @@
 ﻿using DDSS_LobbyGuard.Components;
 using DDSS_LobbyGuard.SecurityExtension;
 using HarmonyLib;
+using Il2Cpp;
 using Il2CppMirror;
 using Il2CppProps.CameraProp;
 using MelonLoader;
@@ -15,6 +16,24 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
         [HarmonyPatch(typeof(CameraPropController), nameof(CameraPropController.OnStart))]
         private static void OnStart_Postfix(CameraPropController __instance)
         {
+            if ((CameraPropController.instance != null)
+                && !CameraPropController.instance.WasCollected
+                && (TaskHighlighter.instance != null)
+                && !TaskHighlighter.instance.WasCollected
+                && (TaskHighlighter.instance.highlightObjects != null)
+                && !TaskHighlighter.instance.highlightObjects.WasCollected)
+            {
+                foreach (HighlightObject highlighter in TaskHighlighter.instance.highlightObjects)
+                {
+                    if (highlighter.highlightObject != CameraPropController.instance.gameObject)
+                        continue;
+                    highlighter.highlightObject = __instance.gameObject;
+                    break;
+                }
+                TaskHighlighter.instance.UpdateHighlighter();
+            }
+            CameraPropController.instance = __instance;
+
             // Validate Prefab
             if ((CollectibleSecurity._cameraPrefab != null)
                 && !CollectibleSecurity._cameraPrefab.WasCollected)

@@ -165,11 +165,7 @@ namespace DDSS_LobbyGuard.SecurityExtension
                 _cameraSpawnPos,
                 _cameraSpawnRot,
                 CollectibleSecurityHandler.eCollectibleType.CAMERA,
-                (CameraPropController camera) =>
-                {
-                    CameraPropController.instance = camera;
-                    camera.gameObject.SetActive(true);
-                });
+                (CameraPropController camera) => camera.gameObject.SetActive(true));
 
         private delegate void dSpawnAndPlace<T>(T obj) 
             where T : Collectible;

@@ -5,6 +5,7 @@ using Il2CppGameManagement;
 using Il2CppMirror;
 using Il2CppPlayer.Lobby;
 using Il2CppProps.CameraProp;
+using Il2CppTMPro;
 
 namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
 {
@@ -79,7 +80,18 @@ namespace DDSS_LobbyGuard.Modules.Security.Assistant.Patches
             if (!InteractionSecurity.IsWithinRange(sender.transform.position, camera.transform.position))
                 return false;
 
-            camera.UpdateText();
+            // Reset Photo Text
+            TextMeshPro photoText = camera.photoCountText;
+            if ((photoText == null)
+                || photoText.WasCollected)
+                camera.ServerResetPhotos();
+            else
+            {
+                if (photoText.text == "0/0")
+                    camera.ServerResetPhotos();
+            }
+
+            // Pickup Camera
             camera.UserCode_CmdUseOverride__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
