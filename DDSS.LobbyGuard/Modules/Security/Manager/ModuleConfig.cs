@@ -8,7 +8,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager
         internal static ModuleConfig Instance { get; private set; }
 
         internal MelonPreferences_Entry<bool> SpawnManagerKeys;
-        internal MelonPreferences_Entry<bool> AutomaticallyDemotePreviousAssistant;
 
         public ModuleConfig() : base()
             => Instance = this;
@@ -25,11 +24,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Manager
                 "Spawn Manager Keys",
                 "Allows Spawning of Keys in Manager's Office",
                 true);
-
-            AutomaticallyDemotePreviousAssistant = CreatePref("AutomaticallyDemotePreviousAssistant",
-                "Automatically Demote Previous Assistant",
-                "Demotes any Previous Assistant when Promoting a New Assistant",
-                false);
         }
     }
 }
