@@ -83,7 +83,7 @@ namespace DDSS_LobbyGuard.SecurityExtension
                 || playerController.WasCollected)
                 return false;
 
-            CameraController playerCamera = playerController.cameraController;
+            Transform playerCamera = playerController.cameraPos;
             if ((playerCamera == null)
                 || playerCamera.WasCollected)
                 return false;
@@ -93,7 +93,7 @@ namespace DDSS_LobbyGuard.SecurityExtension
                 || objCollider.WasCollected)
                 return false;
 
-            Vector3 cameraPos = playerCamera.transform.position;
+            Vector3 cameraPos = playerCamera.position;
             Vector3 closestObjPoint = objCollider.ClosestPoint(cameraPos);
             return IsWithinRange(cameraPos, closestObjPoint, MAX_INTERACTION_DISTANCE);
         }
@@ -109,12 +109,12 @@ namespace DDSS_LobbyGuard.SecurityExtension
                 || playerController.WasCollected)
                 return false;
 
-            CameraController playerCamera = playerController.cameraController;
+            Transform playerCamera = playerController.cameraPos;
             if ((playerCamera == null)
                 || playerCamera.WasCollected)
                 return false;
 
-            Vector3 cameraPos = playerCamera.transform.position;
+            Vector3 cameraPos = playerCamera.position;
             return IsWithinRange(cameraPos, closestObjPoint, MAX_INTERACTION_DISTANCE);
         }
 
