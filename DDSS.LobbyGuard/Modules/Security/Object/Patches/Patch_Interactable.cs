@@ -29,22 +29,12 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
             if (sender.IsGhost())
                 return false;
 
-            // Get Max Distance
+            // Get Distance
             float maxDistance = InteractionSecurity.MAX_DISTANCE_DEFAULT;
-            Il2CppSystem.Type interactType = interact.GetIl2CppType();
-            if ((interactType == InteractionSecurity.TVType)
-                || (interactType == InteractionSecurity.CCTVType)
-                || (interactType == InteractionSecurity.EaselType)
-                || (interactType == InteractionSecurity.WhiteBoardType)
-                || (interactType == InteractionSecurity.KitchenCabinetType)
-                || (interactType == InteractionSecurity.VendingMachineType))
-                maxDistance = InteractionSecurity.MAX_DISTANCE_EXTENDED;
-
-            // Validate Distance
             float distance = Vector3.Distance(sender.transform.position, interact.transform.position);
             if (distance < 0f)
                 distance *= -1f;
-            if (distance > maxDistance)
+            if (distance > InteractionSecurity.MAX_DISTANCE_EXTENDED)
                 return false;
 
             // Validate Cooldown
