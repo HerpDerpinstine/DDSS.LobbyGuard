@@ -35,6 +35,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
             CameraPropController.instance = __instance;
 
             // Validate Prefab
+            if (!NetworkServer.activeHost)
+                return;
             if ((CollectibleSecurity._cameraPrefab != null)
                 && !CollectibleSecurity._cameraPrefab.WasCollected)
                 return;

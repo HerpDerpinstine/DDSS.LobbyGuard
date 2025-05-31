@@ -2,12 +2,12 @@
 using Il2Cpp;
 using Il2CppGameManagement;
 using Il2CppInterop.Runtime.Attributes;
+using Il2CppMirror;
 using Il2CppProps;
 using Il2CppProps.Keys;
 using Il2CppProps.Scripts;
 using Il2CppProps.Shelf;
 using Il2CppProps.Stereo;
-using MelonLoader;
 using System;
 using UnityEngine;
 
@@ -59,6 +59,8 @@ namespace DDSS_LobbyGuard.Components
 
         public void OnDestroy()
         {
+            if (!NetworkServer.activeHost)
+                return;
             if (collectibleType == eCollectibleType.NO_CALLBACK)
                 return;
 
