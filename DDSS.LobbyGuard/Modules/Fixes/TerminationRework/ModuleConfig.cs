@@ -21,9 +21,9 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework
         public override eModuleType ConfigType
             => eModuleType.Fixes;
         public override string ID
-            => "PlayerLeavesReduceTerminations";
+            => "TerminationRework";
         public override string DisplayName
-            => "Player Leaves Reduce Terminations";
+            => "TerminationRework";
 
         public override void CreatePreferences()
         {
