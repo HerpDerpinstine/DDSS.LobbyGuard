@@ -6,6 +6,5 @@
         Security,
         Fixes,
         Extras,
-        Decay,
     }
 }

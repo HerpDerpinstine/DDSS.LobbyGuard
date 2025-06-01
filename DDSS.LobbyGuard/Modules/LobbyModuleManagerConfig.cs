@@ -40,14 +40,14 @@ namespace DDSS_LobbyGuard.Modules
         private static void HandleVersionCheck()
         {
             if (!SemVersion.TryParse(_versionCheckEntry.GetValueAsString(), out var lastUsedVersion)
-                || !SemVersion.TryParse(BuildInfo.Version, out var currentVersion)
+                || !SemVersion.TryParse(Properties.BuildInfo.Version, out var currentVersion)
                 || (currentVersion > lastUsedVersion))
                 ResetPreferences();
         }
 
         private static void ResetPreferences()
         {
-            _versionCheckEntry.EditedValue = _versionCheckEntry.Value = BuildInfo.Version;
+            _versionCheckEntry.EditedValue = _versionCheckEntry.Value = Properties.BuildInfo.Version;
 
             foreach (var togglePair in _allToggles.Values)
                 foreach (var toggle in togglePair.Values)
