@@ -14,12 +14,12 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
         private static bool SetKeyBind_Prefix(KeyBindingObject __instance)
         {
             // Check for KeyCode Binds
-            if (!__instance.actionName.StartsWith(ModSettingsOptionBuilder._keyCodePrefix))
+            if (!__instance.actionName.StartsWith(ModSettingsManager._keyCodePrefix))
                 return true;
 
             // Update Value Text
-            __instance.keyBindText.text = __instance.actionName.Substring(ModSettingsOptionBuilder._keyCodePrefixLen,
-                __instance.actionName.Length - ModSettingsOptionBuilder._keyCodePrefixLen);
+            __instance.keyBindText.text = __instance.actionName.Substring(ModSettingsManager._keyCodePrefixLen,
+                __instance.actionName.Length - ModSettingsManager._keyCodePrefixLen);
 
             // Prevent Original
             return false;
@@ -30,12 +30,12 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
         private static bool RefreshKeyBindText_Prefix(KeyBindingObject __instance)
         {
             // Check for KeyCode Binds
-            if (!__instance.actionName.StartsWith(ModSettingsOptionBuilder._keyCodePrefix))
+            if (!__instance.actionName.StartsWith(ModSettingsManager._keyCodePrefix))
                 return true;
 
             // Update Value Text
-            __instance.keyBindText.text = __instance.actionName.Substring(ModSettingsOptionBuilder._keyCodePrefixLen,
-                __instance.actionName.Length - ModSettingsOptionBuilder._keyCodePrefixLen);
+            __instance.keyBindText.text = __instance.actionName.Substring(ModSettingsManager._keyCodePrefixLen,
+                __instance.actionName.Length - ModSettingsManager._keyCodePrefixLen);
 
             // Prevent Original
             return false;
@@ -46,7 +46,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
         private static bool UpdateKeyBind_Prefix(KeyBindingObject __instance)
         {
             // Check for KeyCode Binds
-            if (!__instance.actionName.StartsWith(ModSettingsOptionBuilder._keyCodePrefix))
+            if (!__instance.actionName.StartsWith(ModSettingsManager._keyCodePrefix))
                 return true;
 
             // Wait for User Input
@@ -55,7 +55,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
                 (newCode) =>
                 {
                     if (newCode != KeyCode.Escape)
-                        __instance.actionName = $"{ModSettingsOptionBuilder._keyCodePrefix}{Enum.GetName(newCode)}";
+                        __instance.actionName = $"{ModSettingsManager._keyCodePrefix}{Enum.GetName(newCode)}";
                     __instance.RefreshKeyBindText();
                 },
                 // Rebind Cancelled (manually or timeout)

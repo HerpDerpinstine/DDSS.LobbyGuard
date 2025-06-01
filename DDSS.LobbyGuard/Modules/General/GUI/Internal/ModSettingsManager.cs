@@ -1,6 +1,4 @@
-﻿using DDSS_LobbyGuard.Modules.General.GUI.Internal.MainMenu;
-using DDSS_LobbyGuard.Utils;
-using Il2Cpp;
+﻿using DDSS_LobbyGuard.Utils;
 using Il2CppUMUI;
 using System;
 using System.Collections;
@@ -10,15 +8,24 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 {
     internal static class ModSettingsManager
     {
-        internal static SettingsTab _tab;
-        internal static RectTransform _tabRect;
+        internal static readonly string _keyCodePrefix = "KeyCode_";
+        internal static readonly int _keyCodePrefixLen = _keyCodePrefix.Length;
+
+        internal static ModSettingsBuilder _builder;
         internal static Coroutine _rebindCoroutine;
         private static Action _lastOnCancel;
 
-        internal static void MainMenuInit()
+        internal static void SceneInit(string sceneName)
         {
-            MainMenuPanelBuilder.MainMenuInit();
-            ModSettingsPanelBuilder.Create(ref _tab, ref _tabRect);
+            switch (sceneName)
+            {
+                case "MainMenuScene":
+                    _builder = new MainMenuModSettings();
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         internal static void OpenModSettings()
@@ -29,7 +36,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                 return;
 
             // Open Custom Tab
-            UIManager.instance.tabs["LobbyGuardSettings"] = _tab;
+            UIManager.instance.tabs["LobbyGuardSettings"] = _builder._tab;
             UIManager.instance.OpenTab("LobbyGuardSettings");
         }
 
@@ -81,14 +88,14 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 
             _lastOnCancel = onCancel;
             _rebindCoroutine =
-                _tab.StartCoroutine(RebindCoroutine(onChange, onCancel, onTick, maxTime));
+                _builder._tab.StartCoroutine(RebindCoroutine(onChange, onCancel, onTick, maxTime));
         }
 
         internal static void CancelRebind()
         {
             if (_rebindCoroutine == null)
                 return;
-            _tab.StopCoroutine(_rebindCoroutine);
+            _builder._tab.StopCoroutine(_rebindCoroutine);
             _lastOnCancel();
             _lastOnCancel = null;
             _rebindCoroutine = null;

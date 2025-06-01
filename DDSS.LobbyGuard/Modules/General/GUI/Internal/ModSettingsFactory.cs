@@ -1,6 +1,9 @@
 ﻿using DDSS_LobbyGuard.Config;
 using Il2Cpp;
+using Il2CppLocalization;
+using Il2CppTMPro;
 using Il2CppUI.Tabs.SettingsTab;
+using Il2CppUMUI.UiElements;
 using MelonLoader;
 using System;
 using System.Collections.Generic;
@@ -31,7 +34,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                 cat.Save();
 
             // Reset Objects
-            ModSettingsManager._tab.ShowSettings();
+            ModSettingsManager._builder.ShowSettings();
 
             // Log Changes
             MelonMain._logger.Msg("Settings have been Reset!");
@@ -71,10 +74,10 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
         {
             // Clear Old Listings
             _categoryCache.Clear();
-            int childCount = ModSettingsManager._tab.categoryGrid.childCount;
+            int childCount = ModSettingsManager._builder._categoryGrid.childCount;
             if (childCount > 0)
                 for (int i = 0; i < childCount; i++)
-                    UnityEngine.Object.Destroy(ModSettingsManager._tab.categoryGrid.GetChild(i).gameObject);
+                    UnityEngine.Object.Destroy(ModSettingsManager._builder._categoryGrid.GetChild(i).gameObject);
 
             // Add New Listings
             int index = 0;
@@ -82,12 +85,12 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
             {
                 // Create Category Button
                 string catName = Enum.GetName(cat);
-                CategoryButton category = ModSettingsCategoryBuilder.CreateButton(catName);
+                CategoryButton category = ModSettingsManager._builder.CreateCategoryButton(catName);
                 _categoryCache[cat] = category;
                 category.categoryIndex = index;
-                category.SetSelected(ModSettingsManager._tab.currentCategoryIndex);
-                category.button.enabled = ModSettingsManager._tab.currentCategoryIndex != index;
-                category.button.SetHighlighted(ModSettingsManager._tab.currentCategoryIndex == index);
+                category.SetSelected(ModSettingsManager._builder.currentCategoryIndex);
+                category.button.enabled = ModSettingsManager._builder.currentCategoryIndex != index;
+                category.button.SetHighlighted(ModSettingsManager._builder.currentCategoryIndex == index);
 
                 // Fix Button
                 category.button.OnClick = new();
@@ -111,8 +114,8 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 
                 if (melonEntryType == typeof(KeyCode))
                 {
-                    string valueStr = setting.keyBind.actionName.Substring(ModSettingsOptionBuilder._keyCodePrefixLen,
-                        setting.keyBind.actionName.Length - ModSettingsOptionBuilder._keyCodePrefixLen);
+                    string valueStr = setting.keyBind.actionName.Substring(ModSettingsManager._keyCodePrefixLen,
+                        setting.keyBind.actionName.Length - ModSettingsManager._keyCodePrefixLen);
                     KeyCode[] enumValues = Enum.GetValues<KeyCode>();
                     foreach (KeyCode obj in enumValues)
                     {
@@ -152,7 +155,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
             CacheSettingChanges();
 
             // Select New Category
-            ModSettingsManager._tab.SelectCategory(button.categoryIndex);
+            ModSettingsManager._builder.SelectCategory(button.categoryIndex);
             button.SetSelected(button.categoryIndex);
             button.button.enabled = false;
             button.button.SetHighlighted(true);
@@ -166,28 +169,56 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
             }
 
             // Scroll To Top
-            ModSettingsManager._tab.StartCoroutine(ModSettingsManager._tab.ScrollToTopNextFrame());
+            ModSettingsManager._builder._tab.StartCoroutine(ModSettingsManager._builder.ScrollToTopNextFrame());
+        }
+
+        internal static void SetupButton(Transform trans, Vector3 localPos, string text, Action onClick)
+        {
+            // Move Object
+            trans.localPosition = localPos;
+
+            // Rename Object
+            trans.name = text;
+
+            // Set Text
+            TextMeshProUGUI creditsText = trans.GetComponentInChildren<TextMeshProUGUI>();
+            if (creditsText != null)
+                creditsText.text = text;
+
+            // Remove Localization
+            LocalizedText localized = trans.GetComponentInChildren<LocalizedText>();
+            if (localized != null)
+                UnityEngine.Object.Destroy(localized);
+
+            // Apply new Button Callback
+            UMUIButton cloneSettingsButton = trans.GetComponentInChildren<UMUIButton>();
+            if (cloneSettingsButton != null)
+            {
+                // Create Event to Open Custom Tab
+                cloneSettingsButton.OnClick = new();
+                cloneSettingsButton.OnClick.AddListener(onClick);
+            }
         }
 
         internal static void Generate()
         {
             // Clear Old Listings
             _settingCache.Clear();
-            int childCount = ModSettingsManager._tab.settingsParent.childCount;
+            int childCount = ModSettingsManager._builder._settingParent.childCount;
             if (childCount > 0)
                 for (int i = 0; i < childCount; i++)
-                    UnityEngine.Object.Destroy(ModSettingsManager._tab.settingsParent.GetChild(i).gameObject);
+                    UnityEngine.Object.Destroy(ModSettingsManager._builder._settingParent.GetChild(i).gameObject);
 
             // Add New Listings
             foreach (var cat in ConfigCategory._allCategories.Values)
             {
-                if (ModSettingsManager._tab.currentCategoryIndex != (int)cat.ConfigType)
+                if (ModSettingsManager._builder.currentCategoryIndex != (int)cat.ConfigType)
                     continue;
 
                 MelonPreferences_Category melonCat = cat.Category;
 
                 // Create Category Object
-                ModSettingsCategoryBuilder.Create(melonCat.DisplayName);
+                ModSettingsManager._builder.CreateCategory(melonCat.DisplayName);
 
                 // Iterate through Entries
                 foreach (MelonPreferences_Entry melonEntry in melonCat.Entries)
@@ -199,26 +230,26 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                     // Create Entry Objects
                     Type melonEntryType = melonEntry.GetReflectedType();
                     if (melonEntryType == typeof(KeyCode))
-                        _settingCache.Add(ModSettingsOptionBuilder.CreateKeybind(
+                        _settingCache.Add(ModSettingsManager._builder.CreateSettingKeybind(
                             melonEntry.DisplayName,
                             string.Empty, // melonEntry.Description,
                             (KeyCode)melonEntry.BoxedEditedValue),
                             melonEntry);
                     else if (melonEntryType.IsEnum)
-                        _settingCache.Add(ModSettingsOptionBuilder.CreateEnum(
+                        _settingCache.Add(ModSettingsManager._builder.CreateSettingEnum(
                             melonEntry.DisplayName,
                             string.Empty, // melonEntry.Description,
                             melonEntry.GetEditedValueAsString(),
                             melonEntryType),
                             melonEntry);
                     else if (melonEntryType == typeof(bool))
-                        _settingCache.Add(ModSettingsOptionBuilder.CreateToggle(
+                        _settingCache.Add(ModSettingsManager._builder.CreateSettingToggle(
                             melonEntry.DisplayName,
                             string.Empty, // melonEntry.Description,
                             (bool)melonEntry.BoxedEditedValue),
                             melonEntry);
                     else if (melonEntryType == typeof(int))
-                        _settingCache.Add(ModSettingsOptionBuilder.CreateNumber(
+                        _settingCache.Add(ModSettingsManager._builder.CreateSettingNumber(
                             melonEntry.DisplayName,
                             string.Empty, // melonEntry.Description,
                             (int)melonEntry.BoxedEditedValue,
@@ -226,7 +257,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                             int.MaxValue),
                             melonEntry);
                     else if (melonEntryType == typeof(uint))
-                        _settingCache.Add(ModSettingsOptionBuilder.CreateNumber(
+                        _settingCache.Add(ModSettingsManager._builder.CreateSettingNumber(
                             melonEntry.DisplayName,
                             string.Empty, // melonEntry.Description,
                             (uint)melonEntry.BoxedEditedValue,
@@ -234,7 +265,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                             uint.MaxValue),
                             melonEntry);
                     else if (melonEntryType == typeof(float))
-                        _settingCache.Add(ModSettingsOptionBuilder.CreateNumber(
+                        _settingCache.Add(ModSettingsManager._builder.CreateSettingNumber(
                             melonEntry.DisplayName,
                             string.Empty, // melonEntry.Description,
                             (float)melonEntry.BoxedEditedValue,
@@ -242,7 +273,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                             float.MaxValue),
                             melonEntry);
                     else if (melonEntryType == typeof(short))
-                        _settingCache.Add(ModSettingsOptionBuilder.CreateNumber(
+                        _settingCache.Add(ModSettingsManager._builder.CreateSettingNumber(
                             melonEntry.DisplayName,
                             string.Empty, // melonEntry.Description,
                             (short)melonEntry.BoxedEditedValue,
@@ -250,7 +281,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                             short.MaxValue),
                             melonEntry);
                     else if (melonEntryType == typeof(ushort))
-                        _settingCache.Add(ModSettingsOptionBuilder.CreateNumber(
+                        _settingCache.Add(ModSettingsManager._builder.CreateSettingNumber(
                             melonEntry.DisplayName,
                             string.Empty, // melonEntry.Description,
                             (ushort)melonEntry.BoxedEditedValue,
@@ -261,7 +292,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
             }
 
             // Scroll To Top
-            ModSettingsManager._tab.StartCoroutine(ModSettingsManager._tab.ScrollToTopNextFrame());
+            ModSettingsManager._builder._tab.StartCoroutine(ModSettingsManager._builder.ScrollToTopNextFrame());
         }
     }
 }

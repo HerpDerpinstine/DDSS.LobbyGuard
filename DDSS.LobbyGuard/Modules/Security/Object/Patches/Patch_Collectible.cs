@@ -10,7 +10,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
         [HarmonyPatch(typeof(Collectible), nameof(Collectible.Start))]
         private static void Start_Postfix(Collectible __instance)
         {
-            __instance.despawnAfterIdle = ModuleConfig.Instance.DespawnIdleCollectibles.Value;
+            if (__instance.despawnAfterIdle)
+                __instance.despawnAfterIdle = ModuleConfig.Instance.DespawnIdleCollectibles.Value;
         }
     }
 }

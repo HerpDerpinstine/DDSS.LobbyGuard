@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+
+/*
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+*/
 
 namespace DDSS_LobbyGuard.Modules.Security.Object
 {
@@ -8,6 +12,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Object
     {
         public override string Name => "Object";
         public override eModuleType ModuleType => eModuleType.Security;
+        public override Type ConfigType => typeof(ModuleConfig);
 
         /*
         public override void OnSceneInit(int buildIndex, string sceneName)

@@ -1,20 +1,81 @@
 ﻿using Il2Cpp;
 using Il2CppLocalization;
+using Il2CppSystem.Collections;
+using Il2CppTMPro;
 using Il2CppUI.Tabs.SettingsTab;
+using Il2CppUMUI;
 using System;
 using UnityEngine;
 
 namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 {
-    internal static class ModSettingsOptionBuilder
+    // It's name is Bob
+    internal abstract class ModSettingsBuilder
     {
-        internal static string _keyCodePrefix = "KeyCode_";
-        internal static int _keyCodePrefixLen = _keyCodePrefix.Length;
+        #region Internal Members
 
-        private static SettingObject CreateObject(Setting setting)
+        internal UiTab _tab;
+        internal GameObject _tabObj;
+
+        internal GameObject _categoryPrefab;
+        internal GameObject _categoryButtonPrefab;
+        internal Transform _categoryGrid;
+
+        internal GameObject _settingPrefab;
+        internal Transform _settingParent;
+        internal RectTransform _settingParentRect;
+
+        internal abstract int currentCategoryIndex { get; set; }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal ModSettingsBuilder()
         {
-            GameObject obj = UnityEngine.Object.Instantiate(ModSettingsManager._tab.settingPrefab,
-                ModSettingsManager._tab.settingsParent);
+            CreatePanel();
+            CreateTab();
+        }
+
+        internal abstract void CreateTab();
+        internal abstract void CreatePanel();
+        internal abstract void ShowSettings();
+        internal abstract void SelectCategory(int categoryIndex);
+        internal abstract IEnumerator ScrollToTopNextFrame();
+
+        #endregion
+
+        #region Category
+
+        internal GameObject CreateCategory(string name)
+        {
+            if ((_categoryPrefab == null)
+                || _categoryPrefab.WasCollected
+                || (_settingParent == null)
+                || _settingParent.WasCollected)
+                return null;
+
+            GameObject catObj = UnityEngine.Object.Instantiate(_categoryPrefab, _settingParent);
+            TextMeshProUGUI catTmp = catObj.GetComponentInChildren<TextMeshProUGUI>();
+            catTmp.text = name;
+            catTmp.autoSizeTextContainer = true;
+            return catObj;
+        }
+        internal CategoryButton CreateCategoryButton(string name)
+        {
+            GameObject catObj = UnityEngine.Object.Instantiate(_categoryButtonPrefab, _categoryGrid);
+            TextMeshProUGUI catTmp = catObj.GetComponentInChildren<TextMeshProUGUI>();
+            catTmp.text = name;
+            return catObj.GetComponent<CategoryButton>();
+        }
+
+        #endregion
+
+        #region Setting
+
+        private SettingObject CreateSettingObject(Setting setting)
+        {
+            GameObject obj = UnityEngine.Object.Instantiate(_settingPrefab, _settingParent);
             SettingObject settingObj = obj.GetComponent<SettingObject>();
             settingObj.SetSetting(setting, GameSettingsManager.instance, true, true);
 
@@ -25,7 +86,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
             return settingObj;
         }
 
-        private static Setting CreateSetting(string name,
+        private Setting CreateSetting(string name,
             string description,
             SettingType type = SettingType.MultiChoice)
         {
@@ -39,18 +100,18 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
             return setting;
         }
 
-        internal static SettingObject CreateKeybind(string name,
+        internal SettingObject CreateSettingKeybind(string name,
             string description,
             KeyCode value)
         {
             Setting setting = CreateSetting(name, description, SettingType.KeyBind);
-            setting.axisName = $"{_keyCodePrefix}{Enum.GetName(typeof(KeyCode), value)}";
-            SettingObject obj = CreateObject(setting);
+            setting.axisName = $"{ModSettingsManager._keyCodePrefix}{Enum.GetName(typeof(KeyCode), value)}";
+            SettingObject obj = CreateSettingObject(setting);
             obj.keyBind.RefreshKeyBindText();
             return obj;
         }
 
-        internal static SettingObject CreateToggle(string name,
+        internal SettingObject CreateSettingToggle(string name,
             string description,
             bool value)
         {
@@ -59,10 +120,10 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
             setting.alternatives.Add(new("OFF", "OFF"));
             setting.alternatives.Add(new("ON", "ON"));
             setting.Value = value ? 1f : 0f;
-            return CreateObject(setting);
+            return CreateSettingObject(setting);
         }
 
-        internal static SettingObject CreateNumber<T>(
+        internal SettingObject CreateSettingNumber<T>(
             string name,
             string description,
             T value,
@@ -82,10 +143,10 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
             else
                 setting.Value = Convert.ToSingle(value);
 
-            return CreateObject(setting);
+            return CreateSettingObject(setting);
         }
 
-        internal static SettingObject CreateEnum(string name,
+        internal SettingObject CreateSettingEnum(string name,
             string description,
             string value,
             Type enumType)
@@ -108,7 +169,9 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
             }
             setting.Value = valueIndex;
 
-            return CreateObject(setting);
+            return CreateSettingObject(setting);
         }
+
+        #endregion
     }
 }

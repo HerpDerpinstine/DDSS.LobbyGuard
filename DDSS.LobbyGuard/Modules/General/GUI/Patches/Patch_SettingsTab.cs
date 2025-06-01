@@ -13,7 +13,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
         private static bool ShowSettings_Prefix(SettingsTab __instance)
         {
             // Check for Mod Settings Tab
-            if (__instance != ModSettingsManager._tab)
+            if (__instance != ModSettingsManager._builder._tab)
                 return true;
 
             // Generate Entries
@@ -28,7 +28,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
         private static bool ShowCategories_Prefix(SettingsTab __instance)
         {
             // Check for Mod Settings Tab
-            if (__instance != ModSettingsManager._tab)
+            if (__instance != ModSettingsManager._builder._tab)
                 return true;
 
             // Generate Categories
@@ -43,7 +43,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
         private static bool ApplyAllSettings_Prefix(SettingsTab __instance)
         {
             // Check for Mod Settings Tab
-            if (__instance != ModSettingsManager._tab)
+            if (__instance != ModSettingsManager._builder._tab)
                 return true;
 
             // Apply Changes
@@ -58,7 +58,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Patches
         private static bool ResetAllSettings_Prefix(SettingsTab __instance)
         {
             // Check for Mod Settings Tab
-            if (__instance != ModSettingsManager._tab)
+            if (__instance != ModSettingsManager._builder._tab)
                 return true;
 
             // Reset to Default
