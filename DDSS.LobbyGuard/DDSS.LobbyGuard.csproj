@@ -106,4 +106,7 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\General\GUI\Internal\Lobby\" />
+  </ItemGroup>
 </Project>

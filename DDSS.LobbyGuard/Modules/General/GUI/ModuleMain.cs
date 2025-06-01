@@ -13,7 +13,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI
             if (sceneName != "MainMenuScene")
                 return;
 
-            MainMenuPanelBuilder.MainMenuInit();
+            ModSettingsManager.MainMenuInit();
         }
     }
 }

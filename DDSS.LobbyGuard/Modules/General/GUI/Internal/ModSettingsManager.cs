@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.Modules.General.GUI.Internal.MainMenu;
+using DDSS_LobbyGuard.Utils;
 using Il2Cpp;
 using Il2CppUMUI;
 using System;
@@ -15,7 +16,10 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
         private static Action _lastOnCancel;
 
         internal static void MainMenuInit()
-            => ModSettingsPanelBuilder.Create(ref _tab, ref _tabRect);
+        {
+            MainMenuPanelBuilder.MainMenuInit();
+            ModSettingsPanelBuilder.Create(ref _tab, ref _tabRect);
+        }
 
         internal static void OpenModSettings()
         {

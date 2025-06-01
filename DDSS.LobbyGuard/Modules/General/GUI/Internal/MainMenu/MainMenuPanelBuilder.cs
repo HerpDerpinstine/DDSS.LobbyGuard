@@ -6,7 +6,7 @@ using Il2CppUMUI.UiElements;
 using System;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
+namespace DDSS_LobbyGuard.Modules.General.GUI.Internal.MainMenu
 {
     internal static class MainMenuPanelBuilder
     {
@@ -103,8 +103,6 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                     "Settings",
                     new Action(() => ModSettingsManager.OpenModSettings()));
             }
-
-            ModSettingsManager.MainMenuInit();
         }
 
         internal static void SetupButton(Transform trans, Vector3 localPos, string text, Action onClick)
