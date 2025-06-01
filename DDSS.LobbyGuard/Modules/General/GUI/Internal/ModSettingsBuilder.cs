@@ -16,6 +16,12 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 
         internal UiTab _tab;
         internal GameObject _tabObj;
+        internal SettingsTab _tabCasted;
+        internal static GameObject _tabStatic;
+
+        internal UiTab _panelTab;
+        internal GameObject _panelTabObj;
+        internal static GameObject _panelTabStatic;
 
         internal GameObject _categoryPrefab;
         internal GameObject _categoryButtonPrefab;
@@ -25,7 +31,11 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
         internal Transform _settingParent;
         internal RectTransform _settingParentRect;
 
-        internal abstract int currentCategoryIndex { get; set; }
+        internal int currentCategoryIndex
+        {
+            get => _tabCasted.currentCategoryIndex;
+            set => _tabCasted.currentCategoryIndex = value;
+        }
 
         #endregion
 
@@ -35,13 +45,35 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
         {
             CreatePanel();
             CreateTab();
+
+            if ((_panelTabStatic == null)
+                || _panelTabStatic.WasCollected)
+            {
+                _panelTabStatic = GameObject.Instantiate(_panelTabObj);
+                _panelTabStatic.SetActive(false);
+                GameObject.DontDestroyOnLoad(_panelTabStatic);
+            }
+
+            if ((_tabStatic == null)
+                || _tabStatic.WasCollected)
+            {
+                _tabStatic = GameObject.Instantiate(_tabObj);
+                _tabStatic.SetActive(false);
+                GameObject.DontDestroyOnLoad(_tabStatic);
+            }
         }
 
         internal abstract void CreateTab();
         internal abstract void CreatePanel();
-        internal abstract void ShowSettings();
-        internal abstract void SelectCategory(int categoryIndex);
-        internal abstract IEnumerator ScrollToTopNextFrame();
+
+        internal void ShowSettings()
+            => _tabCasted.ShowSettings();
+
+        internal void SelectCategory(int categoryIndex)
+            => _tabCasted.SelectCategory(categoryIndex);
+
+        internal IEnumerator ScrollToTopNextFrame()
+            => _tabCasted.ScrollToTopNextFrame();
 
         #endregion
 

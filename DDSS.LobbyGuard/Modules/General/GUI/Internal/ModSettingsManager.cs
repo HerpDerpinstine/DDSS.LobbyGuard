@@ -23,6 +23,10 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                     _builder = new MainMenuModSettings();
                     break;
 
+                case "LobbyScene":
+                    _builder = new LobbyModSettings();
+                    break;
+
                 default:
                     break;
             }
