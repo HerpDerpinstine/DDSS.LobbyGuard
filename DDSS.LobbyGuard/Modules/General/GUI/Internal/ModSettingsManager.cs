@@ -8,6 +8,8 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 {
     internal static class ModSettingsManager
     {
+        internal const string _tabID = "LobbyGuardSettings";
+
         internal static readonly string _keyCodePrefix = "KeyCode_";
         internal static readonly int _keyCodePrefixLen = _keyCodePrefix.Length;
 
@@ -40,8 +42,8 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                 return;
 
             // Open Custom Tab
-            UIManager.instance.tabs["LobbyGuardSettings"] = _builder._tab;
-            UIManager.instance.OpenTab("LobbyGuardSettings");
+            UIManager.instance.tabs[_tabID] = _builder._tab;
+            UIManager.instance.OpenTab(_tabID);
         }
 
         internal static float IncrementCustomSettingValue(Type targetType,

@@ -24,8 +24,9 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                 _tabObj = UnityEngine.Object.Instantiate(_tabStatic, comp.transform.parent);
 
                 _tabCasted = _tabObj.GetComponent<SettingsTab>();
+                _tabCasted.isOverlay = true;
 
-                _tabObj.name = _tabCasted.name = "LobbyGuardSettings";
+                _tabObj.name = _tabCasted.name = ModSettingsManager._tabID;
 
                 // Get References
                 _tab = _tabCasted;
@@ -62,21 +63,35 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                 canvasLayout.childAlignment = TextAnchor.MiddleCenter;
 
                 // Change Clone Title
-                Transform cloneTitleTrans = _tabObj.transform.Find("Tab/Tasks/TopBar/Title");
+                Transform cloneTitleTrans = _tabObj.transform.FindChild("Tab/Tasks/TopBar/Title");
                 if (cloneTitleTrans != null)
                 {
-                    TextMeshProUGUI cloneSettingsText = cloneTitleTrans.GetComponentInChildren<TextMeshProUGUI>();
+                    Vector3 titlePos = cloneTitleTrans.localPosition;
+                    titlePos.x = 0f;
+                    cloneTitleTrans.localPosition = titlePos;
+
+                    TextMeshProUGUI cloneSettingsText = cloneTitleTrans.GetComponent<TextMeshProUGUI>();
                     if (cloneSettingsText != null)
-                        cloneSettingsText.text = "LobbyGuard Settings";
+                    {
+                        cloneSettingsText.text = " LobbyGuard Settings";
+                        cloneSettingsText.alignment = TextAlignmentOptions.Center;
+                    }
+
+                    LocalizedText localized = cloneTitleTrans.GetComponent<LocalizedText>();
+                    if (localized != null)
+                        UnityEngine.Object.Destroy(localized);
                 }
 
                 // Fix Close Button
-                Transform closeButtonTrans = _tabObj.transform.Find("Canvas/LobbyGuardSettings/Tab/Tasks/TopBar/Close");
+                Transform closeButtonTrans = _tabObj.transform.FindChild("Tab/Tasks/TopBar/Close");
                 if (closeButtonTrans != null)
                 {
-                    UMUIButton closeButton = closeButtonTrans.GetComponentInChildren<UMUIButton>();
+                    UMUIButton closeButton = closeButtonTrans.GetComponent<UMUIButton>();
                     if (closeButton != null)
-                        closeButton.OnClick.AddListener((Action)ModSettingsFactory.OnClose);
+                        closeButton.OnClick.AddListener(new Action(ModSettingsFactory.OnClose));
+                    LocalizedText localized = closeButton.GetComponent<LocalizedText>();
+                    if (localized != null)
+                        UnityEngine.Object.Destroy(localized);
                 }
 
                 break;
@@ -99,7 +114,7 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                 // Apply New Tab
                 _panelTab = _panelTabObj.GetComponent<UiTab>();
                 _panelTab.InitTab();
-                UIManager.instance.tabs["LobbyGuardSettings"] = _panelTab;
+                UIManager.instance.tabs[ModSettingsManager._tabID] = _panelTab;
                 MenuTab[] menuTabs = Resources.FindObjectsOfTypeAll<MenuTab>();
                 if (menuTabs.Length > 0)
                     foreach (MenuTab tab in menuTabs)
@@ -107,29 +122,70 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                         tab.childTabs.Add(_panelTab);
                         break;
                     }
-
+                
                 // Get New Panel Title
-                Transform titleTextTrans = _panelTabObj.transform.Find("NewsLetter/TopBar/Title");
+                Transform titleTextTrans = _panelTabObj.transform.FindChild("NewsLetter/TopBar/Title");
                 if (titleTextTrans != null)
                 {
+                    Vector3 titlePos = titleTextTrans.localPosition;
+                    titlePos.x = 0f;
+                    titleTextTrans.localPosition = titlePos;
+
                     // Set Text
-                    TextMeshProUGUI titleText = titleTextTrans.GetComponentInChildren<TextMeshProUGUI>();
+                    TextMeshProUGUI titleText = titleTextTrans.GetComponent<TextMeshProUGUI>();
                     if (titleText != null)
+                    {
                         titleText.text = $"{Properties.BuildInfo.Name} v{Properties.BuildInfo.Version}";
+                        titleText.alignment = TextAlignmentOptions.Center;
+                    }
+
+                    // Remove Localization
+                    LocalizedText localized = titleTextTrans.GetComponent<LocalizedText>();
+                    if (localized != null)
+                        UnityEngine.Object.Destroy(localized);
                 }
 
                 // Get New Panel Text
-                Transform descriptionTextTrans = _panelTabObj.transform.Find("NewsLetter/Title (1)");
+                Transform descriptionTextTrans = _panelTabObj.transform.FindChild("NewsLetter/Title");
+                if (descriptionTextTrans == null)
+                    descriptionTextTrans = _panelTabObj.transform.FindChild("NewsLetter/Title (1)");
                 if (descriptionTextTrans != null)
                 {
                     // Set Text
-                    TextMeshProUGUI descriptionText = descriptionTextTrans.GetComponentInChildren<TextMeshProUGUI>();
+                    TextMeshProUGUI descriptionText = descriptionTextTrans.GetComponent<TextMeshProUGUI>();
                     if (descriptionText != null)
+                    {
                         descriptionText.text = $"{Properties.BuildInfo.Description}\nCreated by {Properties.BuildInfo.Author}";
+                        descriptionText.alignment = TextAlignmentOptions.Center;
+                    }
+
+                    // Remove Localization
+                    LocalizedText localized = descriptionTextTrans.GetComponent<LocalizedText>();
+                    if (localized != null)
+                        UnityEngine.Object.Destroy(localized);
+                }
+
+                // Fix Lobby Settings
+                Transform lobbyButtonTrans = comp.transform.FindChild("Tab/Settings/Ready");
+                if (lobbyButtonTrans != null)
+                {
+                    UMUIButton lobbyButton = lobbyButtonTrans.GetComponent<UMUIButton>();
+                    if (lobbyButton != null)
+                    {
+                        var originalClick = lobbyButton.OnClick;
+                        lobbyButton.OnClick = new();
+                        lobbyButton.OnClick.AddListener(new Action(() =>
+                        {
+                            UIManager.instance.CloseTab(1);
+                            if (originalClick != null)
+                                originalClick.Invoke();
+                            ModSettingsFactory.OnClose();
+                        }));
+                    }
                 }
 
                 // Setup GitHub Button
-                Transform githubButtonTrans = _panelTabObj.transform.Find("NewsLetter/GitHub");
+                Transform githubButtonTrans = _panelTabObj.transform.FindChild("NewsLetter/GitHub");
                 if (githubButtonTrans != null)
                     ModSettingsFactory.SetupButton(
                         githubButtonTrans,
@@ -138,14 +194,18 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
                         new Action(() => Application.OpenURL(Properties.BuildInfo.DownloadLink)));
 
                 // Setup Settings Button
-                Transform newButton = _panelTabObj.transform.Find("NewsLetter/Settings");
+                Transform newButton = _panelTabObj.transform.FindChild("NewsLetter/Settings");
                 if (newButton != null)
                     ModSettingsFactory.SetupButton(
                         newButton,
                         new(85, -66, 0),
                         "Settings",
-                        new Action(() => ModSettingsManager.OpenModSettings()));
-
+                        new Action(() =>
+                        {
+                            UIManager.instance.CloseTab(1);
+                            ModSettingsManager.OpenModSettings();
+                        }));
+                
                 break;
             }
         }
