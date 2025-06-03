@@ -125,7 +125,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
                 return false;
 
             // Get Document Content
-            bool setLabel = true;
+            bool isPremadeDocument = false;
             string fileName = __1.SafeReadString();
             string documentContent = __1.SafeReadString().RemoveRichText();
             if (!string.IsNullOrEmpty(fileName)
@@ -135,7 +135,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
                 if ((textAsset != null)
                     && !textAsset.WasCollected)
                 {
-                    setLabel = false;
+                    isPremadeDocument = true;
                     documentContent = textAsset.text;
                 }
                 else
@@ -143,14 +143,16 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
             }
             else
                 fileName = "Document";
-            if (string.IsNullOrEmpty(documentContent)
-                || string.IsNullOrWhiteSpace(documentContent))
-                return false;
 
-            if (setLabel)
+            if (!isPremadeDocument)
             {
+                if (string.IsNullOrEmpty(documentContent)
+                    || string.IsNullOrWhiteSpace(documentContent))
+                    return false;
+
                 if (documentContent.Length > InteractionSecurity.MAX_DOCUMENT_CHARS)
                     documentContent = documentContent.Substring(0, InteractionSecurity.MAX_DOCUMENT_CHARS);
+
                 if (string.IsNullOrEmpty(documentContent)
                     || string.IsNullOrWhiteSpace(documentContent))
                     return false;
@@ -174,19 +176,36 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
             NetworkServer.Spawn(docObj);
 
             // Get New Label
-            string newLabel = setLabel
-                ? (ModuleConfig.Instance.UsernamesOnPrintedDocuments.Value ? $"{userName.RemoveRichText()}'s Document" : "Document")
-                : fileName;
+            string newLabel = fileName;
             if (newLabel == "SalesReport")
                 newLabel = "Sales Report";
+            string playerLabel = isPremadeDocument
+                ? newLabel
+                : $"{userName.RemoveRichText()}'s Document";
 
             // Apply Label and Text
-            docCopy.SetLabel(newLabel);
             docCopy.SetText(documentContent);
-            docCopy.SetName(setLabel ? newLabel : fileName);
+            docCopy.SetName(fileName);
+            switch (ModuleConfig.Instance.UsernamesOnPrintedDocuments.Value)
+            {
+                case Config.eConfigHostType.ALL:
+                    docCopy.SetLabel(playerLabel);
+                    printer.ServerPlaceCollectible(docCopy.netIdentity, playerLabel);
+                    break;
 
-            // Place Document in Printer
-            printer.ServerPlaceCollectible(docCopy.netIdentity, newLabel);
+                case Config.eConfigHostType.HOST_ONLY:
+                    docCopy.SetLabel(newLabel);
+                    printer.ServerPlaceCollectible(docCopy.netIdentity, newLabel);
+                    docCopy.label = playerLabel;
+                    docCopy.UpdateCollectible();
+                    break;
+
+                case Config.eConfigHostType.DISABLED:
+                default:
+                    docCopy.SetLabel(newLabel);
+                    printer.ServerPlaceCollectible(docCopy.netIdentity, newLabel);
+                    break;
+            }
 
             // Prevent Original
             return false;
@@ -260,15 +279,33 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
             NetworkServer.Spawn(imgObj);
 
             // Get New Label
-            string newLabel = (ModuleConfig.Instance.UsernamesOnPrintedImages.Value ? $"{userName.RemoveRichText()}'s Image" : "Printed Image");
+            string fileName = "Printed Image";
+            string newLabel = fileName;
+            string playerLabel = $"{userName.RemoveRichText()}'s Image";
 
-            // Set Label and Image
-            imgCopy.SetLabel(newLabel);
-            imgCopy.SetName(imgCopy.interactableName);
+            // Apply Label and Text
             printer.RpcSetImage(imgCopy.netIdentity, imageData);
+            imgCopy.SetName(fileName);
+            switch (ModuleConfig.Instance.UsernamesOnPrintedImages.Value)
+            {
+                case Config.eConfigHostType.ALL:
+                    imgCopy.SetLabel(playerLabel);
+                    printer.ServerPlaceCollectible(imgCopy.netIdentity, playerLabel);
+                    break;
 
-            // Place Image in Printer
-            printer.ServerPlaceCollectible(imgCopy.netIdentity, newLabel);
+                case Config.eConfigHostType.HOST_ONLY:
+                    imgCopy.SetLabel(newLabel);
+                    printer.ServerPlaceCollectible(imgCopy.netIdentity, newLabel);
+                    imgCopy.label = playerLabel;
+                    imgCopy.UpdateCollectible();
+                    break;
+
+                case Config.eConfigHostType.DISABLED:
+                default:
+                    imgCopy.SetLabel(newLabel);
+                    printer.ServerPlaceCollectible(imgCopy.netIdentity, newLabel);
+                    break;
+            }
 
             // Prevent Original
             return false;
