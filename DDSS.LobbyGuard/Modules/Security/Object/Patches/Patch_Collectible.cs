@@ -31,6 +31,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
         [HarmonyPatch(typeof(Collectible), nameof(Collectible.Start))]
         private static void Start_Postfix(Collectible __instance)
         {
+            if (!__instance.despawnAfterIdle)
+                return;
             Il2CppSystem.Type collectibleType = __instance.GetIl2CppType();
 
             // Mugs
