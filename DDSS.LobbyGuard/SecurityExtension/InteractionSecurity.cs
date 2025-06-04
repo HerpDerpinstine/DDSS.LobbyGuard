@@ -69,14 +69,23 @@ namespace DDSS_LobbyGuard.SecurityExtension
             return distance <= maxRange;
         }
 
-        internal static bool IsPlayerWithinInteractRange<T>(NetworkIdentity player, T obj)
-            where T : Interactable
+        internal static bool IsPlayerWithinInteractRange(NetworkIdentity player, Interactable obj)
         {
             if ((player == null)
                 || player.WasCollected
                 || (obj == null)
                 || obj.WasCollected)
                 return false;
+
+            CollectibleHolder holder = obj.TryCast<CollectibleHolder>();
+            if ((holder != null)
+                && !holder.WasCollected)
+            {
+                Interactable parentInteract = holder.parentInteractable;
+                if ((parentInteract != null)
+                    && !parentInteract.WasCollected)
+                    obj = parentInteract;
+            }
 
             PlayerController playerController = player.GetPlayerController();
             if ((playerController == null)
