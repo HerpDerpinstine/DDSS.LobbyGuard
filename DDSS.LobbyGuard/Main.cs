@@ -92,6 +92,8 @@ namespace DDSS_LobbyGuard
             if ((sceneName == "MainMenuScene")
                 || (sceneName == "LobbyScene"))
                 CollectibleSecurity.OnSceneLoad();
+
+            LobbyModuleManager.SceneLoad(buildIndex, sceneName);
         }
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)

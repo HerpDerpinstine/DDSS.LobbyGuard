@@ -99,6 +99,12 @@ namespace DDSS_LobbyGuard.Modules
             _modules.Clear();
         }
 
+        internal static void SceneLoad(int buildIndex, string sceneName)
+        {
+            foreach (var module in _modules)
+                module.OnSceneLoad(buildIndex, sceneName);
+        }
+
         internal static void SceneInit(int buildIndex, string sceneName)
         {
             foreach (var module in _modules)

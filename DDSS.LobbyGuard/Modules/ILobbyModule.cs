@@ -16,6 +16,7 @@ namespace DDSS_LobbyGuard.Modules
 
         public virtual bool OnLoad() => true;
         public virtual void OnQuit() { }
+        public virtual void OnSceneLoad(int buildIndex, string sceneName) { }
         public virtual void OnSceneInit(int buildIndex, string sceneName) { }
     }
 }
