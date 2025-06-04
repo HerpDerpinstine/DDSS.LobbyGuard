@@ -13,20 +13,12 @@ using Il2CppProps.Scripts;
 using Il2CppProps.ServerRack;
 using Il2CppProps.WorkStation.Mouse;
 using Il2CppProps.WorkStation.Scripts;
-using MelonLoader;
 
 namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_WorkStationController
     {
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.WatchForStats))]
-        private static void WatchForStats()
-        {
-            MelonDebug.Msg("WatchForStats");
-        }
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(WorkStationController), nameof(WorkStationController.SpawnDeskItems))]
         private static bool SpawnDeskItems_Prefix(WorkStationController __instance, PlayerRole __0)
