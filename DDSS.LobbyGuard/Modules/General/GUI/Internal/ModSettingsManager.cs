@@ -19,6 +19,8 @@ namespace DDSS_LobbyGuard.Modules.General.GUI.Internal
 
         internal static void SceneInit(string sceneName)
         {
+            ModSettingsFactory.OnClose();
+
             switch (sceneName)
             {
                 case "MainMenuScene":
