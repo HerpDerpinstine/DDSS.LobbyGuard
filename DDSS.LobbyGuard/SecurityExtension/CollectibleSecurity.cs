@@ -81,7 +81,7 @@ namespace DDSS_LobbyGuard.SecurityExtension
                 holder,
                 CollectibleSecurityHandler.eCollectibleType.NO_CALLBACK,
                 null);
-        
+
         internal static void SpawnMouse(GameObject prefab, MouseHolder holder)
             => SpawnAndPlace<Mouse, MouseHolder>(prefab,
                 holder,
@@ -155,7 +155,11 @@ namespace DDSS_LobbyGuard.SecurityExtension
             => SpawnAndPlace(holder.cdCasePrefab,
                 holder,
                 CollectibleSecurityHandler.eCollectibleType.CD,
-                (CDCase cd) => cd.NetworksongIndex = index,
+                (CDCase cd) =>
+                {
+                    cd.LoadSong(index);
+                    cd.UpdateCollectible();
+                },
                 index);
 
         internal static void SpawnCamera(MonoBehaviour coroutineParent)
@@ -222,13 +226,15 @@ namespace DDSS_LobbyGuard.SecurityExtension
             gameObject.transform.position = holder.transform.position;
             gameObject.transform.rotation = holder.transform.rotation;
 
+            yield return new WaitForSeconds(1f);
+
             T obj = gameObject.GetComponent<T>();
-            holder.ServerPlaceCollectible(obj.netIdentity, obj.Networklabel);
+            if (afterSpawn != null)
+                afterSpawn(obj);
 
             yield return new WaitForSeconds(1f);
 
-            if (afterSpawn != null)
-                afterSpawn(obj);
+            holder.ServerPlaceCollectible(obj.netIdentity, obj.Networklabel);
 
             yield break;
         }
