@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Il2Cpp;
+using Il2CppGameManagement;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppPlayer;
@@ -35,6 +36,41 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
 
             // Prevent Original
             return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.ServerSetPlayerRole))]
+        private static void ServerSetPlayerRole_Prefix(LobbyPlayer __instance, PlayerRole __0)
+        {
+            if ((__instance == null)
+                || __instance.WasCollected)
+                return;
+
+            NetworkIdentity controllerNet = __instance.playerController;
+            if ((controllerNet == null)
+                || controllerNet.WasCollected)
+                return;
+
+            PlayerController controller = controllerNet.gameObject.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected
+                || (controller.currentUsables == null)
+                || controller.currentUsables.WasCollected
+                || (controller.currentUsables.Count <= 0))
+                return;
+
+            if ((__0 == PlayerRole.Manager)
+                || (__0 == PlayerRole.Janitor)
+                || (__0 == PlayerRole.None))
+            {
+                if (__instance.subRole == SubRole.HrRep)
+                    GameManager.instance.SelectNewHrRep();
+
+                if (__instance.subRole == SubRole.Analyst)
+                    GameManager.instance.SelectNewAnalyst();
+
+                __instance.ServerSetSubRole(SubRole.None, true);
+            }
         }
     }
 }
