@@ -25,12 +25,12 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper
             UsernamesOnPrintedDocuments = CreatePref("UsernamesOnPrintedDocuments",
                 "Usernames On Printed Documents",
                 "Puts the Player's Username in the Name of their Custom Printed Document",
-                eConfigHostType.ALL);
+                eConfigHostType.HOST_ONLY);
 
             UsernamesOnPrintedImages = CreatePref("UsernamesOnPrintedImages",
                 "Usernames On Printed Images",
                 "Puts the Player's Username in the Name of their Custom Printed Image",
-                eConfigHostType.ALL); 
+                eConfigHostType.HOST_ONLY); 
             
             PrinterCopiesSignatures = CreatePref("PrinterCopiesSignatures",
                 "Printer Copies Signatures",
