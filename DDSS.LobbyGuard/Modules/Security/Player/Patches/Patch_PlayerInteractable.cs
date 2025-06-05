@@ -22,37 +22,11 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 || interact.WasCollected)
                 return false;
 
-            // Validate Target
-            PlayerController controller = interact.playerController;
-            if ((controller == null)
-                || controller.WasCollected)
-                return false;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Validate Sender
-            PlayerController senderController = sender.GetComponent<PlayerController>();
-            if ((senderController == null)
-                || senderController.WasCollected)
-                return false;
-
-            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost())
-                return false;
-
-            // Validate Interactable
-            PlayerInteractable senderInteract = controller.playerInteractable;
-            if ((senderInteract == null)
-                || senderInteract.WasCollected
-                || (senderInteract == interact))
-                return false;
-
             // Validate Distance
-            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, interact)
-                || !interact.HasPlayerRequestedHandShake(senderInteract))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, interact))
                 return false;
 
             interact.UserCode_AcceptHandShake__NetworkIdentity__NetworkConnectionToClient(sender, __2);
@@ -72,50 +46,14 @@ namespace DDSS_LobbyGuard.Modules.Security.Player.Patches
                 || interact.WasCollected)
                 return false;
 
-            // Validate Target
-            PlayerController controller = interact.playerController;
-            if ((controller == null)
-                || controller.WasCollected)
-                return false;
-
             // Get Sender
             NetworkIdentity sender = __2.identity;
 
-            // Validate Sender
-            PlayerController senderController = sender.GetComponent<PlayerController>();
-            if ((senderController == null)
-                || senderController.WasCollected)
-                return false;
-
-            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
-            if ((lobbyPlayer == null)
-                || lobbyPlayer.WasCollected
-                || lobbyPlayer.IsGhost())
-                return false;
-
-            // Validate Interactable
-            PlayerInteractable senderInteract = controller.playerInteractable;
-            if ((senderInteract == null)
-                || senderInteract.WasCollected
-                || (senderInteract == interact))
-                return false;
-
             // Validate Distance
-            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, interact)
-                || interact.HasPlayerRequestedHandShake(senderInteract))
+            if (!InteractionSecurity.IsPlayerWithinInteractRange(sender, interact))
                 return false;
 
-            // Reset Current Request
-            if (senderInteract.NetworkthisPlayerRequestedHandshakeWith != null)
-            {
-                PlayerController component2 = senderInteract.NetworkthisPlayerRequestedHandshakeWith.GetComponent<PlayerController>();
-                if (component2 != null)
-                    component2.playerInteractable.UserCode_CmdResetHandShakeRequest__NetworkIdentity__NetworkConnectionToClient(sender, __2);
-            }
-
-            // Apply New Request
-            interact.NetworkplayerRequestedHandshakeWithThisPlayer = sender;
-            senderInteract.NetworkthisPlayerRequestedHandshakeWith = interact.playerController.netIdentity;
+            interact.UserCode_CmdRequestHandShake__NetworkIdentity__NetworkConnectionToClient(sender, __2);
 
             // Prevent Original
             return false;
