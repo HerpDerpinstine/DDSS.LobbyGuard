@@ -123,10 +123,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation.Patches
                 if (isReceiverPlayer)
                 {
                     // Player -> Player
-
-                    if (string.IsNullOrEmpty(subject)
-                        || string.IsNullOrWhiteSpace(subject)
-                        || string.IsNullOrEmpty(msg)
+                    if (string.IsNullOrEmpty(msg)
                         || string.IsNullOrWhiteSpace(msg))
                         return false;
                 }
