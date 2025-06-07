@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppMirror;
 using Il2CppPlayer;
@@ -12,12 +11,11 @@ namespace DDSS_LobbyGuard.Modules.Security.Object.Patches
     internal class Patch_LobbyPlayer
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.ServerSetPlayerRole))]
-        private static void ServerSetPlayerRole_Prefix(LobbyPlayer __instance, PlayerRole __0)
+        [HarmonyPatch(typeof(LobbyPlayer), nameof(LobbyPlayer.ServerReplacePlayerWithSpectator))]
+        private static void ServerReplacePlayerWithSpectator_Prefix(LobbyPlayer __instance)
         {
             if ((__instance == null)
-                || __instance.WasCollected
-                || (__0 != PlayerRole.None))
+                || __instance.WasCollected)
                 return;
 
             NetworkIdentity controllerNet = __instance.playerController;
