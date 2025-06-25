@@ -58,6 +58,7 @@ namespace DDSS_LobbyGuard.Modules
 
                 // Run OnLoad
                 if (!LobbyModuleManagerConfig.IsModuleEnabled(module)
+                    || module.IsDisabled
                     || !module.OnLoad())
                 {
 #if DEBUG
