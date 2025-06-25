@@ -220,12 +220,6 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
             player.isFired = !should_janitors_keep_workstations || !should_become_janitor;
             player.subRole = SubRole.None;
 
-            if (!is_janitor)
-            {
-                player.originalPlayerRole = current_role;
-                player.lastPlayerRole = current_role;
-            }
-
             // Check if should become Janitor or Ghost
             if (should_become_janitor)
             {
@@ -235,6 +229,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
 
                 // Apply New Role
                 player.ServerSetPlayerRole(PlayerRole.Janitor);
+                player.originalPlayerRole = current_role;
             }
             else
             {
@@ -242,7 +237,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
                 player.ServerSetWorkStation(null, current_role, true);
 
                 // Apply New Role
-                //player.ServerSetPlayerRole(PlayerRole.None);
+                player.ServerSetPlayerRole(PlayerRole.None);
 
                 // Replace Player with Ghost
                 player.ServerReplacePlayerWithSpectator(__0.connectionToClient);
