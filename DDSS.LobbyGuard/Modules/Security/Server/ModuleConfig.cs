@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.Modules.Security.Game
+namespace DDSS_LobbyGuard.Modules.Security.Server
 {
     internal class ModuleConfig : ConfigCategory
     {
@@ -9,17 +9,15 @@ namespace DDSS_LobbyGuard.Modules.Security.Game
 
         internal MelonPreferences_Entry<int> ServerOutageRandomMinimum;
         internal MelonPreferences_Entry<int> ServerOutageRandomMaximum;
-        internal MelonPreferences_Entry<int> WorkstationVirusRandomMinimum;
-        internal MelonPreferences_Entry<int> WorkstationVirusRandomMaximum;
 
         public ModuleConfig() : base()
             => Instance = this;
         public override eModuleType ConfigType
             => eModuleType.Security;
         public override string ID
-            => "Game";
+            => "Server";
         public override string DisplayName
-            => "Game";
+            => "Server";
 
         public override void CreatePreferences()
         {
@@ -32,16 +30,6 @@ namespace DDSS_LobbyGuard.Modules.Security.Game
                 "Server Outage Random Maximum",
                 "Maximum Value in Seconds for the Random Timer of Server Outages",
                 600);
-
-            WorkstationVirusRandomMinimum = CreatePref("WorkstationVirusRandomMinimum",
-                "Workstation Virus Random Minimum",
-                "Minimum Value in Seconds for the Random Timer of Workstation Viruses",
-                30);
-
-            WorkstationVirusRandomMaximum = CreatePref("WorkstationVirusRandomMaximum",
-                "Workstation Virus Random Maximum",
-                "Maximum Value in Seconds for the Random Timer of Workstation Viruses",
-                60);
         }
     }
 }

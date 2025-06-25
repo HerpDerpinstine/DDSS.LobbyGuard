@@ -6,6 +6,5 @@ namespace DDSS_LobbyGuard.Modules.Security.Game
     {
         public override string Name => "Game";
         public override eModuleType ModuleType => eModuleType.Security;
-        public override Type ConfigType => typeof(ModuleConfig);
     }
 }

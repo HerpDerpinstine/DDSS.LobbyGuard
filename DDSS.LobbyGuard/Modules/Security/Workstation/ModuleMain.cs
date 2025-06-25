@@ -7,6 +7,7 @@ namespace DDSS_LobbyGuard.Modules.Security.Workstation
     {
         public override string Name => "Workstation";
         public override eModuleType ModuleType => eModuleType.Security;
+        public override Type ConfigType => typeof(ModuleConfig);
 
         public override void OnSceneInit(int buildIndex, string sceneName)
         {
