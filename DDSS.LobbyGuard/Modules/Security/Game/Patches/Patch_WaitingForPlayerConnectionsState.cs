@@ -10,6 +10,7 @@ using Il2CppPlayer;
 using Il2CppPlayer.Lobby;
 using Il2CppPlayer.Tasks;
 using Il2CppProps.ServerRack;
+using Il2CppStats;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -96,6 +97,10 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
                 if (lobbyPlayer == null)
                     continue;
 
+                ulong playerSteamID = lobbyPlayer.steamID;
+                if (!LobbyStatisticsManager.instance.playerStats.ContainsKey(playerSteamID))
+                    LobbyStatisticsManager.instance.playerStats[playerSteamID] = new();
+
                 // Check for Manager
                 if (lobbyPlayer.playerRole == PlayerRole.Manager)
                 {
@@ -179,6 +184,9 @@ namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
             }
 
             // Apply Win Condition
+            LobbyManager.instance.NetworkstartMemberCount = playerCount;
+            manager.NetworkstartSlackers = slackerCount;
+            manager.NetworkstartSpecialists = specialistCount;
             manager.RpcResetTerminationTimer(manager.terminationMaxTime);
             manager.SetWinCondition(specialistCount, slackerCount);
 
