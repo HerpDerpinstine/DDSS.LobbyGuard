@@ -15,7 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
+namespace DDSS_LobbyGuard.Modules.Fixes.MatchInitRework.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_WaitingForPlayerConnectionsState

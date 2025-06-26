@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Il2CppGameManagement.StateMachine;
 
-namespace DDSS_LobbyGuard.Modules.Security.Game.Patches
+namespace DDSS_LobbyGuard.Modules.Fixes.MatchInitRework.Patches
 {
     [LobbyModulePatch(typeof(ModuleMain))]
     internal class Patch_StartGameState
