@@ -1,4 +1,5 @@
-﻿using DDSS_LobbyGuard.Utils;
+﻿using DDSS_LobbyGuard.SecurityExtension;
+using DDSS_LobbyGuard.Utils;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppMirror;
@@ -29,8 +30,8 @@ namespace DDSS_LobbyGuard.Modules.Security.Communication.Patches
                 || string.IsNullOrWhiteSpace(message))
                 return false;
 
-            if (message.Length > 50)
-                message = message.Substring(0, 50);
+            if (message.Length > InteractionSecurity.MAX_CHAT_CHARS)
+                message = message.Substring(0, InteractionSecurity.MAX_CHAT_CHARS);
             if (string.IsNullOrEmpty(message)
                 || string.IsNullOrWhiteSpace(message))
                 return false;
