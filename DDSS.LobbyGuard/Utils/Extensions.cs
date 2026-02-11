@@ -127,6 +127,27 @@ namespace DDSS_LobbyGuard.Utils
             return controller.IsManager();
         }
 
+        public static bool IsSaboteur(this LobbyPlayer player)
+            => (player.playerRole == PlayerRole.Saboteur);
+        public static bool IsSaboteur(this PlayerController controller)
+        {
+            LobbyPlayer lobbyPlayer = controller.NetworklobbyPlayer;
+            if ((lobbyPlayer == null)
+                || lobbyPlayer.WasCollected)
+                return false;
+
+            return lobbyPlayer.IsSaboteur();
+        }
+        public static bool IsSaboteur(this NetworkIdentity player)
+        {
+            PlayerController controller = player.GetComponent<PlayerController>();
+            if ((controller == null)
+                || controller.WasCollected)
+                return false;
+
+            return controller.IsSaboteur();
+        }
+
         public static PlayerRole GetPlayerRole(this NetworkIdentity player)
         {
             PlayerController controller = player.GetComponent<PlayerController>();

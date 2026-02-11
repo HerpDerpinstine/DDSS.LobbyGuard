@@ -85,6 +85,51 @@ namespace DDSS_LobbyGuard.Modules.Security.Paper.Patches
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(Il2CppProps.Printer.Printer), nameof(Il2CppProps.Printer.Printer.InvokeUserCode_CmdFix__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdFix__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkIdentity __0,
+            NetworkConnectionToClient __2)
+        {
+            // Get Printer
+            Il2CppProps.Printer.Printer printer = __0.TryCast<Il2CppProps.Printer.Printer>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, printer))
+                return false;
+
+            printer.UserCode_CmdFix__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Il2CppProps.Printer.Printer), nameof(Il2CppProps.Printer.Printer.InvokeUserCode_CmdJam__NetworkIdentity__NetworkConnectionToClient))]
+        private static bool InvokeUserCode_CmdJam__NetworkIdentity__NetworkConnectionToClient_Prefix(NetworkIdentity __0,
+            NetworkConnectionToClient __2)
+        {
+            // Get Printer
+            Il2CppProps.Printer.Printer printer = __0.TryCast<Il2CppProps.Printer.Printer>();
+
+            // Get Sender
+            NetworkIdentity sender = __2.identity;
+
+            // Validate Distance
+            if (sender.IsGhost()
+                || !InteractionSecurity.IsPlayerWithinInteractRange(sender, printer)
+                || !sender.IsSaboteur())
+                return false;
+
+            printer.UserCode_CmdJam__NetworkIdentity__NetworkConnectionToClient(sender, __2);
+
+            // Prevent Original
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(Il2CppProps.Printer.Printer), nameof(Il2CppProps.Printer.Printer.InvokeUserCode_CmdPrintDocument__String__String__NetworkIdentity__NetworkConnectionToClient))]
         private static bool InvokeUserCode_CmdPrintDocument__String__String__NetworkIdentity__NetworkConnectionToClient_Prefix(
             NetworkBehaviour __0,
