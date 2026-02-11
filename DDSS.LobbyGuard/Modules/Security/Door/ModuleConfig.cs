@@ -1,7 +1,7 @@
 ﻿using DDSS_LobbyGuard.Config;
 using MelonLoader;
 
-namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework
+namespace DDSS_LobbyGuard.Modules.Security.Door
 {
     internal class ModuleConfig : ConfigCategory
     {
@@ -12,11 +12,11 @@ namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework
         public ModuleConfig() : base()
             => Instance = this;
         public override eModuleType ConfigType
-            => eModuleType.Fixes;
+            => eModuleType.Security;
         public override string ID
-            => "DoorRework";
+            => "Door";
         public override string DisplayName
-            => "Door Rework";
+            => "Door";
 
         public override void CreatePreferences()
         {

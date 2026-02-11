@@ -176,6 +176,9 @@ namespace DDSS_LobbyGuard.Modules.Security.Door.Patches
             // Apply State
             door.UserCode_CmdSetLockState__NetworkIdentity__Boolean__NetworkConnectionToClient(sender, requestedState, __2);
 
+            if (ModuleConfig.Instance.CloseDoorsOnLock.Value && requestedState)
+                door.UserCode_CmdSetDoorState__Int32__PlayerController__NetworkConnectionToClient(0, controller, __2);
+
             // Prevent Original
             return false;
         }
