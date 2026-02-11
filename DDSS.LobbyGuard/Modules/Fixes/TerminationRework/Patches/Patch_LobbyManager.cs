@@ -38,7 +38,7 @@ namespace DDSS_LobbyGuard.Modules.Fixes.TerminationRework.Patches
                     lobbyPlayer.ServerSetWorkStation(null, playerRole, true);
 
                 // Check Setting
-                if ((ModuleConfig.Instance.PlayerLeavesReduceTerminations.Value != ModuleConfig.eTermType.Always)
+                if ((ModuleConfig.Instance.PlayerLeavesReduceTerminations.Value != ModuleConfig.eTermType.Never)
                     && !isJanitor
                     && playerRole != PlayerRole.Manager
                     && GameManager.instance != null
