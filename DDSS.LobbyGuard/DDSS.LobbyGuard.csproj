@@ -12,6 +12,7 @@
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GameFolder>C:\Program Files (x86)\Steam\steamapps\common\Dale%26Dawson</GameFolder>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 	</PropertyGroup>
   <PropertyGroup>
 		<MelonLoaderInstall>$(GameFolder)\MelonLoader</MelonLoaderInstall>
@@ -19,16 +20,19 @@
 		<MelonLoaderNET6>$(MelonLoaderInstall)\net6</MelonLoaderNET6>
   </PropertyGroup>
   <ItemGroup>
-	<PackageReference Include="HarmonyX" Version="2.13.0">
+	<PackageReference Include="HarmonyX" Version="2.10.2">
 	  <PrivateAssets>all</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="LavaGang.MelonLoader" Version="0.6.5">
+    <PackageReference Include="LavaGang.MelonLoader" Version="0.7.1">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Il2CppInterop.Runtime" Version="1.4.5">
+    <PackageReference Include="Il2CppInterop.Runtime" Version="1.5.1">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3">
+    <PackageReference Include="Mono.Cecil" Version="0.11.6" />
+    <PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" />
+    <PackageReference Include="MonoMod.Utils" Version="22.7.31.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>

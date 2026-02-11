@@ -24,13 +24,13 @@ Serverside Anti-Cheat and Security for [Dale & Dawson Stationery Supplies](https
 
 ### REQUIREMENTS:
 
-- [MelonLoader](https://github.com/LavaGang/MelonLoader/releases) v0.6.5 or higher.
+- [MelonLoader](https://github.com/LavaGang/MelonLoader/releases) v0.7.2 or higher.
 
 ---
 
 ### INSTALLATION:
 
-1) Install [MelonLoader](https://github.com/LavaGang/MelonLoader/releases) v0.6.5 or higher.
+1) Install [MelonLoader](https://github.com/LavaGang/MelonLoader/releases) v0.7.2 or higher.
 4) Download [DDSS.LobbyGuard](https://github.com/HerpDerpinstine/DDSS.LobbyGuard/releases) from Releases.
 5) Place ``DDSS.LobbyGuard.dll`` in the ``Mods`` folder of your Game's Install Folder.
 6) Start the Game.

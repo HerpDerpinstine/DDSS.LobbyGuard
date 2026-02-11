@@ -16,5 +16,5 @@ using MelonLoader;
     DDSS_LobbyGuard.Properties.BuildInfo.DownloadLink)]
 [assembly: MelonGame("StripedPandaStudios", "DDSS")]
 [assembly: MelonPriority(int.MinValue)]
-[assembly: VerifyLoaderVersion("0.6.5", true)]
+[assembly: VerifyLoaderVersion("0.7.2", true)]
 [assembly: HarmonyDontPatchAll]
