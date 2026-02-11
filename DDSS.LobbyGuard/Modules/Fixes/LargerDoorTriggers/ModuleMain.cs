@@ -37,7 +37,6 @@ namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework
                 return;
 
             Vector3 size = collider.size;
-            MelonLogger.Msg("OldSize: " + size.x + ", " + size.y + ", " + size.z);
 
             if (size.x < _colliderSizeMin)
                 size.x = _colliderSizeMin;
@@ -45,8 +44,6 @@ namespace DDSS_LobbyGuard.Modules.Fixes.DoorRework
                 size.y = _colliderSizeMin;
             if (size.z < _colliderSizeMin)
                 size.z = _colliderSizeMin;
-
-            MelonLogger.Msg("NewSize: " + size.x + ", " + size.y + ", " + size.z);
 
             collider.size = size;
         }
